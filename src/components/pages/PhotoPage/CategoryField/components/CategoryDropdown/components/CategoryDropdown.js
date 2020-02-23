@@ -3,7 +3,7 @@ import Select, { components } from "react-select";
 
 import MenuItem from "@material-ui/core/MenuItem";
 
-import { data } from "custom/categories";
+import data from "custom/categories.json";
 
 import FieldLabel from "../FieldLabel";
 

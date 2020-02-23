@@ -17,7 +17,7 @@ import enums from "../types/enums";
 import TitleTextField from "../components/pages/PhotoPage/AdminApproval/TitleTextField";
 import MultiFields from "../components/pages/PhotoPage/AdminApproval/MultiFields";
 
-import { data } from "./categories";
+import data from "./categories.json";
 
 const primaryColor = styles.primary;
 const secondaryColor = styles.secondary;
