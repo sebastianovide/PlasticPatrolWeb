@@ -24,6 +24,7 @@ import { isIphoneWithNotchAndCordova, isIphoneAndCordova } from "../../utils";
 import CardComponent from "../CardComponent";
 
 const tweetLogo = process.env.PUBLIC_URL + "/images/twitter.svg";
+const placeholderImage = process.env.PUBLIC_URL + "/custom/images/logo.svg";
 
 const styles = theme => ({
   notchTop: {
@@ -63,7 +64,6 @@ class DisplayPhoto extends Component {
     const {
       user,
       config,
-      placeholderImage,
       feature,
       handleClose,
       handleRejectClick,

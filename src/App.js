@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Route, Switch, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 
 import * as localforage from "localforage";
 import _ from "lodash";
@@ -17,29 +17,23 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import CloseIcon from "@material-ui/icons/Close";
 
-import TutorialPage from "./components/pages/TutorialPage";
-import WelcomePage from "./components/pages/WelcomePage";
-import PhotoPage from "./components/pages/PhotoPage";
-import ProfilePage from "./components/ProfilePage";
+import { Routes } from "routes/Routes";
+
 import Map from "./components/MapPage/Map";
 import CustomPhotoDialog from "./components/CustomPhotoDialog";
-import ModeratorPage from "./components/ModeratorPage";
 import LoginFirebase from "./components/LoginFirebase";
 import Login from "./components/Login";
-import AboutPage from "./components/AboutPage";
-import LeaderboardPage from "./components/Leaderboard";
-import WriteFeedbackPage from "./components/WriteFeedbackPage";
+import WelcomePage from "./components/pages/WelcomePage";
+
 import DrawerContainer from "./components/DrawerContainer";
 import TermsDialog from "./components/TermsDialog";
 import EmailVerifiedDialog from "./components/EmailVerifiedDialog";
-import DisplayPhoto from "./components/MapPage/DisplayPhoto";
+
 import authFirebase from "./authFirebase";
 import dbFirebase from "./dbFirebase";
 import { gtagPageView, gtagEvent } from "./gtag.js";
 import "./App.scss";
-import FeedbackReportsSubrouter from "./components/FeedbackReports/FeedbackReportsSubrouter";
 import MapLocation from "./types/MapLocation";
-const placeholderImage = process.env.PUBLIC_URL + "/custom/images/logo.svg";
 
 const styles = theme => ({
   dialogClose: {
@@ -645,7 +639,7 @@ class App extends Component {
   };
 
   render() {
-    const { classes, fields, config, history } = this.props;
+    const { classes, fields, config } = this.props;
     return (
       <div className="geovation-app">
         {!this.state.termsAccepted &&
@@ -660,162 +654,25 @@ class App extends Component {
         />
 
         <main className="content">
-          <Switch>
-            {config.CUSTOM_PAGES.map(
-              (CustomPage, index) =>
-                !!CustomPage.page && (
-                  <Route
-                    key={index}
-                    path={CustomPage.path}
-                    render={props => (
-                      <CustomPage.page
-                        {...props}
-                        handleClose={history.goBack}
-                        label={CustomPage.label}
-                      />
-                    )}
-                  />
-                )
-            )}
-
-            <Route
-              path={config.PAGES.about.path}
-              render={props => (
-                <AboutPage
-                  {...props}
-                  label={this.props.config.PAGES.about.label}
-                  handleClose={history.goBack}
-                  reloadPhotos={this.reloadPhotos}
-                />
-              )}
-            />
-
-            <Route
-              path={config.PAGES.tutorial.path}
-              render={props => (
-                <TutorialPage
-                  {...props}
-                  label={this.props.config.PAGES.tutorial.label}
-                  handleClose={history.goBack}
-                />
-              )}
-            />
-
-            <Route
-              path={config.PAGES.leaderboard.path}
-              render={props => (
-                <LeaderboardPage
-                  {...props}
-                  config={this.props.config}
-                  label={this.props.config.PAGES.leaderboard.label}
-                  usersLeaderboard={this.state.usersLeaderboard}
-                  handleClose={history.goBack}
-                  user={this.state.user}
-                />
-              )}
-            />
-
-            {this.state.user && this.state.user.isModerator && (
-              <Route
-                path={this.props.config.PAGES.moderator.path}
-                render={props => (
-                  <ModeratorPage
-                    {...props}
-                    photos={this.state.photosToModerate}
-                    config={this.props.config}
-                    label={this.props.config.PAGES.moderator.label}
-                    user={this.state.user}
-                    handleClose={history.goBack}
-                    handleRejectClick={this.handleRejectClick}
-                    handleApproveClick={this.handleApproveClick}
-                  />
-                )}
-              />
-            )}
-
-            {this.state.user && this.state.user.isModerator && (
-              <Route
-                path={this.props.config.PAGES.feedbackReports.path}
-                render={props => (
-                  <FeedbackReportsSubrouter
-                    {...props}
-                    config={this.props.config}
-                    label={this.props.config.PAGES.feedbackReports.label}
-                    user={this.state.user}
-                    handleClose={this.props.history.goBack}
-                  />
-                )}
-              />
-            )}
-
-            <Route
-              path={config.PAGES.photos.path}
-              render={props => (
-                <PhotoPage
-                  {...props}
-                  label={this.props.config.PAGES.photos.label}
-                  file={this.state.file}
-                  gpsLocation={this.state.location}
-                  online={this.state.online}
-                  srcType={this.state.srcType}
-                  cordovaMetadata={this.state.cordovaMetadata}
-                  fields={fields}
-                  handleClose={history.goBack}
-                  handleRetakeClick={this.handleCameraClick}
-                />
-              )}
-            />
-
-            {this.state.user && (
-              <Route
-                path={this.props.config.PAGES.account.path}
-                render={props => (
-                  <ProfilePage
-                    {...props}
-                    config={this.props.config}
-                    label={this.props.config.PAGES.account.label}
-                    user={this.state.user}
-                    geojson={this.state.geojson}
-                    handleClose={history.goBack}
-                    handlePhotoClick={this.handlePhotoClick}
-                  />
-                )}
-              />
-            )}
-
-            <Route
-              path={config.PAGES.writeFeedback.path}
-              render={props => (
-                <WriteFeedbackPage
-                  {...props}
-                  label={this.props.config.PAGES.writeFeedback.label}
-                  user={this.state.user}
-                  location={this.state.location}
-                  online={this.state.online}
-                  handleClose={history.goBack}
-                />
-              )}
-            />
-
-            <Route
-              path={[
-                `${config.PAGES.displayPhoto.path}/:id`,
-                `${config.PAGES.embeddable.path}${config.PAGES.displayPhoto.path}/:id`
-              ]}
-              render={props => (
-                <DisplayPhoto
-                  {...props}
-                  user={this.state.user}
-                  placeholderImage={placeholderImage}
-                  config={config}
-                  handleRejectClick={this.handleRejectClick}
-                  handleApproveClick={this.handleApproveClick}
-                  handleClose={this.handlePhotoPageClose}
-                  feature={this.state.selectedFeature}
-                />
-              )}
-            />
-          </Switch>
+          <Routes
+            user={this.state.user}
+            fields={fields}
+            usersLeaderboard={this.state.usersLeaderboard}
+            file={this.state.file}
+            gpsLocation={this.state.gpsLocation}
+            online={this.state.online}
+            srcType={this.state.srcType}
+            cordovaMetadata={this.state.cordovaMetadata}
+            geojson={this.state.geojson}
+            handleCameraClick={this.handleCameraClick}
+            reloadPhotos={this.reloadPhotos}
+            photosToModerate={this.photosToModerate}
+            handleApproveClick={this.handleApproveClick}
+            handleRejectClick={this.handleRejectClick}
+            handlePhotoClick={this.handlePhotoClick}
+            selectedFeature={this.selectedFeature}
+            handlePhotoPageClose={this.handlePhotoPageClose}
+          />
 
           {!this.state.welcomeShown &&
             config.PAGES.embeddable.path &&
@@ -935,4 +792,3 @@ class App extends Component {
 }
 
 export default withRouter(withStyles(styles, { withTheme: true })(App));
-
