@@ -28,11 +28,11 @@ class LoginFirebase extends React.Component {
 
   componentDidMount() {
     this.uiConfig = {
-      // signInFlow: 'redirect',
       signInSuccessUrl: "/",
       credentialHelper: firebaseui.auth.CredentialHelper.NONE,
       signInOptions: [
-        // firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+        firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+        firebase.auth.GoogleAuthProvider.PROVIDER_ID,
         firebase.auth.EmailAuthProvider.PROVIDER_ID
       ],
       callbacks: {
