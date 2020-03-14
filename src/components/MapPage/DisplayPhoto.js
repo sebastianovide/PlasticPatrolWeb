@@ -20,7 +20,9 @@ import withMobileDialog from "@material-ui/core/withMobileDialog";
 import { withStyles } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
-import { isIphoneWithNotchAndCordova, isIphoneAndCordova } from "../../utils";
+import { isIphoneWithNotchAndCordova, isIphoneAndCordova } from "utils";
+import { tweetMessage } from "static/info";
+
 import CardComponent from "../CardComponent";
 
 const tweetLogo = process.env.PUBLIC_URL + "/images/twitter.svg";
@@ -77,7 +79,7 @@ class DisplayPhoto extends Component {
     const coords = location.pathname.split("@")[1];
     const photoUrl = `${config.metadata.metadataServerUrl}/${photoID}@${coords}`;
     const photoTweetLink = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
-      config.CUSTOM_STRING.tweetMessage
+      tweetMessage
     )}&url=${encodeURIComponent(photoUrl)}`;
 
     return (

@@ -14,7 +14,9 @@ import { withStyles } from "@material-ui/core/styles";
 
 import { dbFirebase } from "features/firebase";
 
-import utils, { device } from "../utils";
+import { feedbackEmail } from "static/info";
+
+import { device } from "../utils";
 import PageWrapper from "./PageWrapper";
 
 const styles = theme => ({
@@ -118,8 +120,7 @@ class WriteFeedbackPage extends React.Component {
       .catch(err => {
         console.log(err.toString());
         this.openDialog(
-          "Something went wrong. Try again later or please email us to " +
-            utils.customiseString("writeFeedback", "admin@geovation.uk"),
+          `Something went wrong. Try again later or please email us to ${feedbackEmail}`,
           true
         );
       });

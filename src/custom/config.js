@@ -22,41 +22,6 @@ import { data } from "./categories";
 const primaryColor = styles.primary;
 const secondaryColor = styles.secondary;
 
-const CUSTOM_STRING = {
-  drawer: {
-    "photos published so far!": "pieces found so far!"
-  },
-  tutorial: {
-    "Walk around the city and take photos":
-      "Get outside and photograph rubbish",
-    "Write info about the photos and upload it to the cloud":
-      "Categorise the rubbish by amount, type and brand",
-    "View your images in our interactive map":
-      "Upload your photograph and see how you’ve helped fight the crisis"
-  },
-  about: {
-    "We are Geovation and we Geovate":
-      "#PlasticPatrol is about engaging people with the issue of plastic pollution through adventure and nature, helping to safeguard our seas for the future.\n\n" +
-      "Our mission is to combat the global plastic crisis by stopping the problem at its source – in our waterways.\n\n" +
-      "Every single piece of plastic collected and shared on social media as part of the #PlasticPatrol movement is captured in our interactive map, creating a picture of the problem on a global scale for the very first time.\n\n" +
-      "Using this app you can get involved. Simply take a photo of what you find by pressing the camera button and upload it directly to the map. After it has been approved you will be able to view the images by pressing the globe button."
-  },
-  writeFeedback: {
-    "admin@geovation.uk": "lizzieoutside@icloud.com"
-  },
-  termsAndConditions: {
-    "Welcome to App": "Welcome to Plastic Patrol",
-    "Please read our ": "Please read our ",
-    "Terms and Conditions": "Terms and Conditions ",
-    " and ": " and ",
-    "Privacy Policy": "Privacy Policy ",
-    "T&C link": "https://plasticpatrol.co.uk/terms-and-conditions/",
-    "Privacy Policy Link": "https://plasticpatrol.co.uk/privacy-policy/"
-  },
-  tweetMessage:
-    "Check out this rubbish shared on the @Plastic_Patrol app for global citizen science. Researchers analyse everything collected and use it as evidence to help tackle the problem. #PlasticPatrol"
-};
-
 const PAGES = {
   map: {
     path: "/",
@@ -134,7 +99,6 @@ const STATIC_CONFIG = require("./config.json");
 
 export default {
   ...STATIC_CONFIG,
-  CUSTOM_STRING,
   MAX_IMAGE_SIZE: 2048,
   THEME: {
     palette: {

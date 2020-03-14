@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
@@ -9,13 +10,14 @@ import Divider from "@material-ui/core/Divider";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import Avatar from "@material-ui/core/Avatar";
 import Typography from "@material-ui/core/Typography";
-
-import { Link } from "react-router-dom";
 import { withStyles } from "@material-ui/core/styles";
-import config from "../custom/config";
-import utils from "../utils";
+
+import { tAndCLink, privatePolicyLink } from "static/info";
+
+import { isIphoneWithNotchAndCordova, isIphoneAndCordova } from "utils";
+import config from "custom/config";
+
 import "./DrawerContainer.scss";
-import { isIphoneWithNotchAndCordova, isIphoneAndCordova } from "../utils";
 
 const placeholderImage =
   process.env.PUBLIC_URL + "/images/geovation-banner.svg";
@@ -42,10 +44,6 @@ const styles = theme => ({
 });
 
 const PAGES = config.PAGES;
-const links = {
-  terms: utils.customiseString("termsAndConditions", "T&C link"),
-  privacy: utils.customiseString("termsAndConditions", "Privacy Policy Link")
-};
 
 class DrawerContainer extends Component {
   render() {
@@ -140,10 +138,7 @@ class DrawerContainer extends Component {
         </div>
 
         <Typography className={classes.stats} color={"secondary"}>
-          {`${stats | 0} ${utils.customiseString(
-            "drawer",
-            "photos published so far!"
-          )}`}
+          {`${stats | 0} pieces found so far!`}
           {sponsorImage && (
             <span className="sponsored-by-container">
               <span
@@ -160,9 +155,9 @@ class DrawerContainer extends Component {
         </div>
 
         <Typography className={classes.links}>
-          <a href={links.terms}>Terms and Conditions</a>
+          <a href={tAndCLink}>Terms and Conditions</a>
           {" / "}
-          <a href={links.privacy}>Privacy Policy</a>
+          <a href={privatePolicyLink}>Privacy Policy</a>
         </Typography>
       </Drawer>
     );

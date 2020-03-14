@@ -1,4 +1,4 @@
-import { sortArrayByObjectKey } from "../";
+import { sortArrayByObjectKey } from "..";
 
 describe("sortArrayByObjectKey", () => {
   it("sorts strings into alphabetical order", () => {
