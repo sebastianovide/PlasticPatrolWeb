@@ -19,18 +19,18 @@ import CloseIcon from "@material-ui/icons/Close";
 
 import { Routes } from "routes/Routes";
 
+import { dbFirebase, authFirebase } from "features/firebase";
+
+import WelcomePage from "./components/pages/WelcomePage";
 import Map from "./components/MapPage/Map";
 import CustomPhotoDialog from "./components/CustomPhotoDialog";
 import LoginFirebase from "./components/LoginFirebase";
 import Login from "./components/Login";
-import WelcomePage from "./components/pages/WelcomePage";
 
 import DrawerContainer from "./components/DrawerContainer";
 import TermsDialog from "./components/TermsDialog";
 import EmailVerifiedDialog from "./components/EmailVerifiedDialog";
 
-import authFirebase from "./authFirebase";
-import dbFirebase from "./dbFirebase";
 import { gtagPageView, gtagEvent } from "./gtag.js";
 import "./App.scss";
 import MapLocation from "./types/MapLocation";

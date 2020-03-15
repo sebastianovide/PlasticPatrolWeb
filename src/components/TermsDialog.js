@@ -11,23 +11,7 @@ import withMobileDialog from "@material-ui/core/withMobileDialog";
 import { withStyles } from "@material-ui/core/styles";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 
-import utils from "../utils";
-
-const message = {
-  title: utils.customiseString("termsAndConditions", "Welcome to App"),
-  startText: utils.customiseString("termsAndConditions", "Please read our "),
-  termsText: utils.customiseString(
-    "termsAndConditions",
-    "Terms and Conditions"
-  ),
-  midText: utils.customiseString("termsAndConditions", " and "),
-  privacyText: utils.customiseString("termsAndConditions", "Privacy Policy"),
-  termsLink: utils.customiseString("termsAndConditions", "T&C link"),
-  privacyLink: utils.customiseString(
-    "termsAndConditions",
-    "Privacy Policy Link"
-  )
-};
+import { tAndCLink, privatePolicyLink } from "static/info";
 
 const styles = theme => ({
   root: {
@@ -59,14 +43,14 @@ class TermsDialog extends React.Component {
           id="responsive-dialog-title"
           style={{ textAlign: "center" }}
         >
-          {message.title}
+          Welcome to Plastic Patrol
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            {message.startText}
-            <a href={message.termsLink}>{message.termsText}</a>
-            {message.midText}
-            <a href={message.privacyLink}>{message.privacyText}</a>
+            Please read our
+            <a href={tAndCLink}>Terms and Conditions</a>
+            and
+            <a href={privatePolicyLink}>Privacy Policy</a>
             <br /> <br />
             <FormControlLabel
               control={
