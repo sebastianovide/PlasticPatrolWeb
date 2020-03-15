@@ -3,6 +3,8 @@ import { Switch, Route, useHistory } from "react-router-dom";
 
 import config from "custom/config";
 
+import User from "types/User";
+
 import TutorialPage from "components/pages/TutorialPage";
 import PhotoPage from "components/pages/PhotoPage";
 import ProfilePage from "components/ProfilePage";
@@ -17,6 +19,26 @@ import DisplayPhoto from "components/MapPage/DisplayPhoto";
 
 import ModeratorRoute from "./components/ModeratorRoute";
 import SignedInRoute from "./components/SignedInRoute";
+
+type Props = {
+  user: User;
+  usersLeaderboard: any;
+  reloadPhotos: () => void;
+  photosToModerate: () => void;
+  handleApproveClick: () => void;
+  handleRejectClick: () => void;
+  file: any;
+  gpsLocation: any;
+  online: boolean;
+  srcType: any;
+  cordovaMetadata: any;
+  handleCameraClick: () => void;
+  geojson: any;
+  handlePhotoClick: () => void;
+  selectedFeature: any;
+  handlePhotoPageClose: () => void;
+  fields: any;
+};
 
 export function Routes({
   user,
@@ -36,7 +58,7 @@ export function Routes({
   selectedFeature,
   handlePhotoPageClose,
   fields
-}) {
+}: Props) {
   const history = useHistory();
   return (
     <Switch>
@@ -88,6 +110,7 @@ export function Routes({
 
       <Route path={config.PAGES.photos.path}>
         <PhotoPage
+          //@ts-ignore - this exists
           label={config.PAGES.photos.label}
           file={file}
           gpsLocation={gpsLocation}
@@ -100,7 +123,7 @@ export function Routes({
         />
       </Route>
 
-      <SignedInRoute path={config.PAGES.account.path}>
+      <SignedInRoute path={config.PAGES.account.path} user={user}>
         <ProfilePage
           config={config}
           label={config.PAGES.account.label}
