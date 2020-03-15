@@ -117,11 +117,11 @@ jobs:
     - npm install
     - npm install ios-deploy
 
-    # build the iOS app for a device, requires code signing, so only run in
-    # main repo (where we can decrypt the required keys)
+    # build the iOS app for a device, requires code signing, so don't run on PRS
+    # (we need to decrypt the required keys)
   - name: ios:prod
     os: osx
-    if: repo = Geovation/plastic-patrol AND tag IS blank
+    if: type != pull_request AND tag IS blank
     branches:
       only:
       - master
