@@ -25,11 +25,6 @@ import WelcomePage from "./components/pages/WelcomePage";
 import Map from "./components/MapPage/Map";
 import CustomPhotoDialog from "./components/CustomPhotoDialog";
 import LoginFirebase from "./components/LoginFirebase";
-import Login from "./components/Login";
-
-import AboutPage from "./components/AboutPage";
-import LeaderboardPage from "./components/Leaderboard";
-import WriteFeedbackPage from "./components/WriteFeedbackPage";
 import DrawerContainer from "./components/DrawerContainer";
 import TermsDialog from "./components/TermsDialog";
 import EmailVerifiedDialog from "./components/EmailVerifiedDialog";
@@ -314,7 +309,6 @@ class App extends Component {
   async componentWillUnmount() {
     // Terrible hack !!! it will be fixed with redux
     this.setState = console.log;
-
     await this.unregisterAuthObserver();
     await this.unregisterLocationObserver();
     await this.unregisterConnectionObserver();
@@ -467,9 +461,13 @@ class App extends Component {
 
   handleNextClick = async () => {
     const user = await authFirebase.reloadUser();
-    if (user.emailVerified) {
+    if (authFirebase.shouldConsiderEmailVerified(user)) {
       this.setState({
-        user: { ...this.state.user, emailVerified: user.emailVerified }
+        user: {
+          ...this.state.user,
+
+          emailVerified: authFirebase.shouldConsiderEmailVerified(user)
+        }
       });
       let message = {
         title: "Confirmation",
@@ -650,7 +648,12 @@ class App extends Component {
 
         <EmailVerifiedDialog
           user={this.state.user}
-          open={!!(this.state.user && !this.state.user.emailVerified)}
+          open={
+            !!(
+              this.state.user &&
+              !authFirebase.shouldConsiderEmailVerified(this.state.user)
+            )
+          }
           handleNextClick={this.handleNextClick}
         />
 

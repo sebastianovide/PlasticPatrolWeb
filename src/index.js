@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import { HashRouter as Router } from "react-router-dom";
 
@@ -6,6 +6,9 @@ import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 
 import "./index.scss";
 import App from "./App";
+import * as firebaseui from "firebaseui";
+import firebase from "firebase/app";
+import LoginFirebase from "./components/LoginFirebase";
 import * as serviceWorker from "./serviceWorker";
 import config from "./custom/config";
 import { isIphoneAndCordova } from "./utils";
@@ -16,6 +19,13 @@ serviceWorker.register();
 if (isIphoneAndCordova) {
   window.StatusBar.styleDefault();
 }
+
+const isPendingRedirect = () => {
+  const app =
+    firebaseui.auth.AuthUI.getInstance() ||
+    new firebaseui.auth.AuthUI(firebase.auth());
+  return app.isPendingRedirect();
+};
 
 if (
   process.env.NODE_ENV !== "development" &&
@@ -31,13 +41,27 @@ if (devDissableDebugLog) {
 
 const theme = createMuiTheme(config.THEME);
 
+const Wrapper = () => {
+  const [handledPendingRedirect, setHandledPendingRedirect] = useState(false);
+  return (
+    <>
+      <LoginFirebase
+        open={!handledPendingRedirect && isPendingRedirect()}
+        handleClose={() => {}}
+        onSignIn={() => setHandledPendingRedirect(true)}
+      />
+      <App fields={Object.values(config.PHOTO_FIELDS)} config={config} />
+    </>
+  );
+};
+
 const startApp = () => {
   gtagInit();
 
   ReactDOM.render(
     <Router>
       <MuiThemeProvider theme={theme}>
-        <App fields={Object.values(config.PHOTO_FIELDS)} config={config} />
+        <Wrapper />
       </MuiThemeProvider>
     </Router>,
     document.getElementById("root")
