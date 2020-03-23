@@ -1,4 +1,5 @@
-import config from "../custom/config";
+//to get round window.cordova being undefined
+declare var window: any;
 
 export const device = () => {
   const agent = navigator.userAgent;
@@ -82,10 +83,10 @@ export const isIphoneWithNotchAndCordova = () => {
   return false;
 };
 
-export function getValueFromTree(tree, value) {
+export function getValueFromTree(tree: Object, value: string) {
   let foundedNode;
 
-  function searchTree(tree, key_to_find) {
+  function searchTree(tree: Object, key_to_find: string) {
     Object.entries(tree).forEach(([key, value]) => {
       if (key_to_find === key) {
         foundedNode = value.label;
@@ -100,11 +101,14 @@ export function getValueFromTree(tree, value) {
   return foundedNode;
 }
 
-export function getValueAndAncestorsFromTree(tree, key_to_find) {
-  const stack = [];
-  let listWithNodes = [];
+export function getValueAndAncestorsFromTree(
+  tree: Object,
+  key_to_find: string
+) {
+  const stack: string[] = [];
+  let listWithNodes: string[] = [];
 
-  function findPathOfFoundedNode(tree, key_to_find) {
+  function findPathOfFoundedNode(tree: Object, key_to_find: string) {
     Object.entries(tree).forEach(([key, value]) => {
       if (key_to_find === key) {
         const foundedNode = value.label;
@@ -121,15 +125,10 @@ export function getValueAndAncestorsFromTree(tree, key_to_find) {
   return listWithNodes;
 }
 
-export function customiseString(page, key) {
-  return config.CUSTOM_STRING[page][key] || key;
-}
-
-export default {
-  customiseString
-};
-
-export const sortArrayByObjectKey = (array, keyName) => {
+export function sortArrayByObjectKey<T extends Object, K extends keyof T>(
+  array: T[],
+  keyName: K
+) {
   return array.sort((a, b) => {
     if (a[keyName] < b[keyName]) {
       return -1;
@@ -139,4 +138,4 @@ export const sortArrayByObjectKey = (array, keyName) => {
     }
     return 0;
   });
-};
+}

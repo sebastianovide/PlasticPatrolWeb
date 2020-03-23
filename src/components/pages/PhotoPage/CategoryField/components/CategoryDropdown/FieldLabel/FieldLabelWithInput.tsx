@@ -1,9 +1,16 @@
 import React, { useState, useEffect } from "react";
 import classnames from "classnames";
 
-import FieldLabel from "./FieldLabel";
+import FieldLabel, { PropsToPass } from "./FieldLabel";
 
 import "./FieldLabelWithInput.scss";
+
+type Props = {
+  validationFn: (value: string) => boolean;
+  value: string;
+  placeholder: string;
+  setValue: (value: string) => void;
+} & PropsToPass;
 
 const FieldLabelWithInput = ({
   validationFn,
@@ -11,7 +18,7 @@ const FieldLabelWithInput = ({
   setValue,
   placeholder,
   ...fieldLabelProps
-}) => {
+}: Props) => {
   const [error, setError] = useState(false);
 
   useEffect(() => {

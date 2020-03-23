@@ -8,6 +8,8 @@
     "@material-ui/core": "^4.6.1",
     "@material-ui/icons": "^4.5.1",
     "@turf/turf": "^5.1.6",
+    "@types/react": "^16.9.23",
+    "@types/react-dom": "^16.9.5",
     "blueimp-load-image": "^2.24.0",
     "classnames": "^2.2.6",
     "dms2dec": "^1.1.0",
@@ -61,6 +63,9 @@
     "random-location": "^1.1.2",
     "react-scripts": "^3.2.0",
     "rimraf": "^3.0.0",
+    "source-map-loader": "^0.2.4",
+    "ts-loader": "^6.2.1",
+    "typescript": "^3.8.3",
     "workbox-cli": "^4.1.1"
   },
   "browserslist": [

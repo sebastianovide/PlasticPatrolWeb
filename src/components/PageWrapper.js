@@ -6,10 +6,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import { withStyles } from "@material-ui/core/styles";
 import CloseIcon from "@material-ui/icons/Close";
 import BackIcon from "@material-ui/icons/ArrowBack";
-import utils, {
-  isIphoneWithNotchAndCordova,
-  isIphoneAndCordova
-} from "../utils";
+import { isIphoneWithNotchAndCordova, isIphoneAndCordova } from "../utils";
 const placeholderImage = process.env.PUBLIC_URL + "/custom/images/banner.svg";
 
 const styles = theme => ({
@@ -142,7 +139,7 @@ class PageWrapper extends React.Component {
           <img
             className={classes.logo}
             src={placeholderImage}
-            alt={utils.customiseString("about", "Geovation")}
+            alt={"Geovation"}
           />
         )}
         <div className={classes.main}>{children}</div>

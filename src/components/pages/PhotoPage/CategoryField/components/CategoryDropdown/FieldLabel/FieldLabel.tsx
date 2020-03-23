@@ -3,7 +3,22 @@ import classnames from "classnames";
 
 import "./FieldLabel.scss";
 
-const FieldLabel = ({ label, required, children, className }) => {
+export type PropsToPass = {
+  label: string;
+  required?: boolean;
+  className?: string;
+};
+
+type Props = {
+  children: React.ReactElement;
+} & PropsToPass;
+
+export default function FieldLabel({
+  label,
+  required,
+  children,
+  className
+}: Props) {
   return (
     <div className={classnames("FieldLabel__container", className)}>
       <p className={"FieldLabel__label"}>
@@ -13,6 +28,4 @@ const FieldLabel = ({ label, required, children, className }) => {
       {children}
     </div>
   );
-};
-
-export default FieldLabel;
+}
