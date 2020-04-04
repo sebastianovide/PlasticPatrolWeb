@@ -17,7 +17,7 @@ import { dbFirebase } from "features/firebase";
 import { isIphoneWithNotchAndCordova, isIphoneAndCordova } from "../../utils";
 import config from "../../custom/config";
 
-const styles = theme => ({
+const styles = (theme) => ({
   notchTop: {
     paddingTop: isIphoneWithNotchAndCordova()
       ? "env(safe-area-inset-top)"
@@ -65,9 +65,11 @@ class FeedbackDetailsPage extends Component {
       this.props.user &&
       this.props.user.isModerator
     ) {
-      dbFirebase.getFeedbackByID(this.props.match.params.id).then(feedback => {
-        this.setState({ feedback });
-      });
+      dbFirebase
+        .getFeedbackByID(this.props.match.params.id)
+        .then((feedback) => {
+          this.setState({ feedback });
+        });
     }
   }
 
@@ -100,7 +102,7 @@ class FeedbackDetailsPage extends Component {
 
         <DialogContent className={classes.main}>
           {feedback ? (
-            Object.keys(feedback).map(key => (
+            Object.keys(feedback).map((key) => (
               <div key={key} style={{ textAlign: "justify", padding: "5px" }}>
                 <b>{key + ": "}</b>
                 {"" +
@@ -116,7 +118,7 @@ class FeedbackDetailsPage extends Component {
                 style: { backgroundColor: "transparent", boxShadow: "none" }
               }}
             >
-              <CircularProgress color="secondary" />
+              <CircularProgress color="primary" />
             </Dialog>
           )}
         </DialogContent>
@@ -127,7 +129,7 @@ class FeedbackDetailsPage extends Component {
             className={classes.button}
             fullWidth
             variant="contained"
-            color="secondary"
+            color="primary"
             onClick={async () => {
               await this.handleResolvedClick(feedback, user);
               handleClose();

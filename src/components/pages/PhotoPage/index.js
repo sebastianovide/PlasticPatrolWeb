@@ -35,7 +35,7 @@ const emptyState = {
   totalCount: null
 };
 
-const styles = theme => ({
+const styles = (theme) => ({
   cssUnderline: {
     "&:after": {
       borderBottomColor: theme.palette.secondary.main
@@ -102,7 +102,7 @@ class PhotoPage extends Component {
   /**
    * Given an exif object, return the coordinates {latitude, longitude} or undefined if an error occurs
    */
-  getLocationFromExifMetadata = imgExif => {
+  getLocationFromExifMetadata = (imgExif) => {
     let location, latitude, longitude;
     try {
       if (!window.cordova) {
@@ -161,7 +161,7 @@ class PhotoPage extends Component {
 
     const { fieldsValues, totalCount } = this.state;
 
-    const fieldValuesToSend = fieldsValues.map(value => {
+    const fieldValuesToSend = fieldsValues.map((value) => {
       const {
         values: { error, number, ...otherNonExtraneousFields }
       } = value;
@@ -204,7 +204,7 @@ class PhotoPage extends Component {
 
       this.uploadTask.on(
         "state_changed",
-        snapshot => {
+        (snapshot) => {
           const sendingProgress = Math.ceil(
             (snapshot.bytesTransferred / snapshot.totalBytes) * 98 + 1
           );
@@ -221,7 +221,7 @@ class PhotoPage extends Component {
               console.log(snapshot.state);
           }
         },
-        error => {
+        (error) => {
           // debugger
           console.error(error);
           const extraInfo =
@@ -249,7 +249,7 @@ class PhotoPage extends Component {
     if (!window.cordova) {
       loadImage.parseMetaData(
         this.props.file,
-        data => {
+        (data) => {
           imgExif = data.exif ? data.exif.getAll() : imgExif;
           imgIptc = data.iptc ? data.iptc.getAll() : imgIptc;
         },
@@ -262,7 +262,7 @@ class PhotoPage extends Component {
 
     loadImage(
       this.props.file,
-      img => {
+      (img) => {
         let imgFromCamera;
         const imgSrc = img.toDataURL("image/jpeg");
         if (window.cordova) {
@@ -411,7 +411,7 @@ class PhotoPage extends Component {
                   variant="outlined"
                   fullWidth={true}
                   onClick={this.retakePhoto}
-                  color={"secondary"}
+                  color="primary"
                 >
                   Retake
                 </Button>

@@ -13,7 +13,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 
 import { tAndCLink, privatePolicyLink } from "static/info";
 
-const styles = theme => ({
+const styles = (theme) => ({
   root: {
     background: "rgba(255,225,225,0.5)"
   }
@@ -25,7 +25,7 @@ class TermsDialog extends React.Component {
     isChecked: false
   };
 
-  handleChange = () => event => {
+  handleChange = () => (event) => {
     this.setState({ isChecked: event.target.checked });
   };
 
@@ -46,10 +46,10 @@ class TermsDialog extends React.Component {
           Welcome to Plastic Patrol
         </DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            Please read our
-            <a href={tAndCLink}>Terms and Conditions</a>
-            and
+          <DialogContentText style={{ textAlign: "center" }}>
+            {" "}
+            <a href={tAndCLink}>Terms and Conditions</a>{" "}
+            <p style={{ margin: 0 }}>and</p>
             <a href={privatePolicyLink}>Privacy Policy</a>
             <br /> <br />
             <FormControlLabel
@@ -57,6 +57,7 @@ class TermsDialog extends React.Component {
                 <Checkbox
                   onChange={this.handleChange("checkbox")}
                   checked={this.state.isChecked}
+                  color="primary"
                 />
               }
               label="I have read and agree to the Terms and Conditions, and Privacy Policy."
@@ -68,7 +69,7 @@ class TermsDialog extends React.Component {
           <Button
             fullWidth
             variant="contained"
-            color="secondary"
+            color="primary"
             disabled={!this.state.isChecked}
             onClick={handleClose}
           >

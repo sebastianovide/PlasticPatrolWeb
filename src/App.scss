@@ -1,4 +1,4 @@
-@import "./custom/config";
+@import "./standard.scss";
 
 body {
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
@@ -26,16 +26,11 @@ body {
 }
 
 .firebaseui-textfield.mdl-textfield .firebaseui-label::after {
-  background: $secondary !important;
+  background: $teal !important;
 }
 .firebaseui-form-actions
   .mdl-button--raised.mdl-button--colored.firebaseui-button {
-  background: $secondary !important;
-}
-
-// color of the link text for forgotten passwords
-.firebaseui-link.firebaseui-id-secondary-link {
-  //color: $secondary !important;
+  background: $teal !important;
 }
 
 .body {

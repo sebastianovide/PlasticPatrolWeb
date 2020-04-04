@@ -6,10 +6,14 @@ import Toolbar from "@material-ui/core/Toolbar";
 import { withStyles } from "@material-ui/core/styles";
 import CloseIcon from "@material-ui/icons/Close";
 import BackIcon from "@material-ui/icons/ArrowBack";
+
+import standardStyles from "standard.scss";
+
 import { isIphoneWithNotchAndCordova, isIphoneAndCordova } from "../utils";
+
 const placeholderImage = process.env.PUBLIC_URL + "/custom/images/banner.svg";
 
-const styles = theme => ({
+const styles = (theme) => ({
   container: {
     display: "flex",
     flex: 1,
@@ -49,6 +53,12 @@ const styles = theme => ({
   logo: {
     height: "80px",
     margin: theme.spacing(2)
+  },
+  button: {
+    color: theme.palette.primary.contrastText
+  },
+  buttonDisabled: {
+    color: `${standardStyles.textPrimaryDisabled} !important`
   }
 });
 
@@ -118,8 +128,9 @@ class PageWrapper extends React.Component {
             {photoPage && !nextClicked && (
               <Button
                 disabled={!this.props.enableNext}
-                color="secondary"
+                className={classes.button}
                 onClick={this.handleNext}
+                classes={{ disabled: classes.buttonDisabled }}
               >
                 Next
               </Button>
@@ -127,8 +138,9 @@ class PageWrapper extends React.Component {
             {photoPage && nextClicked && (
               <Button
                 disabled={error}
-                color="secondary"
+                className={classes.button}
                 onClick={this.props.sendFile}
+                classes={{ disabled: classes.buttonDisabled }}
               >
                 Upload
               </Button>

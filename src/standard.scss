@@ -1,16 +1,23 @@
 //  Colors
 
+//Palettes
+
 // Primary
 $teal: #2cb5b5;
 $textPrimary: #fff;
+$textPrimaryDisabled: rgba(white, 0.5);
 
 //Secondary
 $blue: #78cade;
 $textSecondary: #fff;
+
+// Text
+$grey: rgba(0, 0, 0, 0.54);
 
 :export {
   primary: $teal;
   secondary: $blue;
   textPrimary: $textPrimary;
   textSecondary: $textSecondary;
+  textPrimaryDisabled: $textPrimaryDisabled;
 }
