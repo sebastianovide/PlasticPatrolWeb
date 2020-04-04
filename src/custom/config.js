@@ -19,10 +19,10 @@ import MultiFields from "../components/pages/PhotoPage/AdminApproval/MultiFields
 
 import data from "./categories.json";
 
-const primaryColor = styles.primary;
-const textPrimary = styles.textPrimary;
-const secondaryColor = styles.secondary;
-const textSecondary = styles.textPrimary;
+const primaryMain = styles.primaryMain;
+const primaryContrastText = styles.primaryContrastText;
+const secondaryMain = styles.secondaryMain;
+const secondaryContrastText = styles.primaryContrastText;
 
 const PAGES = {
   map: {
@@ -104,8 +104,8 @@ export default {
   MAX_IMAGE_SIZE: 2048,
   THEME: {
     palette: {
-      primary: { main: primaryColor, contrastText: textPrimary },
-      secondary: { main: secondaryColor, contrastText: textSecondary }
+      primary: { main: primaryMain, contrastText: primaryContrastText },
+      secondary: { main: secondaryMain, contrastText: secondaryContrastText }
     },
     spacing: 10
   },

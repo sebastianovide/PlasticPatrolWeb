@@ -58,7 +58,7 @@ const styles = (theme) => ({
     color: theme.palette.primary.contrastText
   },
   buttonDisabled: {
-    color: `${standardStyles.textPrimaryDisabled} !important`
+    color: `${standardStyles.primaryTextDisabled} !important`
   }
 });
 

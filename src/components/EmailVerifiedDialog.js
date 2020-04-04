@@ -33,7 +33,7 @@ const styles = (theme) => ({
   },
   link: {
     cursor: "pointer",
-    color: "blue"
+    color: theme.palette.secondary.main
   },
   button: {
     margin: theme.spacing(1.5)
