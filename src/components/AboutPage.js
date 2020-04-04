@@ -6,7 +6,7 @@ import { withStyles } from "@material-ui/core/styles";
 
 import PageWrapper from "./PageWrapper";
 
-const styles = theme => ({
+const styles = (theme) => ({
   typography: {
     ...theme.mixins.gutters(),
     whiteSpace: "pre-wrap"
@@ -35,7 +35,7 @@ class AboutPage extends React.Component {
           <span style={{ display: "block", textAlign: "center" }}>
             <Button
               onClick={reloadPhotos}
-              color="secondary"
+              color="primary"
               startIcon={<CachedIcon />}
             >
               Recache Photos

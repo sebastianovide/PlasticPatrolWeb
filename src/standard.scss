@@ -1,0 +1,16 @@
+//  Colors
+
+// Primary
+$teal: #2cb5b5;
+$textPrimary: #fff;
+
+//Secondary
+$blue: #78cade;
+$textSecondary: #fff;
+
+:export {
+  primary: $teal;
+  secondary: $blue;
+  textPrimary: $textPrimary;
+  textSecondary: $textSecondary;
+}

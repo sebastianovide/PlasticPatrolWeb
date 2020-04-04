@@ -24,7 +24,7 @@ const placeholderImage =
 const drawerWidth = "80%";
 const drawerMaxWidth = 360;
 
-const styles = theme => ({
+const styles = (theme) => ({
   drawerPaper: {
     width: drawerWidth,
     maxWidth: drawerMaxWidth
@@ -137,7 +137,7 @@ class DrawerContainer extends Component {
           </List>
         </div>
 
-        <Typography className={classes.stats} color={"secondary"}>
+        <Typography className={classes.stats} color="primary">
           {`${stats | 0} pieces found so far!`}
           {sponsorImage && (
             <span className="sponsored-by-container">

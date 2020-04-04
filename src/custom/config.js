@@ -1,4 +1,5 @@
 import React from "react";
+import _ from "lodash";
 
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
@@ -9,9 +10,8 @@ import EventIcon from "@material-ui/icons/Event";
 import FeedbackIcon from "@material-ui/icons/Feedback";
 import LibraryBooksIcon from "@material-ui/icons/LibraryBooks";
 
-import _ from "lodash";
+import styles from "standard.scss";
 
-import styles from "./config.scss";
 import enums from "../types/enums";
 
 import TitleTextField from "../components/pages/PhotoPage/AdminApproval/TitleTextField";
@@ -20,7 +20,9 @@ import MultiFields from "../components/pages/PhotoPage/AdminApproval/MultiFields
 import data from "./categories.json";
 
 const primaryColor = styles.primary;
+const textPrimary = styles.textPrimary;
 const secondaryColor = styles.secondary;
+const textSecondary = styles.textPrimary;
 
 const PAGES = {
   map: {
@@ -102,8 +104,8 @@ export default {
   MAX_IMAGE_SIZE: 2048,
   THEME: {
     palette: {
-      primary: { main: primaryColor },
-      secondary: { main: secondaryColor }
+      primary: { main: primaryColor, contrastText: textPrimary },
+      secondary: { main: secondaryColor, contrastText: textSecondary }
     },
     spacing: 10
   },
@@ -115,8 +117,8 @@ export default {
   GA_TRACKING_ID: "UA-126516084-1",
   GA_PROPERTY_ID: "189010506",
   PHOTO_ZOOMED_FIELDS: {
-    updated: s => new Date(s).toDateString(),
-    pieces: s => s
+    updated: (s) => new Date(s).toDateString(),
+    pieces: (s) => s
   },
   ZOOM: 5,
   ZOOM_FLYTO: 15,
@@ -139,8 +141,8 @@ export default {
       placeholder: "Add litter category",
       data: data,
       noOptionsMessage: "No more categories",
-      sanitize: value => {
-        _.forEach(value, category => {
+      sanitize: (value) => {
+        _.forEach(value, (category) => {
           category.brand =
             category.brand.replace &&
             category.brand.replace(/\s+/g, " ").trim();
