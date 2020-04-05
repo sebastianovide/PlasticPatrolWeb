@@ -16,6 +16,9 @@ import { tAndCLink, privatePolicyLink } from "static/info";
 const styles = (theme) => ({
   root: {
     background: "rgba(255,225,225,0.5)"
+  },
+  text: {
+    margin: 0
   }
 });
 
@@ -47,9 +50,9 @@ class TermsDialog extends React.Component {
         </DialogTitle>
         <DialogContent>
           <DialogContentText style={{ textAlign: "center" }}>
-            {" "}
+            <p className={classes.text}>Please read our</p>
             <a href={tAndCLink}>Terms and Conditions</a>{" "}
-            <p style={{ margin: 0 }}>and</p>
+            <p className={classes.text}>and</p>
             <a href={privatePolicyLink}>Privacy Policy</a>
             <br /> <br />
             <FormControlLabel
