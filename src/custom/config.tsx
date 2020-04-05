@@ -12,87 +12,92 @@ import LibraryBooksIcon from "@material-ui/icons/LibraryBooks";
 import _ from "lodash";
 
 import styles from "./config.scss";
-import enums from "../types/enums";
+import enums from "types/enums";
+import User from "types/User";
+import Page from "types/Page";
+import Stats from "types/Stats";
 
-import TitleTextField from "../components/pages/PhotoPage/AdminApproval/TitleTextField";
-import MultiFields from "../components/pages/PhotoPage/AdminApproval/MultiFields";
+import TitleTextField from "components/pages/PhotoPage/AdminApproval/TitleTextField";
+import MultiFields from "components/pages/PhotoPage/AdminApproval/MultiFields";
 
 import data from "./categories.json";
 
 const primaryColor = styles.primary;
 const secondaryColor = styles.secondary;
 
-const PAGES = {
+const PAGES: { [pageName: string]: Page } = {
   map: {
     path: "/",
-    label: "Map"
+    label: "Map",
   },
   embeddable: {
     path: "/embeddable",
-    label: "Map"
+    label: "Map",
   },
   photos: {
     path: "/photo",
-    label: "Photo"
+    label: "Photo",
   },
   moderator: {
     path: "/moderator",
     label: "Photo Approval",
     icon: <CheckCircleIcon />,
-    visible: (user, online) => user && user.isModerator
+    visible: (user: User | undefined, online: boolean) =>
+      !!(user && user.isModerator),
   },
   account: {
     path: "/account",
     label: "Account",
     icon: <AccountCircleIcon />,
-    visible: (user, online) => user
+    visible: (user: User | undefined, online: boolean) => !!user,
   },
   about: {
     path: "/about",
     label: "About",
-    visible: (user, online) => true,
-    icon: <HelpIcon />
+    visible: (user: User | undefined, online: boolean) => true,
+    icon: <HelpIcon />,
   },
   tutorial: {
     path: "/tutorial",
     label: "Tutorial",
-    visible: (user, online) => true,
-    icon: <SchoolIcon />
+    visible: (user: User | undefined, online: boolean) => true,
+    icon: <SchoolIcon />,
   },
   writeFeedback: {
     path: "/write-feedback",
     label: "Feedback",
-    visible: (user, online) => true,
-    icon: <FeedbackIcon />
+    visible: (user: User | undefined, online: boolean) => true,
+    icon: <FeedbackIcon />,
   },
   events: {
     path: "/events",
-    label: "Clean-ups"
+    label: "Clean-ups",
   },
   partners: {
     path: "/partners",
-    label: "Partners"
+    label: "Partners",
   },
   leaderboard: {
     path: "/leaderboard",
     label: "Leaderboard",
-    visible: (user, online) => true,
-    icon: <DashboardIcon />
+    visible: (user: User | undefined, online: boolean) => true,
+    icon: <DashboardIcon />,
   },
   feedbackReports: {
     path: "/feedback-reports",
     label: "Feedback Reports",
     icon: <LibraryBooksIcon />,
-    visible: (user, online) => user && user.isModerator
+    visible: (user: User | undefined, online: boolean) =>
+      !!(user && user.isModerator),
   },
   feedbackDetails: {
     path: "/feedback-details",
-    label: "Feedback Details"
+    label: "Feedback Details",
   },
   displayPhoto: {
     path: "/photos",
-    label: "photos"
-  }
+    label: "photos",
+  },
 };
 
 const STATIC_CONFIG = require("./config.json");
@@ -103,9 +108,9 @@ export default {
   THEME: {
     palette: {
       primary: { main: primaryColor },
-      secondary: { main: secondaryColor }
+      secondary: { main: secondaryColor },
     },
-    spacing: 10
+    spacing: 10,
   },
   MAP_SOURCE: "mapbox://styles/mapbox/streets-v10",
   // MAP_SOURCE: "https://s3-eu-west-1.amazonaws.com/tiles.os.uk/styles/open-zoomstack-outdoor/style.json",
@@ -115,8 +120,8 @@ export default {
   GA_TRACKING_ID: "UA-126516084-1",
   GA_PROPERTY_ID: "189010506",
   PHOTO_ZOOMED_FIELDS: {
-    updated: s => new Date(s).toDateString(),
-    pieces: s => s
+    updated: (s: string) => new Date(s).toDateString(),
+    pieces: (s: string) => s,
   },
   ZOOM: 5,
   ZOOM_FLYTO: 15,
@@ -129,7 +134,7 @@ export default {
       placeholder: "eg. 123",
       inputProps: { min: 0, step: 1 },
       regexValidation: "^[0-9]+",
-      component: TitleTextField
+      component: TitleTextField,
     },
     categories: {
       component: MultiFields.MultiFieldsWithStyles,
@@ -139,8 +144,8 @@ export default {
       placeholder: "Add litter category",
       data: data,
       noOptionsMessage: "No more categories",
-      sanitize: value => {
-        _.forEach(value, category => {
+      sanitize: (value: any) => {
+        _.forEach(value, (category) => {
           category.brand =
             category.brand.replace &&
             category.brand.replace(/\s+/g, " ").trim();
@@ -156,7 +161,7 @@ export default {
           title: "Number",
           type: enums.TYPES.number,
           placeholder: "eg. 123",
-          regexValidation: "^[0-9]+"
+          regexValidation: "^[0-9]+",
         },
         brand: {
           component: TitleTextField,
@@ -164,28 +169,29 @@ export default {
           title: "Brand",
           type: enums.TYPES.string,
           placeholder: "eg. whatever",
-          regexValidation: ".+"
-        }
-      }
-    }
+          regexValidation: ".+",
+        },
+      },
+    },
   },
   PAGES,
   CUSTOM_PAGES: [
     {
-      visible: (user, online) => true,
+      visible: (user: User | undefined, online: boolean) => true,
       icon: <EventIcon />,
       label: PAGES.events.label,
-      click: () => (window.location = "https://plasticpatrol.co.uk/clean-ups/")
-    }
+      onClick: () =>
+        (window.location.href = "https://plasticpatrol.co.uk/clean-ups/"),
+    },
   ],
-  getStats: (photos, dbStats) => (dbStats && dbStats.pieces) || 0,
+  getStats: (photos: any, dbStats: Stats) => (dbStats && dbStats.pieces) || 0,
   ENABLE_GRAVATAR_PROFILES: true, //To update user-profile from Gravatar, value: true or false.
   SECURITY: {
-    UPLOAD_REQUIRES_LOGIN: true
+    UPLOAD_REQUIRES_LOGIN: true,
   },
   MODERATING_PHOTOS: 15,
   LEADERBOARD_FIELD: {
     label: "Pieces",
-    field: "pieces"
-  }
+    field: "pieces",
+  },
 };
