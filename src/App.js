@@ -687,13 +687,13 @@ class App extends Component {
             user={this.state.user}
             config={config}
             embeddable={this.props.history.location.pathname.match(
-              new RegExp(config.PAGES.embeddable.path, "g")
+              new RegExp(config.PAGES.embeddable.target, "g")
             )}
             handleCameraClick={this.handleCameraClick}
             toggleLeftDrawer={this.toggleLeftDrawer}
             handlePhotoClick={this.handlePhotoClick}
             mapLocation={this.state.mapLocation}
-            handleMapLocationChange={(newMapLocation) =>
+            handleMapLocationChange={newMapLocation =>
               this.handleMapLocationChange(newMapLocation)
             }
             handleLocationClick={this.handleLocationClick}
@@ -721,7 +721,7 @@ class App extends Component {
               accept="image/*"
               id={"fileInput"}
               onChange={this.openFile}
-              onClick={(e) => (e.target.value = null)}
+              onClick={e => (e.target.value = null)}
             />
           </RootRef>
         )}

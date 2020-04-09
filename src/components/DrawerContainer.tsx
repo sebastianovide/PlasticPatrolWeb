@@ -8,7 +8,6 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Divider from "@material-ui/core/Divider";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
-import Avatar from "@material-ui/core/Avatar";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 
@@ -17,10 +16,7 @@ import { tAndCLink, privatePolicyLink } from "static/info";
 import { isIphoneWithNotchAndCordova, isIphoneAndCordova } from "utils";
 import User from "types/User";
 import Page from "types/Page";
-import Stats from "types/Stats";
 import config from "custom/config";
-
-import "./DrawerContainer.scss";
 
 const placeholderImage =
   process.env.PUBLIC_URL + "/images/geovation-banner.svg";
@@ -33,16 +29,31 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: drawerMaxWidth,
   },
   stats: {
-    position: "absolute",
     bottom: theme.spacing(5),
-    alignSelf: "center",
-    paddingBottom: theme.spacing(2),
   },
   links: {
-    position: "absolute",
-    alignSelf: "center",
-    bottom: theme.spacing(1),
+    paddingBottom: theme.spacing(1),
     fontSize: "12px",
+  },
+  sponsoredByContainer: {
+    height: "25px",
+    width: "100%",
+    display: "block",
+    backgroundSize: "contain",
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "center",
+  },
+  container: {
+    width: "100%",
+    height: "100%",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+  },
+  info: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
 }));
 
@@ -58,27 +69,31 @@ type Props = {
   handleClickLoginLogout: () => void;
 };
 
-type NavBarItemBase = {
-  visible: (user: User | undefined, online: boolean) => boolean;
-  icon: React.ReactElement;
-  label: string;
-  click?: () => void;
-};
+function renderListItem(
+  user: User | undefined,
+  online: boolean,
+  item: Page,
+  index: number
+): React.ReactNode {
+  if (item.visible && !item.visible(user, online)) {
+    return [];
+  }
 
-type NavBarItemClick = NavBarItemBase & {
-  onClick: () => void;
-};
-
-type NavBarItemPath = NavBarItemBase & {
-  path: string;
-};
-
-type NavBarItem = NavBarItemPath | NavBarItemClick;
-
-function isNavBarItemPath(
-  item: NavBarItemPath | NavBarItemClick
-): item is NavBarItemPath {
-  return (item as NavBarItemPath).path !== undefined;
+  if (typeof item.target === "string") {
+    return (
+      <ListItem button key={index} component={Link} to={item.target}>
+        {item.icon && <ListItemIcon>{item.icon}</ListItemIcon>}
+        <ListItemText primary={item.label} />
+      </ListItem>
+    );
+  } else {
+    return (
+      <ListItem button key={index} onClick={item.target}>
+        {item.icon && <ListItemIcon>{item.icon}</ListItemIcon>}
+        <ListItemText primary={item.label} />
+      </ListItem>
+    );
+  }
 }
 
 export default function DrawerContainer({
@@ -92,29 +107,24 @@ export default function DrawerContainer({
 }: Props) {
   const theme = useTheme();
   const classes = useStyles();
-  const ListItemsTop: NavBarItem[] = [
-    PAGES.account,
-    PAGES.moderator,
-    PAGES.feedbackReports,
-    PAGES.tutorial,
-    PAGES.leaderboard,
-  ];
-  const ListItemsConfigurable: NavBarItem = config.CUSTOM_PAGES;
-  const LogInLogOut: NavBarItem = {
+  const logInLogOut: Page = {
     visible: (user: User | undefined, online: boolean) => online,
     icon: <ExitToAppIcon />,
     label: user ? "Logout" : "Login",
-    onClick: handleClickLoginLogout,
+    target: handleClickLoginLogout,
   };
-  const ListItemsBottom: NavBarItem[] = [
+  const listItemsTop: Page[] = [PAGES.account, PAGES.moderator];
+  const listItemsTopUnderBreak: Page[] = [
+    PAGES.feedbackReports,
+    PAGES.leaderboard,
+    PAGES.cleanUps,
+  ];
+  const listItemsBottom: Page[] = [
+    PAGES.tutorial,
     PAGES.about,
     PAGES.writeFeedback,
-    LogInLogOut,
+    logInLogOut,
   ];
-  const ListItems: NavBarItem[] = ListItemsTop.concat(
-    ListItemsConfigurable,
-    ListItemsBottom
-  );
   return (
     <Drawer
       className="geovation-drawercontainer"
@@ -131,74 +141,49 @@ export default function DrawerContainer({
             : undefined,
         }}
       />
-      {user && (
+      <div
+        tabIndex={0}
+        role="button"
+        onClick={toggleLeftDrawer(false)}
+        className={classes.container}
+      >
         <div>
-          <div className="drawer-user">
-            <Avatar
-              alt="profile-image"
-              src={user.photoURL}
-              className="avatar"
-              component={Link}
-              to={PAGES.account.path}
-              onClick={toggleLeftDrawer(false)}
-            />
-            <Typography className={"drawer-typography"}>
-              {user.displayName}
-            </Typography>
-            {user.isModerator && <Typography>Admin</Typography>}
-          </div>
-          <Divider />
+          <List>
+            {listItemsTop.map((item, idx) =>
+              renderListItem(user, online, item, idx)
+            )}
+            <Divider />
+            {listItemsTopUnderBreak.map((item, idx) =>
+              renderListItem(user, online, item, idx)
+            )}
+          </List>
         </div>
-      )}
+        <div>
+          <List>
+            {listItemsBottom.map((item, idx) =>
+              renderListItem(user, online, item, idx)
+            )}
+          </List>
 
-      <div tabIndex={0} role="button" onClick={toggleLeftDrawer(false)}>
-        <List>
-          {ListItems.map((item: NavBarItem, index: number) => {
-            if (!item.visible(user, online)) {
-              return [];
-            }
+          <div className={classes.info}>
+            <Typography className={classes.stats} color={"secondary"}>
+              {`${stats | 0} pieces found so far!`}
+            </Typography>
+            {sponsorImage && (
+              <span
+                className={classes.sponsoredByContainer}
+                style={{ backgroundImage: "url(" + sponsorImage + ")" }}
+              />
+            )}
 
-            if (isNavBarItemPath(item)) {
-              return (
-                <ListItem button key={index} component={Link} to={item.path}>
-                  {item.icon && <ListItemIcon>{item.icon}</ListItemIcon>}
-                  <ListItemText primary={item.label} />
-                </ListItem>
-              );
-            } else {
-              return (
-                <ListItem button key={index} onClick={item.onClick}>
-                  {item.icon && <ListItemIcon>{item.icon}</ListItemIcon>}
-                  <ListItemText primary={item.label} />
-                </ListItem>
-              );
-            }
-          })}
-        </List>
+            <Typography className={classes.links}>
+              <a href={tAndCLink}>Terms and Conditions</a>
+              {" / "}
+              <a href={privatePolicyLink}>Privacy Policy</a>
+            </Typography>
+          </div>
+        </div>
       </div>
-
-      <Typography className={classes.stats} color={"secondary"}>
-        {`${stats | 0} pieces found so far!`}
-        {sponsorImage && (
-          <span className="sponsored-by-container">
-            <span
-              className="sponsored-by-image"
-              style={{ backgroundImage: "url(" + sponsorImage + ")" }}
-            ></span>
-          </span>
-        )}
-      </Typography>
-
-      <div className="built-by-geovation">
-        <Typography className="built-by-text">Built by</Typography>
-        <img src={placeholderImage} className="built-by-img" alt={""} />
-      </div>
-
-      <Typography className={classes.links}>
-        <a href={tAndCLink}>Terms and Conditions</a>
-        {" / "}
-        <a href={privatePolicyLink}>Privacy Policy</a>
-      </Typography>
     </Drawer>
   );
 }

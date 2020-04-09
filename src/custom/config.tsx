@@ -27,76 +27,83 @@ const secondaryColor = styles.secondary;
 
 const PAGES: { [pageName: string]: Page } = {
   map: {
-    path: "/",
+    target: "/",
     label: "Map",
   },
   embeddable: {
-    path: "/embeddable",
+    target: "/embeddable",
     label: "Map",
   },
   photos: {
-    path: "/photo",
+    target: "/photo",
     label: "Photo",
   },
   moderator: {
-    path: "/moderator",
+    target: "/moderator",
     label: "Photo Approval",
     icon: <CheckCircleIcon />,
     visible: (user: User | undefined, online: boolean) =>
       !!(user && user.isModerator),
   },
   account: {
-    path: "/account",
+    target: "/account",
     label: "Account",
     icon: <AccountCircleIcon />,
     visible: (user: User | undefined, online: boolean) => !!user,
   },
   about: {
-    path: "/about",
+    target: "/about",
     label: "About",
     visible: (user: User | undefined, online: boolean) => true,
     icon: <HelpIcon />,
   },
   tutorial: {
-    path: "/tutorial",
+    target: "/tutorial",
     label: "Tutorial",
     visible: (user: User | undefined, online: boolean) => true,
     icon: <SchoolIcon />,
   },
   writeFeedback: {
-    path: "/write-feedback",
+    target: "/write-feedback",
     label: "Feedback",
     visible: (user: User | undefined, online: boolean) => true,
     icon: <FeedbackIcon />,
   },
   events: {
-    path: "/events",
+    target: "/events",
     label: "Clean-ups",
   },
   partners: {
-    path: "/partners",
+    target: "/partners",
     label: "Partners",
   },
   leaderboard: {
-    path: "/leaderboard",
+    target: "/leaderboard",
     label: "Leaderboard",
     visible: (user: User | undefined, online: boolean) => true,
     icon: <DashboardIcon />,
   },
   feedbackReports: {
-    path: "/feedback-reports",
+    target: "/feedback-reports",
     label: "Feedback Reports",
     icon: <LibraryBooksIcon />,
     visible: (user: User | undefined, online: boolean) =>
       !!(user && user.isModerator),
   },
   feedbackDetails: {
-    path: "/feedback-details",
+    target: "/feedback-details",
     label: "Feedback Details",
   },
   displayPhoto: {
-    path: "/photos",
+    target: "/photos",
     label: "photos",
+  },
+  cleanUps: {
+    target: () =>
+      (window.location.href = "https://plasticpatrol.co.uk/clean-ups/"),
+    visible: (user: User | undefined, online: boolean) => true,
+    icon: <EventIcon />,
+    label: "Clean-ups",
   },
 };
 
@@ -175,15 +182,6 @@ export default {
     },
   },
   PAGES,
-  CUSTOM_PAGES: [
-    {
-      visible: (user: User | undefined, online: boolean) => true,
-      icon: <EventIcon />,
-      label: PAGES.events.label,
-      onClick: () =>
-        (window.location.href = "https://plasticpatrol.co.uk/clean-ups/"),
-    },
-  ],
   getStats: (photos: any, dbStats: Stats) => (dbStats && dbStats.pieces) || 0,
   ENABLE_GRAVATAR_PROFILES: true, //To update user-profile from Gravatar, value: true or false.
   SECURITY: {
