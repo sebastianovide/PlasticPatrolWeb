@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { Link as ReactLink } from "react-router-dom";
 
+import Link from "@material-ui/core/Link";
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -23,17 +24,17 @@ const placeholderImage =
 const drawerWidth = "80%";
 const drawerMaxWidth = 360;
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   drawerPaper: {
     width: drawerWidth,
-    maxWidth: drawerMaxWidth,
+    maxWidth: drawerMaxWidth
   },
   stats: {
-    bottom: theme.spacing(5),
+    bottom: theme.spacing(5)
   },
   links: {
     paddingBottom: theme.spacing(1),
-    fontSize: "12px",
+    fontSize: "12px"
   },
   sponsoredByContainer: {
     height: "25px",
@@ -41,20 +42,20 @@ const useStyles = makeStyles((theme) => ({
     display: "block",
     backgroundSize: "contain",
     backgroundRepeat: "no-repeat",
-    backgroundPosition: "center",
+    backgroundPosition: "center"
   },
   container: {
     width: "100%",
     height: "100%",
     display: "flex",
     flexDirection: "column",
-    justifyContent: "space-between",
+    justifyContent: "space-between"
   },
   info: {
     display: "flex",
     flexDirection: "column",
-    alignItems: "center",
-  },
+    alignItems: "center"
+  }
 }));
 
 const PAGES = config.PAGES;
@@ -79,16 +80,16 @@ function renderListItem(
     return [];
   }
 
-  if (typeof item.target === "string") {
+  if (item.path.startsWith("http")) {
     return (
-      <ListItem button key={index} component={Link} to={item.target}>
+      <ListItem button key={index} component={Link} href={item.path}>
         {item.icon && <ListItemIcon>{item.icon}</ListItemIcon>}
         <ListItemText primary={item.label} />
       </ListItem>
     );
   } else {
     return (
-      <ListItem button key={index} onClick={item.target}>
+      <ListItem button key={index} component={ReactLink} to={item.path}>
         {item.icon && <ListItemIcon>{item.icon}</ListItemIcon>}
         <ListItemText primary={item.label} />
       </ListItem>
@@ -103,27 +104,20 @@ export default function DrawerContainer({
   stats,
   sponsorImage,
   toggleLeftDrawer,
-  handleClickLoginLogout,
+  handleClickLoginLogout
 }: Props) {
   const theme = useTheme();
   const classes = useStyles();
-  const logInLogOut: Page = {
-    visible: (user: User | undefined, online: boolean) => online,
-    icon: <ExitToAppIcon />,
-    label: user ? "Logout" : "Login",
-    target: handleClickLoginLogout,
-  };
   const listItemsTop: Page[] = [PAGES.account, PAGES.moderator];
   const listItemsTopUnderBreak: Page[] = [
     PAGES.feedbackReports,
     PAGES.leaderboard,
-    PAGES.cleanUps,
+    PAGES.cleanUps
   ];
   const listItemsBottom: Page[] = [
     PAGES.tutorial,
     PAGES.about,
-    PAGES.writeFeedback,
-    logInLogOut,
+    PAGES.writeFeedback
   ];
   return (
     <Drawer
@@ -138,7 +132,7 @@ export default function DrawerContainer({
             ? "env(safe-area-inset-top)"
             : isIphoneAndCordova
             ? theme.spacing(1.5)
-            : undefined,
+            : undefined
         }}
       />
       <div
@@ -163,8 +157,15 @@ export default function DrawerContainer({
             {listItemsBottom.map((item, idx) =>
               renderListItem(user, online, item, idx)
             )}
+            {online && (
+              <ListItem button onClick={handleClickLoginLogout}>
+                <ListItemIcon>
+                  <ExitToAppIcon />
+                </ListItemIcon>
+                <ListItemText primary={user ? "Logout" : "Login"} />
+              </ListItem>
+            )}
           </List>
-
           <div className={classes.info}>
             <Typography className={classes.stats} color={"secondary"}>
               {`${stats | 0} pieces found so far!`}

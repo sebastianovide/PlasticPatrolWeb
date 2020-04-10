@@ -27,97 +27,104 @@ const secondaryColor = styles.secondary;
 
 const PAGES: { [pageName: string]: Page } = {
   map: {
-    target: "/",
-    label: "Map",
+    path: "/",
+    label: "Map"
   },
   embeddable: {
-    target: "/embeddable",
-    label: "Map",
+    path: "/embeddable",
+    label: "Map"
   },
   photos: {
-    target: "/photo",
-    label: "Photo",
+    path: "/photo",
+    label: "Photo"
   },
   moderator: {
-    target: "/moderator",
+    path: "/moderator",
     label: "Photo Approval",
     icon: <CheckCircleIcon />,
     visible: (user: User | undefined, online: boolean) =>
-      !!(user && user.isModerator),
+      !!(user && user.isModerator)
   },
   account: {
-    target: "/account",
+    path: "/account",
     label: "Account",
     icon: <AccountCircleIcon />,
-    visible: (user: User | undefined, online: boolean) => !!user,
+    visible: (user: User | undefined, online: boolean) => !!user
   },
   about: {
-    target: "/about",
+    path: "/about",
     label: "About",
     visible: (user: User | undefined, online: boolean) => true,
-    icon: <HelpIcon />,
+    icon: <HelpIcon />
   },
   tutorial: {
-    target: "/tutorial",
+    path: "/tutorial",
     label: "Tutorial",
     visible: (user: User | undefined, online: boolean) => true,
-    icon: <SchoolIcon />,
+    icon: <SchoolIcon />
   },
   writeFeedback: {
-    target: "/write-feedback",
+    path: "/write-feedback",
     label: "Feedback",
     visible: (user: User | undefined, online: boolean) => true,
-    icon: <FeedbackIcon />,
+    icon: <FeedbackIcon />
   },
   events: {
-    target: "/events",
-    label: "Clean-ups",
+    path: "/events",
+    label: "Clean-ups"
   },
   partners: {
-    target: "/partners",
-    label: "Partners",
+    path: "/partners",
+    label: "Partners"
   },
   leaderboard: {
-    target: "/leaderboard",
+    path: "/leaderboard",
     label: "Leaderboard",
     visible: (user: User | undefined, online: boolean) => true,
-    icon: <DashboardIcon />,
+    icon: <DashboardIcon />
   },
   feedbackReports: {
-    target: "/feedback-reports",
+    path: "/feedback-reports",
     label: "Feedback Reports",
     icon: <LibraryBooksIcon />,
     visible: (user: User | undefined, online: boolean) =>
-      !!(user && user.isModerator),
+      !!(user && user.isModerator)
   },
   feedbackDetails: {
-    target: "/feedback-details",
-    label: "Feedback Details",
+    path: "/feedback-details",
+    label: "Feedback Details"
   },
   displayPhoto: {
-    target: "/photos",
-    label: "photos",
+    path: "/photos",
+    label: "photos"
   },
   cleanUps: {
-    target: () =>
-      (window.location.href = "https://plasticpatrol.co.uk/clean-ups/"),
+    path: "https://plasticpatrol.co.uk/clean-ups/",
     visible: (user: User | undefined, online: boolean) => true,
     icon: <EventIcon />,
-    label: "Clean-ups",
-  },
+    label: "Clean-ups"
+  }
 };
 
-const STATIC_CONFIG = require("./config.json");
-
 export default {
-  ...STATIC_CONFIG,
+  metadata: {
+    metadataServerUrl: "https://md.plasticpatrol.co.uk",
+    serverUrl: "https://app.plasticpatrol.co.uk",
+    twSite: "@Plastic_Patrol",
+    twCreator: "@LizzieOutside",
+    twDomain: "www.plasticpatrol.co.uk",
+    _twDescriptionField: "pieces",
+    twDescription:
+      "The global movement that is crowdsource cleaning the planet. Download the Plastic Patrol app to join the movement!",
+    twTitle: "Plastic Patrol"
+  },
   MAX_IMAGE_SIZE: 2048,
   THEME: {
     palette: {
       primary: { main: primaryColor },
-      secondary: { main: secondaryColor },
+      secondary: { main: secondaryColor }
     },
-    spacing: 10,
+    spacing: 10
   },
   MAP_SOURCE: "mapbox://styles/mapbox/streets-v10",
   // MAP_SOURCE: "https://s3-eu-west-1.amazonaws.com/tiles.os.uk/styles/open-zoomstack-outdoor/style.json",
@@ -128,7 +135,7 @@ export default {
   GA_PROPERTY_ID: "189010506",
   PHOTO_ZOOMED_FIELDS: {
     updated: (s: string) => new Date(s).toDateString(),
-    pieces: (s: string) => s,
+    pieces: (s: string) => s
   },
   ZOOM: 5,
   ZOOM_FLYTO: 15,
@@ -141,7 +148,7 @@ export default {
       placeholder: "eg. 123",
       inputProps: { min: 0, step: 1 },
       regexValidation: "^[0-9]+",
-      component: TitleTextField,
+      component: TitleTextField
     },
     categories: {
       component: MultiFields.MultiFieldsWithStyles,
@@ -152,7 +159,7 @@ export default {
       data: data,
       noOptionsMessage: "No more categories",
       sanitize: (value: any) => {
-        _.forEach(value, (category) => {
+        _.forEach(value, (category: any) => {
           category.brand =
             category.brand.replace &&
             category.brand.replace(/\s+/g, " ").trim();
@@ -168,7 +175,7 @@ export default {
           title: "Number",
           type: enums.TYPES.number,
           placeholder: "eg. 123",
-          regexValidation: "^[0-9]+",
+          regexValidation: "^[0-9]+"
         },
         brand: {
           component: TitleTextField,
@@ -176,20 +183,20 @@ export default {
           title: "Brand",
           type: enums.TYPES.string,
           placeholder: "eg. whatever",
-          regexValidation: ".+",
-        },
-      },
-    },
+          regexValidation: ".+"
+        }
+      }
+    }
   },
   PAGES,
   getStats: (photos: any, dbStats: Stats) => (dbStats && dbStats.pieces) || 0,
   ENABLE_GRAVATAR_PROFILES: true, //To update user-profile from Gravatar, value: true or false.
   SECURITY: {
-    UPLOAD_REQUIRES_LOGIN: true,
+    UPLOAD_REQUIRES_LOGIN: true
   },
   MODERATING_PHOTOS: 15,
   LEADERBOARD_FIELD: {
     label: "Pieces",
-    field: "pieces",
-  },
+    field: "pieces"
+  }
 };
