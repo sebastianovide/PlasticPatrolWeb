@@ -1,0 +1,23 @@
+//  Colors
+
+//Palettes
+
+// Primary
+$primaryMain: #2cb5b5;
+$primaryContrastText: #fff;
+$primaryTextDisabled: rgba(white, 0.5);
+
+//Secondary
+$secondaryMain: #78cade;
+$secondaryContrastText: #fff;
+
+// Text
+$grey: rgba(0, 0, 0, 0.54);
+
+:export {
+  primaryMain: $primaryMain;
+  secondaryMain: $secondaryMain;
+  primaryContrastText: $primaryContrastText;
+  secondaryContrastText: $secondaryContrastText;
+  primaryTextDisabled: $primaryTextDisabled;
+}

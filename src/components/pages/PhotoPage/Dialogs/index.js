@@ -30,7 +30,7 @@ const Dialogs = ({
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={closeAlert} color="secondary">
+        <Button onClick={closeAlert} color="primary">
           Ok
         </Button>
       </DialogActions>
@@ -45,13 +45,13 @@ const Dialogs = ({
           <br />
           <LinearProgress
             variant="determinate"
-            color="secondary"
+            color="primary"
             value={sendingProgress}
           />
         </div>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleCancelSend} color="secondary">
+        <Button onClick={handleCancelSend} color="primary">
           Cancel
         </Button>
       </DialogActions>

@@ -18,7 +18,7 @@ import MapLocation from "../../types/MapLocation";
 
 const placeholderImage = process.env.PUBLIC_URL + "/custom/images/logo.svg";
 
-const styles = theme => ({
+const styles = (theme) => ({
   location: {
     position: "absolute",
     top: isIphoneWithNotchAndCordova()
@@ -105,11 +105,11 @@ class Map extends Component {
 
     // this.callHandlerCoordinates();
 
-    this.map.on("moveend", e => {
+    this.map.on("moveend", (e) => {
       this.callHandlerCoordinates();
     });
 
-    this.map.on("render", "unclustered-point", e => {
+    this.map.on("render", "unclustered-point", (e) => {
       this.updateRenderedThumbails(e.features);
     });
 
@@ -121,7 +121,7 @@ class Map extends Component {
       this.map.getCanvas().style.cursor = "";
     });
 
-    this.map.on("click", "clusters", e => {
+    this.map.on("click", "clusters", (e) => {
       gtagEvent("Cluster Clicked", "Map");
       const features = this.map.queryRenderedFeatures(e.point, {
         layers: ["clusters"]
@@ -145,7 +145,7 @@ class Map extends Component {
     });
   }
 
-  flyTo = mapLocation => {
+  flyTo = (mapLocation) => {
     this.map.flyTo({
       center: [mapLocation.longitude, mapLocation.latitude],
       zoom: mapLocation.zoom
@@ -189,7 +189,7 @@ class Map extends Component {
     }
   }
 
-  addFeaturesToMap = geojson => {
+  addFeaturesToMap = (geojson) => {
     if (this.map.getLayer("clusters")) this.map.removeLayer("clusters");
     if (this.map.getLayer("cluster-count"))
       this.map.removeLayer("cluster-count");
@@ -284,11 +284,11 @@ class Map extends Component {
     }, UPDATE_URL_COORDS_DELAY);
   };
 
-  updateRenderedThumbails = visibleFeatures => {
+  updateRenderedThumbails = (visibleFeatures) => {
     _.forEach(this.renderedThumbnails, (thumbnailUrl, id) => {
       const exists = !!_.find(
         visibleFeatures,
-        feature => feature.properties.id === id
+        (feature) => feature.properties.id === id
       );
       // if it !exist => remove marker object - delete key from dictionary
       if (!exists) {
@@ -297,7 +297,7 @@ class Map extends Component {
       }
     });
 
-    visibleFeatures.forEach(feature => {
+    visibleFeatures.forEach((feature) => {
       if (!this.renderedThumbnails[feature.properties.id]) {
         //create a div element - give attributes
         const el = document.createElement("div");
@@ -354,7 +354,7 @@ class Map extends Component {
           <div>
             <Fab
               className={classes.camera}
-              color="secondary"
+              color="primary"
               onClick={this.props.handleCameraClick}
             >
               <span style={{ marginRight: "3px" }}>Add a photo</span>
