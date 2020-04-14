@@ -1,9 +1,9 @@
-@import "custom/config.scss";
+@import "standard.scss";
 
 .FieldLabelWithInput {
   width: 100%;
   border: 0;
-  border-bottom: $secondary solid 2px;
+  border-bottom: $primaryMain solid 2px;
   outline: none;
   background: inherit;
   font-size: inherit;

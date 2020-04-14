@@ -1,4 +1,5 @@
 import React from "react";
+import _ from "lodash";
 
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
@@ -9,9 +10,8 @@ import EventIcon from "@material-ui/icons/Event";
 import FeedbackIcon from "@material-ui/icons/Feedback";
 import LibraryBooksIcon from "@material-ui/icons/LibraryBooks";
 
-import _ from "lodash";
+import styles from "standard.scss";
 
-import styles from "./config.scss";
 import enums from "types/enums";
 import User from "types/User";
 import Page from "types/Page";
@@ -22,88 +22,90 @@ import MultiFields from "components/pages/PhotoPage/AdminApproval/MultiFields";
 
 import data from "./categories.json";
 
-const primaryColor = styles.primary;
-const secondaryColor = styles.secondary;
+const primaryMain = styles.primaryMain;
+const primaryContrastText = styles.primaryContrastText;
+const secondaryMain = styles.secondaryMain;
+const secondaryContrastText = styles.primaryContrastText;
 
 const PAGES: { [pageName: string]: Page } = {
   map: {
     path: "/",
-    label: "Map"
+    label: "Map",
   },
   embeddable: {
     path: "/embeddable",
-    label: "Map"
+    label: "Map",
   },
   photos: {
     path: "/photo",
-    label: "Photo"
+    label: "Photo",
   },
   moderator: {
     path: "/moderator",
     label: "Photo Approval",
     icon: <CheckCircleIcon />,
     visible: (user: User | undefined, online: boolean) =>
-      !!(user && user.isModerator)
+      !!(user && user.isModerator),
   },
   account: {
     path: "/account",
     label: "Account",
     icon: <AccountCircleIcon />,
-    visible: (user: User | undefined, online: boolean) => !!user
+    visible: (user: User | undefined, online: boolean) => !!user,
   },
   about: {
     path: "/about",
     label: "About",
     visible: (user: User | undefined, online: boolean) => true,
-    icon: <HelpIcon />
+    icon: <HelpIcon />,
   },
   tutorial: {
     path: "/tutorial",
     label: "Tutorial",
     visible: (user: User | undefined, online: boolean) => true,
-    icon: <SchoolIcon />
+    icon: <SchoolIcon />,
   },
   writeFeedback: {
     path: "/write-feedback",
     label: "Feedback",
     visible: (user: User | undefined, online: boolean) => true,
-    icon: <FeedbackIcon />
+    icon: <FeedbackIcon />,
   },
   events: {
     path: "/events",
-    label: "Clean-ups"
+    label: "Clean-ups",
   },
   partners: {
     path: "/partners",
-    label: "Partners"
+    label: "Partners",
   },
   leaderboard: {
     path: "/leaderboard",
     label: "Leaderboard",
     visible: (user: User | undefined, online: boolean) => true,
-    icon: <DashboardIcon />
+    icon: <DashboardIcon />,
   },
   feedbackReports: {
     path: "/feedback-reports",
     label: "Feedback Reports",
     icon: <LibraryBooksIcon />,
     visible: (user: User | undefined, online: boolean) =>
-      !!(user && user.isModerator)
+      !!(user && user.isModerator),
   },
   feedbackDetails: {
     path: "/feedback-details",
-    label: "Feedback Details"
+    label: "Feedback Details",
   },
   displayPhoto: {
     path: "/photos",
-    label: "photos"
+    label: "photos",
   },
   cleanUps: {
     path: "https://plasticpatrol.co.uk/clean-ups/",
     visible: (user: User | undefined, online: boolean) => true,
     icon: <EventIcon />,
-    label: "Clean-ups"
-  }
+    label: "Clean-ups",
+  },
 };
 
 export default {
@@ -116,15 +118,15 @@ export default {
     _twDescriptionField: "pieces",
     twDescription:
       "The global movement that is crowdsource cleaning the planet. Download the Plastic Patrol app to join the movement!",
-    twTitle: "Plastic Patrol"
+    twTitle: "Plastic Patrol",
   },
   MAX_IMAGE_SIZE: 2048,
   THEME: {
     palette: {
-      primary: { main: primaryColor },
-      secondary: { main: secondaryColor }
+      primary: { main: primaryMain, contrastText: primaryContrastText },
+      secondary: { main: secondaryMain, contrastText: secondaryContrastText },
     },
-    spacing: 10
+    spacing: 10,
   },
   MAP_SOURCE: "mapbox://styles/mapbox/streets-v10",
   // MAP_SOURCE: "https://s3-eu-west-1.amazonaws.com/tiles.os.uk/styles/open-zoomstack-outdoor/style.json",
@@ -135,7 +137,7 @@ export default {
   GA_PROPERTY_ID: "189010506",
   PHOTO_ZOOMED_FIELDS: {
     updated: (s: string) => new Date(s).toDateString(),
-    pieces: (s: string) => s
+    pieces: (s: string) => s,
   },
   ZOOM: 5,
   ZOOM_FLYTO: 15,
@@ -148,7 +150,7 @@ export default {
       placeholder: "eg. 123",
       inputProps: { min: 0, step: 1 },
       regexValidation: "^[0-9]+",
-      component: TitleTextField
+      component: TitleTextField,
     },
     categories: {
       component: MultiFields.MultiFieldsWithStyles,
@@ -175,7 +177,7 @@ export default {
           title: "Number",
           type: enums.TYPES.number,
           placeholder: "eg. 123",
-          regexValidation: "^[0-9]+"
+          regexValidation: "^[0-9]+",
         },
         brand: {
           component: TitleTextField,
@@ -183,20 +185,20 @@ export default {
           title: "Brand",
           type: enums.TYPES.string,
           placeholder: "eg. whatever",
-          regexValidation: ".+"
-        }
-      }
-    }
+          regexValidation: ".+",
+        },
+      },
+    },
   },
   PAGES,
   getStats: (photos: any, dbStats: Stats) => (dbStats && dbStats.pieces) || 0,
   ENABLE_GRAVATAR_PROFILES: true, //To update user-profile from Gravatar, value: true or false.
   SECURITY: {
-    UPLOAD_REQUIRES_LOGIN: true
+    UPLOAD_REQUIRES_LOGIN: true,
   },
   MODERATING_PHOTOS: 15,
   LEADERBOARD_FIELD: {
     label: "Pieces",
-    field: "pieces"
-  }
+    field: "pieces",
+  },
 };

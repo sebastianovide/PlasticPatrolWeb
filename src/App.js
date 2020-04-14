@@ -35,7 +35,7 @@ import { gtagPageView, gtagEvent } from "./gtag.js";
 import "./App.scss";
 import MapLocation from "./types/MapLocation";
 
-const styles = theme => ({
+const styles = (theme) => ({
   dialogClose: {
     position: "absolute",
     top: theme.spacing(1),
@@ -85,7 +85,7 @@ class App extends Component {
     );
   }
 
-  openPhotoPage = file => {
+  openPhotoPage = (file) => {
     this.setState({
       file
     });
@@ -96,7 +96,7 @@ class App extends Component {
   setLocationWatcher() {
     if (navigator && navigator.geolocation) {
       this.geoid = navigator.geolocation.watchPosition(
-        position => {
+        (position) => {
           const location = Object.assign(this.state.location, {
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
@@ -108,7 +108,7 @@ class App extends Component {
             location
           });
         },
-        error => {
+        (error) => {
           console.log("Error: ", error.message);
           const location = this.state.location;
           location.online = false;
@@ -135,8 +135,8 @@ class App extends Component {
     if (photoId && !this.state.selectedFeature) {
       return dbFirebase
         .getPhotoByID(photoId)
-        .then(selectedFeature => this.setState({ selectedFeature }))
-        .catch(e => this.setState({ selectedFeature: null }));
+        .then((selectedFeature) => this.setState({ selectedFeature }))
+        .catch((e) => this.setState({ selectedFeature: null }));
     }
   }
 
@@ -172,7 +172,7 @@ class App extends Component {
     let { photoId, mapLocation } = this.extractPathnameParams();
     this.setState({ photoId, mapLocation });
 
-    this.unregisterAuthObserver = authFirebase.onAuthStateChanged(user => {
+    this.unregisterAuthObserver = authFirebase.onAuthStateChanged((user) => {
       // will do this after the user has been loaded. It should speed up the users login.
       // not sure if we need this if.
       if (!this.initDone) {
@@ -192,7 +192,7 @@ class App extends Component {
 
     this.unregisterLocationObserver = this.setLocationWatcher();
     this.unregisterConfigObserver = dbFirebase.configObserver(
-      config => this.setState(config),
+      (config) => this.setState(config),
       console.error
     );
   }
@@ -215,7 +215,7 @@ class App extends Component {
         };
       }
 
-      geojson.features = _.map(this.featuresDict, f => f);
+      geojson.features = _.map(this.featuresDict, (f) => f);
 
       // save only if different
       if (!_.isEqual(this.state.geojson, geojson)) {
@@ -226,7 +226,7 @@ class App extends Component {
     }, 100);
   };
 
-  modifyFeature = photo => {
+  modifyFeature = (photo) => {
     this.featuresDict[photo.id] = {
       type: "Feature",
       geometry: {
@@ -239,16 +239,16 @@ class App extends Component {
     this.delayedSaveGeojson();
   };
 
-  addFeature = photo => this.modifyFeature(photo);
+  addFeature = (photo) => this.modifyFeature(photo);
 
-  removeFeature = photo => {
+  removeFeature = (photo) => {
     delete this.featuresDict[photo.id];
     this.delayedSaveGeojson();
   };
 
   someInits(photoId) {
     this.unregisterConnectionObserver = dbFirebase.onConnectionStateChanged(
-      online => {
+      (online) => {
         this.setState({ online });
       }
     );
@@ -258,7 +258,7 @@ class App extends Component {
       // into the photoId.
       this.setState({ photoAccessedByUrl: !!this.state.selectedFeature });
 
-      dbFirebase.fetchStats().then(dbStats => {
+      dbFirebase.fetchStats().then((dbStats) => {
         console.log(dbStats);
         this.setState({
           usersLeaderboard: dbStats.users,
@@ -276,7 +276,7 @@ class App extends Component {
         this.addFeature,
         this.modifyFeature,
         this.removeFeature,
-        error => {
+        (error) => {
           console.log(error);
           alert(error);
           window.location.reload();
@@ -287,7 +287,7 @@ class App extends Component {
     // use the locals one if we have them: faster boot.
     localforage
       .getItem("cachedGeoJson")
-      .then(geojson => {
+      .then((geojson) => {
         if (geojson) {
           this.geojson = geojson;
           const stats = this.props.config.getStats(geojson, this.state.dbStats);
@@ -301,8 +301,8 @@ class App extends Component {
   }
 
   fetchPhotos() {
-    dbFirebase.fetchPhotos().then(photos => {
-      _.forEach(photos, photo => {
+    dbFirebase.fetchPhotos().then((photos) => {
+      _.forEach(photos, (photo) => {
         this.addFeature(photo);
       });
     });
@@ -344,8 +344,8 @@ class App extends Component {
     ) {
       this.unregisterPhotosToModerate = dbFirebase.photosToModerateRT(
         this.props.config.MODERATING_PHOTOS,
-        photo => this.updatePhotoToModerate(photo),
-        photo => this.removePhotoToModerate(photo)
+        (photo) => this.updatePhotoToModerate(photo),
+        (photo) => this.removePhotoToModerate(photo)
       );
     }
   }
@@ -402,13 +402,13 @@ class App extends Component {
     }
   };
 
-  openFile = e => {
+  openFile = (e) => {
     if (e.target.files[0]) {
       this.openPhotoPage(e.target.files[0]);
     }
   };
 
-  handlePhotoDialogClose = dialogSelectedValue => {
+  handlePhotoDialogClose = (dialogSelectedValue) => {
     this.setState({ openPhotoDialog: false });
     if (dialogSelectedValue) {
       const Camera = navigator.camera;
@@ -421,13 +421,13 @@ class App extends Component {
         srcType: dialogSelectedValue === "CAMERA" ? "camera" : "filesystem"
       });
       Camera.getPicture(
-        imageUri => {
+        (imageUri) => {
           const file = JSON.parse(imageUri);
           const cordovaMetadata = JSON.parse(file.json_metadata);
           this.setState({ cordovaMetadata });
           this.openPhotoPage(file.filename);
         },
-        message => {
+        (message) => {
           console.log("Failed because: ", message);
         },
         {
@@ -445,17 +445,17 @@ class App extends Component {
     localStorage.setItem("welcomeShown", true);
   };
 
-  handleTermsPageClose = e => {
+  handleTermsPageClose = (e) => {
     localStorage.setItem("termsAccepted", "Yes");
     this.setState({ termsAccepted: "Yes" });
   };
 
-  toggleLeftDrawer = isItOpen => () => {
+  toggleLeftDrawer = (isItOpen) => () => {
     gtagEvent(isItOpen ? "Opened" : "Closed", "Menu");
     this.setState({ leftDrawerOpen: isItOpen });
   };
 
-  handleLoginPhotoAdd = e => {
+  handleLoginPhotoAdd = (e) => {
     this.setState({
       loginLogoutDialogOpen: true,
       dialogOpen: false
@@ -487,7 +487,7 @@ class App extends Component {
     this.setState({ confirmDialogOpen: false });
   };
 
-  handleRejectClick = photo => {
+  handleRejectClick = (photo) => {
     this.setState({
       confirmDialogOpen: true,
       confirmDialogTitle: `Are you sure you want to unpublish the photo ?`,
@@ -495,7 +495,7 @@ class App extends Component {
     });
   };
 
-  handleApproveClick = photo => {
+  handleApproveClick = (photo) => {
     this.setState({
       confirmDialogOpen: true,
       confirmDialogTitle: `Are you sure you want to publish the photo ?`,
@@ -553,11 +553,11 @@ class App extends Component {
     }
   };
 
-  approvePhoto = photo => this.approveRejectPhoto(true, photo);
+  approvePhoto = (photo) => this.approveRejectPhoto(true, photo);
 
-  rejectPhoto = photo => this.approveRejectPhoto(false, photo);
+  rejectPhoto = (photo) => this.approveRejectPhoto(false, photo);
 
-  handleMapLocationChange = newMapLocation => {
+  handleMapLocationChange = (newMapLocation) => {
     if (!this.props.history.location.pathname.match(this.VISIBILITY_REGEX)) {
       return;
     }
@@ -601,7 +601,7 @@ class App extends Component {
     this.props.history.goBack();
   };
 
-  handlePhotoClick = feature => {
+  handlePhotoClick = (feature) => {
     this.setState({ selectedFeature: feature });
 
     let pathname = `${this.props.config.PAGES.displayPhoto.path}/${feature.properties.id}`;
@@ -693,7 +693,7 @@ class App extends Component {
             toggleLeftDrawer={this.toggleLeftDrawer}
             handlePhotoClick={this.handlePhotoClick}
             mapLocation={this.state.mapLocation}
-            handleMapLocationChange={newMapLocation =>
+            handleMapLocationChange={(newMapLocation) =>
               this.handleMapLocationChange(newMapLocation)
             }
             handleLocationClick={this.handleLocationClick}
@@ -721,7 +721,7 @@ class App extends Component {
               accept="image/*"
               id={"fileInput"}
               onChange={this.openFile}
-              onClick={e => (e.target.value = null)}
+              onClick={(e) => (e.target.value = null)}
             />
           </RootRef>
         )}
@@ -761,7 +761,7 @@ class App extends Component {
 
           <DialogActions>
             {/* clicking ok should either open a login box or there should be a text field in the box to enter your email address */}
-            <Button onClick={this.handleLoginPhotoAdd} color="secondary">
+            <Button onClick={this.handleLoginPhotoAdd} color="primary">
               Login
             </Button>
           </DialogActions>
@@ -773,13 +773,10 @@ class App extends Component {
         >
           <DialogTitle>{this.state.confirmDialogTitle}</DialogTitle>
           <DialogActions>
-            <Button onClick={this.handleConfirmDialogClose} color="secondary">
+            <Button onClick={this.handleConfirmDialogClose} color="primary">
               Cancel
             </Button>
-            <Button
-              onClick={this.state.confirmDialogHandleOk}
-              color="secondary"
-            >
+            <Button onClick={this.state.confirmDialogHandleOk} color="primary">
               Ok
             </Button>
           </DialogActions>

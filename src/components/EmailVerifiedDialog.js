@@ -18,7 +18,7 @@ import { authFirebase } from "features/firebase";
 
 import { isIphoneWithNotchAndCordova, isIphoneAndCordova } from "../utils";
 
-const styles = theme => ({
+const styles = (theme) => ({
   typography: {
     ...theme.mixins.gutters(),
     whiteSpace: "pre-wrap",
@@ -33,7 +33,7 @@ const styles = theme => ({
   },
   link: {
     cursor: "pointer",
-    color: "blue"
+    color: theme.palette.secondary.main
   },
   button: {
     margin: theme.spacing(1.5)
@@ -144,12 +144,12 @@ class EmailVerifiedDialog extends React.Component {
               <br />
             </Typography>
           </DialogContent>
-          <DialogActions color="secondary">
+          <DialogActions color="primary">
             <Button
               className={classes.button}
               fullWidth
               variant="contained"
-              color="secondary"
+              color="primary"
               onClick={this.handleNextClick}
             >
               Next
@@ -164,7 +164,7 @@ class EmailVerifiedDialog extends React.Component {
             style: { backgroundColor: "transparent", boxShadow: "none" }
           }}
         >
-          <CircularProgress color="secondary" />
+          <CircularProgress color="primary" />
         </Dialog>
 
         <Dialog open={this.state.openConformationDialog}>
@@ -183,11 +183,11 @@ class EmailVerifiedDialog extends React.Component {
               {this.state.conformationMessage}
             </Typography>
           </DialogContent>
-          <DialogActions color="secondary">
+          <DialogActions color="primary">
             <Button
               className={classes.button}
               fullWidth
-              color="secondary"
+              color="primary"
               variant="contained"
               onClick={this.handleCloseConfirmationDialog}
             >
