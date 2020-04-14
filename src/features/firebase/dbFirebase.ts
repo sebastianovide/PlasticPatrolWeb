@@ -96,7 +96,7 @@ const configObserver = (onNext, onError) => {
 
 async function fetchStats(): Promise<Stats> {
   const response = await fetch(firebaseConfig.apiURL + "/stats", {
-    mode: "cors",
+    mode: "cors"
   });
   const json = await response.json();
   return json;

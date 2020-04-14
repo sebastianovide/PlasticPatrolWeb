@@ -102,7 +102,7 @@ export default function DrawerContainer({
             ? "env(safe-area-inset-top)"
             : isIphoneAndCordova
             ? theme.spacing(1.5)
-            : undefined,
+            : undefined
         }}
       />
       <div
