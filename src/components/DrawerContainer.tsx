@@ -1,7 +1,4 @@
-import React, { Component } from "react";
-import { Link as ReactLink } from "react-router-dom";
-
-import Link from "@material-ui/core/Link";
+import React from "react";
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -14,13 +11,12 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 
 import { tAndCLink, privatePolicyLink } from "static/info";
 
+import DrawerContainerItem from "components/DrawerContainerItem";
 import { isIphoneWithNotchAndCordova, isIphoneAndCordova } from "utils";
 import User from "types/User";
 import Page from "types/Page";
 import config from "custom/config";
 
-const placeholderImage =
-  process.env.PUBLIC_URL + "/images/geovation-banner.svg";
 const drawerWidth = "80%";
 const drawerMaxWidth = 360;
 
@@ -69,33 +65,6 @@ type Props = {
   toggleLeftDrawer: (open: boolean) => () => void;
   handleClickLoginLogout: () => void;
 };
-
-function renderListItem(
-  user: User | undefined,
-  online: boolean,
-  item: Page,
-  index: number
-): React.ReactNode {
-  if (item.visible && !item.visible(user, online)) {
-    return [];
-  }
-
-  if (item.path.startsWith("http")) {
-    return (
-      <ListItem button key={index} component={Link} href={item.path}>
-        {item.icon && <ListItemIcon>{item.icon}</ListItemIcon>}
-        <ListItemText primary={item.label} />
-      </ListItem>
-    );
-  } else {
-    return (
-      <ListItem button key={index} component={ReactLink} to={item.path}>
-        {item.icon && <ListItemIcon>{item.icon}</ListItemIcon>}
-        <ListItemText primary={item.label} />
-      </ListItem>
-    );
-  }
-}
 
 export default function DrawerContainer({
   user,
@@ -146,22 +115,26 @@ export default function DrawerContainer({
           <List>
             {!!user && (
               <>
-                {listItemsTop.map((item, idx) =>
-                  renderListItem(user, online, item, idx)
-                )}
+                {listItemsTop.map((item, idx) => (
+                  <DrawerContainerItem
+                    user={user}
+                    online={online}
+                    item={item}
+                  />
+                ))}
                 <Divider />
               </>
             )}
-            {listItemsTopUnderBreak.map((item, idx) =>
-              renderListItem(user, online, item, idx)
-            )}
+            {listItemsTopUnderBreak.map((item, idx) => (
+              <DrawerContainerItem user={user} online={online} item={item} />
+            ))}
           </List>
         </div>
         <div>
           <List>
-            {listItemsBottom.map((item, idx) =>
-              renderListItem(user, online, item, idx)
-            )}
+            {listItemsBottom.map((item, idx) => (
+              <DrawerContainerItem user={user} online={online} item={item} />
+            ))}
             {online && (
               <ListItem button onClick={handleClickLoginLogout}>
                 <ListItemIcon>
@@ -172,7 +145,7 @@ export default function DrawerContainer({
             )}
           </List>
           <div className={classes.info}>
-            <Typography className={classes.stats} color={"secondary"}>
+            <Typography className={classes.stats} color={"primary"}>
               {`${stats | 0} pieces found so far!`}
             </Typography>
             {sponsorImage && (

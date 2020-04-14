@@ -94,12 +94,12 @@ const configObserver = (onNext, onError) => {
     }, onError);
 };
 
-async function fetchStats(): Stats {
-  return fetch(firebaseConfig.apiURL + "/stats", {
+async function fetchStats(): Promise<Stats> {
+  const response = await fetch(firebaseConfig.apiURL + "/stats", {
     mode: "cors",
-  }).then((response) => {
-    return response.json();
   });
+  const json = await response.json();
+  return json;
 }
 
 async function fetchPhotos() {
