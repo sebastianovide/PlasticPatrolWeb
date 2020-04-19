@@ -20,17 +20,17 @@ import config from "custom/config";
 const drawerWidth = "80%";
 const drawerMaxWidth = 360;
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   drawerPaper: {
     width: drawerWidth,
-    maxWidth: drawerMaxWidth,
+    maxWidth: drawerMaxWidth
   },
   stats: {
-    bottom: theme.spacing(5),
+    bottom: theme.spacing(5)
   },
   links: {
     paddingBottom: theme.spacing(1),
-    fontSize: "12px",
+    fontSize: "12px"
   },
   sponsoredByContainer: {
     height: "25px",
@@ -38,20 +38,20 @@ const useStyles = makeStyles((theme) => ({
     display: "block",
     backgroundSize: "contain",
     backgroundRepeat: "no-repeat",
-    backgroundPosition: "center",
+    backgroundPosition: "center"
   },
   container: {
     width: "100%",
     height: "100%",
     display: "flex",
     flexDirection: "column",
-    justifyContent: "space-between",
+    justifyContent: "space-between"
   },
   info: {
     display: "flex",
     flexDirection: "column",
-    alignItems: "center",
-  },
+    alignItems: "center"
+  }
 }));
 
 const PAGES = config.PAGES;
@@ -73,7 +73,7 @@ export default function DrawerContainer({
   stats,
   sponsorImage,
   toggleLeftDrawer,
-  handleClickLoginLogout,
+  handleClickLoginLogout
 }: Props) {
   const theme = useTheme();
   const classes = useStyles();
@@ -82,12 +82,12 @@ export default function DrawerContainer({
   const listItemsTopUnderBreak: Page[] = [
     PAGES.feedbackReports,
     PAGES.leaderboard,
-    PAGES.cleanUps,
+    PAGES.cleanUps
   ];
   const listItemsBottom: Page[] = [
     PAGES.tutorial,
     PAGES.about,
-    PAGES.writeFeedback,
+    PAGES.writeFeedback
   ];
   return (
     <Drawer
@@ -102,7 +102,7 @@ export default function DrawerContainer({
             ? "env(safe-area-inset-top)"
             : isIphoneAndCordova
             ? theme.spacing(1.5)
-            : undefined,
+            : undefined
         }}
       />
       <div
@@ -120,13 +120,19 @@ export default function DrawerContainer({
                     user={user}
                     online={online}
                     item={item}
+                    key={idx}
                   />
                 ))}
                 <Divider />
               </>
             )}
             {listItemsTopUnderBreak.map((item, idx) => (
-              <DrawerContainerItem user={user} online={online} item={item} />
+              <DrawerContainerItem
+                user={user}
+                online={online}
+                item={item}
+                key={idx}
+              />
             ))}
           </List>
         </div>
