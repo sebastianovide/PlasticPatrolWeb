@@ -102,7 +102,7 @@ export default function DrawerContainer({
             ? "env(safe-area-inset-top)"
             : isIphoneAndCordova
             ? theme.spacing(1.5)
-            : undefined
+            : undefined,
         }}
       />
       <div
@@ -133,7 +133,12 @@ export default function DrawerContainer({
         <div>
           <List>
             {listItemsBottom.map((item, idx) => (
-              <DrawerContainerItem user={user} online={online} item={item} />
+              <DrawerContainerItem
+                key={idx}
+                user={user}
+                online={online}
+                item={item}
+              />
             ))}
             {online && (
               <ListItem button onClick={handleClickLoginLogout}>
