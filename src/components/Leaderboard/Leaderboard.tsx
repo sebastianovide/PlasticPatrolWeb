@@ -20,21 +20,21 @@ type Props = {
   handleClose: () => void;
 };
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   header: {
     fontWeight: "bold",
     position: "relative",
     padding: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
-    color: theme.palette.secondary.contrastText,
-  },
+    color: theme.palette.secondary.contrastText
+  }
 }));
 
 export default function Leaderboard({
   label,
   handleClose,
   user,
-  usersLeaderboard,
+  usersLeaderboard
 }: Props) {
   const classes = useStyles();
   return (
