@@ -58,7 +58,7 @@ class App extends Component {
       welcomeShown: !!localStorage.getItem("welcomeShown"),
       termsAccepted: !!localStorage.getItem("termsAccepted"),
       geojson: null,
-      stats: null,
+      stats: undefined,
       srcType: null,
       cordovaMetadata: {},
       dialogOpen: false,
@@ -268,8 +268,6 @@ class App extends Component {
             this.state.dbStats
           )
         });
-
-        return dbStats;
       });
 
       gtagPageView(this.props.location.pathname);
