@@ -57,6 +57,13 @@ const styles = (theme: Theme) =>
     },
     noClick: {
       cursor: "initial"
+    },
+    header: {
+      fontWeight: "bold",
+      position: "relative",
+      padding: theme.spacing(1),
+      backgroundColor: theme.palette.secondary.main,
+      color: theme.palette.secondary.contrastText
     }
   });
 
@@ -129,7 +136,8 @@ class MuiVirtualizedTable extends React.PureComponent<
         className={clsx(
           classes.tableCell,
           classes.flexContainer,
-          classes.noClick
+          classes.noClick,
+          classes.header
         )}
         variant="head"
         style={{ height: headerHeight }}
@@ -189,44 +197,6 @@ class MuiVirtualizedTable extends React.PureComponent<
 
 const VirtualizedTable = withStyles(styles)(MuiVirtualizedTable);
 
-// ---
-
-interface Data {
-  calories: number;
-  carbs: number;
-  dessert: string;
-  fat: number;
-  id: number;
-  protein: number;
-}
-type Sample = [string, number, number, number, number];
-
-const sample: Sample[] = [
-  ["Frozen yoghurt", 159, 6.0, 24, 4.0],
-  ["Ice cream sandwich", 237, 9.0, 37, 4.3],
-  ["Eclair", 262, 16.0, 24, 6.0],
-  ["Cupcake", 305, 3.7, 67, 4.3],
-  ["Gingerbread", 356, 16.0, 49, 3.9]
-];
-
-function createData(
-  id: number,
-  dessert: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number
-): Data {
-  return { id, dessert, calories, fat, carbs, protein };
-}
-
-const rows: Data[] = [];
-
-for (let i = 0; i < 200; i += 1) {
-  const randomSelection = sample[Math.floor(Math.random() * sample.length)];
-  rows.push(createData(i, ...randomSelection));
-}
-
 type Props = {
   usersLeaderboard: LeaderboardT;
   user: CurrentUser;
@@ -242,31 +212,33 @@ export default function ReactVirtualizedTable({
   handleClose,
   label
 }: Props) {
-  if (usersLeaderboard.length > 0) {
-    console.log(usersLeaderboard[0]);
-  }
   const copy = usersLeaderboard.slice();
   sortArrayByObjectKey(copy, "pieces").reverse();
-  const withRank = copy.map((value, index) => ({ ...value, rank: index + 1 }));
+  const withRank = copy.map(({ displayName, ...value }, index) => ({
+    displayName: displayName.split("@")[0],
+    ...value,
+    rank: index + 1
+  }));
+  const width = window.innerWidth;
   return (
-    <PageWrapper>
+    <PageWrapper handleClose={handleClose} label={label}>
       <VirtualizedTable
         rowCount={withRank.length}
         rowGetter={({ index }) => withRank[index]}
         columns={[
           {
-            width: 100,
+            width: width * 0.1,
             label: "Rank",
             dataKey: "rank"
           },
           {
-            width: 200,
+            width: width * 0.6,
             label: "User",
             dataKey: "displayName",
-            numeric: true
+            numeric: false
           },
           {
-            width: 200,
+            width: width * 0.3,
             label: "Pieces",
             dataKey: "pieces",
             numeric: true
