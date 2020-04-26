@@ -31,7 +31,7 @@
   },
   "scripts": {
     "firebase": "node ./scripts/firebase.js",
-    "start": "./scripts/runWithVars.sh 'HTTPS=true react-scripts start'",
+    "start": "./scripts/runWithVars.sh 'react-scripts start'",
     "build": "npm run build:react",
     "test": "react-scripts test --env=jsdom --forceExit",
     "eject": "react-scripts eject",
