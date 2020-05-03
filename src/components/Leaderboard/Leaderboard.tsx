@@ -1,6 +1,4 @@
 import React from "react";
-import PageWrapper from "../PageWrapper";
-import { LeaderboardUser, LeaderboardT, CurrentUser } from "./types";
 import clsx from "clsx";
 import {
   createStyles,
@@ -9,7 +7,7 @@ import {
   WithStyles
 } from "@material-ui/core/styles";
 import TableCell from "@material-ui/core/TableCell";
-import Paper from "@material-ui/core/Paper";
+import StarsIcon from "@material-ui/icons/Stars";
 import {
   AutoSizer,
   Column,
@@ -17,7 +15,11 @@ import {
   TableCellRenderer,
   TableHeaderProps
 } from "react-virtualized";
+
 import { sortArrayByObjectKey } from "utils";
+
+import PageWrapper from "../PageWrapper";
+import { LeaderboardUser, LeaderboardT, CurrentUser } from "./types";
 
 declare module "@material-ui/core/styles/withStyles" {
   // Augment the BaseCSSProperties so that we can control jss-rtl
@@ -64,6 +66,10 @@ const styles = (theme: Theme) =>
       padding: theme.spacing(1),
       backgroundColor: theme.palette.secondary.main,
       color: theme.palette.secondary.contrastText
+    },
+    highlightRow: {
+      fontWeight: "bold",
+      color: theme.palette.primary.main
     }
   });
 
@@ -85,6 +91,7 @@ interface MuiVirtualizedTableProps extends WithStyles<typeof styles> {
   rowCount: number;
   rowGetter: (row: Row) => LeaderboardUser;
   rowHeight?: number;
+  userId?: string;
 }
 
 class MuiVirtualizedTable extends React.PureComponent<
@@ -103,13 +110,20 @@ class MuiVirtualizedTable extends React.PureComponent<
     });
   };
 
-  cellRenderer: TableCellRenderer = ({ cellData, columnIndex }) => {
+  cellRenderer: TableCellRenderer = ({
+    cellData,
+    columnIndex,
+    rowData: { uid, rank },
+    dataKey
+  }) => {
     const { columns, classes, rowHeight, onRowClick } = this.props;
+
     return (
       <TableCell
         component="div"
         className={clsx(classes.tableCell, classes.flexContainer, {
-          [classes.noClick]: onRowClick == null
+          [classes.noClick]: onRowClick == null,
+          [classes.highlightRow]: rank === 1 || uid === this.props.userId
         })}
         variant="body"
         style={{ height: rowHeight }}
@@ -119,7 +133,7 @@ class MuiVirtualizedTable extends React.PureComponent<
             : "left"
         }
       >
-        {cellData}
+        {dataKey === "rank" && rank === 1 ? <StarsIcon /> : cellData}
       </TableCell>
     );
   };
@@ -225,6 +239,7 @@ export default function ReactVirtualizedTable({
       <VirtualizedTable
         rowCount={withRank.length}
         rowGetter={({ index }) => withRank[index]}
+        userId={user && user.id}
         columns={[
           {
             width: width * 0.1,
