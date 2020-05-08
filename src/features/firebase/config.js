@@ -1,6 +1,5 @@
-console.log("got env: " + process.env.NODE_ENV);
 const config =
-  false && process.env.NODE_ENV === "development"
+  !process.env.REACT_APP_USE_PROD_DATA && process.env.NODE_ENV === "development"
     ? require("./config.dev.json")
     : require("./config.json");
 

@@ -1,63 +1,265 @@
 import React from "react";
-
-import { makeStyles } from "@material-ui/core/styles";
-import Table from "@material-ui/core/Table";
-
+import clsx from "clsx";
+import {
+  createStyles,
+  Theme,
+  withStyles,
+  WithStyles
+} from "@material-ui/core/styles";
 import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
+import StarsIcon from "@material-ui/icons/Stars";
+import {
+  AutoSizer,
+  Column,
+  Table,
+  TableCellRenderer,
+  TableHeaderProps
+} from "react-virtualized";
+
+import { sortArrayByObjectKey } from "utils";
 
 import PageWrapper from "../PageWrapper";
+import { LeaderboardUser, LeaderboardT, CurrentUser } from "./types";
 
-import LeaderboardBody from "./LeaderboardBody";
-import { LeaderboardT, CurrentUser } from "./types";
+declare module "@material-ui/core/styles/withStyles" {
+  // Augment the BaseCSSProperties so that we can control jss-rtl
+  interface BaseCSSProperties {
+    /*
+     * Used to control if the rule-set should be affected by rtl transformation
+     */
+    flip?: boolean;
+  }
+}
+
+const styles = (theme: Theme) =>
+  createStyles({
+    flexContainer: {
+      display: "flex",
+      alignItems: "center",
+      boxSizing: "border-box"
+    },
+    table: {
+      // temporary right-to-left patch, waiting for
+      // https://github.com/bvaughn/react-virtualized/issues/454
+      "& .ReactVirtualized__Table__headerRow": {
+        flip: false,
+        paddingRight: theme.direction === "rtl" ? "0px !important" : undefined
+      }
+    },
+    tableRow: {
+      cursor: "pointer"
+    },
+    tableRowHover: {
+      "&:hover": {
+        backgroundColor: theme.palette.grey[200]
+      }
+    },
+    tableCell: {
+      flex: 1
+    },
+    noClick: {
+      cursor: "initial"
+    },
+    header: {
+      fontWeight: "bold",
+      position: "relative",
+      padding: theme.spacing(1),
+      backgroundColor: theme.palette.secondary.main,
+      color: theme.palette.secondary.contrastText
+    },
+    highlightRow: {
+      fontWeight: "bold",
+      color: theme.palette.primary.main
+    }
+  });
+
+interface ColumnData {
+  dataKey: string;
+  label: string;
+  numeric?: boolean;
+  width: number;
+}
+
+interface Row {
+  index: number;
+}
+
+interface MuiVirtualizedTableProps extends WithStyles<typeof styles> {
+  columns: ColumnData[];
+  headerHeight?: number;
+  onRowClick?: () => void;
+  rowCount: number;
+  rowGetter: (row: Row) => LeaderboardUser;
+  rowHeight?: number;
+  userId?: string;
+}
+
+class MuiVirtualizedTable extends React.PureComponent<
+  MuiVirtualizedTableProps
+> {
+  static defaultProps = {
+    headerHeight: 48,
+    rowHeight: 48
+  };
+
+  getRowClassName = ({ index }: Row) => {
+    const { classes, onRowClick } = this.props;
+
+    return clsx(classes.tableRow, classes.flexContainer, {
+      [classes.tableRowHover]: index !== -1 && onRowClick != null
+    });
+  };
+
+  cellRenderer: TableCellRenderer = ({
+    cellData,
+    columnIndex,
+    rowData: { uid, rank },
+    dataKey
+  }) => {
+    const { columns, classes, rowHeight, onRowClick } = this.props;
+
+    return (
+      <TableCell
+        component="div"
+        className={clsx(classes.tableCell, classes.flexContainer, {
+          [classes.noClick]: onRowClick == null,
+          [classes.highlightRow]: rank === 1 || uid === this.props.userId
+        })}
+        variant="body"
+        style={{ height: rowHeight }}
+        align={
+          (columnIndex != null && columns[columnIndex].numeric) || false
+            ? "right"
+            : "left"
+        }
+      >
+        {dataKey === "rank" && rank === 1 ? <StarsIcon /> : cellData}
+      </TableCell>
+    );
+  };
+
+  headerRenderer = ({
+    label,
+    columnIndex
+  }: TableHeaderProps & { columnIndex: number }) => {
+    const { headerHeight, columns, classes } = this.props;
+
+    return (
+      <TableCell
+        component="div"
+        className={clsx(
+          classes.tableCell,
+          classes.flexContainer,
+          classes.noClick,
+          classes.header
+        )}
+        variant="head"
+        style={{ height: headerHeight }}
+        align={columns[columnIndex].numeric || false ? "right" : "left"}
+      >
+        <span>{label}</span>
+      </TableCell>
+    );
+  };
+
+  render() {
+    const {
+      classes,
+      columns,
+      rowHeight,
+      headerHeight,
+      ...tableProps
+    } = this.props;
+    return (
+      <AutoSizer>
+        {({ height, width }) => (
+          <Table
+            height={height}
+            width={width}
+            rowHeight={rowHeight!}
+            gridStyle={{
+              direction: "inherit"
+            }}
+            headerHeight={headerHeight!}
+            className={classes.table}
+            {...tableProps}
+            rowClassName={this.getRowClassName}
+          >
+            {columns.map(({ dataKey, ...other }, index) => {
+              return (
+                <Column
+                  key={dataKey}
+                  headerRenderer={headerProps =>
+                    this.headerRenderer({
+                      ...headerProps,
+                      columnIndex: index
+                    })
+                  }
+                  className={classes.flexContainer}
+                  cellRenderer={this.cellRenderer}
+                  dataKey={dataKey}
+                  {...other}
+                />
+              );
+            })}
+          </Table>
+        )}
+      </AutoSizer>
+    );
+  }
+}
+
+const VirtualizedTable = withStyles(styles)(MuiVirtualizedTable);
 
 type Props = {
   usersLeaderboard: LeaderboardT;
   user: CurrentUser;
   config: any;
-  label: string;
   handleClose: () => void;
+  label: string;
 };
 
-const useStyles = makeStyles((theme) => ({
-  header: {
-    fontWeight: "bold",
-    position: "relative",
-    padding: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-    color: theme.palette.secondary.contrastText
-  }
-}));
-
-export default function Leaderboard({
-  label,
-  handleClose,
+export default function ReactVirtualizedTable({
+  config,
   user,
-  usersLeaderboard
+  usersLeaderboard,
+  handleClose,
+  label
 }: Props) {
-  const classes = useStyles();
+  const copy = usersLeaderboard.slice();
+  sortArrayByObjectKey(copy, "pieces").reverse();
+  const withRank = copy.map(({ displayName, ...value }, index) => ({
+    displayName: displayName.split("@")[0],
+    ...value,
+    rank: index + 1
+  }));
+  const width = window.innerWidth;
   return (
-    <PageWrapper label={label} handleClose={handleClose} hasLogo={false}>
-      <Table>
-        <TableHead>
-          <TableRow color="primary">
-            <TableCell
-              className={classes.header}
-              style={{ width: "10%", textAlign: "center" }}
-            >
-              Rank
-            </TableCell>
-            <TableCell className={classes.header} style={{ width: "60%" }}>
-              User
-            </TableCell>
-            <TableCell className={classes.header} style={{ width: "10%" }}>
-              Pieces
-            </TableCell>
-          </TableRow>
-        </TableHead>
-        <LeaderboardBody usersLeaderboard={usersLeaderboard} user={user} />
-      </Table>
+    <PageWrapper handleClose={handleClose} label={label}>
+      <VirtualizedTable
+        rowCount={withRank.length}
+        rowGetter={({ index }) => withRank[index]}
+        userId={user && user.id}
+        columns={[
+          {
+            width: width * 0.1,
+            label: "Rank",
+            dataKey: "rank"
+          },
+          {
+            width: width * 0.6,
+            label: "User",
+            dataKey: "displayName",
+            numeric: false
+          },
+          {
+            width: width * 0.3,
+            label: "Pieces",
+            dataKey: "pieces",
+            numeric: true
+          }
+        ]}
+      />
     </PageWrapper>
   );
 }
