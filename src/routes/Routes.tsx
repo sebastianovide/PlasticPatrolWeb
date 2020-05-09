@@ -5,6 +5,9 @@ import config from "custom/config";
 
 import User from "types/User";
 
+import Groups from "components/Groups/GroupMain";
+import GroupList from "components/Groups/GroupList";
+import GroupAdd from "components/Groups/GroupAdd";
 import TutorialPage from "components/pages/TutorialPage";
 import PhotoPage from "components/pages/PhotoPage";
 import ProfilePage from "components/ProfilePage";
@@ -86,6 +89,43 @@ export function Routes({
           user={user}
         />
       </Route>
+
+      <Route
+        path={config.PAGES.groups.path}
+        render={props => (
+          <Groups
+            {...props}
+            config={config}
+            label={config.PAGES.groups.label}
+            handleClose={history.goBack}
+          />
+        )}
+      />
+
+      <Route
+        path={config.PAGES.grouplist.path}
+        render={props => (
+          <GroupList
+            {...props}
+            config={config}
+            label={config.PAGES.grouplist.label}
+            groupsArray={["group1", "group2"]}
+            handleClose={history.goBack}
+          />
+        )}
+      />
+
+      <Route
+        path={config.PAGES.groupadd.path}
+        render={props => (
+          <GroupAdd
+            {...props}
+            config={config}
+            label={config.PAGES.groupadd.label}
+            handleClose={history.goBack}
+          />
+        )}
+      />
 
       <ModeratorRoute path={config.PAGES.moderator.path} user={user}>
         <ModeratorPage
