@@ -82,9 +82,8 @@ export default function DrawerContainer({
   const listItemsTopUnderBreak: Page[] = [
     PAGES.feedbackReports,
     PAGES.leaderboard,
-    PAGES.cleanUps,
-    PAGES.groups
-  ];
+    PAGES.cleanUps
+  ].concat(config.ENABLE_GROUPS ? [PAGES.groups] : []);
   const listItemsBottom: Page[] = [
     PAGES.tutorial,
     PAGES.about,

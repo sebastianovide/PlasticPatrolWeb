@@ -210,6 +210,7 @@ export default {
   PAGES,
   getStats: (photos: any, dbStats: Stats) => (dbStats && dbStats.pieces) || 0,
   ENABLE_GRAVATAR_PROFILES: true, //To update user-profile from Gravatar, value: true or false.
+  ENABLE_GROUPS: false,
   SECURITY: {
     UPLOAD_REQUIRES_LOGIN: true
   },
