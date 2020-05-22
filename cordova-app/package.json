@@ -5,7 +5,6 @@
   "homepage": "./",
   "cordova": {
     "platforms": [
-      "ios",
       "android"
     ],
     "plugins": {
@@ -25,7 +24,6 @@
   },
   "dependencies": {
     "cordova-android": "^8.1.0",
-    "cordova-ios": "^5.0.1",
     "cordova-ios-plugin-no-export-compliance": "0.0.6",
     "cordova-plugin-androidx": "^1.0.2",
     "cordova-plugin-androidx-adapter": "^1.1.0",
