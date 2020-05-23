@@ -61,14 +61,14 @@ const ModeratorPage = ({
 
   if (photos.length === 0) {
     return (
-      <PageWrapper label={label} handleClose={handleClose} hasHeader={false}>
+      <PageWrapper label={label} handleClose={handleClose}>
         <div className={styles.noPhotos}>No photos to moderate!</div>
       </PageWrapper>
     );
   }
 
   return (
-    <PageWrapper label={label} handleClose={handleClose} hasHeader={false}>
+    <PageWrapper label={label} handleClose={handleClose}>
       <List dense={false}>
         {_.map(photos, photo => (
           <ListItem
