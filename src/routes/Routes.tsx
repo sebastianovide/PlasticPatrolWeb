@@ -19,6 +19,7 @@ import WriteFeedbackPage from "components/WriteFeedbackPage";
 import FeedbackReportsSubrouter from "components/FeedbackReports/FeedbackReportsSubrouter";
 
 import DisplayPhoto from "components/MapPage/DisplayPhoto";
+import Photo from "types/Photo";
 
 import ModeratorRoute from "./components/ModeratorRoute";
 import SignedInRoute from "./components/SignedInRoute";
@@ -27,7 +28,7 @@ type Props = {
   user: User;
   usersLeaderboard: any;
   reloadPhotos: () => void;
-  photosToModerate: () => void;
+  photosToModerate: Photo[];
   handleApproveClick: () => void;
   handleRejectClick: () => void;
   file: any;
@@ -130,9 +131,7 @@ export function Routes({
       <ModeratorRoute path={config.PAGES.moderator.path} user={user}>
         <ModeratorPage
           photos={photosToModerate}
-          config={config}
           label={config.PAGES.moderator.label}
-          user={user}
           handleClose={history.goBack}
           handleRejectClick={handleRejectClick}
           handleApproveClick={handleApproveClick}

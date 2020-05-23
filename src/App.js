@@ -664,7 +664,8 @@ class App extends Component {
             geojson={this.state.geojson}
             handleCameraClick={this.handleCameraClick}
             reloadPhotos={this.reloadPhotos}
-            photosToModerate={this.photosToModerate}
+            // just need the list of photos, don't need the object keyed on the id
+            photosToModerate={_.map(this.photosToModerate, x => x)}
             handleApproveClick={this.handleApproveClick}
             handleRejectClick={this.handleRejectClick}
             handlePhotoClick={this.handlePhotoClick}
