@@ -188,16 +188,18 @@ export function Routes({
           `${config.PAGES.displayPhoto.path}/:id`,
           `${config.PAGES.embeddable.path}${config.PAGES.displayPhoto.path}/:id`
         ]}
-      >
-        <DisplayPhoto
-          user={user}
-          config={config}
-          handleRejectClick={handleRejectClick}
-          handleApproveClick={handleApproveClick}
-          handleClose={handlePhotoPageClose}
-          feature={selectedFeature}
-        />
-      </Route>
+        render={({ location }) => (
+          <DisplayPhoto
+            user={user}
+            config={config}
+            handleRejectClick={handleRejectClick}
+            handleApproveClick={handleApproveClick}
+            handleClose={handlePhotoPageClose}
+            feature={selectedFeature}
+            location={location}
+          />
+        )}
+      />
     </Switch>
   );
 }

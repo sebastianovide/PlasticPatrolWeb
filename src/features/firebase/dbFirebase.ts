@@ -8,6 +8,7 @@ import appConfig from "custom/config";
 import firebaseApp from "./firebaseInit.js";
 import firebaseConfig from "./config";
 import Stats from "types/Stats";
+import Feature from "types/Feature";
 
 const firestore = firebase.firestore();
 const storageRef = firebase.storage().ref();
@@ -56,8 +57,8 @@ function photosRT(addedFn, modifiedFn, removedFn, errorFn) {
     .where("published", "==", true)
     .orderBy("moderated", "desc")
     .limit(100)
-    .onSnapshot((snapshot) => {
-      snapshot.docChanges().forEach((change) => {
+    .onSnapshot(snapshot => {
+      snapshot.docChanges().forEach(change => {
         var photo;
         try {
           photo = extractPhoto(change.doc.data(), change.doc.id);
@@ -87,7 +88,7 @@ const configObserver = (onNext, onError) => {
   return firestore
     .collection("sys")
     .doc("config")
-    .onSnapshot((snapshot) => {
+    .onSnapshot(snapshot => {
       const config = snapshot.data();
       localforage.setItem("config", config);
       onNext(config);
@@ -104,7 +105,7 @@ async function fetchStats(): Promise<Stats> {
 
 async function fetchPhotos() {
   const photosResponse = await fetch(firebaseConfig.apiURL + "/photos.json", {
-    mode: "cors",
+    mode: "cors"
   });
   const photosJson = await photosResponse.json();
   const photos = photosJson.photos;
@@ -119,13 +120,13 @@ function fetchFeedbacks(isShowAll) {
     .limit((appConfig.FEEDBACKS && appConfig.FEEDBACKS.MAX) || 50);
   return query
     .get()
-    .then((sn) =>
-      sn.docs.map((doc) => {
+    .then(sn =>
+      sn.docs.map(doc => {
         return { ...doc.data(), id: doc.id };
       })
     )
-    .then((feedbacks) =>
-      feedbacks.filter((feedback) => !feedback.resolved || isShowAll)
+    .then(feedbacks =>
+      feedbacks.filter(feedback => !feedback.resolved || isShowAll)
     );
 }
 
@@ -144,7 +145,7 @@ function saveMetadata(data) {
   data.moderated = null;
 
   let fieldsToSave = ["moderated", "updated", "location", "owner_id"];
-  _.forEach(appConfig.PHOTO_FIELDS, (field) => fieldsToSave.push(field.name));
+  _.forEach(appConfig.PHOTO_FIELDS, field => fieldsToSave.push(field.name));
 
   return firestore.collection("photos").add(_.pick(data, fieldsToSave));
 }
@@ -161,7 +162,7 @@ function savePhoto(id, base64) {
     .child(id)
     .child("original.jpg");
   return originalJpgRef.putString(base64, "base64", {
-    contentType: "image/jpeg",
+    contentType: "image/jpeg"
   });
 }
 
@@ -181,7 +182,7 @@ async function getFeedbackByID(id) {
   return fbFeedback.exists ? { id, ...fbFeedback.data() } : null;
 }
 
-async function getPhotoByID(id) {
+async function getPhotoByID(id: string): Promise<Feature | undefined> {
   const fbPhoto = await firestore
     .collection("photos")
     .doc(id)
@@ -192,12 +193,12 @@ async function getPhotoByID(id) {
       type: "Feature",
       geometry: {
         type: "Point",
-        coordinates: [photo.location.longitude, photo.location.latitude],
+        coordinates: [photo.location.longitude, photo.location.latitude]
       },
-      properties: photo,
+      properties: photo
     };
   }
-  return null;
+  return undefined;
 }
 
 /**
@@ -216,8 +217,8 @@ function photosToModerateRT(
     .where("moderated", "==", null)
     .orderBy("updated", "desc")
     .limit(howMany)
-    .onSnapshot((snapshot) => {
-      snapshot.docChanges().forEach((change) => {
+    .onSnapshot(snapshot => {
+      snapshot.docChanges().forEach(change => {
         const photo = extractPhoto(change.doc.data(), change.doc.id);
         if (change.type === "added" || change.type === "modified") {
           updatePhotoToModerate(photo);
@@ -242,7 +243,7 @@ function writeModeration(photoId, userId, published) {
     .update({
       moderated: firebase.firestore.FieldValue.serverTimestamp(),
       published: published,
-      moderator_id: userId,
+      moderator_id: userId
     });
 }
 
@@ -286,7 +287,7 @@ async function toggleUnreadFeedback(id, resolved, userId) {
     .update({
       resolved: !resolved,
       customerSupport_id: userId,
-      updated: firebase.firestore.FieldValue.serverTimestamp(),
+      updated: firebase.firestore.FieldValue.serverTimestamp()
     });
 }
 
@@ -307,5 +308,5 @@ export default {
   disconnect,
   writeFeedback,
   toggleUnreadFeedback,
-  configObserver,
+  configObserver
 };

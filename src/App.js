@@ -665,11 +665,11 @@ class App extends Component {
             handleCameraClick={this.handleCameraClick}
             reloadPhotos={this.reloadPhotos}
             // just need the list of photos, don't need the object keyed on the id
-            photosToModerate={_.map(this.photosToModerate, x => x)}
+            photosToModerate={_.map(this.state.photosToModerate, x => x)}
             handleApproveClick={this.handleApproveClick}
             handleRejectClick={this.handleRejectClick}
             handlePhotoClick={this.handlePhotoClick}
-            selectedFeature={this.selectedFeature}
+            selectedFeature={this.state.selectedFeature}
             handlePhotoPageClose={this.handlePhotoPageClose}
           />
 
