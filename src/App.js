@@ -657,7 +657,7 @@ class App extends Component {
             fields={fields}
             usersLeaderboard={this.state.usersLeaderboard}
             file={this.state.file}
-            gpsLocation={this.state.gpsLocation}
+            gpsLocation={this.state.location}
             online={this.state.online}
             srcType={this.state.srcType}
             cordovaMetadata={this.state.cordovaMetadata}
