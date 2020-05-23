@@ -6,7 +6,7 @@ import { withStyles } from "@material-ui/core/styles";
 
 import PageWrapper from "./PageWrapper";
 
-const styles = (theme) => ({
+const styles = theme => ({
   typography: {
     ...theme.mixins.gutters(),
     whiteSpace: "pre-wrap"

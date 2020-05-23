@@ -28,7 +28,7 @@ import CardComponent from "../CardComponent";
 const tweetLogo = process.env.PUBLIC_URL + "/images/twitter.svg";
 const placeholderImage = process.env.PUBLIC_URL + "/custom/images/logo.svg";
 
-const styles = (theme) => ({
+const styles = theme => ({
   notchTop: {
     paddingTop: isIphoneWithNotchAndCordova()
       ? "env(safe-area-inset-top)"
@@ -114,7 +114,7 @@ class DisplayPhoto extends Component {
             <DialogContent>
               <div style={{ textAlign: "center" }}>
                 <img
-                  onError={(e) => {
+                  onError={e => {
                     e.target.src = placeholderImage;
                   }}
                   className={"main-image"}
@@ -130,7 +130,7 @@ class DisplayPhoto extends Component {
                     <CardActionArea>
                       <CardContent>
                         {Object.keys(config.PHOTO_ZOOMED_FIELDS).map(
-                          (fieldName) => (
+                          fieldName => (
                             <Typography gutterBottom key={fieldName}>
                               <b>{_.capitalize(fieldName)}: </b>
                               {this.formatField(

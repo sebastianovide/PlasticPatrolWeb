@@ -18,7 +18,7 @@ import { authFirebase } from "features/firebase";
 
 import { isIphoneWithNotchAndCordova, isIphoneAndCordova } from "../utils";
 
-const styles = (theme) => ({
+const styles = theme => ({
   typography: {
     ...theme.mixins.gutters(),
     whiteSpace: "pre-wrap",

@@ -13,7 +13,7 @@ import { isIphoneWithNotchAndCordova, isIphoneAndCordova } from "../utils";
 
 const placeholderImage = process.env.PUBLIC_URL + "/custom/images/banner.svg";
 
-const styles = (theme) => ({
+const styles = theme => ({
   container: {
     display: "flex",
     flex: 1,
