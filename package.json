@@ -16,7 +16,7 @@
     "@types/react-virtualized": "^9.21.9",
     "@types/react-virtualized-auto-sizer": "^1.0.0",
     "@types/react-window": "^1.8.2",
-    "blueimp-load-image": "^2.24.0",
+    "blueimp-load-image": "2.24.0",
     "classnames": "^2.2.6",
     "dms2dec": "^1.1.0",
     "firebase": "^7.4.0",

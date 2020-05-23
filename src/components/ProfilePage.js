@@ -65,11 +65,7 @@ class Profile extends React.Component {
     const numPieces = _.sumBy(myPhotos, o => o.properties.pieces);
 
     return (
-      <PageWrapper
-        label={label}
-        handleClose={this.props.handleClose}
-        header={false}
-      >
+      <PageWrapper label={label} handleClose={this.props.handleClose}>
         <div className={"profile-info"}>
           <Avatar
             className={classes.avatar}
