@@ -14,7 +14,7 @@ import config from "../../../custom/config";
 import { gtagEvent } from "../../../gtag.js";
 import { isIphoneWithNotchAndCordova, device } from "../../../utils";
 
-import PageWrapper from "../../PageWrapper";
+import { PhotoPageWrapper } from "../../PageWrapper";
 import Fields from "./Fields";
 import Dialogs from "./Dialogs";
 import "./style.scss";
@@ -264,6 +264,7 @@ class PhotoPage extends Component {
       this.props.file,
       img => {
         let imgFromCamera;
+        debugger;
         const imgSrc = img.toDataURL("image/jpeg");
         if (window.cordova) {
           if (this.props.srcType === "camera") {
@@ -376,7 +377,7 @@ class PhotoPage extends Component {
     const { classes, label, fields } = this.props;
     return (
       <div className="geovation-photos">
-        <PageWrapper
+        <PhotoPageWrapper
           handlePrev={this.handlePrev}
           handleNext={this.handleNext}
           enableNext={!!this.state.imgLocation}
@@ -427,7 +428,7 @@ class PhotoPage extends Component {
             sendingProgress={this.state.sendingProgress}
             handleCancelSend={this.handleCancel}
           />
-        </PageWrapper>
+        </PhotoPageWrapper>
       </div>
     );
   }
