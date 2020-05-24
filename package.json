@@ -39,7 +39,9 @@
     "firebase": "node ./scripts/firebase.js",
     "start": "./scripts/runWithVars.sh 'react-scripts start'",
     "build": "npm run build:react",
-    "test": "react-scripts test --env=jsdom --forceExit",
+    "test": "npm run app:test && npm run functions:test",
+    "app:test": "react-scripts test --watchAll=false --env=jsdom --forceExit",
+    "app:test:watch": "react-scripts test --watchAll=false --env=jsdom --forceExit",
     "eject": "react-scripts eject",
     "backup": "./scripts/backup.sh",
     "serve-prod": "npm run build:react && http-server build",
@@ -52,8 +54,8 @@
     "beta:ios": "cd cordova-app; fastlane ios beta",
     "coverage": "react-scripts test --env=jsdom --coverage",
     "coveralls": "cat ./coverage/lcov.info | node node_modules/.bin/coveralls",
-    "geovation-photos-update": "geovation-photos-update",
-    "start:prod": "npm run build:react && http-server build -S -o"
+    "start:prod": "npm run build:react && http-server build -S -o",
+    "functions:test": "cd functions && npm run test"
   },
   "devDependencies": {
     "cordova": "^9.0.0",

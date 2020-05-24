@@ -1,11 +1,10 @@
-// @ts-ignore
+// @ts-nocheck
 "use strict";
 
 import _ from "lodash";
 import json2csv from "json2csv";
 import * as functions from "firebase-functions";
 import mkdirp from "mkdirp-promise";
-import admin from "firebase-admin";
 import corsModule from "cors";
 import { PubSub } from "@google-cloud/pubsub";
 import path from "path";
@@ -13,9 +12,12 @@ import os from "os";
 import fs from "fs";
 import gmModule from "gm";
 import express from "express";
+import admin from "firebase-admin";
 
+import { firestore } from "./firestore";
+import { STATS_TOPIC } from "./constants";
 import config from "./config.json";
-import { computeStats } from "./utils";
+import { updateStats, computeStatsAdHoc } from "./stats";
 
 const cors = corsModule({ origin: true });
 const gm = gmModule.subClass({ imageMagick: true });
@@ -26,18 +28,11 @@ const THUMB_NAME = "thumbnail.jpg";
 const MAIN_MAX_SIZE = 1014;
 const MAIN_NAME = "1024.jpg";
 
-const TOPIC = "update-stats";
 const DB_CACHE_AGE_MS = 1000 * 60 * 60 * 24 * 1; // 1 day
 const WEB_CACHE_AGE_S = 1 * 60 * 60 * 24 * 1; // 1day
 
 // const DB_CACHE_AGE_MS = 0; // none
 // const WEB_CACHE_AGE_S =    0; // noce
-
-admin.initializeApp();
-const firestore = admin.firestore();
-const auth = admin.auth();
-const settings = { timestampsInSnapshots: true };
-firestore.settings(settings);
 
 const pubsub = new PubSub();
 const app = express();
@@ -47,7 +42,7 @@ async function resize(inFile, outFile, maxSize) {
   return new Promise((resolve, reject) => {
     gm(inFile)
       .resize(maxSize, maxSize)
-      .write(outFile, err => {
+      .write(outFile, (err) => {
         if (err) reject(err);
         else resolve();
       });
@@ -65,10 +60,7 @@ async function pubIfNecessary(doc) {
   let recalculate = true;
 
   try {
-    const updatedTimestamp = doc
-      .data()
-      .updated.toDate()
-      .getTime();
+    const updatedTimestamp = doc.data().updated.toDate().getTime();
     const age = new Date().getTime() - updatedTimestamp;
     recalculate = age > DB_CACHE_AGE_MS;
     console.info(`States is ${age / 1000 / 60 / 60} hours old`);
@@ -80,13 +72,13 @@ async function pubIfNecessary(doc) {
     console.info("Need to recreate stats");
 
     try {
-      await pubsub.createTopic(TOPIC);
+      await pubsub.createTopic(STATS_TOPIC);
     } catch (e) {
       console.info(`topic already created: ${e}`);
     }
 
     const messageId = await pubsub
-      .topic(TOPIC)
+      .topic(STATS_TOPIC)
       .publish(Buffer.from("Recreate the stats"));
     console.info(`Message ${messageId} published.`);
   }
@@ -102,7 +94,7 @@ async function pubIfNecessary(doc) {
  */
 const generateThumbnail = functions.storage
   .object()
-  .onFinalize(async object => {
+  .onFinalize(async (object) => {
     // File and directory paths.
     const filePath = object.name;
     const contentType = object.contentType; // This is the image MIME type
@@ -185,10 +177,7 @@ app.get("/stats", async (req, res) => {
   );
 
   try {
-    const doc = await firestore
-      .collection("sys")
-      .doc("stats")
-      .get();
+    const doc = await firestore.collection("sys").doc("stats").get();
     if (doc.exists) {
       const data = doc.data();
       data.updated = data.updated.toDate();
@@ -234,7 +223,7 @@ app.get("/photos.json", async (req, res) => {
     photos: {},
     serverTime: new Date()
   };
-  querySnapshot.forEach(doc => {
+  querySnapshot.forEach((doc) => {
     // doc.data() is never undefined for query doc snapshots
     data.photos[doc.id] = convertFirebaseTimestampFieldsIntoDate(doc.data());
   });
@@ -276,7 +265,7 @@ app.get("/photos.csv", async (req, res) => {
     .where("published", "==", true)
     .get();
   const photos = [];
-  querySnapshot.forEach(doc => {
+  querySnapshot.forEach((doc) => {
     const photo = convertFirebaseTimestampFieldsIntoDate(doc.data());
     const newPhoto = plainToFlattenObject(_.extend(photo, { id: doc.id }));
 
@@ -303,44 +292,6 @@ app.get("/photos.csv", async (req, res) => {
   return true;
 });
 
-async function fetchUsers() {
-  // get all the users
-  let users = [];
-  let pageToken = undefined;
-  do {
-    /* eslint-disable no-await-in-loop */
-    const listUsersResult = await auth.listUsers(1000, pageToken);
-    pageToken = listUsersResult.pageToken;
-    if (listUsersResult.users) {
-      users = users.concat(listUsersResult.users);
-    }
-  } while (pageToken);
-  return users;
-}
-
-/**
- * recalculate the stats and save them in the DB
- *
- * @type {CloudFunction<Message>}
- */
-const updateStats = functions.pubsub.topic(TOPIC).onPublish(async () => {
-  const [rawUsers, groupDocuments, photos, users] = await Promise.all([
-    fetchUsers(),
-    firestore.collection("groups").get(),
-    firestore.collection("photos").get(),
-    firestore.collection("users").get()
-  ]);
-  const stats = await computeStats(rawUsers, groupDocuments, photos, users);
-  const statsWithTimestamp = {
-    updated: admin.firestore.FieldValue.serverTimestamp(),
-    ...stats
-  };
-  return await firestore
-    .collection("sys")
-    .doc("stats")
-    .set(statsWithTimestamp);
-});
-
 async function hostMetadata(req, res) {
   const BUCKET = config.FIREBASE.storageBucket;
   const SERVER_URL = config.metadata.serverUrl;
@@ -354,10 +305,7 @@ async function hostMetadata(req, res) {
 
   let photo;
   if (photoId.length > 0) {
-    photo = await firestore
-      .collection("photos")
-      .doc(photoId)
-      .get();
+    photo = await firestore.collection("photos").doc(photoId).get();
   }
 
   let indexHTML;
@@ -397,9 +345,22 @@ async function hostMetadata(req, res) {
   res.status(200).send(indexHTML);
 }
 
+const wrap = (f) => {
+  const wrapped = async (_, res) => {
+    try {
+      const result = await f();
+      res.status(200).send(result);
+    } catch (e) {
+      res.status(500).send({ error: "" + e });
+    }
+  };
+  return wrapped;
+};
+
 module.exports = {
   api: functions.https.onRequest(app),
   hostMetadata: functions.https.onRequest(hostMetadata),
   generateThumbnail,
-  updateStats
+  updateStats: functions.pubsub.topic(STATS_TOPIC).onPublish(updateStats),
+  computeStats: functions.https.onRequest(wrap(computeStatsAdHoc))
 };

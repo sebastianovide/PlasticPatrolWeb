@@ -9,11 +9,6 @@ export interface Group {
   displayName: string;
 }
 
-export interface RawUser {
-  uid: string;
-  displayName: string;
-}
-
 export interface User {
   groups?: string[];
 }
