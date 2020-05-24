@@ -14,10 +14,16 @@ $secondaryContrastText: #fff;
 // Text
 $grey: rgba(0, 0, 0, 0.54);
 
+//Other
+$lightGrey: #eaeaea;
+$mediumGrey: #c3c3c3;
+
 :export {
   primaryMain: $primaryMain;
   secondaryMain: $secondaryMain;
   primaryContrastText: $primaryContrastText;
   secondaryContrastText: $secondaryContrastText;
   primaryTextDisabled: $primaryTextDisabled;
+  lightGrey: $lightGrey;
+  mediumGrey: $mediumGrey;
 }

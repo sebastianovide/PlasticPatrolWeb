@@ -1,4 +1,5 @@
 import React from "react";
+import classNames from "classnames";
 
 import { makeStyles } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
@@ -35,14 +36,19 @@ const useStyles = makeStyles(theme => ({
 type Props = {
   quantity: number;
   setQuantity: (quantity: number) => void;
+  className: string;
 };
 
-export default function QuantitySelector({ quantity, setQuantity }: Props) {
+export default function QuantitySelector({
+  quantity,
+  setQuantity,
+  className
+}: Props) {
   const styles = useStyles();
   return (
-    <div className={styles.wrapper}>
+    <div className={classNames(styles.wrapper, className)}>
       <IconButton
-        onClick={() => setQuantity(quantity - 1)}
+        onClick={() => setQuantity(Math.max(quantity - 1, 0))}
         className={styles.button}
         disableRipple
         size="small"
