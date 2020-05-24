@@ -1,12 +1,6 @@
-const config = require("../src/features/firebase/config.json");
-const firebase = require("firebase/app");
-require("firebase/auth");
-require("firebase/database");
-require("firebase/firestore");
+const { firebase } = require("./utils");
 
-firebase.initializeApp(config);
-
-(async function() {
+(async function () {
   const firestore = firebase.firestore();
   try {
     const photo = await firestore
