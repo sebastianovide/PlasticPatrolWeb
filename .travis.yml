@@ -4,7 +4,7 @@ jobs:
     language: node_js
     node_js: 13
     install:
-    - npm install
+    - yarn install && cd functions && npm install
     script:
     - npm test
   - name: android
@@ -64,7 +64,7 @@ jobs:
       script: npm run beta:android
 
   - os: linux
-    if: # tag =~ /^release-[0-9]+.[0-9]+.[0-9]+$/
+    if: false # tag =~ /^release-[0-9]+.[0-9]+.[0-9]+$/
     language: node_js
     dist: trusty
     node_js: 13
@@ -104,7 +104,7 @@ jobs:
     # build the iOS app in debug mode
   - name: ios:dev
     os: osx
-    if: # tag IS blank
+    if: false # tag IS blank
     language: objective-c
     osx_image: xcode10.1
     node_js: 13
@@ -129,7 +129,7 @@ jobs:
     # (we need to decrypt the required keys)
   - name: ios:prod
     os: osx
-    if: # type != pull_request AND tag IS blank
+    if: false # type != pull_request AND tag IS blank
     branches:
       only:
       - master
