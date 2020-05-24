@@ -68,7 +68,7 @@ const CategoryField = ({ handleClickRemove, handleChange }: Props) => {
           label="Type of rubbish"
           placeholder={"e.g. plastic bottle"}
           value={selectedOption}
-          setValue={option => setSelectedOption(option)}
+          setValue={(option) => setSelectedOption(option)}
         />
         <RemoveIcon onClick={handleClickRemove} />
       </div>
@@ -89,7 +89,7 @@ const CategoryField = ({ handleClickRemove, handleChange }: Props) => {
             placeholder={"e.g. 1"}
             validationFn={validateIsPositiveNumber}
             value={numberOfPieces === undefined ? "" : "" + numberOfPieces}
-            setValue={x => setNumberOfPieces(Number(x))}
+            setValue={(x) => setNumberOfPieces(Number(x))}
             required
           />
         </>

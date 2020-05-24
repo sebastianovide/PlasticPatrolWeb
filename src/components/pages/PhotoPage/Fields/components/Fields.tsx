@@ -59,7 +59,7 @@ const Fields = ({ imgSrc, handleChange, handleTotalCountChange }: Props) => {
   const handleCategoryChange = (index: number) => (newValue: Category) => {
     let error = false;
     const updatedCategoryValues: CategoryWithKey[] = categoryValues.map(
-      categoryValue => {
+      (categoryValue) => {
         const { keyIndex } = categoryValue;
 
         if (newValue.error) error = true;
@@ -78,7 +78,7 @@ const Fields = ({ imgSrc, handleChange, handleTotalCountChange }: Props) => {
   };
 
   const handleClickRemove = useCallback(
-    index => () => {
+    (index) => () => {
       if (categoryValues.length <= 1) return;
 
       const filteredCategoryValues = categoryValues.filter(
