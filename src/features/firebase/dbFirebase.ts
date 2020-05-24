@@ -93,7 +93,6 @@ const configObserver = (onNext, onError) => {
 };
 
 async function fetchStats(): Promise<Stats> {
-  throw Exception("whats up from tests");
   const response = await fetch(firebaseConfig.apiURL + "/stats", {
     mode: "cors"
   });
@@ -102,7 +101,6 @@ async function fetchStats(): Promise<Stats> {
 }
 
 async function fetchPhotos() {
-  throw Exception("whats up from tests");
   const photosResponse = await fetch(firebaseConfig.apiURL + "/photos.json", {
     mode: "cors"
   });
