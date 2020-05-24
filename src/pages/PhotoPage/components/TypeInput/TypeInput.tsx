@@ -3,9 +3,12 @@ import React, { useState, useCallback, useEffect } from "react";
 import Search from "@material-ui/icons/Search";
 import { makeStyles } from "@material-ui/core/styles";
 
-import styles from "standard.scss";
-import { getSuggestions, getLeafKey } from "./utils";
 import useOnOutsideClick from "hooks/useOnOutsideClick";
+
+import { Type } from "../../types";
+import { getSuggestions, getLeafKey } from "./utils";
+
+import styles from "standard.scss";
 
 const useStyles = makeStyles(theme => ({
   inputWrapper: {
@@ -44,30 +47,30 @@ const useStyles = makeStyles(theme => ({
 }));
 
 type Props = {
-  setLeafKey: (leafKey: null | string) => void;
+  setType: (type: Type) => void;
   className: string;
 };
 
 export default function TypeInput(props: Props) {
   const styles = useStyles();
-  const [type, setType] = useState("");
+  const [label, setLabel] = useState("");
   const [focused, setFocused] = useState(false);
   const outsideClickRef = useOnOutsideClick(() => setFocused(false));
 
-  const suggestions = getSuggestions(type);
-  const leafKey = getLeafKey(type);
+  const suggestions = getSuggestions(label);
+  const leafKey = getLeafKey(label);
   const onSuggestionClick = useCallback((suggestion: string) => {
-    setType(suggestion);
+    setLabel(suggestion);
     setFocused(false);
   }, []);
 
   useEffect(() => {
-    props.setLeafKey(leafKey);
+    props.setType({ leafKey, label });
   }, [leafKey]);
 
   const showMessage =
     (!focused && !leafKey) ||
-    (focused && type.length >= 3 && suggestions.length === 0);
+    (focused && label.length >= 3 && suggestions.length === 0);
 
   return (
     //@ts-ignore
@@ -77,8 +80,8 @@ export default function TypeInput(props: Props) {
         <input
           placeholder="    Search for litter ..."
           className={styles.input}
-          value={type}
-          onChange={e => setType(e.target.value)}
+          value={label}
+          onChange={e => setLabel(e.target.value)}
           onFocus={() => setFocused(true)}
         />
       </div>
@@ -106,7 +109,7 @@ type SuggestionProps = {
   onClick: (suggestion: string) => void;
 };
 
-function Suggestion({ label, Key, className, onClick }: SuggestionProps) {
+function Suggestion({ label, className, onClick }: SuggestionProps) {
   return (
     <div className={className} onClick={() => onClick(label)}>
       {label}

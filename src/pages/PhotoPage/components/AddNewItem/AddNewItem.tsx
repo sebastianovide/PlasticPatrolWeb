@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button, makeStyles } from "@material-ui/core";
 
-import { Item } from "../ItemOverview";
+import { Item, Type } from "../../types";
 import QuantitySelector from "../QuantitySelector";
 import TypeInput from "../TypeInput";
 
@@ -65,14 +65,14 @@ const useStyles = makeStyles(theme => ({
 
 export default function AddNewItem({ onCancelClick, onAddClick }: Props) {
   const [quantity, setQuantity] = useState(0);
-  const [type, setType] = useState<string | null>("");
+  const [type, setType] = useState<Type>({});
   const [brand, setBrand] = useState<string>("");
 
   const styles = useStyles();
 
   return (
     <div className={styles.wrapper}>
-      <TypeInput setLeafKey={setType} className={styles.type} />
+      <TypeInput setType={setType} className={styles.type} />
       <input
         placeholder="Enter brand"
         value={brand}
@@ -89,8 +89,8 @@ export default function AddNewItem({ onCancelClick, onAddClick }: Props) {
 
       <Button
         onClick={onCancelClick}
-        variant="contained"
-        color="secondary"
+        variant="outlined"
+        color="primary"
         className={styles.cancel}
       >
         Cancel

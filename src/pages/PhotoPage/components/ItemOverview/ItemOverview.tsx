@@ -3,11 +3,7 @@ import React from "react";
 import CloseIcon from "@material-ui/icons/Close";
 import { makeStyles } from "@material-ui/core/styles";
 
-export type Item = {
-  quantity: number;
-  brand?: string;
-  type: string;
-};
+import { Item } from "../../types";
 
 type Props = {
   handleRemove: () => void;
@@ -30,14 +26,14 @@ const useStyles = makeStyles(theme => ({
 export default function ItemOverview({
   quantity,
   brand,
-  type,
+  type: { label },
   handleRemove
 }: Props) {
   const styles = useStyles();
 
   return (
     <div className={styles.wrapper}>
-      {quantity} {brand} {type}
+      {quantity} {brand} {label}
       <CloseIcon className={styles.cross} onClick={handleRemove} />
     </div>
   );

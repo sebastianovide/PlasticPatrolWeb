@@ -28,6 +28,7 @@ const useStyles = makeStyles(theme => ({
     flex: 1,
     flexDirection: "column",
     height: "100%",
+    width: "100vw",
     position: "fixed",
     right: 0,
     left: 0,
@@ -38,7 +39,9 @@ const useStyles = makeStyles(theme => ({
     display: "flex",
     flexDirection: "column",
     flex: 1,
+    height: "100%",
     overflowY: "auto",
+
     "-webkit-overflow-scrolling": "touch"
   },
   iconButton: {
@@ -79,7 +82,7 @@ interface Props {
 
 interface PhotoPageProps {
   handlePrev: () => void;
-  handleNext: () => void;
+  handleNext?: () => void;
   enableNext: boolean;
   nextClicked: boolean;
   error: boolean;

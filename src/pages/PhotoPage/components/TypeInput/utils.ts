@@ -17,7 +17,7 @@ export function getSuggestions(input: string) {
 
 function filterCat(input: string) {
   return function(category: Category) {
-    if (input.length < 3) {
+    if (input.length === 0) {
       return false;
     }
     const normalisedInput = input.toLowerCase();

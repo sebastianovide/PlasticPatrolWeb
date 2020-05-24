@@ -8,11 +8,15 @@ export const withAllFields = () => (
   <ItemOverview
     quantity={1}
     brand={"Coca cola"}
-    type={"Plastic bottle"}
+    type={{ label: "Plastic bottle", leafKey: null }}
     handleRemove={() => {}}
   />
 );
 
 export const withoutBrand = () => (
-  <ItemOverview quantity={1} type={"Plastic bottle"} handleRemove={() => {}} />
+  <ItemOverview
+    quantity={1}
+    type={{ label: "Plastic bottle", leafKey: null }}
+    handleRemove={() => {}}
+  />
 );
