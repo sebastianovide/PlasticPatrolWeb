@@ -1,4 +1,10 @@
+// @ts-nocheck
 import { sortArrayByObjectKey } from "utils";
+import {
+  CategoryData,
+  CategoryOption,
+  KeyedCategoryData
+} from "types/Category";
 
 export function customFilterOption(option, rawInput) {
   if (!rawInput) {
@@ -28,10 +34,12 @@ export function labelWordContainsInputWord(label, input) {
   return label && label.includes(input);
 }
 
-export const getDropdownOptions = categoriesObject => {
-  const items = [];
+export const getDropdownOptions = (
+  categoriesObject: KeyedCategoryData
+): CategoryOption[] => {
+  const items: CategoryOption[] = [];
 
-  function getNodesInLowestHierarchy(categoriesObject) {
+  function getNodesInLowestHierarchy(categoriesObject: KeyedCategoryData) {
     Object.entries(categoriesObject).forEach(([key, value]) => {
       if (!value.children) {
         items.push({ label: value.label, key: key });

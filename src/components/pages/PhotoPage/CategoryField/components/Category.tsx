@@ -6,13 +6,21 @@ import { FieldLabelWithInput } from "./CategoryDropdown/FieldLabel";
 
 import { validateString, validateIsPositiveNumber } from "./validation";
 import CategoryDropdown from "./CategoryDropdown";
+import { Category, CategoryOption } from "types/Category";
 
 import "./Category.scss";
 
-const CategoryField = ({ handleClickRemove, handleChange }) => {
-  const [numberOfPieces, setNumberOfPieces] = useState("");
+interface Props {
+  handleClickRemove: () => void;
+  handleChange: (category: Category) => void;
+}
+
+const CategoryField = ({ handleClickRemove, handleChange }: Props) => {
+  const [numberOfPieces, setNumberOfPieces] = useState<number | undefined>();
   const [brand, setBrand] = useState("");
-  const [selectedOption, setSelectedOption] = useState("");
+  const [selectedOption, setSelectedOption] = useState<
+    CategoryOption | undefined
+  >();
 
   const categoryValuesRef = useRef({
     numberOfPiecesRef: numberOfPieces,
@@ -28,9 +36,11 @@ const CategoryField = ({ handleClickRemove, handleChange }) => {
     } = categoryValuesRef.current;
 
     if (
-      numberOfPiecesRef !== numberOfPieces ||
-      brandRef !== brand ||
-      selectedOptionRef !== selectedOption
+      (numberOfPiecesRef !== numberOfPieces ||
+        brandRef !== brand ||
+        selectedOptionRef !== selectedOption) &&
+      selectedOption &&
+      numberOfPieces
     ) {
       const validBrand = validateString(brand);
       const validCategory =
@@ -41,7 +51,7 @@ const CategoryField = ({ handleClickRemove, handleChange }) => {
       handleChange({
         leafKey: selectedOption && selectedOption.key,
         number: numberOfPieces,
-        brand: validBrand && brand.trim(),
+        brand: validBrand ? brand.trim() : undefined,
         error: !validCategory
       });
 
@@ -58,7 +68,7 @@ const CategoryField = ({ handleClickRemove, handleChange }) => {
           label="Type of rubbish"
           placeholder={"e.g. plastic bottle"}
           value={selectedOption}
-          setValue={setSelectedOption}
+          setValue={(option) => setSelectedOption(option)}
         />
         <RemoveIcon onClick={handleClickRemove} />
       </div>
@@ -78,8 +88,8 @@ const CategoryField = ({ handleClickRemove, handleChange }) => {
             label="Number of pieces"
             placeholder={"e.g. 1"}
             validationFn={validateIsPositiveNumber}
-            value={numberOfPieces}
-            setValue={setNumberOfPieces}
+            value={numberOfPieces === undefined ? "" : "" + numberOfPieces}
+            setValue={(x) => setNumberOfPieces(Number(x))}
             required
           />
         </>
