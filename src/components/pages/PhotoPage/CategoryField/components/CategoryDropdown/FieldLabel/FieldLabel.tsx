@@ -1,24 +1,20 @@
-import React from "react";
+import React, { FunctionComponent } from "react";
 import classnames from "classnames";
 
 import "./FieldLabel.scss";
 
-export type PropsToPass = {
-  label: string;
+export type Props = {
+  label?: string;
   required?: boolean;
   className?: string;
 };
 
-type Props = {
-  children: React.ReactElement;
-} & PropsToPass;
-
-export default function FieldLabel({
+const FieldLabel: FunctionComponent<Props> = ({
   label,
   required,
   children,
   className
-}: Props) {
+}) => {
   return (
     <div className={classnames("FieldLabel__container", className)}>
       <p className={"FieldLabel__label"}>
@@ -28,4 +24,6 @@ export default function FieldLabel({
       {children}
     </div>
   );
-}
+};
+
+export default FieldLabel;

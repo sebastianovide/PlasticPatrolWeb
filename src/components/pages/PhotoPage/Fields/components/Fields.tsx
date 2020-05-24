@@ -8,27 +8,47 @@ import CategoryField from "../../CategoryField";
 import { FieldLabelWithInput } from "../../CategoryField/components/CategoryDropdown/FieldLabel";
 import { validateIsPositiveNumber } from "../../CategoryField/components/validation";
 
+import { Category } from "types/Category";
+
 import "./Fields.scss";
 
-const INITIAL_CATEGORY_VALUES = [{ keyIndex: 0, values: { error: false } }];
+type CategoryWithKey = {
+  keyIndex: number;
+  values: {
+    error?: boolean;
+  };
+};
 
-const Fields = ({ imgSrc, handleChange, handleTotalCountChange }) => {
+const INITIAL_CATEGORY_VALUES: CategoryWithKey[] = [
+  { keyIndex: 0, values: { error: false } }
+];
+
+interface Props {
+  imgSrc: any;
+  handleChange: any;
+  handleTotalCountChange: (error: boolean, totalCount: number) => void;
+}
+
+const Fields = ({ imgSrc, handleChange, handleTotalCountChange }: Props) => {
   const [categoryValues, setCategoryValues] = useState(INITIAL_CATEGORY_VALUES);
   const [childIndex, setNextChildIndex] = useState(categoryValues.length);
-  const [totalCount, setTotalCount] = useState(null);
+  const [totalCount, setTotalCount] = useState(0);
   const [anyCategoryErrors, setAnyCategoryErrors] = useState(false);
   const [totalCountErrors, setTotalCountErrors] = useState(true);
   const [photoEnlarged, setPhotoEnlarged] = useState(false);
 
-  const handleSetTotalCount = newTotalCount => {
+  const handleSetTotalCount = (newTotalCount: string) => {
     const countError = !validateIsPositiveNumber(newTotalCount);
 
-    setTotalCount(newTotalCount);
+    setTotalCount(Number(newTotalCount));
     setTotalCountErrors(countError);
-    handleTotalCountChange(countError || anyCategoryErrors, newTotalCount);
+    handleTotalCountChange(
+      countError || anyCategoryErrors,
+      Number(newTotalCount)
+    );
   };
 
-  const handleClickAdd = categoryValues => {
+  const handleClickAdd = (categoryValues: CategoryWithKey[]) => {
     categoryValues.push({ keyIndex: childIndex, values: {} });
     setNextChildIndex(childIndex + 1);
     setCategoryValues(categoryValues);
@@ -36,19 +56,21 @@ const Fields = ({ imgSrc, handleChange, handleTotalCountChange }) => {
     handleChange(true, categoryValues);
   };
 
-  const handleCategoryChange = index => newValue => {
+  const handleCategoryChange = (index: number) => (newValue: Category) => {
     let error = false;
-    const updatedCategoryValues = categoryValues.map(categoryValue => {
-      const { keyIndex } = categoryValue;
+    const updatedCategoryValues: CategoryWithKey[] = categoryValues.map(
+      categoryValue => {
+        const { keyIndex } = categoryValue;
 
-      if (newValue.error) error = true;
+        if (newValue.error) error = true;
 
-      if (index === keyIndex) {
-        return { keyIndex, values: newValue };
+        if (index === keyIndex) {
+          return { keyIndex, values: newValue };
+        }
+
+        return categoryValue;
       }
-
-      return categoryValue;
-    });
+    );
 
     setAnyCategoryErrors(error);
     handleChange(totalCountErrors || error, updatedCategoryValues);
@@ -56,7 +78,7 @@ const Fields = ({ imgSrc, handleChange, handleTotalCountChange }) => {
   };
 
   const handleClickRemove = useCallback(
-    index => e => {
+    index => () => {
       if (categoryValues.length <= 1) return;
 
       const filteredCategoryValues = categoryValues.filter(
@@ -94,7 +116,7 @@ const Fields = ({ imgSrc, handleChange, handleTotalCountChange }) => {
         <FieldLabelWithInput
           label="Total number of pieces in photo:"
           placeholder="e.g. 0"
-          value={totalCount}
+          value={"" + totalCount}
           setValue={handleSetTotalCount}
           validationFn={validateIsPositiveNumber}
           className="Fields__numberOfPieces"

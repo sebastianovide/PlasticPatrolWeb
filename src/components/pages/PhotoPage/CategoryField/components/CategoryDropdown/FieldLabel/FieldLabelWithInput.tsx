@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import classnames from "classnames";
 
-import FieldLabel, { PropsToPass } from "./FieldLabel";
+import FieldLabel, { Props as FieldLabelProps } from "./FieldLabel";
 
 import "./FieldLabelWithInput.scss";
 
@@ -10,7 +10,7 @@ type Props = {
   value: string;
   placeholder: string;
   setValue: (value: string) => void;
-} & PropsToPass;
+} & FieldLabelProps;
 
 const FieldLabelWithInput = ({
   validationFn,
