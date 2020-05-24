@@ -1,6 +1,8 @@
 # plastic-patrol
 
-This app is built based on [Geovation Photos](https://github.com/Geovation/photos) stack.
+*NOTE* I highly recommend running "echo REACT_ENV_USE_PROD_DATA=false >> .env" before running the app.
+
+To start the webapp, just `npm start`
 
 # Testing
 
@@ -13,8 +15,13 @@ for changes and report if any tests break as a result.
 ## Local Execution
 
 To run functions locally, follow the instructions [here](https://firebase.google.com/docs/functions/local-emulator) to set up
-the firebase emulator. When you make changes to the typescript, you will need to manually run `npm run build` in the functions/
-directory to have those changes picked up by the emulator. Once that is running, you should be able to run:
+the firebase emulator. You will need to set up credentials and `export GOOGLE_APPLICATION_CREDENTIALS` before running the emulator
+(probably also add it to your .bashrc). 
+
+*NOTE* These should be **dev** credentials!!
+
+When you make changes to the typescript, you will need to manually `npm run build` in the functions/
+directory to have those changes picked up by the emulator. Once that is up, you should be able to:
 
 ```
 curl http://localhost:5001/plastic-patrol-dev-722eb/us-central1/computeStats
@@ -25,6 +32,22 @@ And see the result.
 ## Unit Tests
 
 To unit test functions in isolation, run `npm run functions:test`
+
+# Scripts
+
+## firebase.js
+
+```
+node scripts/firebase.js
+```
+
+This is an example script demonstrating how to interact with firebase via node. It pulls in config.json from the main app so will respect
+`REACT_ENV_USE_PROD_DATA` as well.
+
+## stats.js
+
+Currently just fetches up-to-date stats for staging. Note that this bypasses the cache and is recomputed each time you run it, so don't run
+it against production data.
 
 # Travis
 After changing any secret file:
