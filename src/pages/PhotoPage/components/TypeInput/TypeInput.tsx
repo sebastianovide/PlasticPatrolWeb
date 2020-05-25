@@ -49,11 +49,12 @@ const useStyles = makeStyles(theme => ({
 type Props = {
   setType: (type: Type) => void;
   className: string;
+  initialType?: Type;
 };
 
 export default function TypeInput(props: Props) {
   const styles = useStyles();
-  const [label, setLabel] = useState("");
+  const [label, setLabel] = useState(props.initialType?.label || "");
   const [focused, setFocused] = useState(false);
   const outsideClickRef = useOnOutsideClick(() => setFocused(false));
 

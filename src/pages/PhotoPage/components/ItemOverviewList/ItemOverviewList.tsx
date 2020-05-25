@@ -1,13 +1,19 @@
 import React from "react";
 
-import ItemOverview, { Item } from "../ItemOverview";
+import { Item } from "../../types";
+import ItemOverview from "../ItemOverview";
 
 type Props = {
   items: Array<Item>;
   handleRemoveItem: (index: number) => void;
+  handleItemClick: (index: number) => void;
 };
 
-export default function ItemOverviewList({ items, handleRemoveItem }: Props) {
+export default function ItemOverviewList({
+  items,
+  handleRemoveItem,
+  handleItemClick
+}: Props) {
   return (
     <>
       {items.map((item, index) => {
@@ -15,6 +21,7 @@ export default function ItemOverviewList({ items, handleRemoveItem }: Props) {
           <ItemOverview
             {...item}
             handleRemove={() => handleRemoveItem(index)}
+            handleClick={() => handleItemClick(index)}
             key={`${item.type}-${item.quantity}`}
           />
         );

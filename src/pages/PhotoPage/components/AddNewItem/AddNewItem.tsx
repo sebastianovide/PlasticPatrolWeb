@@ -9,14 +9,15 @@ import styles from "standard.scss";
 
 type Props = {
   onCancelClick: () => void;
-  onAddClick: (item: Item) => void;
+  onConfirmClick: (item: Item) => void;
+  initialItem?: Item;
 };
 
 const button = (theme: any) => ({
   width: 130,
   justifySelf: "center",
   marginTop: theme.spacing(1),
-  textTransform: "none"
+  "text-transform": "none"
 });
 
 const useStyles = makeStyles(theme => ({
@@ -63,16 +64,24 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function AddNewItem({ onCancelClick, onAddClick }: Props) {
-  const [quantity, setQuantity] = useState(0);
-  const [type, setType] = useState<Type>({});
-  const [brand, setBrand] = useState<string>("");
+export default function AddNewItem({
+  onCancelClick,
+  onConfirmClick,
+  initialItem
+}: Props) {
+  const [quantity, setQuantity] = useState(initialItem?.quantity || 0);
+  const [type, setType] = useState<Type>(initialItem?.type || {});
+  const [brand, setBrand] = useState<string>(initialItem?.brand || "");
 
   const styles = useStyles();
 
   return (
     <div className={styles.wrapper}>
-      <TypeInput setType={setType} className={styles.type} />
+      <TypeInput
+        setType={setType}
+        className={styles.type}
+        initialType={initialItem?.type}
+      />
       <input
         placeholder="Enter brand"
         value={brand}
@@ -97,7 +106,7 @@ export default function AddNewItem({ onCancelClick, onAddClick }: Props) {
       </Button>
       <Button
         onClick={() =>
-          onAddClick({
+          onConfirmClick({
             quantity,
             type,
             brand
@@ -107,7 +116,7 @@ export default function AddNewItem({ onCancelClick, onAddClick }: Props) {
         color="primary"
         className={styles.add}
       >
-        Add item(s)
+        {initialItem ? "Edit" : "Add"} item(s)
       </Button>
     </div>
   );

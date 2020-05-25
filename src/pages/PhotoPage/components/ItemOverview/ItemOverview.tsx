@@ -7,6 +7,7 @@ import { Item } from "../../types";
 
 type Props = {
   handleRemove: () => void;
+  handleClick: () => void;
 } & Item;
 
 const useStyles = makeStyles(theme => ({
@@ -27,12 +28,13 @@ export default function ItemOverview({
   quantity,
   brand,
   type: { label },
-  handleRemove
+  handleRemove,
+  handleClick
 }: Props) {
   const styles = useStyles();
 
   return (
-    <div className={styles.wrapper}>
+    <div className={styles.wrapper} onClick={handleClick}>
       {quantity} {brand} {label}
       <CloseIcon className={styles.cross} onClick={handleRemove} />
     </div>

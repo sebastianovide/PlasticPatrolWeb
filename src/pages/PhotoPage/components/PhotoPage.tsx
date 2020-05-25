@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
+import { Button } from "@material-ui/core";
 
 import PageWrapper from "components/PageWrapper";
+import { Item } from "../types";
 import AddNewItem from "./AddNewItem/AddNewItem";
 import ItemOverviewList from "./ItemOverviewList/ItemOverviewList";
-import { Item } from "./ItemOverview";
-import { Button } from "@material-ui/core";
 
 type Props = {
   imgSrc: string;
@@ -39,6 +39,7 @@ export default function CategoriseLitterPage({
 }) {
   const styles = useStyles();
   const [addingNewItem, setAddingNewItem] = useState(false);
+  const [editingItem, setEditingItem] = useState<Item | null>(null);
   const [items, setItems] = useState<Item[]>([]);
 
   const handleRemoveItem = (index: number) => {
@@ -53,6 +54,23 @@ export default function CategoriseLitterPage({
     setAddingNewItem(false);
   };
 
+  const handleEditItemClick = (index: number) => {
+    const itemToEdit = items[index];
+    setEditingItem(itemToEdit);
+  };
+
+  const editItem = (item: Item) => {
+    const index = editingItem && items.indexOf(editingItem);
+    // if item doesn't exist returns -1, in theory shouldn't ever happen
+    if (index !== null && index !== -1) {
+      const newItems = items;
+      newItems[index] = item;
+      setItems(newItems);
+      setEditingItem(null);
+    } else {
+      throw new Error("no item to edit");
+    }
+  };
   return (
     <PageWrapper label={"Log your litter"} handleClose={() => {}}>
       <div className={styles.wrapper}>
@@ -64,7 +82,13 @@ export default function CategoriseLitterPage({
         {addingNewItem ? (
           <AddNewItem
             onCancelClick={() => setAddingNewItem(false)}
-            onAddClick={addNewItem}
+            onConfirmClick={addNewItem}
+          />
+        ) : editingItem ? (
+          <AddNewItem
+            onCancelClick={() => setEditingItem(null)}
+            onConfirmClick={editItem}
+            initialItem={editingItem}
           />
         ) : (
           <>
@@ -74,12 +98,15 @@ export default function CategoriseLitterPage({
             <ItemOverviewList
               items={items}
               handleRemoveItem={handleRemoveItem}
+              handleItemClick={handleEditItemClick}
             />
           </>
         )}
-        <Button variant="contained" color="primary" className={styles.button}>
-          Submit Collection
-        </Button>
+        {!(addingNewItem || editingItem) && (
+          <Button variant="contained" color="primary" className={styles.button}>
+            Submit Collection
+          </Button>
+        )}
       </div>
     </PageWrapper>
   );
