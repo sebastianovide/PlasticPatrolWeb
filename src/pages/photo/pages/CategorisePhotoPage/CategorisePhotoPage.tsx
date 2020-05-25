@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Route, useHistory, useParams } from "react-router";
 
 import { makeStyles } from "@material-ui/core/styles";
 import { Button } from "@material-ui/core";
@@ -8,8 +9,12 @@ import { Item } from "../../types";
 import AddNewItem from "../../components/AddNewItem/AddNewItem";
 import ItemOverviewList from "../../components/ItemOverviewList/ItemOverviewList";
 
-import { useGetLocationFileState } from "routes/photo/routes/categorise/links";
+import {
+  useGetLocationFileState,
+  linkToUploadPhoto
+} from "routes/photo/routes/categorise/links";
 import loadPhoto from "./utils";
+import UploadPhotoDialog from "pages/photo/components/UploadPhotoDialog";
 
 const useStyles = makeStyles(theme => ({
   wrapper: {
@@ -36,6 +41,8 @@ const useStyles = makeStyles(theme => ({
 export default function CategoriseLitterPage() {
   const fileState = useGetLocationFileState();
   const [photo, setPhoto] = useState<any>();
+  const history = useHistory();
+  const { fileName } = useParams();
 
   useEffect(() => {
     if (fileState) {
@@ -90,42 +97,57 @@ export default function CategoriseLitterPage() {
   };
 
   return (
-    <PageWrapper label={"Log your litter"} handleClose={() => {}}>
-      <div className={styles.wrapper}>
-        <img
-          src={photo && photo.imgSrc}
-          className={styles.img}
-          onClick={() => setAddingNewItem(true)}
-        ></img>
-        {addingNewItem ? (
-          <AddNewItem
-            onCancelClick={() => setAddingNewItem(false)}
-            onConfirmClick={addNewItem}
-          />
-        ) : editingItem ? (
-          <AddNewItem
-            onCancelClick={() => setEditingItem(null)}
-            onConfirmClick={editItem}
-            initialItem={editingItem}
-          />
-        ) : (
-          <>
-            <p className={styles.prompt}>
-              Tap on the pieces of litter in your photo to add litter details
-            </p>
-            <ItemOverviewList
-              items={items}
-              handleRemoveItem={handleRemoveItem}
-              handleItemClick={handleEditItemClick}
+    <>
+      <PageWrapper label={"Log your litter"} handleClose={() => {}}>
+        <div className={styles.wrapper}>
+          <img
+            src={photo && photo.imgSrc}
+            className={styles.img}
+            onClick={() => setAddingNewItem(true)}
+          ></img>
+          {addingNewItem ? (
+            <AddNewItem
+              onCancelClick={() => setAddingNewItem(false)}
+              onConfirmClick={addNewItem}
             />
-          </>
-        )}
-        {!(addingNewItem || editingItem) && (
-          <Button variant="contained" color="primary" className={styles.button}>
-            Submit Collection
-          </Button>
-        )}
-      </div>
-    </PageWrapper>
+          ) : editingItem ? (
+            <AddNewItem
+              onCancelClick={() => setEditingItem(null)}
+              onConfirmClick={editItem}
+              initialItem={editingItem}
+            />
+          ) : (
+            <>
+              <p className={styles.prompt}>
+                Tap on the pieces of litter in your photo to add litter details
+              </p>
+              <ItemOverviewList
+                items={items}
+                handleRemoveItem={handleRemoveItem}
+                handleItemClick={handleEditItemClick}
+              />
+            </>
+          )}
+          {!(addingNewItem || editingItem) && (
+            <Button
+              variant="contained"
+              color="primary"
+              className={styles.button}
+              onClick={() => history.push(linkToUploadPhoto(fileName))}
+            >
+              Submit Collection
+            </Button>
+          )}
+        </div>
+      </PageWrapper>
+      <Route path={linkToUploadPhoto()}>
+        <UploadPhotoDialog
+          imgSrc={photo && photo.imgSrc}
+          online
+          items={items}
+          imgLocation={photo && photo.imgLocation}
+        />
+      </Route>
+    </>
   );
 }

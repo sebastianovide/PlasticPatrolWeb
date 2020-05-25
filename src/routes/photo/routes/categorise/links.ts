@@ -38,3 +38,7 @@ export function useGetLocationFileState() {
 
   return getLocationFileState(location);
 }
+
+export function linkToUploadPhoto(fileName?: string) {
+  return `${linkToCategorise(fileName)}/upload`;
+}

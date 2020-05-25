@@ -34,6 +34,7 @@ import EmailVerifiedDialog from "./components/EmailVerifiedDialog";
 import { gtagPageView, gtagEvent } from "./gtag.js";
 import "./App.scss";
 import MapLocation from "./types/MapLocation";
+import { linkToNewPhoto } from "routes/photo/routes/new/links";
 
 const styles = theme => ({
   dialogClose: {
@@ -384,22 +385,23 @@ class App extends Component {
   };
 
   handleCameraClick = () => {
-    if (this.props.config.SECURITY.UPLOAD_REQUIRES_LOGIN && !this.state.user) {
-      this.setState({
-        dialogOpen: true,
-        dialogTitle: "Please login to add a photo",
-        dialogContentText:
-          "Before adding photos, you must be logged into your account."
-      });
-    } else {
-      if (window.cordova) {
-        console.log("Opening cordova dialog");
-        this.setState({ openPhotoDialog: true });
-      } else {
-        console.log("Clicking on photo");
-        this.domRefInput.current.click();
-      }
-    }
+    this.props.history.push(linkToNewPhoto());
+    // if (this.props.config.SECURITY.UPLOAD_REQUIRES_LOGIN && !this.state.user) {
+    //   this.setState({
+    //     dialogOpen: true,
+    //     dialogTitle: "Please login to add a photo",
+    //     dialogContentText:
+    //       "Before adding photos, you must be logged into your account."
+    //   });
+    // } else {
+    //   if (window.cordova) {
+    //     console.log("Opening cordova dialog");
+    //     this.setState({ openPhotoDialog: true });
+    //   } else {
+    //     console.log("Clicking on photo");
+    //     this.domRefInput.current.click();
+    //   }
+    // }
   };
 
   openFile = e => {
