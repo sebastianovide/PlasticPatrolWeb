@@ -1,16 +1,21 @@
 import React from "react";
-import { Route, Redirect } from "react-router";
+import { Route, Redirect, Switch } from "react-router";
 
 import { linkToNewPhoto } from "./new/links";
 import NewPhotoRoute from "./new/Route";
+import { linkToCategorise } from "./categorise/links";
+import CategorisePhotoRoute from "./categorise/Route";
 
 export default function PhotoPageSubRouter() {
   return (
-    <>
-      <Route link={linkToNewPhoto()}>
+    <Switch>
+      <Route path={linkToCategorise()}>
+        <CategorisePhotoRoute />
+      </Route>
+      <Route path={linkToNewPhoto()}>
         <NewPhotoRoute />
       </Route>
       <Redirect to={linkToNewPhoto()} />
-    </>
+    </Switch>
   );
 }

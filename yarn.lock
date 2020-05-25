@@ -3507,6 +3507,13 @@
   dependencies:
     "@babel/types" "^7.3.0"
 
+"@types/blueimp-load-image@^2.23.6":
+  version "2.23.6"
+  resolved "https://registry.npmjs.org/@types/blueimp-load-image/-/blueimp-load-image-2.23.6.tgz#2ccf3c69bd17c5bd1f4471470505a7f065a84a9f"
+  integrity sha512-RF5EQ2miGm/o5XmZk0PhpLnikXOwe1BxGJVikYcNhwr4s7i7LqVc4U51k/zFTD11GeqyK+yz6vWwvvtoKsPYLw==
+  dependencies:
+    "@types/node" "*"
+
 "@types/classnames@^2.2.10":
   version "2.2.10"
   resolved "https://registry.yarnpkg.com/@types/classnames/-/classnames-2.2.10.tgz#cc658ca319b6355399efc1f5b9e818f1a24bf999"

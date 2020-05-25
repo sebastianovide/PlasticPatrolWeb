@@ -1,7 +1,8 @@
 // Custom Dialog to choose camera and photo library to interact with cordova-plugin-camera
 
-import React from "react";
-import PropTypes from "prop-types";
+import React, { useRef, useEffect } from "react";
+
+import RootRef from "@material-ui/core/RootRef";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import IconButton from "@material-ui/core/IconButton";
@@ -10,26 +11,62 @@ import Dialog from "@material-ui/core/Dialog";
 import CameraIcon from "@material-ui/icons/PhotoCamera";
 import PhotoLibraryIcon from "@material-ui/icons/PhotoLibrary";
 import CancelIcon from "@material-ui/icons/Close";
+import { useLocation } from "react-router-dom";
 
 type Props = {
   onClose: () => void;
-  handleListItemClick: (value: string) => void;
+  handlePhotoSelect: (value: string | File) => void;
 };
 
-export default function AddPhotoDialog({
-  onClose,
-  handleListItemClick
-}: Props) {
+export default function AddPhotoDialogWithHiddenInputForDesktop(props: Props) {
+  const domRefInput = useRef();
+  const location = useLocation();
+
+  // TODO: make less hacky, but I think the only desktop users are devs ...
+  setTimeout(() => {
+    // @ts-ignore
+    domRefInput.current && domRefInput.current.click();
+  }, 100);
+
+  //@ts-ignore
+  return window.cordova ? (
+    <AddPhotoDialog {...props} />
+  ) : (
+    <RootRef rootRef={domRefInput}>
+      <input
+        className="hidden"
+        type="file"
+        accept="image/*"
+        id={"fileInput"}
+        onChange={e => {
+          const file = e.target && e.target.files && e.target.files[0];
+          if (file) {
+            props.handlePhotoSelect(file);
+          }
+        }}
+      />
+    </RootRef>
+  );
+}
+
+function AddPhotoDialog({ onClose, handlePhotoSelect }: Props) {
+  const callback = (a: any, b: any) => {};
   return (
     <Dialog onClose={onClose} open>
       <List>
-        <ListItem button onClick={() => handleListItemClick("CAMERA")}>
+        <ListItem
+          button
+          onClick={() => handlePhotoDialogItemClick("CAMERA", callback)}
+        >
           <IconButton color="primary" edge={false}>
             <CameraIcon />
           </IconButton>
           <ListItemText primary={"Camera"} />
         </ListItem>
-        <ListItem button onClick={() => handleListItemClick("PHOTOLIBRARY")}>
+        <ListItem
+          button
+          onClick={() => handlePhotoDialogItemClick("PHOTOLIBRARY", callback)}
+        >
           <IconButton color="primary" edge={false}>
             <PhotoLibraryIcon />
           </IconButton>
@@ -43,5 +80,38 @@ export default function AddPhotoDialog({
         </ListItem>
       </List>
     </Dialog>
+  );
+}
+
+function handlePhotoDialogItemClick(
+  value: string,
+  callback: (metaData: any, fileName: string) => void
+) {
+  // @ts-ignore
+  const Camera = navigator.camera;
+  const srcType =
+    value === "CAMERA"
+      ? Camera.PictureSourceType.CAMERA
+      : Camera.PictureSourceType.PHOTOLIBRARY;
+
+  // this.setState({
+  //   srcType: value === "CAMERA" ? "camera" : "filesystem"
+  // });
+  Camera.getPicture(
+    //https://cordova.apache.org/docs/en/1.6.0/cordova/camera/camera.getPicture.html
+    (imageUri: string) => {
+      const file = JSON.parse(imageUri);
+      const cordovaMetadata = JSON.parse(file.json_metadata);
+      callback(cordovaMetadata, file);
+    },
+    (message: string) => {
+      console.log("Failed because: ", message);
+    },
+    {
+      quality: 50,
+      destinationType: Camera.DestinationType.FILE_URI,
+      sourceType: srcType,
+      correctOrientation: true
+    }
   );
 }

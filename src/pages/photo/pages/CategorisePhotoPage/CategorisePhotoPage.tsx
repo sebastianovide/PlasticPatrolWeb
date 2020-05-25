@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
 import { Button } from "@material-ui/core";
@@ -8,9 +8,8 @@ import { Item } from "../../types";
 import AddNewItem from "../../components/AddNewItem/AddNewItem";
 import ItemOverviewList from "../../components/ItemOverviewList/ItemOverviewList";
 
-type Props = {
-  imgSrc: string;
-};
+import { useGetLocationFileState } from "routes/photo/routes/categorise/links";
+import loadPhoto from "./utils";
 
 const useStyles = makeStyles(theme => ({
   wrapper: {
@@ -34,9 +33,27 @@ const useStyles = makeStyles(theme => ({
     padding: `${theme.spacing(0.25)}px ${theme.spacing(4)}px`
   }
 }));
-export default function CategoriseLitterPage({
-  imgSrc = "https://upload.wikimedia.org/wikipedia/en/3/33/Snab_rubbish.jpg"
-}) {
+export default function CategoriseLitterPage() {
+  const fileState = useGetLocationFileState();
+  const [photo, setPhoto] = useState<any>();
+
+  useEffect(() => {
+    if (fileState) {
+      const { file, cordovaMetaData } = fileState;
+      loadPhoto({
+        photoToLoad: file,
+        srcType: "sany",
+        gpsLocation: {
+          latitude: 0,
+          longitude: 0,
+          online: false,
+          updated: new Date()
+        },
+        cordovaMetaData,
+        callback: setPhoto
+      });
+    }
+  }, []);
   const styles = useStyles();
   const [addingNewItem, setAddingNewItem] = useState(false);
   const [editingItem, setEditingItem] = useState<Item | null>(null);
@@ -71,11 +88,12 @@ export default function CategoriseLitterPage({
       throw new Error("no item to edit");
     }
   };
+
   return (
     <PageWrapper label={"Log your litter"} handleClose={() => {}}>
       <div className={styles.wrapper}>
         <img
-          src={imgSrc}
+          src={photo && photo.imgSrc}
           className={styles.img}
           onClick={() => setAddingNewItem(true)}
         ></img>
