@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 
 import AddNewItem from "./AddNewItem";
 
 export default { title: "AddNewItem", component: AddNewItem };
 
+const item: any = {};
 export const defaultSelector = () => (
-  <AddNewItem onCancelClick={() => {}} onAddClick={() => {}} />
+  <AddNewItem onCancelClick={() => {}} onConfirmClick={item => {}} />
 );

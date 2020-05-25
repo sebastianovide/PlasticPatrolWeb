@@ -1,8 +1,9 @@
+// @ts-nocheck
+
 import React, { useState } from "react";
 import faker from "faker";
 
 import ItemOverviewList from "./ItemOverviewList";
-import { Item } from "../ItemOverview";
 
 export default { title: "ItemOverviewList", component: ItemOverviewList };
 

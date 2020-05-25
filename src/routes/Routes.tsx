@@ -23,6 +23,8 @@ import Photo from "types/Photo";
 
 import ModeratorRoute from "./components/ModeratorRoute";
 import SignedInRoute from "./components/SignedInRoute";
+import PhotoRoute from "./photo/Route";
+import { linkToPhotoPage } from "./photo/links";
 
 type Props = {
   user: User;
@@ -147,8 +149,9 @@ export function Routes({
         />
       </ModeratorRoute>
 
-      <Route path={config.PAGES.photos.path}>
-        <PhotoPage
+      <Route path={linkToPhotoPage()}>
+        <PhotoRoute />
+        {/* <PhotoPage
           //@ts-ignore - this exists
           label={config.PAGES.photos.label}
           file={file}
@@ -159,7 +162,7 @@ export function Routes({
           fields={fields}
           handleClose={history.goBack}
           handleRetakeClick={handleCameraClick}
-        />
+        /> */}
       </Route>
 
       <SignedInRoute path={config.PAGES.account.path} user={user}>

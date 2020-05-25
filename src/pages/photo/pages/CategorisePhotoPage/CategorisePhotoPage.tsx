@@ -4,9 +4,9 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Button } from "@material-ui/core";
 
 import PageWrapper from "components/PageWrapper";
-import { Item } from "../types";
-import AddNewItem from "./AddNewItem/AddNewItem";
-import ItemOverviewList from "./ItemOverviewList/ItemOverviewList";
+import { Item } from "../../types";
+import AddNewItem from "../../components/AddNewItem/AddNewItem";
+import ItemOverviewList from "../../components/ItemOverviewList/ItemOverviewList";
 
 type Props = {
   imgSrc: string;

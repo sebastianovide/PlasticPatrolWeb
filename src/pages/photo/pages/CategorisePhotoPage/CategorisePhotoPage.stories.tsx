@@ -1,6 +1,8 @@
+// @ts-nocheck
+
 import React from "react";
 
-import PhotoPage from "./PhotoPage";
+import PhotoPage from "./CategorisePhotoPage";
 
 export default { title: "PhotoPage", component: PhotoPage };
 

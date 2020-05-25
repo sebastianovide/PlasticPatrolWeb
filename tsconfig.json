@@ -16,7 +16,8 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "noEmit": true,
-    "baseUrl": "src"
+    "baseUrl": "src",
+    "isolatedModules": true
   },
   "include": ["src", ".storybook/*"]
 }
