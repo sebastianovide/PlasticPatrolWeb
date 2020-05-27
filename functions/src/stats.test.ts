@@ -1,17 +1,15 @@
 import { it } from "mocha";
 import { strict as assert } from "assert";
-import { computeStats } from "./utils";
-import {
-  QuerySnapshot,
-  QueryDocumentSnapshot
-} from "@firebase/firestore-types";
+import { computeStats } from "./stats";
+import { QuerySnapshot } from "@google-cloud/firestore";
 import { stubInterface } from "ts-sinon";
-import { User, Photo, Group, RawUser } from "./types";
+import { User, Photo, Group } from "./types";
+import admin from "firebase-admin";
 
-function makeQuerySnapshot<T>(id: string, data: T): QuerySnapshot<T> {
-  const snapshot = stubInterface<QuerySnapshot<T>>();
+function makeQuerySnapshot<T>(id: string, data: T): QuerySnapshot {
+  const snapshot = stubInterface<QuerySnapshot>();
   // @ts-ignore
-  snapshot.forEach = f => [{ id, data: () => data }].forEach(f);
+  snapshot.forEach = (f) => [{ id, data: () => data }].forEach(f);
   return snapshot;
 }
 
@@ -19,7 +17,8 @@ it("computesStats for users without groups", () => {
   const userId = "123";
   const groupId = "456";
 
-  const rawUser: RawUser = {
+  // @ts-ignore
+  const rawUser: admin.auth.UserRecord = {
     uid: userId,
     displayName: "Bob"
   };
@@ -70,7 +69,8 @@ it("computesStats with groups", () => {
   const userId = "123";
   const groupId = "456";
 
-  const rawUser: RawUser = {
+  // @ts-ignore
+  const rawUser: admin.auth.UserRecord = {
     uid: userId,
     displayName: "Bob"
   };
