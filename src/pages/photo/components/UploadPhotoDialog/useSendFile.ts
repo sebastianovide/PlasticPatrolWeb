@@ -1,11 +1,13 @@
 import { useState } from "react";
+import { useHistory } from "react-router-dom";
 
 import firebase from "firebase/app";
 
+import { dbFirebase } from "features/firebase";
 import { gtagEvent } from "gtag.js";
 import { Item } from "pages/photo/types";
-import { dbFirebase } from "features/firebase";
-import { useHistory } from "react-router-dom";
+
+import { linkToUploadSuccess } from "routes/upload-success/links";
 
 type HookArgs = {
   imgSrc: string;
@@ -18,6 +20,7 @@ type HookArgs = {
 type Args = {
   setSendingProgress: (progress: number) => void;
   setUploadTask: (task: any) => void;
+  history: any;
 } & HookArgs;
 export default function useSendFile(args: HookArgs) {
   const [uploadTask, setUploadTask] = useState<any>();
@@ -28,7 +31,7 @@ export default function useSendFile(args: HookArgs) {
   const sendFileFunc = () => {
     try {
       console.log("sending");
-      sendFile({ ...args, setUploadTask, setSendingProgress });
+      sendFile({ ...args, setUploadTask, setSendingProgress, history });
     } catch (err) {
       console.log("sending errored");
       setErrorMessage(err.message);
@@ -53,7 +56,7 @@ async function sendFile({
   online,
   imgLocation,
   items,
-  onSuccess,
+  history,
   setSendingProgress,
   setUploadTask
 }: Args) {
@@ -129,7 +132,7 @@ async function sendFile({
       throw Error(`Photo upload was canceled. ${extraInfo}`);
     },
     () => {
-      onSuccess && onSuccess(totalCount);
+      history.push(linkToUploadSuccess(totalCount as any));
     }
   );
 }

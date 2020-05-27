@@ -8,7 +8,6 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 import Button from "@material-ui/core/Button";
 
 import useSendFile from "./useSendFile";
-import { useHistory } from "react-router-dom";
 
 type Props = any;
 export default function UploadPhotoDialog({
@@ -18,8 +17,6 @@ export default function UploadPhotoDialog({
   items
 }: //   onSuccess
 Props) {
-  const history = useHistory();
-  const onSuccess = (t: any) => history.push("/");
   const {
     cancelUpload,
     errorMessage,
@@ -30,8 +27,7 @@ Props) {
     imgSrc,
     online,
     imgLocation,
-    items,
-    onSuccess
+    items
   });
 
   useEffect(() => {

@@ -8,7 +8,7 @@ export default function PhotoRoute() {
   const history = useHistory();
 
   return (
-    <PageWrapper label={"Log your litter"} handleClose={() => {}}>
+    <PageWrapper label={"Log your litter"} handleClose={history.goBack}>
       <PhotoPageSubRouter />
     </PageWrapper>
   );
