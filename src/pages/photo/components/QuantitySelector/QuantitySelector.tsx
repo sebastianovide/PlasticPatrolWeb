@@ -12,7 +12,7 @@ const standardFlex = {
   justifyContent: "center"
 };
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   quantityWrapper: {
     margin: `0 ${theme.spacing(1)}px`,
     background: "#eaeaea",

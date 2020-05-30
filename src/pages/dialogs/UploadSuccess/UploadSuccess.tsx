@@ -10,7 +10,7 @@ type Props = {
   onClose: () => void;
 };
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   dialog: {
     textAlign: "center",
     padding: theme.spacing(2),

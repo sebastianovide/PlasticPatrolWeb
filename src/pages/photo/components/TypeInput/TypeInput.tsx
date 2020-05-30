@@ -10,7 +10,7 @@ import { getSuggestions, getLeafKey } from "./utils";
 
 import styles from "standard.scss";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   inputWrapper: {
     display: "flex",
     alignItems: "center",
@@ -82,7 +82,7 @@ export default function TypeInput(props: Props) {
           placeholder="    Search for litter ..."
           className={styles.input}
           value={label}
-          onChange={e => setLabel(e.target.value)}
+          onChange={(e) => setLabel(e.target.value)}
           onFocus={() => setFocused(true)}
         />
       </div>

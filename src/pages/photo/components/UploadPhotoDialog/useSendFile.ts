@@ -105,7 +105,7 @@ async function sendFile({
 
   uploadTask.on(
     "state_changed",
-    snapshot => {
+    (snapshot) => {
       const sendingProgress = Math.ceil(
         (snapshot.bytesTransferred / snapshot.totalBytes) * 98 + 1
       );
@@ -122,7 +122,7 @@ async function sendFile({
           console.log(snapshot.state);
       }
     },
-    error => {
+    (error) => {
       // debugger
       console.error(error);
       const extraInfo =

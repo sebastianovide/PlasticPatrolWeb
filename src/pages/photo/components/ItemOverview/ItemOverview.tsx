@@ -10,7 +10,7 @@ type Props = {
   handleClick: () => void;
 } & Item;
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   wrapper: {
     display: "flex",
     alignItems: "center",

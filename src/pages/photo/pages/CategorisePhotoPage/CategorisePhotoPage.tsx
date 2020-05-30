@@ -16,7 +16,7 @@ import {
 import loadPhoto from "./utils";
 import UploadPhotoDialog from "pages/photo/components/UploadPhotoDialog";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   wrapper: {
     display: "flex",
     flexDirection: "column",

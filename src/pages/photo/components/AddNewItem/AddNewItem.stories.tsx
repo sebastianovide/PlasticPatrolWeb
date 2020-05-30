@@ -6,5 +6,5 @@ export default { title: "AddNewItem", component: AddNewItem };
 
 const item: any = {};
 export const defaultSelector = () => (
-  <AddNewItem onCancelClick={() => {}} onConfirmClick={item => {}} />
+  <AddNewItem onCancelClick={() => {}} onConfirmClick={(item) => {}} />
 );

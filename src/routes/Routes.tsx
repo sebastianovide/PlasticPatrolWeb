@@ -104,7 +104,7 @@ export function Routes({
 
       <Route
         path={config.PAGES.groups.path}
-        render={props => (
+        render={(props) => (
           <Groups
             {...props}
             config={config}
@@ -116,7 +116,7 @@ export function Routes({
 
       <Route
         path={config.PAGES.grouplist.path}
-        render={props => (
+        render={(props) => (
           <GroupList
             {...props}
             config={config}
@@ -129,7 +129,7 @@ export function Routes({
 
       <Route
         path={config.PAGES.groupadd.path}
-        render={props => (
+        render={(props) => (
           <GroupAdd
             {...props}
             config={config}

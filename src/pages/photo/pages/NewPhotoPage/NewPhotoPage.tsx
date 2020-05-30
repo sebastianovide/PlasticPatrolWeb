@@ -4,7 +4,7 @@ import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
 
 import styles from "standard.scss";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   wrapper: {
     display: "flex",
     flexDirection: "column",

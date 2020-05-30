@@ -29,7 +29,7 @@ export default function loadPhoto({
   if (!window.cordova) {
     loadImage.parseMetaData(
       photoToLoad,
-      data => {
+      (data) => {
         //@ts-ignore
         imgExif = data.exif ? data.exif.getAll() : imgExif;
         //@ts-ignore
@@ -44,7 +44,7 @@ export default function loadPhoto({
 
   return loadImage(
     photoToLoad,
-    img => {
+    (img) => {
       let imgFromCamera;
 
       // @ts-ignore
