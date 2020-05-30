@@ -31,9 +31,13 @@ import DrawerContainer from "./components/DrawerContainer";
 import TermsDialog from "./components/TermsDialog";
 import EmailVerifiedDialog from "./components/EmailVerifiedDialog";
 
+import getIsMapVisible from "utils/getMapIsVisible";
+
 import { gtagPageView, gtagEvent } from "./gtag.js";
 import "./App.scss";
 import MapLocation from "./types/MapLocation";
+import { linkToNewPhoto } from "routes/photo/routes/new/links";
+import getMapIsVisible from "utils/getMapIsVisible";
 
 const styles = theme => ({
   dialogClose: {
@@ -75,14 +79,6 @@ class App extends Component {
     this.geoid = null;
     this.domRefInput = {};
     this.featuresDict = {};
-    this.VISIBILITY_REGEX = new RegExp(
-      "(^/@|^/$|^" +
-        this.props.config.PAGES.displayPhoto.path +
-        "/|^" +
-        this.props.config.PAGES.embeddable.path +
-        ")",
-      "g"
-    );
   }
 
   openPhotoPage = file => {
@@ -384,22 +380,23 @@ class App extends Component {
   };
 
   handleCameraClick = () => {
-    if (this.props.config.SECURITY.UPLOAD_REQUIRES_LOGIN && !this.state.user) {
-      this.setState({
-        dialogOpen: true,
-        dialogTitle: "Please login to add a photo",
-        dialogContentText:
-          "Before adding photos, you must be logged into your account."
-      });
-    } else {
-      if (window.cordova) {
-        console.log("Opening cordova dialog");
-        this.setState({ openPhotoDialog: true });
-      } else {
-        console.log("Clicking on photo");
-        this.domRefInput.current.click();
-      }
-    }
+    this.props.history.push(linkToNewPhoto());
+    // if (this.props.config.SECURITY.UPLOAD_REQUIRES_LOGIN && !this.state.user) {
+    //   this.setState({
+    //     dialogOpen: true,
+    //     dialogTitle: "Please login to add a photo",
+    //     dialogContentText:
+    //       "Before adding photos, you must be logged into your account."
+    //   });
+    // } else {
+    //   if (window.cordova) {
+    //     console.log("Opening cordova dialog");
+    //     this.setState({ openPhotoDialog: true });
+    //   } else {
+    //     console.log("Clicking on photo");
+    //     this.domRefInput.current.click();
+    //   }
+    // }
   };
 
   openFile = e => {
@@ -558,7 +555,7 @@ class App extends Component {
   rejectPhoto = photo => this.approveRejectPhoto(false, photo);
 
   handleMapLocationChange = newMapLocation => {
-    if (!this.props.history.location.pathname.match(this.VISIBILITY_REGEX)) {
+    if (!getMapIsVisible(this.props.history.location.pathname)) {
       return;
     }
 
@@ -620,7 +617,7 @@ class App extends Component {
         : pathname;
 
     // if it is in map, change the url
-    if (this.props.history.location.pathname.match(this.VISIBILITY_REGEX)) {
+    if (getMapIsVisible(this.props.history.location.pathname.match)) {
       this.props.history.replace(`${currentPath.split("@")[0]}@${coordsUrl}`);
     }
 
@@ -652,6 +649,32 @@ class App extends Component {
         />
 
         <main className="content">
+          {!this.state.welcomeShown &&
+            config.PAGES.embeddable.path &&
+            !this.props.history.location.pathname.includes(
+              config.PAGES.embeddable.path
+            ) && <WelcomePage handleClose={this.handleWelcomePageClose} />}
+
+          <Map
+            history={this.props.history}
+            visible={getMapIsVisible(this.props.history.location.pathname)}
+            geojson={this.state.geojson}
+            user={this.state.user}
+            config={config}
+            embeddable={this.props.history.location.pathname.match(
+              new RegExp(config.PAGES.embeddable.path, "g")
+            )}
+            handleCameraClick={this.handleCameraClick}
+            toggleLeftDrawer={this.toggleLeftDrawer}
+            handlePhotoClick={this.handlePhotoClick}
+            mapLocation={this.state.mapLocation}
+            handleMapLocationChange={newMapLocation =>
+              this.handleMapLocationChange(newMapLocation)
+            }
+            handleLocationClick={this.handleLocationClick}
+            gpsOffline={!this.state.location.online}
+            gpsDisabled={!this.state.location.updated}
+          />
           <Routes
             user={this.state.user}
             fields={fields}
@@ -671,35 +694,7 @@ class App extends Component {
             handlePhotoClick={this.handlePhotoClick}
             selectedFeature={this.state.selectedFeature}
             handlePhotoPageClose={this.handlePhotoPageClose}
-          />
-
-          {!this.state.welcomeShown &&
-            config.PAGES.embeddable.path &&
-            !this.props.history.location.pathname.includes(
-              config.PAGES.embeddable.path
-            ) && <WelcomePage handleClose={this.handleWelcomePageClose} />}
-
-          <Map
-            history={this.props.history}
-            visible={this.props.history.location.pathname.match(
-              this.VISIBILITY_REGEX
-            )}
-            geojson={this.state.geojson}
-            user={this.state.user}
-            config={config}
-            embeddable={this.props.history.location.pathname.match(
-              new RegExp(config.PAGES.embeddable.path, "g")
-            )}
-            handleCameraClick={this.handleCameraClick}
-            toggleLeftDrawer={this.toggleLeftDrawer}
-            handlePhotoClick={this.handlePhotoClick}
-            mapLocation={this.state.mapLocation}
-            handleMapLocationChange={newMapLocation =>
-              this.handleMapLocationChange(newMapLocation)
-            }
-            handleLocationClick={this.handleLocationClick}
-            gpsOffline={!this.state.location.online}
-            gpsDisabled={!this.state.location.updated}
+            totalNumberOfPieces={this.state.stats}
           />
         </main>
 
