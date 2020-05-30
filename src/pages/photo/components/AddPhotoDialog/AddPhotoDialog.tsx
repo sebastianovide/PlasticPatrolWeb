@@ -18,45 +18,15 @@ type Props = {
   handlePhotoSelect: (value: string | File) => void;
 };
 
-export default function AddPhotoDialogWithHiddenInputForDesktop(props: Props) {
-  const domRefInput = useRef();
-  const location = useLocation();
-
-  // TODO: make less hacky, but I think the only desktop users are devs ...
-  setTimeout(() => {
-    // @ts-ignore
-    domRefInput.current && domRefInput.current.click();
-  }, 100);
-
-  //@ts-ignore
-  return window.cordova ? (
-    <AddPhotoDialog {...props} />
-  ) : (
-    <RootRef rootRef={domRefInput}>
-      <input
-        className="hidden"
-        type="file"
-        accept="image/*"
-        id={"fileInput"}
-        onChange={e => {
-          const file = e.target && e.target.files && e.target.files[0];
-          if (file) {
-            props.handlePhotoSelect(file);
-          }
-        }}
-      />
-    </RootRef>
-  );
-}
-
-function AddPhotoDialog({ onClose, handlePhotoSelect }: Props) {
-  const callback = (a: any, b: any) => {};
+export default function AddPhotoDialog({ onClose, handlePhotoSelect }: Props) {
   return (
     <Dialog onClose={onClose} open>
       <List>
         <ListItem
           button
-          onClick={() => handlePhotoDialogItemClick("CAMERA", callback)}
+          onClick={() =>
+            handlePhotoDialogItemClick("CAMERA", handlePhotoSelect)
+          }
         >
           <IconButton color="primary" edge={false}>
             <CameraIcon />
@@ -65,7 +35,9 @@ function AddPhotoDialog({ onClose, handlePhotoSelect }: Props) {
         </ListItem>
         <ListItem
           button
-          onClick={() => handlePhotoDialogItemClick("PHOTOLIBRARY", callback)}
+          onClick={() =>
+            handlePhotoDialogItemClick("PHOTOLIBRARY", handlePhotoSelect)
+          }
         >
           <IconButton color="primary" edge={false}>
             <PhotoLibraryIcon />

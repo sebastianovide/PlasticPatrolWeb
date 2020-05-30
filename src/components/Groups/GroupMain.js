@@ -9,7 +9,7 @@ import GroupAddIcon from "@material-ui/icons/GroupAdd";
 import PageWrapper from "../../components/PageWrapper";
 // import config from '../../custom/config';
 
-const styles = theme => ({
+const styles = (theme) => ({
   content: {
     height: "100%",
     overflow: "auto",
@@ -49,7 +49,11 @@ class Groups extends React.Component {
     const { handleClose, label, classes } = this.props;
 
     return (
-      <PageWrapper label={label} handleClose={handleClose} hasLogo={true}>
+      <PageWrapper
+        label={label}
+        navigationHandler={{ handleClose }}
+        hasLogo={true}
+      >
         <div>
           <Grid container spacing={3}>
             <Grid item xs={3}></Grid>

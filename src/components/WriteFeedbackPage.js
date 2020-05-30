@@ -19,7 +19,7 @@ import { feedbackEmail } from "static/info";
 import { device } from "../utils";
 import PageWrapper from "./PageWrapper";
 
-const styles = theme => ({
+const styles = (theme) => ({
   content: {
     height: "100%",
     overflow: "auto",
@@ -49,7 +49,7 @@ class WriteFeedbackPage extends React.Component {
     };
   }
 
-  handleEmailChange = event => {
+  handleEmailChange = (event) => {
     const email = event.target.value;
     const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(.\w{2,3})+$/;
 
@@ -66,7 +66,7 @@ class WriteFeedbackPage extends React.Component {
     }
   };
 
-  handleFeedbackChange = event => {
+  handleFeedbackChange = (event) => {
     this.setState({
       feedback: event.target.value
     });
@@ -111,13 +111,13 @@ class WriteFeedbackPage extends React.Component {
 
     dbFirebase
       .writeFeedback(data)
-      .then(res => {
+      .then((res) => {
         this.setState({ sending: false });
         this.openDialog(
           "Feedback sent, our team will reply as soon as possible!"
         );
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err.toString());
         this.openDialog(
           `Something went wrong. Try again later or please email us to ${feedbackEmail}`,
@@ -127,10 +127,10 @@ class WriteFeedbackPage extends React.Component {
   };
 
   render() {
-    const { classes, label } = this.props;
+    const { classes, label, handleClose } = this.props;
 
     return (
-      <PageWrapper label={label} handleClose={this.props.handleClose}>
+      <PageWrapper label={label} navigationHandler={{ handleClose }}>
         <div className={classes.content}>
           <TextField
             fullWidth

@@ -49,6 +49,7 @@ type Props = {
   handlePhotoPageClose: () => void;
   fields: any;
   totalNumberOfPieces: number;
+  sponsorImage?: string;
 };
 
 export function Routes({
@@ -69,13 +70,17 @@ export function Routes({
   selectedFeature,
   handlePhotoPageClose,
   fields,
-  totalNumberOfPieces
+  totalNumberOfPieces,
+  sponsorImage
 }: Props) {
   const history = useHistory();
   return (
     <Switch>
       <Route path={linkToUploadSuccess()}>
-        <UploadPhotoRoute totalNumberOfPieces={totalNumberOfPieces} />
+        <UploadPhotoRoute
+          totalNumberOfPieces={totalNumberOfPieces}
+          sponsorImage={sponsorImage}
+        />
       </Route>
       <Route path={config.PAGES.about.path}>
         <AboutPage
@@ -104,7 +109,7 @@ export function Routes({
 
       <Route
         path={config.PAGES.groups.path}
-        render={props => (
+        render={(props) => (
           <Groups
             {...props}
             config={config}
@@ -116,7 +121,7 @@ export function Routes({
 
       <Route
         path={config.PAGES.grouplist.path}
-        render={props => (
+        render={(props) => (
           <GroupList
             {...props}
             config={config}
@@ -129,7 +134,7 @@ export function Routes({
 
       <Route
         path={config.PAGES.groupadd.path}
-        render={props => (
+        render={(props) => (
           <GroupAdd
             {...props}
             config={config}
