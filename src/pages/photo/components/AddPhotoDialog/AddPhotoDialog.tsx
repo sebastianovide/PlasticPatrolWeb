@@ -38,7 +38,7 @@ export default function AddPhotoDialogWithHiddenInputForDesktop(props: Props) {
         type="file"
         accept="image/*"
         id={"fileInput"}
-        onChange={e => {
+        onChange={(e) => {
           const file = e.target && e.target.files && e.target.files[0];
           if (file) {
             props.handlePhotoSelect(file);
@@ -50,13 +50,14 @@ export default function AddPhotoDialogWithHiddenInputForDesktop(props: Props) {
 }
 
 function AddPhotoDialog({ onClose, handlePhotoSelect }: Props) {
-  const callback = (a: any, b: any) => {};
   return (
     <Dialog onClose={onClose} open>
       <List>
         <ListItem
           button
-          onClick={() => handlePhotoDialogItemClick("CAMERA", callback)}
+          onClick={() =>
+            handlePhotoDialogItemClick("CAMERA", handlePhotoSelect)
+          }
         >
           <IconButton color="primary" edge={false}>
             <CameraIcon />
@@ -65,7 +66,9 @@ function AddPhotoDialog({ onClose, handlePhotoSelect }: Props) {
         </ListItem>
         <ListItem
           button
-          onClick={() => handlePhotoDialogItemClick("PHOTOLIBRARY", callback)}
+          onClick={() =>
+            handlePhotoDialogItemClick("PHOTOLIBRARY", handlePhotoSelect)
+          }
         >
           <IconButton color="primary" edge={false}>
             <PhotoLibraryIcon />
