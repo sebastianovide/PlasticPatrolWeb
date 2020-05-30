@@ -16,37 +16,19 @@ import { useLocation } from "react-router-dom";
 type Props = {
   onClose: () => void;
   handlePhotoSelect: (value: string | File) => void;
+  inputRef: HTMLInputElement | null;
+  isCordova: boolean;
 };
 
 export default function AddPhotoDialogWithHiddenInputForDesktop(props: Props) {
-  const domRefInput = useRef();
-  const location = useLocation();
+  const { isCordova, inputRef } = props;
+  useEffect(() => {
+    if (!isCordova && inputRef) {
+      inputRef.click();
+    }
+  }, [isCordova, inputRef]);
 
-  // TODO: make less hacky, but I think the only desktop users are devs ...
-  setTimeout(() => {
-    // @ts-ignore
-    domRefInput.current && domRefInput.current.click();
-  }, 100);
-
-  //@ts-ignore
-  return window.cordova ? (
-    <AddPhotoDialog {...props} />
-  ) : (
-    <RootRef rootRef={domRefInput}>
-      <input
-        className="hidden"
-        type="file"
-        accept="image/*"
-        id={"fileInput"}
-        onChange={(e) => {
-          const file = e.target && e.target.files && e.target.files[0];
-          if (file) {
-            props.handlePhotoSelect(file);
-          }
-        }}
-      />
-    </RootRef>
-  );
+  return isCordova ? <AddPhotoDialog {...props} /> : <div />;
 }
 
 function AddPhotoDialog({ onClose, handlePhotoSelect }: Props) {

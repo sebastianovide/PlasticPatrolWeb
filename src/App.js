@@ -388,18 +388,9 @@ class App extends Component {
           "Before adding photos, you must be logged into your account."
       });
     } else {
-      if (window.cordova) {
-        console.log("Opening cordova dialog");
-        this.setState({ openPhotoDialog: true });
-      } else {
-        console.log("Clicking on photo");
-        this.domRefInput.current.click();
-      }
+      this.props.history.push(linkToNewPhoto());
     }
   };
-  //  this.props.history.push(linkToNewPhoto());
-  //}
-  //};
 
   openFile = (e) => {
     if (e.target.files[0]) {

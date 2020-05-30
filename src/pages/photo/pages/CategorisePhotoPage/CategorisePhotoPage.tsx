@@ -3,11 +3,17 @@ import { Route, useHistory, useParams } from "react-router";
 
 import { makeStyles } from "@material-ui/core/styles";
 import { Button } from "@material-ui/core";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import Link from "@material-ui/core/Link";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
 
 import PageWrapper from "components/PageWrapper";
 import { Item } from "../../types";
 import AddNewItem from "../../components/AddNewItem/AddNewItem";
 import ItemOverviewList from "../../components/ItemOverviewList/ItemOverviewList";
+import { ImageMetadata } from "types/Photo";
 
 import {
   useGetLocationFileState,
@@ -15,8 +21,9 @@ import {
 } from "routes/photo/routes/categorise/links";
 import loadPhoto from "./utils";
 import UploadPhotoDialog from "pages/photo/components/UploadPhotoDialog";
+import { linkToNewPhoto } from "routes/photo/routes/new/links";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   wrapper: {
     display: "flex",
     flexDirection: "column",
@@ -36,13 +43,23 @@ const useStyles = makeStyles(theme => ({
     width: "max-content",
     alignSelf: "center",
     padding: `${theme.spacing(0.25)}px ${theme.spacing(4)}px`
+  },
+  link: {
+    color: theme.palette.secondary.main
   }
 }));
+
 export default function CategoriseLitterPage() {
+  const classes = useStyles();
   const fileState = useGetLocationFileState();
-  const [photo, setPhoto] = useState<any>();
+  const [photo, setPhoto] = useState<ImageMetadata | undefined>();
+  const [notGeotagged, setNotGeotagged] = useState(false);
   const history = useHistory();
   const { fileName } = useParams();
+
+  if (fileState === undefined) {
+    history.push(linkToNewPhoto());
+  }
 
   useEffect(() => {
     if (fileState) {
@@ -57,7 +74,14 @@ export default function CategoriseLitterPage() {
           updated: new Date()
         },
         cordovaMetaData,
-        callback: setPhoto
+        callback: (metadata) => {
+          if (!metadata.imgLocation) {
+            setPhoto(metadata);
+            setNotGeotagged(true);
+          } else {
+            setPhoto(metadata);
+          }
+        }
       });
     }
   }, []);
@@ -140,6 +164,34 @@ export default function CategoriseLitterPage() {
           )}
         </div>
       </PageWrapper>
+      <Dialog
+        open={notGeotagged}
+        onClose={() => history.push(linkToNewPhoto())}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            <span style={{ fontWeight: 500 }}>
+              Your photo isn't geo-tagged so it can't be uploaded. To fix this
+              manually, you can geo-tag it online with a tool like&nbsp;
+              <Link href={"https://tool.geoimgr.com/"} className={classes.link}>
+                Geoimgr
+              </Link>
+              . In the future, make sure GPS is enabled and your camera has
+              access to it.
+            </span>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => history.push(linkToNewPhoto())}
+            color="primary"
+          >
+            Ok
+          </Button>
+        </DialogActions>
+      </Dialog>
       <Route path={linkToUploadPhoto()}>
         <UploadPhotoDialog
           imgSrc={photo && photo.imgSrc}
