@@ -13,9 +13,17 @@ export default function NewPhotoRoute() {
     history.push(linkToCategoriseWithState(file));
   const [inputRef, setInputRef] = useState<HTMLInputElement | null>(null);
 
+  // @ts-ignore
+  const isCordova = !!window.cordova;
   return (
     <>
-      <NewPhotoPage onPhotoClick={() => history.push(linkToAddDialog())} />
+      <NewPhotoPage
+        onPhotoClick={() => {
+          isCordova
+            ? history.push(linkToAddDialog())
+            : inputRef && inputRef.click();
+        }}
+      />
       <input
         className="hidden"
         type="file"
@@ -33,9 +41,6 @@ export default function NewPhotoRoute() {
         <AddPhotoDialog
           onClose={() => history.goBack()}
           handlePhotoSelect={handlePhotoSelect}
-          inputRef={inputRef}
-          // @ts-ignore
-          isCordova={!!window.cordova}
         />
       </Route>
     </>

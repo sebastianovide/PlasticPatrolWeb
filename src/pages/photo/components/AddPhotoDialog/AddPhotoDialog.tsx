@@ -16,22 +16,9 @@ import { useLocation } from "react-router-dom";
 type Props = {
   onClose: () => void;
   handlePhotoSelect: (value: string | File) => void;
-  inputRef: HTMLInputElement | null;
-  isCordova: boolean;
 };
 
-export default function AddPhotoDialogWithHiddenInputForDesktop(props: Props) {
-  const { isCordova, inputRef } = props;
-  useEffect(() => {
-    if (!isCordova && inputRef) {
-      inputRef.click();
-    }
-  }, [isCordova, inputRef]);
-
-  return isCordova ? <AddPhotoDialog {...props} /> : <div />;
-}
-
-function AddPhotoDialog({ onClose, handlePhotoSelect }: Props) {
+export default function AddPhotoDialog({ onClose, handlePhotoSelect }: Props) {
   return (
     <Dialog onClose={onClose} open>
       <List>

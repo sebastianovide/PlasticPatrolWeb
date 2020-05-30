@@ -688,6 +688,7 @@ class App extends Component {
             selectedFeature={this.state.selectedFeature}
             handlePhotoPageClose={this.handlePhotoPageClose}
             totalNumberOfPieces={this.state.stats}
+            sponsorImage={this.state.sponsorImage}
           />
         </main>
 

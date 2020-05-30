@@ -16,7 +16,7 @@ import MapLocation from "../types/MapLocation";
 import Feature from "types/Feature";
 import Geojson from "types/Geojson";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   avatar: {
     margin: 10,
     height: 100,
@@ -74,17 +74,18 @@ const ProfilePage = ({
   );
 
   const myPhotos =
-    geojson && geojson.features.filter(f => f.properties.owner_id === user.id);
+    geojson &&
+    geojson.features.filter((f) => f.properties.owner_id === user.id);
   const myLastPhotos = _.reverse(
-    _.sortBy(myPhotos, o => o.properties.moderated)
+    _.sortBy(myPhotos, (o) => o.properties.moderated)
   ).slice(0, 20);
 
   console.log(myLastPhotos);
 
-  const numPieces = _.sumBy(myPhotos, o => o.properties.pieces);
+  const numPieces = _.sumBy(myPhotos, (o) => o.properties.pieces);
 
   return (
-    <PageWrapper label={label} handleClose={handleClose}>
+    <PageWrapper label={label} navigationHandler={{ handleClose }}>
       <div className={"profile-info"}>
         <Avatar
           className={classes.avatar}
@@ -119,7 +120,7 @@ const ProfilePage = ({
               Last {myLastPhotos.length} approved
             </Typography>
 
-            {_.map(myLastPhotos, photo => (
+            {_.map(myLastPhotos, (photo) => (
               <div className={classes.centered} key={photo.properties.id}>
                 <Typography variant="body1">
                   {photo.properties.pieces && (

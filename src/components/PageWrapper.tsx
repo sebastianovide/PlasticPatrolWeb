@@ -22,7 +22,7 @@ declare global {
   }
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   container: {
     display: "flex",
     flex: 1,
@@ -74,10 +74,15 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+type CloseNavigationHandler = { handleClose: () => void };
+type BackNavigationHandler = { handleBack: () => void };
+
+type NavigationHandler = CloseNavigationHandler | BackNavigationHandler;
+
 interface Props {
   label: string;
   hasLogo?: boolean;
-  handleClose: () => void;
+  navigationHandler: NavigationHandler;
 }
 
 interface PhotoPageProps {
@@ -117,8 +122,8 @@ export const PhotoPageWrapper: FunctionComponent<PhotoPageProps> = ({
   error,
   sendFile,
   label,
-  handleClose,
-  children
+  children,
+  handleClose
 }) => {
   const classes = useStyles();
   useStatusBarHighlighting();
@@ -162,20 +167,40 @@ export const PhotoPageWrapper: FunctionComponent<PhotoPageProps> = ({
   );
 };
 
+function isCloseNavigationHandler(
+  navigationHandler: NavigationHandler
+): navigationHandler is CloseNavigationHandler {
+  if ((navigationHandler as CloseNavigationHandler).handleClose !== undefined) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 const PageWrapper: FunctionComponent<Props> = ({
   children,
   label,
   hasLogo,
-  handleClose
+  navigationHandler
 }) => {
   const classes = useStyles();
   useStatusBarHighlighting();
 
+  var navIcon;
+  if (isCloseNavigationHandler(navigationHandler)) {
+    const { handleClose } = navigationHandler;
+    navIcon = (
+      <CloseIcon className={classes.iconButton} onClick={handleClose} />
+    );
+  } else {
+    const { handleBack } = navigationHandler;
+    navIcon = <BackIcon className={classes.iconButton} onClick={handleBack} />;
+  }
   return (
     <div className={classes.container}>
       <AppBar position="static" className={classes.notchTop}>
         <Toolbar>
-          <CloseIcon className={classes.iconButton} onClick={handleClose} />
+          {navIcon}
           <Typography className={classes.grow} variant="h6" color="inherit">
             {label}
           </Typography>

@@ -20,7 +20,7 @@ const button = (theme: any) => ({
   "text-transform": "none"
 });
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   brand: {
     width: "200%",
     boxSizing: "border-box",
@@ -85,7 +85,7 @@ export default function AddNewItem({
       <input
         placeholder="Enter brand"
         value={brand}
-        onChange={e => setBrand(e.target.value)}
+        onChange={(e) => setBrand(e.target.value)}
         type="text"
         className={styles.brand}
       />
@@ -105,6 +105,7 @@ export default function AddNewItem({
         Cancel
       </Button>
       <Button
+        disabled={quantity === 0}
         onClick={() =>
           onConfirmClick({
             quantity,

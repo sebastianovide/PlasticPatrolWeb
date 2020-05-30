@@ -122,48 +122,47 @@ export default function CategoriseLitterPage() {
 
   return (
     <>
-      <PageWrapper label={"Log your litter"} handleClose={() => {}}>
-        <div className={styles.wrapper}>
-          <img
-            src={photo && photo.imgSrc}
-            className={styles.img}
-            onClick={() => setAddingNewItem(true)}
-          ></img>
-          {addingNewItem ? (
-            <AddNewItem
-              onCancelClick={() => setAddingNewItem(false)}
-              onConfirmClick={addNewItem}
+      <div className={styles.wrapper}>
+        <img
+          src={photo && photo.imgSrc}
+          className={styles.img}
+          onClick={() => setAddingNewItem(true)}
+        ></img>
+        {addingNewItem ? (
+          <AddNewItem
+            onCancelClick={() => setAddingNewItem(false)}
+            onConfirmClick={addNewItem}
+          />
+        ) : editingItem ? (
+          <AddNewItem
+            onCancelClick={() => setEditingItem(null)}
+            onConfirmClick={editItem}
+            initialItem={editingItem}
+          />
+        ) : (
+          <>
+            <p className={styles.prompt}>
+              Tap on the pieces of litter in your photo to add litter details
+            </p>
+            <ItemOverviewList
+              items={items}
+              handleRemoveItem={handleRemoveItem}
+              handleItemClick={handleEditItemClick}
             />
-          ) : editingItem ? (
-            <AddNewItem
-              onCancelClick={() => setEditingItem(null)}
-              onConfirmClick={editItem}
-              initialItem={editingItem}
-            />
-          ) : (
-            <>
-              <p className={styles.prompt}>
-                Tap on the pieces of litter in your photo to add litter details
-              </p>
-              <ItemOverviewList
-                items={items}
-                handleRemoveItem={handleRemoveItem}
-                handleItemClick={handleEditItemClick}
-              />
-            </>
-          )}
-          {!(addingNewItem || editingItem) && (
-            <Button
-              variant="contained"
-              color="primary"
-              className={styles.button}
-              onClick={() => history.push(linkToUploadPhoto(fileName))}
-            >
-              Submit Collection
-            </Button>
-          )}
-        </div>
-      </PageWrapper>
+          </>
+        )}
+        {!(addingNewItem || editingItem) && (
+          <Button
+            disabled={items.length === 0}
+            variant="contained"
+            color="primary"
+            className={styles.button}
+            onClick={() => history.push(linkToUploadPhoto(fileName))}
+          >
+            Submit Collection
+          </Button>
+        )}
+      </div>
       <Dialog
         open={notGeotagged}
         onClose={() => history.push(linkToNewPhoto())}

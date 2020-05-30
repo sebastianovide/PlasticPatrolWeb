@@ -13,24 +13,24 @@ const TutorialPage = ({ handleClose, label }) => {
   const reactSwipeEl = useRef();
   const [navDotActiveIndex, setNavDotActiveIndex] = useState(0);
 
-  const handleNavdotClick = index => {
+  const handleNavdotClick = (index) => {
     setNavDotActiveIndex(index);
     reactSwipeEl.current && reactSwipeEl.current.slide(index);
   };
 
-  const onSwipe = index => {
+  const onSwipe = (index) => {
     setNavDotActiveIndex(index);
   };
 
   return (
-    <PageWrapper label={label} handleClose={handleClose} hasLogo>
+    <PageWrapper label={label} navigationHandler={{ handleClose }} hasLogo>
       <ReactSwipe
         swipeOptions={{
           ...swipeConfig,
           callback: onSwipe,
           startSlide: navDotActiveIndex
         }}
-        ref={el => (reactSwipeEl.current = el)}
+        ref={(el) => (reactSwipeEl.current = el)}
       >
         {Object.values(tutorialSteps).map((value, index) => (
           <div key={index}>

@@ -61,16 +61,16 @@ const ModeratorPage = ({
 
   if (photos.length === 0) {
     return (
-      <PageWrapper label={label} handleClose={handleClose}>
+      <PageWrapper label={label} navigationHandler={{ handleClose }}>
         <div className={styles.noPhotos}>No photos to moderate!</div>
       </PageWrapper>
     );
   }
 
   return (
-    <PageWrapper label={label} handleClose={handleClose}>
+    <PageWrapper label={label} navigationHandler={{ handleClose }}>
       <List dense={false}>
-        {_.map(photos, photo => (
+        {_.map(photos, (photo) => (
           <ListItem
             key={photo.id}
             button
@@ -79,7 +79,7 @@ const ModeratorPage = ({
             <ListItemAvatar>
               <Avatar
                 imgProps={{
-                  onError: e => {
+                  onError: (e) => {
                     // @ts-ignore
                     e.target.src = placeholderImage;
                   }
@@ -116,7 +116,7 @@ const ModeratorPage = ({
             <div style={{ textAlign: "center" }}>
               <img
                 className={"main-image"}
-                onError={e => {
+                onError={(e) => {
                   // @ts-ignore
                   e.target.src = placeholderImage;
                 }}
