@@ -20,9 +20,7 @@ const LoginFirebase = (props) => {
     signInSuccessUrl: "/",
     credentialHelper: firebaseui.auth.CredentialHelper.NONE,
     signInOptions: [
-      firebase.auth.GoogleAuthProvider.PROVIDER_ID,
       firebase.auth.FacebookAuthProvider.PROVIDER_ID,
-      new firebase.auth.OAuthProvider("apple.com").providerId,
       firebase.auth.EmailAuthProvider.PROVIDER_ID
     ],
     callbacks: {
