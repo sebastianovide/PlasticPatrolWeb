@@ -5,7 +5,7 @@ import { withStyles } from "@material-ui/core/styles";
 import PageWrapper from "../PageWrapper";
 import Typography from "@material-ui/core/Typography";
 
-const styles = theme => ({
+const styles = (theme) => ({
   message: {
     color: theme.palette.common.black,
     padding: theme.spacing(1.5),
@@ -22,7 +22,11 @@ class GroupList extends React.Component {
     console.log("groups array:", groupsArray);
 
     return (
-      <PageWrapper label={label} handleClose={handleClose} hasLogo={false}>
+      <PageWrapper
+        label={label}
+        navigationHandler={{ handleClose }}
+        hasLogo={false}
+      >
         <Typography variant="h1" color="inherit" className={classes.message}>
           your groups here - coming soon!
         </Typography>

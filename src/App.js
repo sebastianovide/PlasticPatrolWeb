@@ -377,23 +377,16 @@ class App extends Component {
   };
 
   handleCameraClick = () => {
-    this.props.history.push(linkToNewPhoto());
-    // if (this.props.config.SECURITY.UPLOAD_REQUIRES_LOGIN && !this.state.user) {
-    //   this.setState({
-    //     dialogOpen: true,
-    //     dialogTitle: "Please login to add a photo",
-    //     dialogContentText:
-    //       "Before adding photos, you must be logged into your account."
-    //   });
-    // } else {
-    //   if (window.cordova) {
-    //     console.log("Opening cordova dialog");
-    //     this.setState({ openPhotoDialog: true });
-    //   } else {
-    //     console.log("Clicking on photo");
-    //     this.domRefInput.current.click();
-    //   }
-    // }
+    if (this.props.config.SECURITY.UPLOAD_REQUIRES_LOGIN && !this.state.user) {
+      this.setState({
+        dialogOpen: true,
+        dialogTitle: "Please login to add a photo",
+        dialogContentText:
+          "Before adding photos, you must be logged into your account."
+      });
+    } else {
+      this.props.history.push(linkToNewPhoto());
+    }
   };
 
   openFile = (e) => {
@@ -701,6 +694,7 @@ class App extends Component {
             selectedFeature={this.state.selectedFeature}
             handlePhotoPageClose={this.handlePhotoPageClose}
             totalNumberOfPieces={this.state.stats}
+            sponsorImage={this.state.sponsorImage}
           />
         </main>
 

@@ -105,6 +105,7 @@ export default function AddNewItem({
         Cancel
       </Button>
       <Button
+        disabled={quantity === 0}
         onClick={() =>
           onConfirmClick({
             quantity,

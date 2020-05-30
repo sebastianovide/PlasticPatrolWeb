@@ -8,6 +8,7 @@ type Props = {
   numberOfPiecesSubmitted: number;
   totalNumberOfPieces: number;
   onClose: () => void;
+  sponsorImage?: string;
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -19,20 +20,29 @@ const useStyles = makeStyles((theme) => ({
   },
   button: {
     width: "80%"
+  },
+  sponsoredByContainer: {
+    height: "25px",
+    width: "100%",
+    display: "block",
+    backgroundSize: "contain",
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "center",
+    marginBottom: "16px"
   }
 }));
 
 export default function UploadSuccessDialog({
   totalNumberOfPieces,
   numberOfPiecesSubmitted,
-  onClose
+  onClose,
+  sponsorImage
 }: Props) {
   const styles = useStyles();
   return (
     <Dialog open PaperProps={{ className: styles.dialog }}>
       <p>
-        Thank you.
-        <br />
+        <div style={{ fontWeight: "bold" }}>Thank you.</div>
         <br />
         Your upload is now being moderated and will appear on the global map
         within 48 hours.
@@ -50,6 +60,12 @@ export default function UploadSuccessDialog({
         To see how many items you've contributed in total and your global
         position, open the leaderboard from the menu.
       </p>
+      {sponsorImage && (
+        <span
+          className={styles.sponsoredByContainer}
+          style={{ backgroundImage: "url(" + sponsorImage + ")" }}
+        />
+      )}
       <Button
         onClick={onClose}
         color="primary"

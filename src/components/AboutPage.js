@@ -6,7 +6,7 @@ import { withStyles } from "@material-ui/core/styles";
 
 import PageWrapper from "./PageWrapper";
 
-const styles = theme => ({
+const styles = (theme) => ({
   typography: {
     ...theme.mixins.gutters(),
     whiteSpace: "pre-wrap"
@@ -15,11 +15,11 @@ const styles = theme => ({
 
 class AboutPage extends React.Component {
   render() {
-    const { classes, label, reloadPhotos } = this.props;
+    const { classes, label, reloadPhotos, handleClose } = this.props;
     return (
       <PageWrapper
         label={label}
-        handleClose={this.props.handleClose}
+        navigationHandler={{ handleClose }}
         hasLogo={true}
       >
         <Typography

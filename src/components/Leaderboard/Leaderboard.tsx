@@ -189,7 +189,7 @@ class MuiVirtualizedTable extends React.PureComponent<
               return (
                 <Column
                   key={dataKey}
-                  headerRenderer={headerProps =>
+                  headerRenderer={(headerProps) =>
                     this.headerRenderer({
                       ...headerProps,
                       columnIndex: index
@@ -235,7 +235,7 @@ export default function ReactVirtualizedTable({
   }));
   const width = window.innerWidth;
   return (
-    <PageWrapper handleClose={handleClose} label={label}>
+    <PageWrapper navigationHandler={{ handleClose }} label={label}>
       <VirtualizedTable
         rowCount={withRank.length}
         rowGetter={({ index }) => withRank[index]}

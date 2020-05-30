@@ -1,6 +1,9 @@
 export type GPSLocation = {
-  latitude: number;
-  longitude: number;
   online: boolean;
   updated: Date;
+} & LatLong;
+
+export type LatLong = {
+  latitude: number;
+  longitude: number;
 };

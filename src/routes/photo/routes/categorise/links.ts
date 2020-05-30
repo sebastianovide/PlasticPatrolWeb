@@ -17,7 +17,12 @@ export function linkToCategoriseWithState(file: File | string) {
   return { pathname: linkToCategorise(fileName), state: { file } };
 }
 
-export function getLocationFileState(location: any) {
+export type FileState = {
+  file: File;
+  cordovaMetaData?: any;
+};
+
+export function getLocationFileState(location: any): FileState | undefined {
   if (!location.state) {
     console.error("No location state");
     return;
@@ -33,7 +38,7 @@ export function getLocationFileState(location: any) {
   return { file: location.state.file };
 }
 
-export function useGetLocationFileState() {
+export function useGetLocationFileState(): FileState | undefined {
   const location = useLocation();
 
   return getLocationFileState(location);

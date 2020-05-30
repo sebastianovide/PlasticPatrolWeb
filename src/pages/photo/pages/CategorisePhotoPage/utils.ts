@@ -4,45 +4,51 @@ import dms2dec from "dms2dec";
 import config from "custom/config";
 
 import { device } from "utils";
-import { GPSLocation } from "types/GPSLocation";
+import { ImageMetadata } from "types/Photo";
+import { GPSLocation, LatLong } from "types/GPSLocation";
 
 type Args = {
   photoToLoad: File;
   srcType: string;
   gpsLocation: GPSLocation;
   cordovaMetaData: any;
-  callback: (result: any) => void;
+  callback: (result: ImageMetadata) => void;
 };
-export default function loadPhoto({
-  photoToLoad,
-  srcType,
-  gpsLocation,
-  cordovaMetaData,
-  callback
-}: Args) {
-  let imgExif: any = null;
-  let imgIptc: any = null;
-  let imgLocation: any = null;
 
+export default function loadPhoto(args: Args): void {
   //   https://github.com/blueimp/JavaScript-Load-Image#meta-data-parsing
   //@ts-ignore
   if (!window.cordova) {
+    const { photoToLoad } = args;
     loadImage.parseMetaData(
       photoToLoad,
       (data) => {
         //@ts-ignore
-        imgExif = data.exif ? data.exif.getAll() : imgExif;
+        const imgExif = data.exif ? data.exif.getAll() : imgExif;
         //@ts-ignore
-        imgIptc = data.iptc ? data.iptc.getAll() : imgIptc;
+        const imgIptc = data.iptc ? data.iptc.getAll() : imgIptc;
+        doLoadPhoto({ imgExif, imgIptc, ...args });
       },
       {
         maxMetaDataSize: 262144,
         disableImageHead: false
       }
     );
+  } else {
+    doLoadPhoto(args);
   }
+}
 
-  return loadImage(
+function doLoadPhoto({
+  photoToLoad,
+  srcType,
+  gpsLocation,
+  cordovaMetaData,
+  callback,
+  imgExif,
+  imgIptc
+}: Args & { imgExif?: any; imgIptc?: any }): void {
+  loadImage(
     photoToLoad,
     (img) => {
       let imgFromCamera;
@@ -62,6 +68,7 @@ export default function loadPhoto({
         imgFromCamera = isNaN(ageInMinutes) || ageInMinutes < 0.5;
       }
 
+      let imgLocation: any = null;
       if (imgFromCamera) {
         imgLocation = gpsLocation;
         if (!gpsLocation.online) {
@@ -70,7 +77,7 @@ export default function loadPhoto({
           );
         }
       } else {
-        // imgLocation = getLocationFromExifMetadata(imgExif, cordovaMetaData);
+        imgLocation = getLocationFromExifMetadata(imgExif, cordovaMetaData);
       }
 
       callback({
@@ -88,12 +95,14 @@ export default function loadPhoto({
   );
 }
 
-function getLocationFromExifMetadata(imgExif: any, cordovaMetadata: any) {
+function getLocationFromExifMetadata(
+  imgExif: any,
+  cordovaMetadata: any
+): LatLong | undefined {
   let latitude: number, longitude: number;
   try {
     //@ts-ignore
     if (!window.cordova) {
-      console.log(imgExif);
       // https://www.npmjs.com/package/dms2dec
       const lat = imgExif.GPSLatitude.split(",").map(Number);
       const latRef = imgExif.GPSLatitudeRef;
@@ -130,6 +139,6 @@ function getLocationFromExifMetadata(imgExif: any, cordovaMetadata: any) {
       }
     }
   } catch (e) {
-    throw new Error(`Error extracting GPS from file; ${e}`);
+    console.error(`Error extracting GPS from file: ${e}`);
   }
 }
