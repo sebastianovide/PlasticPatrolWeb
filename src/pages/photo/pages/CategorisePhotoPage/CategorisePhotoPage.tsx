@@ -17,7 +17,8 @@ import { ImageMetadata } from "types/Photo";
 
 import {
   useGetLocationFileState,
-  linkToUploadPhoto
+  linkToUploadPhoto,
+  FileState
 } from "routes/photo/routes/categorise/links";
 import loadPhoto from "./utils";
 import UploadPhotoDialog from "pages/photo/components/UploadPhotoDialog";
@@ -50,17 +51,16 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function CategoriseLitterPage() {
-  const classes = useStyles();
   const fileState = useGetLocationFileState();
-  const [photo, setPhoto] = useState<ImageMetadata | undefined>();
-  const [notGeotagged, setNotGeotagged] = useState(false);
-  const history = useHistory();
   const { fileName } = useParams();
+  const history = useHistory();
 
   if (fileState === undefined) {
     history.push(linkToNewPhoto());
   }
 
+  const [photo, setPhoto] = useState<ImageMetadata | undefined>();
+  const [notGeotagged, setNotGeotagged] = useState(false);
   useEffect(() => {
     if (fileState) {
       const { file, cordovaMetaData } = fileState;
@@ -85,6 +85,31 @@ export default function CategoriseLitterPage() {
       });
     }
   }, []);
+
+  return (
+    <CategoriseLitterPageWithFileInfo
+      fileState={fileState}
+      fileName={fileName as string}
+      photo={photo}
+      notGeotagged={notGeotagged}
+    />
+  );
+}
+
+export function CategoriseLitterPageWithFileInfo({
+  fileState,
+  fileName,
+  photo,
+  notGeotagged
+}: {
+  fileState?: FileState;
+  fileName: string;
+  notGeotagged: boolean;
+  photo?: ImageMetadata;
+}) {
+  const classes = useStyles();
+  const history = useHistory();
+
   const styles = useStyles();
   const [addingNewItem, setAddingNewItem] = useState(false);
   const [editingItem, setEditingItem] = useState<Item | null>(null);
