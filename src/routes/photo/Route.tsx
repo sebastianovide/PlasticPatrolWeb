@@ -9,7 +9,6 @@ import { linkToNewPhoto } from "./routes/new/links";
 export default function PhotoRoute() {
   const history = useHistory();
   const location = useLocation();
-  console.log(location);
 
   const navigationHandler =
     location.pathname === linkToNewPhoto()
