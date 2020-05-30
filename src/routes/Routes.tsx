@@ -24,6 +24,12 @@ import Photo from "types/Photo";
 import ModeratorRoute from "./components/ModeratorRoute";
 import SignedInRoute from "./components/SignedInRoute";
 
+import PhotoRoute from "./photo/Route";
+import { linkToPhotoPage } from "./photo/links";
+
+import UploadPhotoRoute from "./upload-success/Route";
+import { linkToUploadSuccess } from "./upload-success/links";
+
 type Props = {
   user: User;
   usersLeaderboard: any;
@@ -42,6 +48,7 @@ type Props = {
   selectedFeature: any;
   handlePhotoPageClose: () => void;
   fields: any;
+  totalNumberOfPieces: number;
 };
 
 export function Routes({
@@ -61,11 +68,15 @@ export function Routes({
   handlePhotoClick,
   selectedFeature,
   handlePhotoPageClose,
-  fields
+  fields,
+  totalNumberOfPieces
 }: Props) {
   const history = useHistory();
   return (
     <Switch>
+      <Route path={linkToUploadSuccess()}>
+        <UploadPhotoRoute totalNumberOfPieces={totalNumberOfPieces} />
+      </Route>
       <Route path={config.PAGES.about.path}>
         <AboutPage
           label={config.PAGES.about.label}
@@ -147,8 +158,9 @@ export function Routes({
         />
       </ModeratorRoute>
 
-      <Route path={config.PAGES.photos.path}>
-        <PhotoPage
+      <Route path={linkToPhotoPage()}>
+        <PhotoRoute />
+        {/* <PhotoPage
           //@ts-ignore - this exists
           label={config.PAGES.photos.label}
           file={file}
@@ -159,7 +171,7 @@ export function Routes({
           fields={fields}
           handleClose={history.goBack}
           handleRetakeClick={handleCameraClick}
-        />
+        /> */}
       </Route>
 
       <SignedInRoute path={config.PAGES.account.path} user={user}>

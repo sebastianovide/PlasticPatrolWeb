@@ -15,9 +15,10 @@
     "forceConsistentCasingInFileNames": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "isolatedModules": true,
     "noEmit": true,
-    "baseUrl": "src"
+    "baseUrl": "src",
+    "isolatedModules": true,
+    "typeRoots": ["./types", "./node_modules/@types"]
   },
-  "include": ["./src/"]
+  "include": ["src", ".storybook/*"]
 }
