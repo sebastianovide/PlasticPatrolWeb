@@ -11,11 +11,11 @@ import Dialog from "@material-ui/core/Dialog";
 import CameraIcon from "@material-ui/icons/PhotoCamera";
 import PhotoLibraryIcon from "@material-ui/icons/PhotoLibrary";
 import CancelIcon from "@material-ui/icons/Close";
-import { useLocation } from "react-router-dom";
+import { CordovaCameraImage } from "types/Photo";
 
 type Props = {
   onClose: () => void;
-  handlePhotoSelect: (value: string | File) => void;
+  handlePhotoSelect: (image: CordovaCameraImage, fromCamera: boolean) => void;
 };
 
 export default function AddPhotoDialog({ onClose, handlePhotoSelect }: Props) {
@@ -24,9 +24,11 @@ export default function AddPhotoDialog({ onClose, handlePhotoSelect }: Props) {
       <List>
         <ListItem
           button
-          onClick={() =>
-            handlePhotoDialogItemClick("CAMERA", handlePhotoSelect)
-          }
+          onClick={() => {
+            handlePhotoDialogItemClick("CAMERA", (file) =>
+              handlePhotoSelect(file, true)
+            );
+          }}
         >
           <IconButton color="primary" edge={false}>
             <CameraIcon />
@@ -36,7 +38,9 @@ export default function AddPhotoDialog({ onClose, handlePhotoSelect }: Props) {
         <ListItem
           button
           onClick={() =>
-            handlePhotoDialogItemClick("PHOTOLIBRARY", handlePhotoSelect)
+            handlePhotoDialogItemClick("PHOTOLIBRARY", (file) =>
+              handlePhotoSelect(file, false)
+            )
           }
         >
           <IconButton color="primary" edge={false}>
@@ -57,7 +61,7 @@ export default function AddPhotoDialog({ onClose, handlePhotoSelect }: Props) {
 
 function handlePhotoDialogItemClick(
   value: string,
-  callback: (metaData: any, fileName: string) => void
+  callback: (file: CordovaCameraImage) => void
 ) {
   // @ts-ignore
   const Camera = navigator.camera;
@@ -73,8 +77,7 @@ function handlePhotoDialogItemClick(
     //https://cordova.apache.org/docs/en/1.6.0/cordova/camera/camera.getPicture.html
     (imageUri: string) => {
       const file = JSON.parse(imageUri);
-      const cordovaMetadata = JSON.parse(file.json_metadata);
-      callback(cordovaMetadata, file);
+      callback(file as CordovaCameraImage);
     },
     (message: string) => {
       console.log("Failed because: ", message);

@@ -165,18 +165,6 @@ export function Routes({
 
       <Route path={linkToPhotoPage()}>
         <PhotoRoute />
-        {/* <PhotoPage
-          //@ts-ignore - this exists
-          label={config.PAGES.photos.label}
-          file={file}
-          gpsLocation={gpsLocation}
-          online={online}
-          srcType={srcType}
-          cordovaMetadata={cordovaMetadata}
-          fields={fields}
-          handleClose={history.goBack}
-          handleRetakeClick={handleCameraClick}
-        /> */}
       </Route>
 
       <SignedInRoute path={config.PAGES.account.path} user={user}>

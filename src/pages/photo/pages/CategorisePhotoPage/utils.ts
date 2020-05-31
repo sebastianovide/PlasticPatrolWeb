@@ -6,12 +6,13 @@ import config from "custom/config";
 import { device } from "utils";
 import { ImageMetadata } from "types/Photo";
 import { GPSLocation, LatLong } from "types/GPSLocation";
+import type { CordovaImageMetadata, FilePath } from "types/Photo";
 
 type Args = {
-  photoToLoad: File;
-  srcType: string;
-  gpsLocation: GPSLocation;
-  cordovaMetaData: any;
+  photoToLoad: File | FilePath;
+  fromCamera: boolean;
+  gpsLocation?: GPSLocation;
+  cordovaMetadata?: CordovaImageMetadata;
   callback: (result: ImageMetadata) => void;
 };
 
@@ -41,9 +42,9 @@ export default function loadPhoto(args: Args): void {
 
 function doLoadPhoto({
   photoToLoad,
-  srcType,
+  fromCamera,
   gpsLocation,
-  cordovaMetaData,
+  cordovaMetadata,
   callback,
   imgExif,
   imgIptc
@@ -51,33 +52,16 @@ function doLoadPhoto({
   loadImage(
     photoToLoad,
     (img) => {
-      let imgFromCamera;
-
       // @ts-ignore
       const imgSrc = img.toDataURL("image/jpeg");
-      // @ts-ignore
-      if (window.cordova) {
-        if (srcType === "camera") {
-          imgFromCamera = true;
-        } else {
-          imgFromCamera = false;
-        }
-      } else {
-        const fileDate = photoToLoad.lastModified;
-        const ageInMinutes = (new Date().getTime() - fileDate) / 1000 / 60;
-        imgFromCamera = isNaN(ageInMinutes) || ageInMinutes < 0.5;
-      }
-
       let imgLocation: any = null;
-      if (imgFromCamera) {
+      if (fromCamera) {
         imgLocation = gpsLocation;
-        if (!gpsLocation.online) {
-          throw new Error(
-            "We couldn't find your location so you won't be able to upload an image right now. Enable GPS on your phone and retake the photo to upload it."
-          );
+        if (!gpsLocation || !gpsLocation.online) {
+          imgLocation = "not online";
         }
       } else {
-        imgLocation = getLocationFromExifMetadata(imgExif, cordovaMetaData);
+        imgLocation = getLocationFromExifMetadata(imgExif, cordovaMetadata);
       }
 
       callback({
@@ -97,8 +81,8 @@ function doLoadPhoto({
 
 function getLocationFromExifMetadata(
   imgExif: any,
-  cordovaMetadata: any
-): LatLong | undefined {
+  cordovaMetadata?: CordovaImageMetadata
+): LatLong | "unable to extract from file" {
   let latitude: number, longitude: number;
   try {
     //@ts-ignore
@@ -136,9 +120,12 @@ function getLocationFromExifMetadata(
           latitude,
           longitude
         };
+      } else {
+        return "unable to extract from file";
       }
     }
   } catch (e) {
     console.error(`Error extracting GPS from file: ${e}`);
+    return "unable to extract from file";
   }
 }
