@@ -1,8 +1,7 @@
 // Custom Dialog to choose camera and photo library to interact with cordova-plugin-camera
 
-import React, { useRef, useEffect } from "react";
+import React from "react";
 
-import RootRef from "@material-ui/core/RootRef";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import IconButton from "@material-ui/core/IconButton";

@@ -25,9 +25,9 @@ export default function loadPhoto(args: Args): void {
       photoToLoad,
       (data) => {
         //@ts-ignore
-        const imgExif = data.exif ? data.exif.getAll() : imgExif;
+        const imgExif = data.exif ? data.exif.getAll() : null;
         //@ts-ignore
-        const imgIptc = data.iptc ? data.iptc.getAll() : imgIptc;
+        const imgIptc = data.iptc ? data.iptc.getAll() : null;
         doLoadPhoto({ imgExif, imgIptc, ...args });
       },
       {

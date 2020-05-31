@@ -54,7 +54,7 @@ const Wrapper = () => {
         onSignIn={() => setHandledPendingRedirect(true)}
       />
       <LocationProvider>
-        <App fields={Object.values(config.PHOTO_FIELDS)} config={config} />
+        <App config={config} />
       </LocationProvider>
     </>
   );

@@ -8,6 +8,7 @@ import { gtagEvent } from "gtag.js";
 import { Item } from "pages/photo/types";
 
 import { linkToUploadSuccess } from "routes/upload-success/links";
+import useEffectOnMount from "hooks/useEffectOnMount";
 
 type HookArgs = {
   imgSrc: string;
@@ -41,6 +42,8 @@ export default function useSendFile(args: HookArgs) {
     uploadTask && uploadTask.cancel();
     history.goBack();
   };
+
+  useEffectOnMount(sendFileFunc);
 
   return {
     sendFile: sendFileFunc,

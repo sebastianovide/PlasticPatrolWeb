@@ -21,12 +21,15 @@ const LocationProvider: React.FC<{}> = ({ children }) => {
       },
       (error) => {
         console.log("Error: ", error.message);
-        if (location) {
-          setLocation({
-            ...location,
-            online: false
-          });
-        }
+
+        setLocation((currentLocation) => {
+          if (currentLocation) {
+            return {
+              ...currentLocation,
+              online: false
+            };
+          }
+        });
       }
     );
     return () => navigator.geolocation.clearWatch(subscription);

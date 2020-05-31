@@ -3,9 +3,9 @@ import React, { Component } from "react";
 import { withStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 
-import enums from "../../../../types/enums";
+import enums from "../../../types/enums";
 
-const styles = theme => ({
+const styles = (theme) => ({
   cssUnderline: {
     "&:after": {
       borderBottomColor: theme.palette.secondary.main
@@ -13,13 +13,13 @@ const styles = theme => ({
   }
 });
 class TitleTextField extends Component {
-  dataFormater = value => {
+  dataFormater = (value) => {
     return this.props.field.type === enums.TYPES.number
       ? Number(value)
       : String(value);
   };
 
-  onChangeHandler = e => {
+  onChangeHandler = (e) => {
     const valueFormated = this.dataFormater(e.target.value);
     const error = !e.target.value.match(this.props.field.regexValidation);
 
