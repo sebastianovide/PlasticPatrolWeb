@@ -6,11 +6,14 @@ import AddPhotoDialog from "pages/photo/components/AddPhotoDialog";
 
 import { linkToAddDialog } from "./links";
 import { linkToCategoriseWithState } from "../categorise/links";
+import { CordovaCameraImage } from "types/Photo";
 
 export default function NewPhotoRoute() {
   const history = useHistory();
-  const handlePhotoSelect = (file: string | File) =>
-    history.push(linkToCategoriseWithState(file));
+  const handlePhotoSelect = (
+    file: File | CordovaCameraImage,
+    fromCamera: boolean
+  ) => history.push(linkToCategoriseWithState(file, fromCamera));
   const [inputRef, setInputRef] = useState<HTMLInputElement | null>(null);
 
   // @ts-ignore
@@ -33,14 +36,16 @@ export default function NewPhotoRoute() {
         onChange={(e) => {
           const file = e.target && e.target.files && e.target.files[0];
           if (file) {
-            handlePhotoSelect(file);
+            handlePhotoSelect(file, false);
           }
         }}
       />
       <Route path={linkToAddDialog()} exact>
         <AddPhotoDialog
           onClose={() => history.goBack()}
-          handlePhotoSelect={handlePhotoSelect}
+          handlePhotoSelect={(image, fromCamera) =>
+            handlePhotoSelect(image, fromCamera)
+          }
         />
       </Route>
     </>

@@ -9,20 +9,19 @@ import Link from "@material-ui/core/Link";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 
-import PageWrapper from "components/PageWrapper";
 import { Item } from "../../types";
 import AddNewItem from "../../components/AddNewItem/AddNewItem";
 import ItemOverviewList from "../../components/ItemOverviewList/ItemOverviewList";
-import { ImageMetadata } from "types/Photo";
+import { ImageMetadata, isCordovaFileState } from "types/Photo";
 
 import {
   useGetLocationFileState,
-  linkToUploadPhoto,
-  FileState
+  linkToUploadPhoto
 } from "routes/photo/routes/categorise/links";
 import loadPhoto from "./utils";
 import UploadPhotoDialog from "pages/photo/components/UploadPhotoDialog";
 import { linkToNewPhoto } from "routes/photo/routes/new/links";
+import { useGPSLocation } from "LocationProvider";
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -54,33 +53,32 @@ export default function CategoriseLitterPage() {
   const fileState = useGetLocationFileState();
   const { fileName } = useParams();
   const history = useHistory();
+  const gpsLocation = useGPSLocation();
 
-  if (fileState === undefined) {
-    history.push(linkToNewPhoto());
-  }
+  useEffect(() => {
+    if (fileState === undefined) {
+      history.push(linkToNewPhoto());
+    }
+  }, [fileState]);
 
   const [photo, setPhoto] = useState<ImageMetadata | undefined>();
-  const [notGeotagged, setNotGeotagged] = useState(false);
   useEffect(() => {
     if (fileState) {
-      const { file, cordovaMetaData } = fileState;
+      var fileOrFilePath, cordovaMetadata, srcType;
+      if (isCordovaFileState(fileState)) {
+        fileOrFilePath = fileState.filePath;
+        cordovaMetadata = fileState.cordovaMetadata;
+      } else {
+        fileOrFilePath = fileState.file;
+        cordovaMetadata = undefined;
+      }
       loadPhoto({
-        photoToLoad: file,
-        srcType: "sany",
-        gpsLocation: {
-          latitude: 0,
-          longitude: 0,
-          online: false,
-          updated: new Date()
-        },
-        cordovaMetaData,
+        photoToLoad: fileOrFilePath,
+        fromCamera: fileState.fromCamera,
+        gpsLocation,
+        cordovaMetadata,
         callback: (metadata) => {
-          if (!metadata.imgLocation) {
-            setPhoto(metadata);
-            setNotGeotagged(true);
-          } else {
-            setPhoto(metadata);
-          }
+          setPhoto(metadata);
         }
       });
     }
@@ -88,23 +86,17 @@ export default function CategoriseLitterPage() {
 
   return (
     <CategoriseLitterPageWithFileInfo
-      fileState={fileState}
       fileName={fileName as string}
       photo={photo}
-      notGeotagged={notGeotagged}
     />
   );
 }
 
 export function CategoriseLitterPageWithFileInfo({
-  fileState,
   fileName,
-  photo,
-  notGeotagged
+  photo
 }: {
-  fileState?: FileState;
   fileName: string;
-  notGeotagged: boolean;
   photo?: ImageMetadata;
 }) {
   const classes = useStyles();
@@ -189,7 +181,31 @@ export function CategoriseLitterPageWithFileInfo({
         )}
       </div>
       <Dialog
-        open={notGeotagged}
+        open={!!(photo && photo.imgLocation === "not online")}
+        onClose={() => history.push(linkToNewPhoto())}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            <span style={{ fontWeight: 500 }}>
+              We couldn't find your location so you won't be able to upload an
+              image right now. Enable GPS on your phone and retake the photo to
+              upload it.
+            </span>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => history.push(linkToNewPhoto())}
+            color="primary"
+          >
+            Ok
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog
+        open={!!(photo && photo.imgLocation === "unable to extract from file")}
         onClose={() => history.push(linkToNewPhoto())}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"

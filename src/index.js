@@ -13,6 +13,7 @@ import * as serviceWorker from "./serviceWorker";
 import config from "./custom/config";
 import { isIphoneAndCordova } from "./utils";
 import { gtagInit } from "./gtag.js";
+import LocationProvider from "./LocationProvider";
 
 serviceWorker.register();
 
@@ -31,12 +32,14 @@ if (
   process.env.NODE_ENV !== "development" &&
   localStorage.getItem("debug") !== "true"
 ) {
-  console.log = console.info = console.trace = console.warn = console.error = console.debug = _ => {};
+  console.log = console.info = console.trace = console.warn = console.error = console.debug = (
+    _
+  ) => {};
 }
 // it must set to fals (not enough to be absent)
 const devDissableDebugLog = localStorage.getItem("debug") === "false";
 if (devDissableDebugLog) {
-  console.debug = _ => {};
+  console.debug = (_) => {};
 }
 
 const theme = createMuiTheme(config.THEME);
@@ -50,7 +53,9 @@ const Wrapper = () => {
         handleClose={() => {}}
         onSignIn={() => setHandledPendingRedirect(true)}
       />
-      <App fields={Object.values(config.PHOTO_FIELDS)} config={config} />
+      <LocationProvider>
+        <App fields={Object.values(config.PHOTO_FIELDS)} config={config} />
+      </LocationProvider>
     </>
   );
 };
