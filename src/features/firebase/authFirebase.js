@@ -14,6 +14,13 @@ import dbFirebase from "./dbFirebase";
 
 let currentUser;
 
+const getProvider = user => {
+  if (user.providerData.length > 0) {
+    return user.providerData[0].providerId;
+  }
+  return null;
+};
+
 const onAuthStateChanged = fn => {
   const firebaseStatusChange = user => {
     currentUser = user;
@@ -36,7 +43,8 @@ const onAuthStateChanged = fn => {
         photoURL,
         null,
         null,
-        null
+        null,
+        getProvider(user)
       );
 
       // this has to be global to be found by the jsonp
@@ -96,9 +104,14 @@ const reloadUser = async () => {
   return firebase.auth().currentUser;
 };
 
+const shouldConsiderEmailVerified = user => {
+  return user.emailVerified || "facebook.com" === user.provider;
+};
+
 export default {
   onAuthStateChanged,
   signOut,
   sendEmailVerification,
-  reloadUser
+  reloadUser,
+  shouldConsiderEmailVerified
 };

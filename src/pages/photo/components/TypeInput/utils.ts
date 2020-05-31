@@ -3,7 +3,7 @@ import categories from "custom/categories.json";
 type Category = { key: string; label: string };
 type CategoriesArr = Array<Category>;
 
-const categoriesArr: CategoriesArr = Object.keys(categories).map(key => {
+const categoriesArr: CategoriesArr = Object.keys(categories).map((key) => {
   return {
     key,
     //@ts-ignore
@@ -16,7 +16,7 @@ export function getSuggestions(input: string) {
 }
 
 function filterCat(input: string) {
-  return function(category: Category) {
+  return function (category: Category) {
     if (input.length === 0) {
       return false;
     }
