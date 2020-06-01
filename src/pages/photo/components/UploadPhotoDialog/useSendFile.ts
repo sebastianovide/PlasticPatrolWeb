@@ -22,6 +22,7 @@ type Args = {
   setUploadTask: (task: any) => void;
   history: any;
 } & HookArgs;
+
 export default function useSendFile(args: HookArgs) {
   const [uploadTask, setUploadTask] = useState<any>();
   const [sendingProgress, setSendingProgress] = useState(0);

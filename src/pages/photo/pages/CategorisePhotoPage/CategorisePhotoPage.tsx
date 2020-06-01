@@ -16,7 +16,7 @@ import { ImageMetadata, isCordovaFileState } from "types/Photo";
 
 import {
   useGetLocationFileState,
-  linkToUploadPhoto
+  linkToUploadPhotoDialog
 } from "routes/photo/routes/categorise/links";
 import loadPhoto from "./utils";
 import UploadPhotoDialog from "pages/photo/components/UploadPhotoDialog";
@@ -174,7 +174,7 @@ export function CategoriseLitterPageWithFileInfo({
             variant="contained"
             color="primary"
             className={styles.button}
-            onClick={() => history.push(linkToUploadPhoto(fileName))}
+            onClick={() => history.push(linkToUploadPhotoDialog())}
           >
             Submit Collection
           </Button>
@@ -232,7 +232,7 @@ export function CategoriseLitterPageWithFileInfo({
           </Button>
         </DialogActions>
       </Dialog>
-      <Route path={linkToUploadPhoto()}>
+      <Route path={linkToUploadPhotoDialog()}>
         <UploadPhotoDialog
           imgSrc={photo && photo.imgSrc}
           online
