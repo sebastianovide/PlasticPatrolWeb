@@ -9,30 +9,90 @@ import PageWrapper from "./PageWrapper";
 const styles = (theme) => ({
   typography: {
     ...theme.mixins.gutters(),
-    whiteSpace: "pre-wrap"
+    // whiteSpace: "pre-wrap",
+    display: "flex",
+    flexDirection: "column"
+  },
+  sponsorImage: {
+    alignSelf: "center",
+    marginBottom: theme.spacing(1)
+  },
+  reCache: {
+    display: "block",
+    textAlign: "center"
+  },
+  list: {
+    paddingLeft: "inherit"
   }
 });
 
 class AboutPage extends React.Component {
   render() {
-    const { classes, label, reloadPhotos, handleClose } = this.props;
+    const {
+      classes,
+      label,
+      reloadPhotos,
+      handleClose,
+      sponsorImage
+    } = this.props;
     return (
       <PageWrapper
         label={label}
         navigationHandler={{ handleClose }}
         hasLogo={true}
       >
-        <Typography
-          align={"justify"}
-          variant={"subtitle1"}
-          className={classes.typography}
-        >
-          {"#PlasticPatrol is about engaging people with the issue of plastic pollution through adventure and nature, helping to safeguard our seas for the future.\n\n" +
-            "Our mission is to combat the global plastic crisis by stopping the problem at its source – in our waterways.\n\n" +
-            "Every single piece of plastic collected and shared on social media as part of the #PlasticPatrol movement is captured in our interactive map, creating a picture of the problem on a global scale for the very first time.\n\n" +
-            "Using this app you can get involved. Simply take a photo of what you find by pressing the camera button and upload it directly to the map. After it has been approved you will be able to view the images by pressing the globe button."}
+        <Typography variant={"subtitle1"} className={classes.typography}>
+          The Plastic Patrol app brings together people all over the world to
+          make powerful and positive impacts on the planet.
           <br />
-          <span style={{ display: "block", textAlign: "center" }}>
+          <br />
+          This is more than just litter picking. By collecting and recording
+          litter you are helping to build the largest and most influential
+          dataset about litter polluting the planet. Data collected is used to
+          drive positive and impactful changes across industry and governments.
+          <br />
+          <br />
+          Here’s just a few ways the litter recorded in the app helps our
+          campaigning:
+          <ul className={classes.list}>
+            <li>
+              Drives change across industry by building evidence that enables us
+              to hold offending brands to account
+            </li>
+            <li>
+              Shapes government policy and provides tangible solutions for
+              system change
+            </li>
+            <li>
+              Creates an annual litter report that breaks down litter collected
+              to identify wider trends and patterns, helping to accelerate
+              system change
+            </li>
+            <li>
+              Provides solutions for local authorities to improve waste
+              management infrastructure and implement measures to prevent
+              littering
+            </li>
+          </ul>
+          Using the app is simple: See it. Snap it. Map it.
+          <br />
+          <br />
+          Every time you record a piece of litter it’s marked on our global map,
+          leaderboard and your personal profile allowing you to track your
+          contributions and that of the Plastic Patrol community.
+          <br />
+          <br />
+          Join thousands of people from more than 85 countries across the globe
+          using the Plastic Patrol app to help shape a litter-free future
+          together.
+          <br />
+          <br />
+          <img
+            src={sponsorImage}
+            className={classes.sponsorImage}
+            alt="sponsor logo"
+          />
+          <span className={classes.reCache}>
             <Button
               onClick={reloadPhotos}
               color="primary"

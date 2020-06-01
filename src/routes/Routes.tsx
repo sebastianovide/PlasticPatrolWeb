@@ -76,6 +76,7 @@ export function Routes({
           label={config.PAGES.about.label}
           handleClose={history.goBack}
           reloadPhotos={reloadPhotos}
+          sponsorImage={sponsorImage}
         />
       </Route>
 
