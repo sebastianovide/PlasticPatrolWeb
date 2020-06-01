@@ -51,7 +51,9 @@ export default function UploadSuccessDialog({
   return (
     <Dialog open PaperProps={{ className: styles.dialog }}>
       <p>
-        <p className={styles.bold}>Thank you.</p>
+        <span className={styles.bold}>Thank you.</span>
+        <br />
+        <br />
         Your upload is now being moderated and will appear on the global map
         within 48 hours.
         <br />

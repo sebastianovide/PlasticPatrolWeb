@@ -50,5 +50,5 @@ export function useGetLocationFileState(): FileState | undefined {
 }
 
 export function linkToUploadPhotoDialog() {
-  return `${linkToPhotoPage()}/upload`;
+  return `${linkToCategorise()}/upload`;
 }

@@ -55,12 +55,6 @@ export default function CategoriseLitterPage() {
   const history = useHistory();
   const gpsLocation = useGPSLocation();
 
-  useEffect(() => {
-    if (fileState === undefined) {
-      history.push(linkToNewPhoto());
-    }
-  }, [fileState]);
-
   const [photo, setPhoto] = useState<ImageMetadata | undefined>();
   useEffect(() => {
     if (fileState) {
