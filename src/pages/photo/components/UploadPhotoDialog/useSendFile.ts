@@ -22,16 +22,17 @@ type Args = {
   setUploadTask: (task: any) => void;
   history: any;
 } & HookArgs;
+
 export default function useSendFile(args: HookArgs) {
   const [uploadTask, setUploadTask] = useState<any>();
   const [sendingProgress, setSendingProgress] = useState(0);
   const [errorMessage, setErrorMessage] = useState<string>();
   const history = useHistory();
 
-  const sendFileFunc = () => {
+  const sendFileFunc = async () => {
     try {
       console.log("sending");
-      sendFile({ ...args, setUploadTask, setSendingProgress, history });
+      await sendFile({ ...args, setUploadTask, setSendingProgress, history });
     } catch (err) {
       console.log("sending errored");
       setErrorMessage(err.message);

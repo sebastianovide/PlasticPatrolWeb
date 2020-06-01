@@ -31,7 +31,7 @@ Props) {
   });
 
   useEffect(() => {
-    sendFile();
+    (async () => await sendFile())();
   }, []);
   return (
     <>
