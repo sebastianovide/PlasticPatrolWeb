@@ -11,7 +11,6 @@ import GroupAdd from "components/Groups/GroupAdd";
 import TutorialPage from "components/pages/TutorialPage";
 import ProfilePage from "components/ProfilePage";
 import ModeratorPage from "components/ModeratorPage";
-import AboutPage from "components/AboutPage";
 import LeaderboardPage from "components/Leaderboard";
 import WriteFeedbackPage from "components/WriteFeedbackPage";
 
@@ -28,6 +27,9 @@ import { linkToPhotoPage } from "./photo/links";
 
 import UploadPhotoRoute from "./upload-success/Route";
 import { linkToUploadSuccess } from "./upload-success/links";
+
+import AboutPageRoute from "./about/Route";
+import { linkToAboutPage } from "./about/links";
 
 type Props = {
   user: User;
@@ -71,9 +73,8 @@ export function Routes({
           sponsorImage={sponsorImage}
         />
       </Route>
-      <Route path={config.PAGES.about.path}>
-        <AboutPage
-          label={config.PAGES.about.label}
+      <Route path={linkToAboutPage()}>
+        <AboutPageRoute
           handleClose={history.goBack}
           reloadPhotos={reloadPhotos}
           sponsorImage={sponsorImage}
