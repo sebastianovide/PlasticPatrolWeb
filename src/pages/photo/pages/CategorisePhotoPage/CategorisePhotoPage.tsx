@@ -111,6 +111,7 @@ export function CategoriseLitterPageWithFileInfo({
     const newItems = [...items, item];
     setItems(newItems);
     setAddingNewItem(false);
+    setEditingItem(null);
   };
 
   const handleEditItemClick = (index: number) => {
@@ -232,6 +233,9 @@ export function CategoriseLitterPageWithFileInfo({
           online
           items={items}
           imgLocation={photo && photo.imgLocation}
+          onCancelUpload={() =>
+            history.push(history.location.pathname, history.location.state)
+          }
         />
       </Route>
     </>

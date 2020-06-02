@@ -9,12 +9,20 @@ import Button from "@material-ui/core/Button";
 
 import useSendFile from "./useSendFile";
 
-type Props = any;
+interface Props {
+  imgLocation: any;
+  imgSrc: any;
+  online: boolean;
+  items: any;
+  onCancelUpload: () => void;
+}
+
 export default function UploadPhotoDialog({
   imgLocation,
   imgSrc,
   online,
-  items
+  items,
+  onCancelUpload
 }: //   onSuccess
 Props) {
   const {
@@ -27,7 +35,8 @@ Props) {
     imgSrc,
     online,
     imgLocation,
-    items
+    items,
+    onCancelUpload
   });
 
   useEffect(() => {

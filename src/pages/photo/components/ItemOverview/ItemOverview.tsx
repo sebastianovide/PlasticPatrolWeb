@@ -1,9 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 
 import CloseIcon from "@material-ui/icons/Close";
 import { makeStyles } from "@material-ui/core/styles";
 
 import { Item } from "../../types";
+import {
+  Dialog,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Button
+} from "@material-ui/core";
 
 type Props = {
   handleRemove: () => void;
@@ -32,6 +39,7 @@ export default function ItemOverview({
   handleClick
 }: Props) {
   const styles = useStyles();
+  const [confirmRemove, setConfirmRemove] = useState(false);
 
   return (
     <div className={styles.wrapper} onClick={handleClick}>
@@ -40,9 +48,41 @@ export default function ItemOverview({
         className={styles.cross}
         onClick={(e) => {
           e.stopPropagation();
-          handleRemove();
+          setConfirmRemove(true);
         }}
       />
+      <Dialog
+        open={confirmRemove}
+        onClose={() => setConfirmRemove(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to remove this label?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={(e) => {
+              setConfirmRemove(false);
+              e.stopPropagation();
+            }}
+            color="primary"
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={(e) => {
+              handleRemove();
+              e.stopPropagation();
+            }}
+            color="primary"
+          >
+            Remove
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }
