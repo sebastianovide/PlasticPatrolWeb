@@ -299,7 +299,6 @@ class App extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    console.log(this.state.sponsorImage);
     const stats = this.props.config.getStats(
       this.state.geojson,
       this.state.dbStats
