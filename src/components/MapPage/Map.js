@@ -357,7 +357,7 @@ class Map extends Component {
               color="primary"
               onClick={this.props.handleCameraClick}
             >
-              <span style={{ marginRight: "3px" }}>Log Your Litter</span>
+              <span style={{ marginRight: "3px" }}>Record Your Litter</span>
               <AddAPhotoIcon />
             </Fab>
             <Dehaze
