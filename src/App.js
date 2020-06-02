@@ -611,7 +611,7 @@ class App extends Component {
         : pathname;
 
     // if it is in map, change the url
-    if (getMapIsVisible(this.props.history.location.pathname.match)) {
+    if (getMapIsVisible(this.props.history.location.pathname)) {
       this.props.history.replace(`${currentPath.split("@")[0]}@${coordsUrl}`);
     }
 
