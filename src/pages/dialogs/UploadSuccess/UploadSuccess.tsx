@@ -21,14 +21,23 @@ const useStyles = makeStyles((theme) => ({
   button: {
     width: "80%"
   },
-  sponsoredByContainer: {
-    height: "25px",
+  sponsoredBy: {
+    display: "flex",
+    flexDirection: "column",
     width: "100%",
-    display: "block",
-    backgroundSize: "contain",
-    backgroundRepeat: "no-repeat",
-    backgroundPosition: "center",
-    marginBottom: "16px"
+
+    fontSize: "0.7rem",
+    margin: 0,
+    marginBottom: theme.spacing(0.5)
+  },
+  sponsorImage: {
+    marginBottom: theme.spacing(2),
+    height: "30px",
+    width: "auto",
+    alignSelf: "center"
+  },
+  bold: {
+    fontWeight: "bold"
   }
 }));
 
@@ -42,7 +51,8 @@ export default function UploadSuccessDialog({
   return (
     <Dialog open PaperProps={{ className: styles.dialog }}>
       <p>
-        <p style={{ fontWeight: "bold" }}>Thank you.</p>
+        <span className={styles.bold}>Thank you.</span>
+        <br />
         <br />
         Your upload is now being moderated and will appear on the global map
         within 48 hours.
@@ -60,12 +70,14 @@ export default function UploadSuccessDialog({
         To see how many items you've contributed in total and your global
         position, open the leaderboard from the menu.
       </p>
-      {sponsorImage && (
-        <span
-          className={styles.sponsoredByContainer}
-          style={{ backgroundImage: "url(" + sponsorImage + ")" }}
-        />
-      )}
+
+      <p className={styles.sponsoredBy}>Sponsored by</p>
+      <img
+        className={styles.sponsorImage}
+        src={sponsorImage}
+        alt="sponsor logo"
+      />
+
       <Button
         onClick={onClose}
         color="primary"

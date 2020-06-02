@@ -18,6 +18,7 @@ export const withoutBrand = () => (
   <ItemOverview
     quantity={1}
     type={{ label: "Plastic bottle", leafKey: null }}
+    handleClick={() => {}}
     handleRemove={() => {}}
   />
 );

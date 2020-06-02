@@ -20,7 +20,7 @@ import config from "custom/config";
 const drawerWidth = "80%";
 const drawerMaxWidth = 360;
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   drawerPaper: {
     width: drawerWidth,
     maxWidth: drawerMaxWidth
@@ -134,6 +134,7 @@ export default function DrawerContainer({
                 key={idx}
               />
             ))}
+            <Divider />
           </List>
         </div>
         <div>

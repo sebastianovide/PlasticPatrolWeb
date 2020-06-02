@@ -49,6 +49,6 @@ export function useGetLocationFileState(): FileState | undefined {
   return getLocationFileState(location);
 }
 
-export function linkToUploadPhoto(fileName?: string) {
-  return `${linkToCategorise(fileName)}/upload`;
+export function linkToUploadPhotoDialog() {
+  return `${linkToCategorise()}/upload`;
 }

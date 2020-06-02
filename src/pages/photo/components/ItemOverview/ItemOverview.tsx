@@ -36,7 +36,13 @@ export default function ItemOverview({
   return (
     <div className={styles.wrapper} onClick={handleClick}>
       {quantity} {brand} {label}
-      <CloseIcon className={styles.cross} onClick={handleRemove} />
+      <CloseIcon
+        className={styles.cross}
+        onClick={(e) => {
+          e.stopPropagation();
+          handleRemove();
+        }}
+      />
     </div>
   );
 }
