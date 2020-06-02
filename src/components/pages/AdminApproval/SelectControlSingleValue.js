@@ -16,9 +16,9 @@ import MenuItem from "@material-ui/core/MenuItem";
 import CancelIcon from "@material-ui/icons/Cancel";
 import { emphasize } from "@material-ui/core/styles/colorManipulator";
 import _ from "lodash";
-import { getValueFromTree } from "../../../../utils";
+import { getValueFromTree } from "../../../utils";
 
-const styles = theme => ({
+const styles = (theme) => ({
   root: {
     display: "flex",
     flexDirection: "column",
@@ -216,7 +216,7 @@ class SelectControlSingleValue extends React.Component {
     options: []
   };
 
-  handleChange = name => value => {
+  handleChange = (name) => (value) => {
     this.setState({
       [name]: value
     });
@@ -231,7 +231,7 @@ class SelectControlSingleValue extends React.Component {
     this.props.handleChangeSelect(selectedValue);
   };
 
-  getItems = tree => {
+  getItems = (tree) => {
     let items = [];
 
     function getNodesInLowestHierarchy(tree) {
@@ -248,7 +248,7 @@ class SelectControlSingleValue extends React.Component {
     return items;
   };
 
-  initializeOptions = data => {
+  initializeOptions = (data) => {
     const unsortedOptions = Object.entries(data).map(([key, value]) => ({
       label: value.label,
       key: value.key
@@ -279,7 +279,7 @@ class SelectControlSingleValue extends React.Component {
     const { classes, theme, field } = this.props;
 
     const selectStyles = {
-      input: base => ({
+      input: (base) => ({
         ...base,
         color: theme.palette.text.primary,
         "& input": {
@@ -296,7 +296,7 @@ class SelectControlSingleValue extends React.Component {
             components={components}
             value={this.state.single}
             onChange={this.handleChange("single")}
-            getOptionValue={option => option["label"]}
+            getOptionValue={(option) => option["label"]}
             placeholder={field.placeholder}
             noOptionsMessage={() => field.noOptionsMessage}
             options={this.state.options}

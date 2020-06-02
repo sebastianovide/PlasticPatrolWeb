@@ -3,9 +3,9 @@ import { withStyles } from "@material-ui/core/styles";
 
 import _ from "lodash";
 
-import "../style.scss";
+import "./style.scss";
 
-const styles = theme => ({
+const styles = (theme) => ({
   pictureThumbnail: {
     maxWidth: 100,
     maxHeight: 100
@@ -18,7 +18,7 @@ class Fields extends Component {
     return a;
   }, {});
 
-  handleChangeComponent = field => (value, error) => {
+  handleChangeComponent = (field) => (value, error) => {
     this.fieldsValues[field.name].error = error;
     this.fieldsValues[field.name].value = value;
 

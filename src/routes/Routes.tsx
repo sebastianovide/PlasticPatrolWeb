@@ -9,10 +9,8 @@ import Groups from "components/Groups/GroupMain";
 import GroupList from "components/Groups/GroupList";
 import GroupAdd from "components/Groups/GroupAdd";
 import TutorialPage from "components/pages/TutorialPage";
-import PhotoPage from "components/pages/PhotoPage";
 import ProfilePage from "components/ProfilePage";
 import ModeratorPage from "components/ModeratorPage";
-import AboutPage from "components/AboutPage";
 import LeaderboardPage from "components/Leaderboard";
 import WriteFeedbackPage from "components/WriteFeedbackPage";
 
@@ -30,6 +28,9 @@ import { linkToPhotoPage } from "./photo/links";
 import UploadPhotoRoute from "./upload-success/Route";
 import { linkToUploadSuccess } from "./upload-success/links";
 
+import AboutPageRoute from "./about/Route";
+import { linkToAboutPage } from "./about/links";
+
 type Props = {
   user: User;
   usersLeaderboard: any;
@@ -37,17 +38,12 @@ type Props = {
   photosToModerate: Photo[];
   handleApproveClick: () => void;
   handleRejectClick: () => void;
-  file: any;
   gpsLocation: any;
   online: boolean;
-  srcType: any;
-  cordovaMetadata: any;
-  handleCameraClick: () => void;
   geojson: any;
   handlePhotoClick: () => void;
   selectedFeature: any;
   handlePhotoPageClose: () => void;
-  fields: any;
   totalNumberOfPieces: number;
   sponsorImage?: string;
 };
@@ -59,17 +55,12 @@ export function Routes({
   photosToModerate,
   handleApproveClick,
   handleRejectClick,
-  file,
   gpsLocation,
   online,
-  srcType,
-  cordovaMetadata,
-  handleCameraClick,
   geojson,
   handlePhotoClick,
   selectedFeature,
   handlePhotoPageClose,
-  fields,
   totalNumberOfPieces,
   sponsorImage
 }: Props) {
@@ -82,11 +73,11 @@ export function Routes({
           sponsorImage={sponsorImage}
         />
       </Route>
-      <Route path={config.PAGES.about.path}>
-        <AboutPage
-          label={config.PAGES.about.label}
+      <Route path={linkToAboutPage()}>
+        <AboutPageRoute
           handleClose={history.goBack}
           reloadPhotos={reloadPhotos}
+          sponsorImage={sponsorImage}
         />
       </Route>
 

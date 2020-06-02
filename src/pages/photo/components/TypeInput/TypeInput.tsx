@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 
 import Search from "@material-ui/icons/Search";
 import { makeStyles } from "@material-ui/core/styles";
@@ -52,9 +52,9 @@ type Props = {
   initialType?: Type;
 };
 
-export default function TypeInput(props: Props) {
+export default function TypeInput({ initialType, className, setType }: Props) {
   const styles = useStyles();
-  const [label, setLabel] = useState(props.initialType?.label || "");
+  const [label, setLabel] = useState(initialType?.label || "");
   const [focused, setFocused] = useState(false);
   const outsideClickRef = useOnOutsideClick(() => setFocused(false));
 
@@ -65,8 +65,17 @@ export default function TypeInput(props: Props) {
     setFocused(false);
   }, []);
 
+  const setTypeRef = useRef(setType);
+  const labelRef = useRef(label);
   useEffect(() => {
-    props.setType({ leafKey, label });
+    labelRef.current = label;
+  }, [label]);
+  useEffect(() => {
+    setTypeRef.current = setType;
+  }, [setType]);
+
+  useEffect(() => {
+    setTypeRef.current({ leafKey, label: labelRef.current });
   }, [leafKey]);
 
   const showMessage =
@@ -75,7 +84,7 @@ export default function TypeInput(props: Props) {
 
   return (
     //@ts-ignore
-    <div ref={outsideClickRef} className={props.className}>
+    <div ref={outsideClickRef} className={className}>
       <div className={styles.inputWrapper}>
         <Search />
         <input

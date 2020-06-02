@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 
 import _ from "lodash";
 
@@ -31,7 +31,7 @@ import Photo from "types/Photo";
 const tweetLogo = process.env.PUBLIC_URL + "/images/twitter.svg";
 const placeholderImage = process.env.PUBLIC_URL + "/custom/images/logo.svg";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   notchTop: {
     paddingTop: isIphoneWithNotchAndCordova()
       ? "env(safe-area-inset-top)"
@@ -123,7 +123,7 @@ export default function DisplayPhoto({
           <DialogContent>
             <div style={{ textAlign: "center" }}>
               <img
-                onError={e => {
+                onError={(e) => {
                   // @ts-ignore
                   e.target.src = placeholderImage;
                 }}
@@ -140,7 +140,7 @@ export default function DisplayPhoto({
                   <CardActionArea>
                     <CardContent>
                       {Object.keys(config.PHOTO_ZOOMED_FIELDS).map(
-                        fieldName => (
+                        (fieldName) => (
                           <Typography gutterBottom key={fieldName}>
                             <b>{_.capitalize(fieldName)}: </b>
                             {formatField(

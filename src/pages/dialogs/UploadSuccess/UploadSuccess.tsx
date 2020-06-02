@@ -72,7 +72,11 @@ export default function UploadSuccessDialog({
       </p>
 
       <p className={styles.sponsoredBy}>Sponsored by</p>
-      <img className={styles.sponsorImage} src={sponsorImage} />
+      <img
+        className={styles.sponsorImage}
+        src={sponsorImage}
+        alt="sponsor logo"
+      />
 
       <Button
         onClick={onClose}

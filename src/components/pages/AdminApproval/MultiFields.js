@@ -3,9 +3,9 @@ import SelectControlSingleValue from "./SelectControlSingleValue";
 import RemoveIcon from "@material-ui/icons/RemoveCircleOutline";
 import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
-import { getValueAndAncestorsFromTree } from "../../../../utils";
+import { getValueAndAncestorsFromTree } from "../../../utils";
 
-const styles = theme => ({});
+const styles = (theme) => ({});
 
 class MultiFields extends React.Component {
   state = {
@@ -25,7 +25,7 @@ class MultiFields extends React.Component {
     }
   };
 
-  handleClickAdd = e => {
+  handleClickAdd = (e) => {
     const fieldValues = [...this.state.fieldValues];
     fieldValues.push({
       ...JSON.parse(JSON.stringify(this.textFieldValueError)),
@@ -37,7 +37,7 @@ class MultiFields extends React.Component {
     });
   };
 
-  handleClickRemove = index => e => {
+  handleClickRemove = (index) => (e) => {
     const length = this.state.fieldValues.length;
     if (index === 0 && length === 1) {
       this.setState({
@@ -60,7 +60,7 @@ class MultiFields extends React.Component {
     }
   };
 
-  checkErrorAndPropagateResToParent = values => {
+  checkErrorAndPropagateResToParent = (values) => {
     let res = [];
     let textFieldErrors = false;
     Object.values(values).forEach((obj, index) => {
@@ -75,7 +75,7 @@ class MultiFields extends React.Component {
     this.props.handleChange(res, textFieldErrors);
   };
 
-  handleChangeSelect = index => (value, error) => {
+  handleChangeSelect = (index) => (value, error) => {
     const fieldValues = [...this.state.fieldValues];
     fieldValues[index].leafkey.value = value;
 
