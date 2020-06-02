@@ -13,7 +13,7 @@ export default function PhotoRoute() {
   const navigationHandler =
     location.pathname === linkToNewPhoto()
       ? { handleClose: () => history.push("/") }
-      : { handleBack: () => history.goBack() };
+      : { handleBack: () => history.goBack(), confirm: true };
 
   return (
     <PageWrapper
