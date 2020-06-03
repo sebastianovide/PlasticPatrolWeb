@@ -37,3 +37,9 @@ jobs:
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           PROJECT_ID: plastic-patrol-dev-722eb
+      - name: Notify releases on slack
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        uses: pullreminders/slack-action@master
+        with:
+          args: '{\"channel\":\"C014L0X2R38\",\"text\":\"A new dev version of the app has been released 🚀 https://plastic-patrol-dev-722eb.web.app/#/ \"}'
