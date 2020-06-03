@@ -1,18 +1,13 @@
 name: Deploy to dev
 
-on: [pull_request]
+  push:
+    branches:
+      - "master"
 
 jobs:
-  branch-deploy:
+  deploy-dev:
     runs-on: ubuntu-latest
     steps:
-      - name: Extract branch name
-        shell: bash
-        run: echo "::set-env name=BRANCH_NAME::$(echo ${GITHUB_HEAD_REF#refs/heads/})" # Only works on pull_request trigger
-
-      - name: "Test"
-        run: echo ${{ env.BRANCH_NAME }}
-
       - uses: actions/checkout@v1
         with:
           fetch-depth: 1
@@ -34,7 +29,7 @@ jobs:
         run: yarn
 
       - name: Build
-        run: yarn build
+        run: NODE_ENV=development yarn build
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
         with:
