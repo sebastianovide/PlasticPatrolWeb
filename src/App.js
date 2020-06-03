@@ -5,7 +5,6 @@ import * as localforage from "localforage";
 import _ from "lodash";
 
 import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
 import Snackbar from "@material-ui/core/Snackbar";
 import { withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
@@ -14,7 +13,6 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
-import CloseIcon from "@material-ui/icons/Close";
 
 import { Routes } from "routes/Routes";
 
