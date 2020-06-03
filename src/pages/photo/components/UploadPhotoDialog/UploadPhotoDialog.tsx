@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -23,14 +23,12 @@ export default function UploadPhotoDialog({
   online,
   items,
   onCancelUpload
-}: //   onSuccess
-Props) {
+}: Props) {
   const {
     cancelUpload,
     errorMessage,
     closeErrorDialog,
-    sendingProgress,
-    sendFile
+    sendingProgress
   } = useSendFile({
     imgSrc,
     online,
@@ -39,9 +37,6 @@ Props) {
     onCancelUpload
   });
 
-  useEffect(() => {
-    (async () => await sendFile())();
-  }, []);
   return (
     <>
       <Dialog

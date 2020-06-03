@@ -18,8 +18,8 @@ import User from "types/User";
 import Page from "types/Page";
 import Stats from "types/Stats";
 
-import TitleTextField from "components/pages/PhotoPage/AdminApproval/TitleTextField";
-import MultiFields from "components/pages/PhotoPage/AdminApproval/MultiFields";
+import TitleTextField from "components/pages/AdminApproval/TitleTextField";
+import MultiFields from "components/pages/AdminApproval/MultiFields";
 
 import data from "./categories.json";
 

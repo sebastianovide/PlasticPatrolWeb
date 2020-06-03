@@ -24,7 +24,11 @@ const seeItSnapItSlideProps = {
 };
 
 const carouselStyle = {
-  wrapper: { height: "100vh", display: "flex" }
+  wrapper: {
+    maxHeight: "100vh",
+    display: "flex",
+    minHeight: "-webkit-fill-available"
+  }
 };
 
 // TODO: in a separate PR clean up duplicate logic betweedn here and the tutorial
@@ -34,12 +38,12 @@ const WelcomePage = ({ handleClose }) => {
   const reactSwipeEl = useRef();
   const [navDotActiveIndex, setNavDotActiveIndex] = useState(0);
 
-  const handleNavdotClick = index => {
+  const handleNavdotClick = (index) => {
     setNavDotActiveIndex(index);
     reactSwipeEl.current && reactSwipeEl.current.slide(index);
   };
 
-  const onSwipe = index => {
+  const onSwipe = (index) => {
     setNavDotActiveIndex(index);
   };
 
@@ -47,7 +51,7 @@ const WelcomePage = ({ handleClose }) => {
     <div className="WelcomePage__container">
       <ReactSwipe
         style={{ ...carouselStyle }}
-        ref={el => (reactSwipeEl.current = el)}
+        ref={(el) => (reactSwipeEl.current = el)}
         swipeOptions={{
           startSlide: navDotActiveIndex,
           callback: onSwipe,

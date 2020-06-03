@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Route, useHistory, useParams } from "react-router";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -22,6 +22,7 @@ import loadPhoto from "./utils";
 import UploadPhotoDialog from "pages/photo/components/UploadPhotoDialog";
 import { linkToNewPhoto } from "routes/photo/routes/new/links";
 import { useGPSLocation } from "LocationProvider";
+import useEffectOnMount from "hooks/useEffectOnMount";
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -56,9 +57,11 @@ export default function CategoriseLitterPage() {
   const gpsLocation = useGPSLocation();
 
   const [photo, setPhoto] = useState<ImageMetadata | undefined>();
-  useEffect(() => {
-    if (fileState) {
-      var fileOrFilePath, cordovaMetadata, srcType;
+  useEffectOnMount(() => {
+    if (fileState === undefined) {
+      history.push(linkToNewPhoto());
+    } else {
+      var fileOrFilePath, cordovaMetadata;
       if (isCordovaFileState(fileState)) {
         fileOrFilePath = fileState.filePath;
         cordovaMetadata = fileState.cordovaMetadata;
@@ -76,7 +79,7 @@ export default function CategoriseLitterPage() {
         }
       });
     }
-  }, []);
+  });
 
   return (
     <CategoriseLitterPageWithFileInfo
@@ -139,6 +142,7 @@ export function CategoriseLitterPageWithFileInfo({
           src={photo && photo.imgSrc}
           className={styles.img}
           onClick={() => setAddingNewItem(true)}
+          alt=""
         ></img>
         {addingNewItem ? (
           <AddNewItem

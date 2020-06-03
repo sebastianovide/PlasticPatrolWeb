@@ -19,13 +19,11 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center"
   },
   button: {
-    width: "80%"
+    width: "80%",
+    minHeight: "min-content"
   },
   sponsoredBy: {
-    display: "flex",
-    flexDirection: "column",
     width: "100%",
-
     fontSize: "0.7rem",
     margin: 0,
     marginBottom: theme.spacing(0.5)
@@ -72,7 +70,11 @@ export default function UploadSuccessDialog({
       </p>
 
       <p className={styles.sponsoredBy}>Sponsored by</p>
-      <img className={styles.sponsorImage} src={sponsorImage} />
+      <img
+        className={styles.sponsorImage}
+        src={sponsorImage}
+        alt="sponsor logo"
+      />
 
       <Button
         onClick={onClose}

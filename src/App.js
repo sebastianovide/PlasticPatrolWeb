@@ -4,7 +4,6 @@ import { withRouter } from "react-router-dom";
 import * as localforage from "localforage";
 import _ from "lodash";
 
-import RootRef from "@material-ui/core/RootRef";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import Snackbar from "@material-ui/core/Snackbar";
@@ -23,13 +22,10 @@ import { dbFirebase, authFirebase } from "features/firebase";
 
 import WelcomePage from "./components/pages/WelcomePage";
 import Map from "./components/MapPage/Map";
-import CustomPhotoDialog from "./components/CustomPhotoDialog";
 import LoginFirebase from "./components/LoginFirebase";
 import DrawerContainer from "./components/DrawerContainer";
 import TermsDialog from "./components/TermsDialog";
 import EmailVerifiedDialog from "./components/EmailVerifiedDialog";
-
-import getIsMapVisible from "utils/getMapIsVisible";
 
 import { gtagPageView, gtagEvent } from "./gtag.js";
 import "./App.scss";
@@ -54,7 +50,6 @@ class App extends Component {
     super(props);
 
     this.state = {
-      file: null,
       location: new MapLocation(), // from GPS
       user: null,
       online: false,
@@ -65,8 +60,6 @@ class App extends Component {
       termsAccepted: !!localStorage.getItem("termsAccepted"),
       geojson: null,
       stats: undefined,
-      srcType: null,
-      cordovaMetadata: {},
       dialogOpen: false,
       confirmDialogOpen: false,
       usersLeaderboard: [],
@@ -75,6 +68,7 @@ class App extends Component {
       photoAccessedByUrl: false,
       photosToModerate: {},
       mapLocation: new MapLocation(), // from the map
+      // comes from config
       sponsorImage: undefined
     };
 
@@ -82,14 +76,6 @@ class App extends Component {
     this.domRefInput = {};
     this.featuresDict = {};
   }
-
-  openPhotoPage = (file) => {
-    this.setState({
-      file
-    });
-
-    this.props.history.push(this.props.config.PAGES.photos.path);
-  };
 
   setLocationWatcher() {
     if (navigator && navigator.geolocation) {
@@ -393,44 +379,6 @@ class App extends Component {
     }
   };
 
-  openFile = (e) => {
-    if (e.target.files[0]) {
-      this.openPhotoPage(e.target.files[0]);
-    }
-  };
-
-  handlePhotoDialogClose = (dialogSelectedValue) => {
-    this.setState({ openPhotoDialog: false });
-    if (dialogSelectedValue) {
-      const Camera = navigator.camera;
-      const srcType =
-        dialogSelectedValue === "CAMERA"
-          ? Camera.PictureSourceType.CAMERA
-          : Camera.PictureSourceType.PHOTOLIBRARY;
-
-      this.setState({
-        srcType: dialogSelectedValue === "CAMERA" ? "camera" : "filesystem"
-      });
-      Camera.getPicture(
-        (imageUri) => {
-          const file = JSON.parse(imageUri);
-          const cordovaMetadata = JSON.parse(file.json_metadata);
-          this.setState({ cordovaMetadata });
-          this.openPhotoPage(file.filename);
-        },
-        (message) => {
-          console.log("Failed because: ", message);
-        },
-        {
-          quality: 50,
-          destinationType: Camera.DestinationType.FILE_URI,
-          sourceType: srcType,
-          correctOrientation: true
-        }
-      );
-    }
-  };
-
   handleWelcomePageClose = () => {
     this.setState({ welcomeShown: true });
     localStorage.setItem("welcomeShown", true);
@@ -632,7 +580,7 @@ class App extends Component {
   };
 
   render() {
-    const { classes, fields, config } = this.props;
+    const { classes, config } = this.props;
     return (
       <div className="geovation-app">
         {!this.state.termsAccepted &&
@@ -680,15 +628,10 @@ class App extends Component {
           />
           <Routes
             user={this.state.user}
-            fields={fields}
             usersLeaderboard={this.state.usersLeaderboard}
-            file={this.state.file}
             gpsLocation={this.state.location}
             online={this.state.online}
-            srcType={this.state.srcType}
-            cordovaMetadata={this.state.cordovaMetadata}
             geojson={this.state.geojson}
-            handleCameraClick={this.handleCameraClick}
             reloadPhotos={this.reloadPhotos}
             // just need the list of photos, don't need the object keyed on the id
             photosToModerate={_.map(this.state.photosToModerate, (x) => x)}
@@ -707,24 +650,6 @@ class App extends Component {
           open={this.state.welcomeShown && !this.state.online}
           message="Connecting to our servers..."
         />
-
-        {window.cordova ? (
-          <CustomPhotoDialog
-            open={this.state.openPhotoDialog}
-            onClose={this.handlePhotoDialogClose}
-          />
-        ) : (
-          <RootRef rootRef={this.domRefInput}>
-            <input
-              className="hidden"
-              type="file"
-              accept="image/*"
-              id={"fileInput"}
-              onChange={this.openFile}
-              onClick={(e) => (e.target.value = null)}
-            />
-          </RootRef>
-        )}
 
         <LoginFirebase
           open={this.state.loginLogoutDialogOpen && !this.state.user}
