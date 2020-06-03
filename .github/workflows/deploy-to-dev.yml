@@ -17,7 +17,7 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Use Node.js 8
+      - name: Use Node.js 10
         uses: actions/setup-node@v1
         with:
           node-version: 10.x
@@ -33,5 +33,12 @@ jobs:
         if: steps.cache-modules.outputs.cache-hit != 'true'
         run: yarn
 
-      - name: Deploy to dev
-        run: yarn firebase use dev
+      - name: Build
+        run: yarn build
+      - name: Deploy to Firebase
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only hosting
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          PROJECT_ID: plastic-patrol-dev-722eb
