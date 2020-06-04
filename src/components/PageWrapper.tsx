@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect } from "react";
+import React, { FunctionComponent, useEffect, useState } from "react";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import AppBar from "@material-ui/core/AppBar";
@@ -10,6 +10,12 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 import standardStyles from "standard.scss";
 
 import { isIphoneWithNotchAndCordova, isIphoneAndCordova } from "../utils";
+import {
+  Dialog,
+  DialogContent,
+  DialogContentText,
+  DialogActions
+} from "@material-ui/core";
 
 const placeholderImage = process.env.PUBLIC_URL + "/custom/images/banner.svg";
 
@@ -75,7 +81,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 type CloseNavigationHandler = { handleClose: () => void };
-type BackNavigationHandler = { handleBack: () => void };
+type BackNavigationHandler = { handleBack: () => void; confirm?: boolean };
 
 type NavigationHandler = CloseNavigationHandler | BackNavigationHandler;
 
@@ -177,6 +183,51 @@ function isCloseNavigationHandler(
   }
 }
 
+interface ConfirmBackProps {
+  open: boolean;
+  handleConfirm: () => void;
+  handleCancel: () => void;
+}
+
+const ConfirmBack = ({
+  open,
+  handleConfirm,
+  handleCancel
+}: ConfirmBackProps) => {
+  return (
+    <Dialog
+      open={open}
+      onClose={() => handleCancel()}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+    >
+      <DialogContent>
+        <DialogContentText id="alert-dialog-description">
+          Are you sure you want to go back? Your progress might be lost
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button
+          onClick={(e) => {
+            handleCancel();
+          }}
+          color="primary"
+        >
+          Cancel
+        </Button>
+        <Button
+          onClick={(e) => {
+            handleConfirm();
+          }}
+          color="primary"
+        >
+          Go back
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
+
 const PageWrapper: FunctionComponent<Props> = ({
   children,
   label,
@@ -184,6 +235,7 @@ const PageWrapper: FunctionComponent<Props> = ({
   navigationHandler
 }) => {
   const classes = useStyles();
+  const [confirmBack, setConfirmBack] = useState(false);
   useStatusBarHighlighting();
 
   var navIcon;
@@ -193,8 +245,19 @@ const PageWrapper: FunctionComponent<Props> = ({
       <CloseIcon className={classes.iconButton} onClick={handleClose} />
     );
   } else {
-    const { handleBack } = navigationHandler;
-    navIcon = <BackIcon className={classes.iconButton} onClick={handleBack} />;
+    const { handleBack, confirm } = navigationHandler;
+    navIcon = (
+      <BackIcon
+        className={classes.iconButton}
+        onClick={() => {
+          if (confirm) {
+            setConfirmBack(true);
+          } else {
+            handleBack();
+          }
+        }}
+      />
+    );
   }
   return (
     <div className={classes.container}>
@@ -215,6 +278,15 @@ const PageWrapper: FunctionComponent<Props> = ({
       )}
       <div className={classes.main}>{children}</div>
       <div className={classes.notchBottom} />
+      <ConfirmBack
+        open={confirmBack}
+        handleCancel={() => setConfirmBack(false)}
+        handleConfirm={() => {
+          setConfirmBack(false);
+          // @ts-ignore
+          navigationHandler.handleBack();
+        }}
+      />
     </div>
   );
 };

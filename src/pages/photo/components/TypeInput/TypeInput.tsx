@@ -90,6 +90,7 @@ export default function TypeInput({ initialType, className, setType }: Props) {
         <input
           placeholder="    Search for litter ..."
           className={styles.input}
+          style={{ boxSizing: "border-box", width: "100%" }}
           value={label}
           onChange={(e) => setLabel(e.target.value)}
           onFocus={() => setFocused(true)}

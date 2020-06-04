@@ -16,6 +16,7 @@ type HookArgs = {
   imgLocation: any;
   items: Item[];
   onSuccess?: (n: number) => void;
+  onCancelUpload: () => void;
 };
 
 type Args = {
@@ -60,7 +61,8 @@ async function sendFile({
   items,
   history,
   setSendingProgress,
-  setUploadTask
+  setUploadTask,
+  onCancelUpload
 }: Args) {
   if (!online) {
     throw new Error(
@@ -125,13 +127,17 @@ async function sendFile({
       }
     },
     (error) => {
-      // debugger
-      console.error(error);
-      const extraInfo =
-        error.message === "storage/canceled"
-          ? ""
-          : `Try again (${error.message})`;
-      throw Error(`Photo upload was canceled. ${extraInfo}`);
+      // @ts-ignore
+      if (error.code === "storage/canceled") {
+        onCancelUpload();
+      } else {
+        console.log(error);
+        const extraInfo =
+          error.message === "storage/canceled"
+            ? ""
+            : `Try again (${error.message})`;
+        throw Error(`Photo upload was canceled. ${extraInfo}`);
+      }
     },
     () => {
       history.push(linkToUploadSuccess(totalCount as any));

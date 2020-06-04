@@ -6,4 +6,9 @@ import TypeInput from "./TypeInput";
 
 export default { title: "TypeInput", component: TypeInput };
 
-export const defaultSelector = () => <TypeInput />;
+const props = {
+  setType: () => {},
+  className: ""
+};
+
+export const defaultSelector = () => <TypeInput {...props} />;

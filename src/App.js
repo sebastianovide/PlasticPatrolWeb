@@ -5,7 +5,6 @@ import * as localforage from "localforage";
 import _ from "lodash";
 
 import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
 import Snackbar from "@material-ui/core/Snackbar";
 import { withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
@@ -14,7 +13,6 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
-import CloseIcon from "@material-ui/icons/Close";
 
 import { Routes } from "routes/Routes";
 
@@ -34,6 +32,10 @@ import { linkToNewPhoto } from "routes/photo/routes/new/links";
 import getMapIsVisible from "utils/getMapIsVisible";
 
 const styles = (theme) => ({
+  rootDialog: {
+    padding: theme.spacing(2),
+    margin: 0
+  },
   dialogClose: {
     position: "absolute",
     top: theme.spacing(1),
@@ -559,7 +561,7 @@ class App extends Component {
         : pathname;
 
     // if it is in map, change the url
-    if (getMapIsVisible(this.props.history.location.pathname.match)) {
+    if (getMapIsVisible(this.props.history.location.pathname)) {
       this.props.history.replace(`${currentPath.split("@")[0]}@${coordsUrl}`);
     }
 
@@ -663,15 +665,8 @@ class App extends Component {
         />
 
         <Dialog open={this.state.dialogOpen} onClose={this.handleDialogClose}>
-          <DialogTitle disableTypography>
+          <DialogTitle disableTypography className={classes.rootDialog}>
             <Typography variant="h6">{this.state.dialogTitle}</Typography>
-            <IconButton
-              className={classes.dialogClose}
-              aria-label="close"
-              onClick={this.handleDialogClose}
-            >
-              <CloseIcon />
-            </IconButton>
           </DialogTitle>
           <DialogContent>
             <DialogContentText>
@@ -680,7 +675,9 @@ class App extends Component {
           </DialogContent>
 
           <DialogActions>
-            {/* clicking ok should either open a login box or there should be a text field in the box to enter your email address */}
+            <Button onClick={this.handleDialogClose} color="primary">
+              Cancel
+            </Button>
             <Button onClick={this.handleLoginPhotoAdd} color="primary">
               Login
             </Button>
