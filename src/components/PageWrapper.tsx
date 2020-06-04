@@ -1,4 +1,6 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
+import classNames from "classnames";
+
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import AppBar from "@material-ui/core/AppBar";
@@ -89,6 +91,7 @@ interface Props {
   label: string;
   hasLogo?: boolean;
   navigationHandler: NavigationHandler;
+  className?: string;
 }
 
 interface PhotoPageProps {
@@ -232,7 +235,8 @@ const PageWrapper: FunctionComponent<Props> = ({
   children,
   label,
   hasLogo,
-  navigationHandler
+  navigationHandler,
+  className
 }) => {
   const classes = useStyles();
   const [confirmBack, setConfirmBack] = useState(false);
@@ -259,6 +263,7 @@ const PageWrapper: FunctionComponent<Props> = ({
       />
     );
   }
+  console.log(className);
   return (
     <div className={classes.container}>
       <AppBar position="static" className={classes.notchTop}>
@@ -276,7 +281,7 @@ const PageWrapper: FunctionComponent<Props> = ({
           alt={"Geovation"}
         />
       )}
-      <div className={classes.main}>{children}</div>
+      <div className={classNames(classes.main, className)}>{children}</div>
       <div className={classes.notchBottom} />
       <ConfirmBack
         open={confirmBack}

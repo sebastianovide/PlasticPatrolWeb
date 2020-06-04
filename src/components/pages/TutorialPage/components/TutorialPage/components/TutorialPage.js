@@ -5,13 +5,30 @@ import PageWrapper from "components/PageWrapper";
 import NavDots from "components/common/NavDots";
 import TutorialItem from "../../TutorialItem";
 import { tutorialSteps } from "../static";
-import "./TutorialPage.scss";
+import { makeStyles } from "@material-ui/core";
 
-const swipeConfig = { continuous: false, widthOfSiblingSlidePreview: 15 };
+const swipeConfig = {
+  continuous: false,
+  widthOfSiblingSlidePreview: 15
+};
 
-const TutorialPage = ({ handleClose, label }) => {
+const useStyles = makeStyles(() => ({
+  wrapper: {
+    justifyContent: "space-around"
+  },
+  carousel: {
+    minHeight: "80vh",
+    overflow: "visible"
+  },
+  carouselItem: {
+    height: "78vh"
+  }
+}));
+
+export default function TutorialPage({ handleClose, label }) {
   const reactSwipeEl = useRef();
   const [navDotActiveIndex, setNavDotActiveIndex] = useState(0);
+  const styles = useStyles();
 
   const handleNavdotClick = (index) => {
     setNavDotActiveIndex(index);
@@ -23,7 +40,11 @@ const TutorialPage = ({ handleClose, label }) => {
   };
 
   return (
-    <PageWrapper label={label} navigationHandler={{ handleClose }} hasLogo>
+    <PageWrapper
+      label={label}
+      navigationHandler={{ handleClose }}
+      className={styles.wrapper}
+    >
       <ReactSwipe
         swipeOptions={{
           ...swipeConfig,
@@ -31,24 +52,36 @@ const TutorialPage = ({ handleClose, label }) => {
           startSlide: navDotActiveIndex
         }}
         ref={(el) => (reactSwipeEl.current = el)}
+        className={styles.carousel}
+        style={{
+          wrapper: {
+            overflow: "visible",
+            position: "relative"
+          },
+          container: {
+            overflow: "hidden visible",
+            visibility: "hidden",
+            position: "relative"
+          },
+          child: {
+            float: "left",
+            width: "100%",
+            position: "relative",
+            transitionProperty: "transform"
+          }
+        }}
       >
-        {Object.values(tutorialSteps).map((value, index) => (
-          <div key={index}>
-            <TutorialItem
-              stepNumber={index + 1}
-              text={value.text}
-              photo={value.photo}
-            />
+        {tutorialSteps.map((value, index) => (
+          <div key={index} className={styles.carouselItem}>
+            <TutorialItem stepNumber={index + 1} {...value} />
           </div>
         ))}
       </ReactSwipe>
       <NavDots
-        numberOfDots={Object.values(tutorialSteps).length}
+        numberOfDots={tutorialSteps.length}
         onClick={handleNavdotClick}
         activeIndex={navDotActiveIndex}
       />
     </PageWrapper>
   );
-};
-
-export default React.memo(TutorialPage);
+}
