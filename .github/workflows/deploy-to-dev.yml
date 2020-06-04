@@ -1,0 +1,45 @@
+name: Deploy to dev
+
+  push:
+    branches:
+      - "master"
+
+jobs:
+  deploy-dev:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+
+      - name: Use Node.js 10
+        uses: actions/setup-node@v1
+        with:
+          node-version: 10.x
+
+      - name: Cache node_modules
+        id: cache-modules
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{ runner.OS }}-node_modules-${{ hashFiles('yarn.lock') }}
+
+      - name: yarn
+        if: steps.cache-modules.outputs.cache-hit != 'true'
+        run: yarn
+
+      - name: Build
+        run: NODE_ENV=development yarn build
+      - name: Deploy to Firebase
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only hosting
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          PROJECT_ID: plastic-patrol-dev-722eb
+      - name: Notify releases on slack
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        uses: pullreminders/slack-action@master
+        with:
+          args: '{\"channel\":\"C014L0X2R38\",\"text\":\"A new dev version of the app has been released 🚀 https://plastic-patrol-dev-722eb.web.app/#/ \"}'
