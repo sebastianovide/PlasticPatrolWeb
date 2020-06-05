@@ -1,15 +1,19 @@
+import _ from "lodash";
 import categories from "custom/categories.json";
 
 type Category = { key: string; label: string };
 type CategoriesArr = Array<Category>;
 
-const categoriesArr: CategoriesArr = Object.keys(categories).map((key) => {
-  return {
-    key,
-    //@ts-ignore
-    label: categories[key].label
-  };
-});
+export const categoriesArr: CategoriesArr = _.sortBy(
+  Object.keys(categories).map((key) => {
+    return {
+      key,
+      //@ts-ignore
+      label: categories[key].label
+    };
+  }),
+  ({ label }) => label
+);
 
 export function getSuggestions(input: string) {
   return categoriesArr.filter(filterCat(input));

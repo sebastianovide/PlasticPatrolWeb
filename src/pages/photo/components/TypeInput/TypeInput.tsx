@@ -1,14 +1,23 @@
 import React, { useState, useCallback, useEffect, useRef } from "react";
 
 import Search from "@material-ui/icons/Search";
+import VisibilityIcon from "@material-ui/icons/Visibility";
 import { makeStyles } from "@material-ui/core/styles";
 
 import useOnOutsideClick from "hooks/useOnOutsideClick";
 
 import { Type } from "../../types";
-import { getSuggestions, getLeafKey } from "./utils";
+import { getSuggestions, getLeafKey, categoriesArr } from "./utils";
 
 import styles from "standard.scss";
+import {
+  IconButton,
+  Dialog,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Button
+} from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   inputWrapper: {
@@ -18,7 +27,16 @@ const useStyles = makeStyles((theme) => ({
     background: styles.lightGrey,
     padding: `${theme.spacing(0.5)}px ${theme.spacing(1)}px`,
     border: `${styles.mediumGrey} solid 1px`,
-    marginBottom: theme.spacing(1)
+    marginBottom: theme.spacing(1),
+    boxSizing: "border-box"
+  },
+  viewListIcon: {
+    opacity: "50%",
+    cursor: "pointer",
+    "&:hover": {
+      opacity: "100%"
+    },
+    height: "24px"
   },
   input: {
     border: "none",
@@ -43,11 +61,32 @@ const useStyles = makeStyles((theme) => ({
   },
   suggestionWrapper: {
     display: "flex",
-    flexWrap: "wrap"
+    flexWrap: "wrap",
+    width: "200%"
   },
   customTypeWarning: {
     opacity: 0.5,
     marginBottom: theme.spacing(1)
+  },
+  suggestionList: {
+    listStyleType: "none",
+    paddingLeft: "0px",
+    marginTop: "0px",
+    marginBottom: "0px"
+  },
+  suggestionListItem: {
+    padding: "6px",
+    marginLeft: "0",
+    cursor: "pointer",
+    "&:hover": {
+      backgroundColor: "rgba(0,0,0,.05)"
+    },
+    "&:first-child": {
+      paddingTop: "0px"
+    },
+    "&:last-child": {
+      paddingBottom: "0px"
+    }
   }
 }));
 
@@ -61,12 +100,14 @@ export default function TypeInput({ initialType, className, setType }: Props) {
   const styles = useStyles();
   const [label, setLabel] = useState(initialType?.label || "");
   const [focused, setFocused] = useState(false);
+  const [showSuggestionList, setShowSuggestionList] = useState(true);
   const outsideClickRef = useOnOutsideClick(() => setFocused(false));
 
   const suggestions = getSuggestions(label);
   const leafKey = getLeafKey(label);
   const onSuggestionClick = useCallback((suggestion: string) => {
     setLabel(suggestion);
+    setShowSuggestionList(false);
     setFocused(false);
   }, []);
 
@@ -81,7 +122,7 @@ export default function TypeInput({ initialType, className, setType }: Props) {
 
   useEffect(() => {
     setTypeRef.current({ leafKey, label: labelRef.current });
-  }, [leafKey]);
+  }, [leafKey, label]);
 
   const showMessage =
     (!focused && !leafKey) ||
@@ -100,6 +141,14 @@ export default function TypeInput({ initialType, className, setType }: Props) {
           onChange={(e) => setLabel(e.target.value)}
           onFocus={() => setFocused(true)}
         />
+        {showMessage && (
+          <div
+            className={styles.viewListIcon}
+            onClick={() => setShowSuggestionList(true)}
+          >
+            <VisibilityIcon />
+          </div>
+        )}
       </div>
       <div className={styles.suggestionWrapper}>
         {focused &&
@@ -119,6 +168,35 @@ export default function TypeInput({ initialType, className, setType }: Props) {
           </div>
         )}
       </div>
+      <Dialog
+        open={showSuggestionList}
+        onClose={() => {}}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent>
+          <ul className={styles.suggestionList}>
+            {categoriesArr.map(({ label }) => (
+              <li
+                onClick={() => onSuggestionClick(label)}
+                className={styles.suggestionListItem}
+              >
+                {label}
+              </li>
+            ))}
+          </ul>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={(e) => {
+              setShowSuggestionList(false);
+            }}
+            color="primary"
+          >
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }
