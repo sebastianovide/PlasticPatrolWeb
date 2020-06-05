@@ -13,6 +13,7 @@ import styles from "standard.scss";
 const useStyles = makeStyles((theme) => ({
   inputWrapper: {
     display: "flex",
+    width: "200%",
     alignItems: "center",
     background: styles.lightGrey,
     padding: `${theme.spacing(0.5)}px ${theme.spacing(1)}px`,
@@ -43,6 +44,10 @@ const useStyles = makeStyles((theme) => ({
   suggestionWrapper: {
     display: "flex",
     flexWrap: "wrap"
+  },
+  customTypeWarning: {
+    opacity: 0.5,
+    marginBottom: theme.spacing(1)
   }
 }));
 
@@ -88,7 +93,7 @@ export default function TypeInput({ initialType, className, setType }: Props) {
       <div className={styles.inputWrapper}>
         <Search />
         <input
-          placeholder="    Search for litter ..."
+          placeholder="Search for litter ..."
           className={styles.input}
           style={{ boxSizing: "border-box", width: "100%" }}
           value={label}
@@ -107,7 +112,12 @@ export default function TypeInput({ initialType, className, setType }: Props) {
               onClick={onSuggestionClick}
             />
           ))}
-        {showMessage && "Sorry, we don't this have this type in our database"}
+        {showMessage && (
+          <div className={styles.customTypeWarning}>
+            This is not an existing item in our database, it will be approved
+            after you submit your collection
+          </div>
+        )}
       </div>
     </div>
   );
