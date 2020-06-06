@@ -14,8 +14,6 @@ import ModeratorPage from "components/ModeratorPage";
 import LeaderboardPage from "components/Leaderboard";
 import WriteFeedbackPage from "components/WriteFeedbackPage";
 
-import FeedbackReportsSubrouter from "components/FeedbackReports/FeedbackReportsSubrouter";
-
 import DisplayPhoto from "components/MapPage/DisplayPhoto";
 import Photo from "types/Photo";
 
@@ -30,6 +28,9 @@ import { linkToUploadSuccess } from "./upload-success/links";
 
 import AboutPageRoute from "./about/Route";
 import { linkToAboutPage } from "./about/links";
+
+import FeedbackRoute from "./feedback-reports/Route";
+import { linkToFeedbackReports } from "./feedback-reports/links";
 
 type Props = {
   user: User;
@@ -145,13 +146,8 @@ export function Routes({
         />
       </ModeratorRoute>
 
-      <ModeratorRoute path={config.PAGES.feedbackReports.path} user={user}>
-        <FeedbackReportsSubrouter
-          config={config}
-          label={config.PAGES.feedbackReports.label}
-          user={user}
-          handleClose={history.goBack}
-        />
+      <ModeratorRoute path={linkToFeedbackReports()} user={user}>
+        <FeedbackRoute user={user} />
       </ModeratorRoute>
 
       <Route path={linkToPhotoPage()}>
