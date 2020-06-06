@@ -263,7 +263,7 @@ const PageWrapper: FunctionComponent<Props> = ({
       />
     );
   }
-  console.log(className);
+
   return (
     <div className={classes.container}>
       <AppBar position="static" className={classes.notchTop}>

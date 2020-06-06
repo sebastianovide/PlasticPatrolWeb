@@ -12,18 +12,22 @@ const swipeConfig = {
   widthOfSiblingSlidePreview: 15
 };
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   wrapper: {
     justifyContent: "space-around"
   },
   carousel: {
-    minHeight: "80vh",
+    height: "max-content",
     overflow: "visible"
   },
   carouselItem: {
-    height: "78vh"
+    height: "78vh",
+    maxHeight: 425,
+    margin: `${theme.spacing(0.5)}px 0 ${theme.spacing(1)}px`
   }
 }));
+
+const SHOW_LOGO = window.innerHeight > 600;
 
 export default function TutorialPage({ handleClose, label }) {
   const reactSwipeEl = useRef();
@@ -44,6 +48,7 @@ export default function TutorialPage({ handleClose, label }) {
       label={label}
       navigationHandler={{ handleClose }}
       className={styles.wrapper}
+      hasLogo={SHOW_LOGO}
     >
       <ReactSwipe
         swipeOptions={{

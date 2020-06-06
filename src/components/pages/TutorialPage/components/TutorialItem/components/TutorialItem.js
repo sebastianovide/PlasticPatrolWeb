@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "space-around"
   },
   icon: { fontSize: "3rem" },
-  image: { maxWidth: "80%", height: "auto" }
+  image: { maxWidth: "80%", height: "auto", maxHeight: 200 }
 }));
 
 const TutorialItem = ({ stepNumber, Icon, text, title, img, Button }) => {
