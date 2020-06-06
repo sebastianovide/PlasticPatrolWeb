@@ -60,8 +60,9 @@ const styles = (theme: Theme) =>
     noClick: {
       cursor: "initial"
     },
-    shiftRight: {
-      marginLeft: "0.3rem"
+    rank: {
+      padding: 0,
+      justifyContent: "center"
     },
     header: {
       fontWeight: "bold",
@@ -127,7 +128,7 @@ class MuiVirtualizedTable extends React.PureComponent<
         className={clsx(classes.tableCell, classes.flexContainer, {
           [classes.noClick]: onRowClick == null,
           [classes.highlightRow]: rank === 1 || uid === this.props.userId,
-          [classes.shiftRight]: dataKey === "rank" && rank !== 1
+          [classes.rank]: dataKey === "rank"
         })}
         variant="body"
         style={{ height: rowHeight }}
