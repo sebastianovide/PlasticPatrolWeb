@@ -3,6 +3,8 @@ import ReactSwipe from "react-swipe";
 
 import PageWrapper from "components/PageWrapper";
 import NavDots from "components/common/NavDots";
+import Logo from "components/common/Logo";
+
 import TutorialItem from "../../TutorialItem";
 import { tutorialSteps } from "../static";
 import { makeStyles } from "@material-ui/core";
@@ -48,8 +50,8 @@ export default function TutorialPage({ handleClose, label }) {
       label={label}
       navigationHandler={{ handleClose }}
       className={styles.wrapper}
-      hasLogo={SHOW_LOGO}
     >
+      {SHOW_LOGO && <Logo />}
       <ReactSwipe
         swipeOptions={{
           ...swipeConfig,

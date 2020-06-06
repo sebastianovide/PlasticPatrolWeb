@@ -19,8 +19,6 @@ import {
   DialogActions
 } from "@material-ui/core";
 
-const placeholderImage = process.env.PUBLIC_URL + "/custom/images/banner.svg";
-
 declare global {
   interface Window {
     StatusBar: {
@@ -70,10 +68,7 @@ const useStyles = makeStyles((theme) => ({
       ? "env(safe-area-inset-bottom)"
       : "0px"
   },
-  logo: {
-    height: "80px",
-    margin: theme.spacing(2)
-  },
+
   button: {
     color: theme.palette.primary.contrastText
   },
@@ -89,7 +84,6 @@ type NavigationHandler = CloseNavigationHandler | BackNavigationHandler;
 
 interface Props {
   label: string;
-  hasLogo?: boolean;
   navigationHandler: NavigationHandler;
   className?: string;
 }
@@ -234,7 +228,6 @@ const ConfirmBack = ({
 const PageWrapper: FunctionComponent<Props> = ({
   children,
   label,
-  hasLogo,
   navigationHandler,
   className
 }) => {
@@ -274,13 +267,6 @@ const PageWrapper: FunctionComponent<Props> = ({
           </Typography>
         </Toolbar>
       </AppBar>
-      {hasLogo === true && (
-        <img
-          className={classes.logo}
-          src={placeholderImage}
-          alt={"Geovation"}
-        />
-      )}
       <div className={classNames(classes.main, className)}>{children}</div>
       <div className={classes.notchBottom} />
       <ConfirmBack
