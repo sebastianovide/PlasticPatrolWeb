@@ -32,6 +32,9 @@ import { linkToAboutPage } from "./about/links";
 import FeedbackRoute from "./feedback-reports/Route";
 import { linkToFeedbackReports } from "./feedback-reports/links";
 
+import { linkToLogin } from "./login/links";
+import LoginRoute from "./login/Route";
+
 type Props = {
   user: User;
   usersLeaderboard: any;
@@ -73,6 +76,9 @@ export function Routes({
           totalNumberOfPieces={totalNumberOfPieces}
           sponsorImage={sponsorImage}
         />
+      </Route>
+      <Route path={linkToLogin()}>
+        <LoginRoute />
       </Route>
       <Route path={linkToAboutPage()}>
         <AboutPageRoute

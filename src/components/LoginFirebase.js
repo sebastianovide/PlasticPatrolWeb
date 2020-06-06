@@ -39,20 +39,9 @@ const LoginFirebase = (props) => {
   };
 
   return (
-    <Dialog
-      // style={{ padding: '0px 0px 0px 0px' }}
-      // fullScreen={false}
-      // fullWidth={true}
-      open={open}
-      onClose={handleClose}
-      // aria-labelledby="responsive-dialog-title"
-    >
+    <Dialog open={open} onClose={handleClose}>
       <DialogContent>
-        <FirebaseAuth
-          // uiCallback={ui => ui.disableAutoSignIn()}
-          uiConfig={uiConfig}
-          firebaseAuth={firebase.auth()}
-        />
+        <FirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} />
       </DialogContent>
     </Dialog>
   );
