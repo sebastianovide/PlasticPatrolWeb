@@ -100,7 +100,7 @@ export default function TypeInput({ initialType, className, setType }: Props) {
   const styles = useStyles();
   const [label, setLabel] = useState(initialType?.label || "");
   const [focused, setFocused] = useState(false);
-  const [showSuggestionList, setShowSuggestionList] = useState(true);
+  const [showSuggestionList, setShowSuggestionList] = useState(false);
   const outsideClickRef = useOnOutsideClick(() => setFocused(false));
 
   const suggestions = getSuggestions(label);

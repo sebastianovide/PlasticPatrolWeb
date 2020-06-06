@@ -17,7 +17,7 @@ export default function PhotoRoute() {
 
   return (
     <PageWrapper
-      label={"Log your litter"}
+      label={"Record your litter"}
       navigationHandler={navigationHandler}
     >
       <PhotoPageSubRouter />
