@@ -60,6 +60,9 @@ const styles = (theme: Theme) =>
     noClick: {
       cursor: "initial"
     },
+    shiftRight: {
+      marginLeft: "0.3rem"
+    },
     header: {
       fontWeight: "bold",
       position: "relative",
@@ -123,7 +126,8 @@ class MuiVirtualizedTable extends React.PureComponent<
         component="div"
         className={clsx(classes.tableCell, classes.flexContainer, {
           [classes.noClick]: onRowClick == null,
-          [classes.highlightRow]: rank === 1 || uid === this.props.userId
+          [classes.highlightRow]: rank === 1 || uid === this.props.userId,
+          [classes.shiftRight]: dataKey === "rank" && rank !== 1
         })}
         variant="body"
         style={{ height: rowHeight }}
@@ -242,12 +246,12 @@ export default function ReactVirtualizedTable({
         userId={user && user.id}
         columns={[
           {
-            width: width * 0.1,
+            width: width * 0.15,
             label: "Rank",
             dataKey: "rank"
           },
           {
-            width: width * 0.6,
+            width: width * 0.55,
             label: "User",
             dataKey: "displayName",
             numeric: false
