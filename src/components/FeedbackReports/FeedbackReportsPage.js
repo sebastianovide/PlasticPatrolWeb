@@ -20,7 +20,7 @@ import PageWrapper from "../PageWrapper";
 import config from "../../custom/config";
 import "../ModeratorPage.scss";
 
-const styles = theme => ({
+const styles = (theme) => ({
   checkbox: {
     marginTop: theme.spacing(1),
     marginLeft: 0
@@ -46,7 +46,7 @@ class FeedbackReportsPage extends Component {
     this.setState({ feedbacks });
   }
 
-  handleResolvedClick = async feedback => {
+  handleResolvedClick = async (feedback) => {
     await dbFirebase.toggleUnreadFeedback(
       feedback.id,
       feedback.resolved,
@@ -56,7 +56,7 @@ class FeedbackReportsPage extends Component {
     this.setState({ feedbacks });
   };
 
-  handleCheckboxChange = async e => {
+  handleCheckboxChange = async (e) => {
     const checked = e.target.checked;
     const feedbacks = await dbFirebase.fetchFeedbacks(checked);
     this.props.setShowAll(checked);
@@ -69,7 +69,7 @@ class FeedbackReportsPage extends Component {
     const { label, handleClose, classes } = this.props;
 
     return (
-      <PageWrapper label={label} handleClose={handleClose}>
+      <PageWrapper label={label} navigationHandler={{ handleClose }}>
         <div>
           <FormControlLabel
             className={classes.checkbox}
@@ -81,9 +81,11 @@ class FeedbackReportsPage extends Component {
           {this.state.feedbacks && (
             <List dense={false}>
               {this.state.feedbacks
-                .filter(feedback => !feedback.resolved || this.props.isShowAll)
+                .filter(
+                  (feedback) => !feedback.resolved || this.props.isShowAll
+                )
                 .sort((a, b) => b.updated.toDate() - a.updated.toDate())
-                .map(feedback => (
+                .map((feedback) => (
                   <div key={feedback.id}>
                     <Divider />
                     <ListItem
