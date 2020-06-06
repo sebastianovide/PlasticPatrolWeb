@@ -7,7 +7,15 @@ import Button from "@material-ui/core/Button";
 
 import exampleImage from "assets/images/example.jpeg";
 
-export const tutorialSteps = [
+export type TutorialStep = {
+  img?: string;
+  text: string;
+  title?: string;
+  Icon?: React.FC<{ className: string }>;
+  Button?: React.FC<{ className?: string }>;
+};
+
+export const tutorialSteps: Array<TutorialStep> = [
   {
     Icon: ({ className }) => <CameraAlt className={className} />,
     title: "Photograph litter you find",

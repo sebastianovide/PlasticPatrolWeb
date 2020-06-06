@@ -4,6 +4,8 @@ import { makeStyles } from "@material-ui/core";
 const useStyles = makeStyles((theme) => ({
   logo: {
     margin: theme.spacing(2),
+    height: "80px",
+    // if min height not set this isn't visible on the about page
     minHeight: "80px"
   }
 }));

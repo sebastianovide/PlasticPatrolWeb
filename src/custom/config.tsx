@@ -23,6 +23,8 @@ import MultiFields from "components/pages/AdminApproval/MultiFields";
 
 import data from "./categories.json";
 import { linkToFeedbackReports } from "routes/feedback-reports/links";
+import { linkToTutorialPage } from "routes/tutorial/links";
+import { linkToAboutPage } from "routes/about/links";
 
 const primaryMain = styles.primaryMain;
 const primaryContrastText = styles.primaryContrastText;
@@ -56,13 +58,13 @@ const PAGES: { [pageName: string]: Page } = {
     visible: (user: User | undefined, online: boolean) => !!user
   },
   about: {
-    path: "/about",
+    path: linkToAboutPage(),
     label: "About",
     visible: (user: User | undefined, online: boolean) => true,
     icon: <HelpIcon />
   },
   tutorial: {
-    path: "/tutorial",
+    path: linkToTutorialPage(),
     label: "Tutorial",
     visible: (user: User | undefined, online: boolean) => true,
     icon: <SchoolIcon />

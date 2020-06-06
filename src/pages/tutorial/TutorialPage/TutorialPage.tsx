@@ -1,13 +1,14 @@
 import React, { useRef, useState } from "react";
 import ReactSwipe from "react-swipe";
 
+import { makeStyles } from "@material-ui/core";
+
 import PageWrapper from "components/PageWrapper";
 import NavDots from "components/common/NavDots";
 import Logo from "components/common/Logo";
 
-import TutorialItem from "../../TutorialItem";
+import TutorialItem from "../TutorialItem";
 import { tutorialSteps } from "../static";
-import { makeStyles } from "@material-ui/core";
 
 const swipeConfig = {
   continuous: false,
@@ -31,23 +32,25 @@ const useStyles = makeStyles((theme) => ({
 
 const SHOW_LOGO = window.innerHeight > 600;
 
-export default function TutorialPage({ handleClose, label }) {
+type Props = { handleClose: () => void };
+export default function TutorialPage({ handleClose }: Props) {
   const reactSwipeEl = useRef();
   const [navDotActiveIndex, setNavDotActiveIndex] = useState(0);
   const styles = useStyles();
 
-  const handleNavdotClick = (index) => {
+  const handleNavdotClick = (index: number) => {
     setNavDotActiveIndex(index);
+    // @ts-ignore
     reactSwipeEl.current && reactSwipeEl.current.slide(index);
   };
 
-  const onSwipe = (index) => {
+  const onSwipe = (index: number) => {
     setNavDotActiveIndex(index);
   };
 
   return (
     <PageWrapper
-      label={label}
+      label={"Tutorial"}
       navigationHandler={{ handleClose }}
       className={styles.wrapper}
     >
@@ -58,6 +61,7 @@ export default function TutorialPage({ handleClose, label }) {
           callback: onSwipe,
           startSlide: navDotActiveIndex
         }}
+        // @ts-ignore
         ref={(el) => (reactSwipeEl.current = el)}
         className={styles.carousel}
         style={{

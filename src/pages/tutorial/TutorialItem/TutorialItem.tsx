@@ -1,6 +1,8 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core";
 
+import { TutorialStep } from "../static";
+
 const useStyles = makeStyles((theme) => ({
   wrapper: {
     display: "flex",
@@ -20,7 +22,16 @@ const useStyles = makeStyles((theme) => ({
   image: { maxWidth: "80%", height: "auto", maxHeight: 200 }
 }));
 
-const TutorialItem = ({ stepNumber, Icon, text, title, img, Button }) => {
+type Props = TutorialStep & { stepNumber: number };
+
+export default function TutorialItem({
+  stepNumber,
+  Icon,
+  text,
+  title,
+  img,
+  Button
+}: Props) {
   const styles = useStyles();
 
   return (
@@ -36,5 +47,4 @@ const TutorialItem = ({ stepNumber, Icon, text, title, img, Button }) => {
       {Button && <Button />}
     </div>
   );
-};
-export default TutorialItem;
+}
