@@ -15,6 +15,8 @@ import PageWrapper from "./PageWrapper";
 import MapLocation from "../types/MapLocation";
 import Feature from "types/Feature";
 import Geojson from "types/Geojson";
+import User from "types/User";
+import { Config } from "custom/config";
 
 const useStyles = makeStyles((theme) => ({
   avatar: {
@@ -41,12 +43,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface Props {
-  user: any;
+  user: User;
   label: string;
   geojson: Geojson;
-  handlePhotoClick: any;
+  handlePhotoClick: (feature: Feature) => void;
   handleClose: () => void;
-  config: any;
+  config: Config;
 }
 
 const ProfilePage = ({
@@ -57,7 +59,6 @@ const ProfilePage = ({
   handleClose,
   config
 }: Props) => {
-  console.log(geojson);
   const classes = useStyles();
 
   const calcUrl = useCallback(
@@ -76,7 +77,7 @@ const ProfilePage = ({
   const myPhotos =
     geojson &&
     geojson.features.filter((f) => f.properties.owner_id === user.id);
-  const myLastPhotos = _.reverse(
+  const myLastPhotos: Feature[] = _.reverse(
     _.sortBy(myPhotos, (o) => o.properties.moderated)
   ).slice(0, 20);
 

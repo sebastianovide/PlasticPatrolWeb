@@ -122,7 +122,42 @@ const PAGES: { [pageName: string]: Page } = {
   }
 };
 
-export default {
+export interface Metadata {
+  metadataServerUrl: string;
+  serverUrl: string;
+  twSite: string;
+  twCreator: string;
+  twDomain: string;
+  _twDescriptionField: string;
+  twDescription: string;
+  twTitle: string;
+}
+
+export interface Config {
+  PAGES: { [pageName: string]: Page };
+  ENABLE_GROUPS: boolean;
+  metadata: Metadata;
+  MAX_IMAGE_SIZE: number;
+  THEME: any;
+  MAP_SOURCE: string;
+  MAPBOX_TOKEN: string;
+  GA_TRACKING_ID: string;
+  GA_PROPERTY_ID: string;
+  PHOTO_ZOOMED_FIELDS: any;
+  ZOOM: number;
+  ZOOM_FLYTO: number;
+  CENTER: [number, number];
+  PHOTO_FIELDS: any;
+  getStats: (photos: any, dbStats: Stats) => number;
+  ENABLE_GRAVATAR_PROFILES: boolean;
+  SECURITY: {
+    UPLOAD_REQUIRES_LOGIN: boolean;
+  };
+  MODERATING_PHOTOS: number;
+  LEADERBOARD_FIELD: any;
+}
+
+const config: Config = {
   metadata: {
     metadataServerUrl: "https://md.plasticpatrol.co.uk",
     serverUrl: "https://app.plasticpatrol.co.uk",
@@ -217,3 +252,5 @@ export default {
     field: "pieces"
   }
 };
+
+export default config;
