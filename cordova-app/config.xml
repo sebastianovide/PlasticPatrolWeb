@@ -25,14 +25,14 @@
         <icon density="xhdpi" src="res/icon/android/icon-96-xhdpi.png"/>
         <icon density="xxhdpi" src="res/icon/android/icon-144-xxhdpi.png"/>
         <icon density="xxxhdpi" src="res/icon/android/icon-192-xxxhdpi.png"/>
-        <splash density="land-hdpi" src="res/screen/android/splash-land-hdpi.png"/>
-        <splash density="land-ldpi" src="res/screen/android/splash-land-ldpi.png"/>
-        <splash density="land-mdpi" src="res/screen/android/splash-land-mdpi.png"/>
-        <splash density="land-xhdpi" src="res/screen/android/splash-land-xhdpi.png"/>
-        <splash density="port-hdpi" src="res/screen/android/splash-port-hdpi.png"/>
-        <splash density="port-ldpi" src="res/screen/android/splash-port-ldpi.png"/>
-        <splash density="port-mdpi" src="res/screen/android/splash-port-mdpi.png"/>
-        <splash density="port-xhdpi" src="res/screen/android/splash-port-xhdpi.png"/>
+        <splash density="land-hdpi" src="res/screen/android/landscape-hdpi.png"/>
+        <splash density="land-ldpi" src="res/screen/android/landscape-ldpi.png"/>
+        <splash density="land-mdpi" src="res/screen/android/landscape-mdpi.png"/>
+        <splash density="land-xhdpi" src="res/screen/android/landscape-xhdpi.png"/>
+        <splash density="port-hdpi" src="res/screen/android/portrait-hdpi.png"/>
+        <splash density="port-ldpi" src="res/screen/android/portrait-ldpi.png"/>
+        <splash density="port-mdpi" src="res/screen/android/portrait-mdpi.png"/>
+        <splash density="port-xhdpi" src="res/screen/android/portrait-xhdpi.png"/>
         <resource-file src="google-services.json" target="app/google-services.json"/>
     </platform>
     <platform name="ios">
