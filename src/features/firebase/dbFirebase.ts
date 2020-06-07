@@ -9,9 +9,11 @@ import firebaseApp from "./firebaseInit.js";
 import firebaseConfig from "./config";
 import Stats from "types/Stats";
 import Feature from "types/Feature";
+import { Feedback } from "types/Feedback";
 
 const firestore = firebase.firestore();
 const storageRef = firebase.storage().ref();
+const MAX_NUMBER_OF_FEEDBACKS_TO_FETCH = 50;
 
 // TODO: add caching
 
@@ -110,21 +112,15 @@ async function fetchPhotos() {
   return _.map(photos, (data, id) => extractPhoto(data, id));
 }
 
-function fetchFeedbacks(isShowAll) {
-  let query = firestore
+async function fetchFeedbacks(): Promise<Array<Feedback>> {
+  const query = firestore
     .collection("feedbacks")
     .orderBy("updated", "desc")
-    .limit((appConfig.FEEDBACKS && appConfig.FEEDBACKS.MAX) || 50);
-  return query
-    .get()
-    .then((sn) =>
-      sn.docs.map((doc) => {
-        return { ...doc.data(), id: doc.id };
-      })
-    )
-    .then((feedbacks) =>
-      feedbacks.filter((feedback) => !feedback.resolved || isShowAll)
-    );
+    .limit(MAX_NUMBER_OF_FEEDBACKS_TO_FETCH);
+
+  const snapshot = await query.get();
+
+  return snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
 }
 
 function saveMetadata(data) {
@@ -168,7 +164,7 @@ async function getUser(id) {
   return fbUser.exists ? fbUser.data() : null;
 }
 
-async function getFeedbackByID(id) {
+async function getFeedbackByID(id: string): Promise<Feedback | null> {
   const fbFeedback = await firestore.collection("feedbacks").doc(id).get();
   return fbFeedback.exists ? { id, ...fbFeedback.data() } : null;
 }

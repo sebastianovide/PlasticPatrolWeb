@@ -22,6 +22,7 @@ import TitleTextField from "components/pages/AdminApproval/TitleTextField";
 import MultiFields from "components/pages/AdminApproval/MultiFields";
 
 import data from "./categories.json";
+import { linkToFeedbackReports } from "routes/feedback-reports/links";
 
 const primaryMain = styles.primaryMain;
 const primaryContrastText = styles.primaryContrastText;
@@ -87,15 +88,11 @@ const PAGES: { [pageName: string]: Page } = {
     icon: <DashboardIcon />
   },
   feedbackReports: {
-    path: "/feedback-reports",
+    path: linkToFeedbackReports(),
     label: "Feedback Reports",
     icon: <LibraryBooksIcon />,
     visible: (user: User | undefined, online: boolean) =>
       !!(user && user.isModerator)
-  },
-  feedbackDetails: {
-    path: "/feedback-details",
-    label: "Feedback Details"
   },
   displayPhoto: {
     path: "/photos",
