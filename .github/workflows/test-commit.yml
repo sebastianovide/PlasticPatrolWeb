@@ -1,0 +1,20 @@
+name: Run tests against commit
+
+on: [pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-16.04
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+      - name: Setup kernel for react, increase watchers
+        # https://stackoverflow.com/questions/59522374/how-to-increase-the-file-limit-of-github-actions
+        run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+      - name: Cypress run
+        uses: cypress-io/github-action@v1
+        with:
+          start: yarn start
+          wait-on: "http://localhost:3000"
+          wait-on-timeout: 180

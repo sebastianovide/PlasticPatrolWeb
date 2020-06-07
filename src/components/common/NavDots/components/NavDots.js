@@ -5,7 +5,7 @@ import classNames from "classnames";
 
 import "./NavDots.scss";
 
-const NavDots = props => {
+const NavDots = (props) => {
   const {
     numberOfDots,
     activeIndex,
@@ -43,6 +43,7 @@ const NavDot = ({ id, active, onClick, navDotActiveClass, navDotClass }) => {
         [navDotActiveClass]: active
       })}
       onClick={handleClick}
+      data-test={`NavDot-${id}`}
     >
       <div
         className={classNames("NavDot__inner", {
