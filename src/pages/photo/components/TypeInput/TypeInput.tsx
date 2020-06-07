@@ -11,10 +11,8 @@ import { getSuggestions, getLeafKey, categoriesArr } from "./utils";
 
 import styles from "standard.scss";
 import {
-  IconButton,
   Dialog,
   DialogContent,
-  DialogContentText,
   DialogActions,
   Button
 } from "@material-ui/core";
