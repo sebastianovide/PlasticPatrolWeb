@@ -57,7 +57,9 @@
     "coveralls": "cat ./coverage/lcov.info | node node_modules/.bin/coveralls",
     "start:prod": "npm run build:react && http-server build -S -o",
     "functions:test": "cd functions && npm run test",
-    "storybook": "start-storybook"
+    "storybook": "start-storybook",
+    "test:cypress": "cypress open",
+    "run:cypress": "cypress run"
   },
   "devDependencies": {
     "@storybook/react": "^5.3.19",
@@ -65,6 +67,7 @@
     "@types/react-swipe": "^6.0.0",
     "cordova": "^9.0.0",
     "coveralls": "^3.0.7",
+    "cypress": "^4.7.0",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",
     "faker": "^4.1.0",
@@ -84,6 +87,7 @@
     "storybook": "^5.3.19",
     "ts-loader": "^6.2.1",
     "typescript": "^3.8.3",
+    "wait-on": "^5.0.1",
     "webpack": "4.42.0",
     "workbox-cli": "^4.1.1"
   },

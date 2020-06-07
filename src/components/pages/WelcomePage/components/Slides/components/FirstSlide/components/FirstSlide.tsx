@@ -1,7 +1,7 @@
 import React from "react";
 
-import globe from "assets/images/intro/globe.PNG";
-import logo from "assets/images/plasticPatrolLogoWhite.PNG";
+import globe from "assets/images/intro/globe.png";
+import logo from "assets/images/plasticPatrolLogoWhite.png";
 
 import "./FirstSlide.scss";
 

@@ -42,7 +42,7 @@ export default function AboutPage({
     <PageWrapper label={"About"} navigationHandler={{ handleClose }}>
       <Logo />
       <Typography variant={"subtitle1"} className={classes.typography}>
-        The Plastic Patrol app brings together people all over the world to make
+        The Planet Patrol app brings together people all over the world to make
         powerful and positive impacts on the planet.
         <br />
         <br />
@@ -78,12 +78,11 @@ export default function AboutPage({
         <br />
         Every time you record a piece of litter it’s marked on our global map,
         leaderboard and your personal profile allowing you to track your
-        contributions and that of the Plastic Patrol community.
+        contributions and that of the Planet Patrol community.
         <br />
         <br />
         Join thousands of people from more than 85 countries across the globe
-        using the Plastic Patrol app to help shape a litter-free future
-        together.
+        using the Planet Patrol app to help shape a litter-free future together.
         <br />
         <br />
         <img
