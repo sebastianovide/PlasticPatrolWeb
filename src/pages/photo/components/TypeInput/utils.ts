@@ -1,15 +1,25 @@
+import _ from "lodash";
 import categories from "custom/categories.json";
 
-type Category = { key: string; label: string };
+type Category = { key: string; label: string; synonyms?: string[] };
 type CategoriesArr = Array<Category>;
 
-const categoriesArr: CategoriesArr = Object.keys(categories).map((key) => {
-  return {
-    key,
-    //@ts-ignore
-    label: categories[key].label
-  };
-});
+export const categoriesArr: CategoriesArr = _.sortBy(
+  Object.keys(categories).map((key) => {
+    return {
+      key,
+      //@ts-ignore
+      label: categories[key].label,
+      //@ts-ignore
+      synonyms: categories[key].synonyms
+    };
+  }),
+  ({ label }) => label
+);
+
+const any = (bools: boolean[]): boolean => {
+  return !bools.map((b) => !b).every((x) => x);
+};
 
 export function getSuggestions(input: string) {
   return categoriesArr.filter(filterCat(input));
@@ -21,9 +31,16 @@ function filterCat(input: string) {
       return false;
     }
     const normalisedInput = input.toLowerCase();
-    const normalisedCategory = category.label.toLowerCase();
+    const { label, synonyms } = category;
+    const normalisedCategories = [label]
+      .concat(synonyms || [])
+      .map((x) => x.toLowerCase());
 
-    return normalisedCategory.includes(normalisedInput);
+    return any(
+      normalisedCategories.map((normalisedCategory) =>
+        normalisedCategory.includes(normalisedInput)
+      )
+    );
   };
 }
 

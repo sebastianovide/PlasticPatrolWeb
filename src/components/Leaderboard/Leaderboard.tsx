@@ -231,7 +231,7 @@ export default function ReactVirtualizedTable({
   handleClose,
   label
 }: Props) {
-  const copy = usersLeaderboard.slice();
+  const copy = usersLeaderboard.filter(({ pieces }) => pieces > 0);
   sortArrayByObjectKey(copy, "pieces").reverse();
   const withRank = copy.map(({ displayName, ...value }, index) => ({
     displayName: displayName.split("@")[0],

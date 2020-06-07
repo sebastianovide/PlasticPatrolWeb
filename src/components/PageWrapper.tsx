@@ -9,6 +9,7 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 
 import standardStyles from "standard.scss";
 
+import logo from "assets/images/plasticPatrolLogoTeal.png";
 import { isIphoneWithNotchAndCordova, isIphoneAndCordova } from "../utils";
 import {
   Dialog,
@@ -16,8 +17,6 @@ import {
   DialogContentText,
   DialogActions
 } from "@material-ui/core";
-
-const placeholderImage = process.env.PUBLIC_URL + "/custom/images/banner.svg";
 
 declare global {
   interface Window {
@@ -70,7 +69,10 @@ const useStyles = makeStyles((theme) => ({
   },
   logo: {
     height: "80px",
-    margin: theme.spacing(2)
+    width: "120px",
+    margin: theme.spacing(2),
+    marginLeft: "auto",
+    marginRight: "auto"
   },
   button: {
     color: theme.palette.primary.contrastText
@@ -270,11 +272,7 @@ const PageWrapper: FunctionComponent<Props> = ({
         </Toolbar>
       </AppBar>
       {hasLogo === true && (
-        <img
-          className={classes.logo}
-          src={placeholderImage}
-          alt={"Geovation"}
-        />
+        <img className={classes.logo} src={logo} alt={"Planet Patrol"} />
       )}
       <div className={classes.main}>{children}</div>
       <div className={classes.notchBottom} />

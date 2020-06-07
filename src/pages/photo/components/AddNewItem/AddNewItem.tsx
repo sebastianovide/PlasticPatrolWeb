@@ -3,6 +3,7 @@ import { Button, makeStyles } from "@material-ui/core";
 
 import { Item, Type } from "../../types";
 import QuantitySelector from "../QuantitySelector";
+import BusinessIcon from "@material-ui/icons/Business";
 import TypeInput from "../TypeInput";
 
 import styles from "standard.scss";
@@ -21,7 +22,9 @@ const button = (theme: any) => ({
 });
 
 const useStyles = makeStyles((theme) => ({
-  brand: {
+  brandWrapper: {
+    display: "flex",
+    alignItems: "center",
     width: "200%",
     boxSizing: "border-box",
     background: styles.lightGrey,
@@ -29,6 +32,16 @@ const useStyles = makeStyles((theme) => ({
     padding: `${theme.spacing(0.5)}px ${theme.spacing(1)}px`,
     border: `${styles.mediumGrey} solid 1px`,
     fontWeight: "bold",
+    "&:focus": {
+      outline: "none"
+    }
+  },
+  brand: {
+    border: "none",
+    background: styles.lightGrey,
+    color: "black",
+    fontWeight: "bold",
+    marginLeft: theme.spacing(1),
     "&:focus": {
       outline: "none"
     }
@@ -42,6 +55,7 @@ const useStyles = makeStyles((theme) => ({
     "cancel add"
 `,
     height: "50vh",
+    gridTemplateColumns: "1fr 1fr",
     gridTemplateRows: "1fr min-content min-content min-content"
   },
   type: {
@@ -77,18 +91,23 @@ export default function AddNewItem({
 
   return (
     <div className={styles.wrapper}>
-      <TypeInput
-        setType={setType}
-        className={styles.type}
-        initialType={initialItem?.type}
-      />
-      <input
-        placeholder="Enter brand"
-        value={brand}
-        onChange={(e) => setBrand(e.target.value)}
-        type="text"
-        className={styles.brand}
-      />
+      <div>
+        <TypeInput
+          setType={setType}
+          className={styles.type}
+          initialType={initialItem?.type}
+        />
+        <div className={styles.brandWrapper}>
+          <BusinessIcon />
+          <input
+            placeholder="Enter brand"
+            value={brand}
+            onChange={(e) => setBrand(e.target.value)}
+            type="text"
+            className={styles.brand}
+          />
+        </div>
+      </div>
       <p className={styles.quantityText}>Quantity</p>
       <QuantitySelector
         quantity={quantity}
