@@ -6,6 +6,7 @@ import CloudUpload from "@material-ui/icons/CloudUpload";
 import Button from "@material-ui/core/Button";
 
 import exampleImage from "assets/images/example.jpeg";
+import { useHistory } from "react-router-dom";
 
 export type TutorialStep = {
   img?: string;
@@ -27,7 +28,7 @@ export const tutorialSteps: Array<TutorialStep> = [
     Icon: ({ className }) => <CloudUpload className={className} />,
     title: "Add data about the pieces of litter in your photo",
     text:
-      "Add the photo to the app and record details including the brand name and type of litter. Your location will be automatically registered through geotagging. When you’re sure you’ve logged all the items in your photo, submit your photo for approval."
+      "Add the photo to the app and tag the brand name and type for each piece of litter. Your location will be automatically registered."
   },
   {
     Icon: ({ className }) => <LocationOn className={className} />,
@@ -37,7 +38,18 @@ export const tutorialSteps: Array<TutorialStep> = [
   },
   {
     text:
-      "By litter picking and logging your findings you are helping build the largest and most powerful dataset on litter. We analyse everything you collect to drive impactful and evidence-based changes by government and brands to protect the environment.",
-    Button: () => <Button className="FinalSlide__button">Get started</Button>
+      "By litter picking and recording your findings you are helping build the largest and most powerful dataset on litter. We analyse everything you collect to drive impactful and evidence-based changes by government and brands to protect the environment.",
+    Button: () => {
+      const history = useHistory();
+
+      return (
+        <Button
+          className="FinalSlide__button"
+          onClick={() => history.push("/")}
+        >
+          Get started
+        </Button>
+      );
+    }
   }
 ];
