@@ -1,6 +1,7 @@
 import React from "react";
 
-import globe from "assets/images/intro/globe.png";
+// @ts-ignore
+import globe from "assets/images/intro/globe.PNG";
 import logo from "assets/images/plasticPatrolLogoWhite.png";
 
 import "./FirstSlide.scss";
