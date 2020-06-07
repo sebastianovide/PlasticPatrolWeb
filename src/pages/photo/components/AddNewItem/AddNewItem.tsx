@@ -55,6 +55,7 @@ const useStyles = makeStyles((theme) => ({
     "cancel add"
 `,
     height: "50vh",
+    gridTemplateColumns: "1fr 1fr",
     gridTemplateRows: "1fr min-content min-content min-content"
   },
   type: {
