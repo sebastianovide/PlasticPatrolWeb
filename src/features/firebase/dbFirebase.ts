@@ -117,11 +117,9 @@ async function fetchFeedbacks(): Promse<Array<Feedback>> {
     .orderBy("updated", "desc")
     .limit(MAX_NUMBER_OF_FEEDBACKS_TO_FETCH);
 
-  return await query.get().then((sn) =>
-    sn.docs.map((doc) => {
-      return { ...doc.data(), id: doc.id };
-    })
-  );
+  const snapshot = await query.get();
+
+  return snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
 }
 
 function saveMetadata(data) {
