@@ -9,6 +9,7 @@ import firebaseApp from "./firebaseInit.js";
 import firebaseConfig from "./config";
 import Stats from "types/Stats";
 import Feature from "types/Feature";
+import { Feedback } from "types/Feedback";
 
 const firestore = firebase.firestore();
 const storageRef = firebase.storage().ref();
@@ -111,7 +112,7 @@ async function fetchPhotos() {
   return _.map(photos, (data, id) => extractPhoto(data, id));
 }
 
-async function fetchFeedbacks(): Promse<Array<Feedback>> {
+async function fetchFeedbacks(): Promise<Array<Feedback>> {
   const query = firestore
     .collection("feedbacks")
     .orderBy("updated", "desc")
