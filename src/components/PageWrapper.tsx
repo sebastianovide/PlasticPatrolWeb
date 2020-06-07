@@ -1,5 +1,4 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
-import classNames from "classnames";
 
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
@@ -11,7 +10,6 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 
 import standardStyles from "standard.scss";
 
-import logo from "assets/images/plasticPatrolLogoTeal.png";
 import { isIphoneWithNotchAndCordova, isIphoneAndCordova } from "../utils";
 import {
   Dialog,
@@ -69,13 +67,7 @@ const useStyles = makeStyles((theme) => ({
       ? "env(safe-area-inset-bottom)"
       : "0px"
   },
-  logo: {
-    height: "80px",
-    width: "120px",
-    margin: theme.spacing(2),
-    marginLeft: "auto",
-    marginRight: "auto"
-  },
+
   button: {
     color: theme.palette.primary.contrastText
   },
@@ -274,9 +266,6 @@ const PageWrapper: FunctionComponent<Props> = ({
           </Typography>
         </Toolbar>
       </AppBar>
-      {hasLogo === true && (
-        <img className={classes.logo} src={logo} alt={"Planet Patrol"} />
-      )}
       <div className={classes.main}>{children}</div>
       <div className={classes.notchBottom} />
       <ConfirmBack
