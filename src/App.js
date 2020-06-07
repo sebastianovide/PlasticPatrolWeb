@@ -25,7 +25,7 @@ import WelcomePage from "./components/pages/WelcomePage";
 import Map from "./components/MapPage/Map";
 import DrawerContainer from "./components/DrawerContainer";
 import TermsDialog from "./components/TermsDialog";
-import EmailVerifiedDialog from "./components/EmailVerifiedDialog";
+import EmailVerifiedDialog from "./pages/dialogs/EmailVerified";
 import MapLocation from "./types/MapLocation";
 
 import { gtagPageView, gtagEvent } from "./gtag.js";
