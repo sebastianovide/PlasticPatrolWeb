@@ -5,6 +5,7 @@ import CachedIcon from "@material-ui/icons/Cached";
 import { makeStyles } from "@material-ui/core/styles";
 
 import PageWrapper from "components/PageWrapper";
+import Logo from "components/common/Logo";
 
 const useStyles = makeStyles((theme) => ({
   typography: {
@@ -38,11 +39,8 @@ export default function AboutPage({
 }: Props) {
   const classes = useStyles();
   return (
-    <PageWrapper
-      label={"About"}
-      navigationHandler={{ handleClose }}
-      hasLogo={true}
-    >
+    <PageWrapper label={"About"} navigationHandler={{ handleClose }}>
+      <Logo />
       <Typography variant={"subtitle1"} className={classes.typography}>
         The Planet Patrol app brings together people all over the world to make
         powerful and positive impacts on the planet.

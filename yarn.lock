@@ -4564,6 +4564,14 @@
     "@types/react-dom" "*"
     "@types/react-transition-group" "*"
 
+"@types/react-swipe@^6.0.0":
+  version "6.0.0"
+  resolved "https://registry.npmjs.org/@types/react-swipe/-/react-swipe-6.0.0.tgz#d5a9cf4d1a9e29e544755fc2a7385a5ca6584dba"
+  integrity sha512-YYgC72+yZ/PYw7AV0JOZ0tKYbDvSERcUPqAn2TCoRZzDXEHHUssvPJiop7oEy3n7TXBfQdcLf13CA0q1x/EmFA==
+  dependencies:
+    "@types/react" "*"
+    "@types/swipe" "*"
+
 "@types/react-syntax-highlighter@11.0.4":
   version "11.0.4"
   resolved "https://registry.npmjs.org/@types/react-syntax-highlighter/-/react-syntax-highlighter-11.0.4.tgz#d86d17697db62f98046874f62fdb3e53a0bbc4cd"
@@ -4628,6 +4636,11 @@
 "@types/stack-utils@^1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@types/stack-utils/-/stack-utils-1.0.1.tgz#0a851d3bd96498fa25c33ab7278ed3bd65f06c3e"
+
+"@types/swipe@*":
+  version "2.0.27"
+  resolved "https://registry.npmjs.org/@types/swipe/-/swipe-2.0.27.tgz#20316cd9756623ecb36fc2a3a13208aa0a3c2f38"
+  integrity sha1-IDFs2XVmI+yzb8KjoTIIqgo8Lzg=
 
 "@types/tapable@*", "@types/tapable@^1.0.5":
   version "1.0.5"

@@ -17,11 +17,7 @@ class GroupAdd extends React.Component {
   render() {
     const { classes, label, handleClose } = this.props;
     return (
-      <PageWrapper
-        label={label}
-        navigationHandler={{ handleClose }}
-        hasLogo={false}
-      >
+      <PageWrapper label={label} navigationHandler={{ handleClose }}>
         <Typography variant="h1" color="inherit" className={classes.message}>
           feature coming soon!
         </Typography>
