@@ -40,5 +40,8 @@
   "1077": { "label": "Tampon applicator" },
   "10003": { "label": "Tyre" },
   "1037": { "label": "Wet wipe" },
-  "139": { "label": "Wood" }
+  "139": { "label": "Wood" },
+  "2000": { "label": "Crisp packet" },
+  "2001": { "label": "Chocolate wrapper" },
+  "2002": { "label": "Sweet wrapper" }
 }

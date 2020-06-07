@@ -23,10 +23,7 @@ const useStyles = makeStyles((theme) => ({
   },
   button: {
     background: "#eaeaea",
-    border: "#c3c3c3 solid 1px",
-    boxSizing: "border-box",
-    height: 25,
-    width: 25
+    border: "#c3c3c3 solid 1px"
   },
   wrapper: {
     ...standardFlex
@@ -49,18 +46,18 @@ export default function QuantitySelector({
     <div className={classNames(styles.wrapper, className)}>
       <IconButton
         onClick={() => setQuantity(Math.max(quantity - 1, 0))}
-        className={styles.button}
         disableRipple
         size="small"
+        className={styles.button}
       >
         <MinusIcon></MinusIcon>
       </IconButton>
       <div className={styles.quantityWrapper}>{quantity}</div>
       <IconButton
         onClick={() => setQuantity(quantity + 1)}
-        className={styles.button}
         disableRipple
         size="small"
+        className={styles.button}
       >
         <AddIcon />
       </IconButton>

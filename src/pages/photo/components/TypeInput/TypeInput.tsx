@@ -163,8 +163,8 @@ export default function TypeInput({ initialType, className, setType }: Props) {
           ))}
         {showMessage && (
           <div className={styles.customTypeWarning}>
-            This is not an existing item in our database, it will be approved
-            after you submit your collection
+            Sorry we don't have this type in our database at the moment. Once
+            you submit your collection it will be manually approved.
           </div>
         )}
       </div>
