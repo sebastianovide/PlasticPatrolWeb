@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="20040000" id="uk.co.plasticpatrol" ios-CFBundleIdentifier="com.lewismakesapps.Plastic-Patrol" ios-CFBundleVersion="2.4.0" version="2.4.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Plastic Patrol</name>
+<widget android-versionCode="20070000" id="uk.co.planetpatrol" ios-CFBundleIdentifier="com.lewismakesapps.Plastic-Patrol" ios-CFBundleVersion="2.7.0" version="2.7.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Planet Patrol</name>
     <description>
-        Fighting Plastic Pollution in the UK Waterways.
+        Fighting Pollution in the UK Waterways.
     </description>
     <author email="geovation@geovation.uk" href="https://geovation.uk/">Geovation</author>
     <content src="index.html"/>
@@ -54,16 +54,16 @@
         <preference name="DisallowOverscroll" value="true"/>
         <preference name="BackupWebStorage" value="local"/>
         <edit-config file="*-Info.plist" mode="merge" target="NSPhotoLibraryUsageDescription">
-            <string>Plastic Patrol needs photo library access to get the picture of the plastic that you collect.</string>
+            <string>Planet Patrol needs photo library access to get the picture of the plastic that you collect.</string>
         </edit-config>
         <edit-config file="*-Info.plist" mode="merge" target="NSLocationWhenInUseUsageDescription">
-            <string>Plastic Patrol needs to know where you are so it can place the photo of the plastic that you collect in the map</string>
+            <string>Planet Patrol needs to know where you are so it can place the photo of the plastic that you collect in the map</string>
         </edit-config>
         <edit-config file="*-Info.plist" mode="merge" target="NSLocationAlwaysUsageDescription">
-            <string>Plastic Patrol needs to know where you are so it can place the photo of the plastic that you collect in the map</string>
+            <string>Planet Patrol needs to know where you are so it can place the photo of the plastic that you collect in the map</string>
         </edit-config>
         <edit-config file="*-Info.plist" mode="merge" target="NSCameraUsageDescription">
-            <string>Plastic Patrol needs camera access to take pictures of the plastic that you collect.</string>
+            <string>Planet Patrol needs camera access to take pictures of the plastic that you collect.</string>
         </edit-config>
         <edit-config file="*-Info.plist" mode="add" target="ITSAppUsesNonExemptEncryption">
             <false/>
