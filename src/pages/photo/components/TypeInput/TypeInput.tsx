@@ -132,7 +132,7 @@ export default function TypeInput({ initialType, className, setType }: Props) {
       <div className={styles.inputWrapper}>
         <Search />
         <input
-          placeholder="Search for litter ..."
+          placeholder='Search for the type of litter e.g. "plastic bottle" or "crisp packet"'
           className={styles.input}
           style={{ boxSizing: "border-box", width: "100%" }}
           value={label}
