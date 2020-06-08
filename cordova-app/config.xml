@@ -54,16 +54,16 @@
         <preference name="DisallowOverscroll" value="true"/>
         <preference name="BackupWebStorage" value="local"/>
         <edit-config file="*-Info.plist" mode="merge" target="NSPhotoLibraryUsageDescription">
-            <string>Planet Patrol needs photo library access to get the picture of the plastic that you collect.</string>
+            <string>Planet Patrol needs photo library access to get the picture of the litter that you collect.</string>
         </edit-config>
         <edit-config file="*-Info.plist" mode="merge" target="NSLocationWhenInUseUsageDescription">
-            <string>Planet Patrol needs to know where you are so it can place the photo of the plastic that you collect in the map</string>
+            <string>Planet Patrol needs to know where you are so it can place the photo of the litter that you collect in the map</string>
         </edit-config>
         <edit-config file="*-Info.plist" mode="merge" target="NSLocationAlwaysUsageDescription">
-            <string>Planet Patrol needs to know where you are so it can place the photo of the plastic that you collect in the map</string>
+            <string>Planet Patrol needs to know where you are so it can place the photo of the litter that you collect in the map</string>
         </edit-config>
         <edit-config file="*-Info.plist" mode="merge" target="NSCameraUsageDescription">
-            <string>Planet Patrol needs camera access to take pictures of the plastic that you collect.</string>
+            <string>Planet Patrol needs camera access to take pictures of the litter that you collect.</string>
         </edit-config>
         <edit-config file="*-Info.plist" mode="add" target="ITSAppUsesNonExemptEncryption">
             <false/>
