@@ -13,7 +13,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 
 import { tAndCLink, privatePolicyLink } from "static/info";
 
-const styles = theme => ({
+const styles = (theme) => ({
   root: {
     background: "rgba(255,225,225,0.5)"
   },
@@ -28,7 +28,7 @@ class TermsDialog extends React.Component {
     isChecked: false
   };
 
-  handleChange = () => event => {
+  handleChange = () => (event) => {
     this.setState({ isChecked: event.target.checked });
   };
 
@@ -46,7 +46,7 @@ class TermsDialog extends React.Component {
           id="responsive-dialog-title"
           style={{ textAlign: "center" }}
         >
-          Welcome to Plastic Patrol
+          Welcome to Planet Patrol
         </DialogTitle>
         <DialogContent>
           <DialogContentText style={{ textAlign: "center" }}>
