@@ -39,6 +39,7 @@ const useStyles = makeStyles((theme) => ({
   },
   prompt: { textAlign: "center" },
   button: {
+    minHeight: "2em",
     marginTop: "auto",
     textTransform: "none",
     width: "max-content",
