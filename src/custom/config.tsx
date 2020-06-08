@@ -168,7 +168,7 @@ const config: Config = {
     twDomain: "www.plasticpatrol.co.uk",
     _twDescriptionField: "pieces",
     twDescription:
-      "The global movement that is crowdsource cleaning the planet. Download the Plastic Patrol app to join the movement!",
+      "The global movement that is crowdsource cleaning the planet. Download the Planet Patrol app to join the movement!",
     twTitle: "Plastic Patrol"
   },
   MAX_IMAGE_SIZE: 2048,

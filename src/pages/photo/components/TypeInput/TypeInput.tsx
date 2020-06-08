@@ -42,8 +42,14 @@ const useStyles = makeStyles((theme) => ({
     color: "black",
     fontWeight: "bold",
     marginLeft: theme.spacing(1),
+    boxSizing: "border-box",
+    width: "100%",
+    textOverflow: "ellipsis",
     "&:focus": {
       outline: "none"
+    },
+    "&::placeholder": {
+      fontSize: 11
     }
   },
   suggestion: {
@@ -132,9 +138,8 @@ export default function TypeInput({ initialType, className, setType }: Props) {
       <div className={styles.inputWrapper}>
         <Search />
         <input
-          placeholder="Search for litter ..."
+          placeholder='Search for the type of litter e.g. "plastic bottle" or "crisp packet"'
           className={styles.input}
-          style={{ boxSizing: "border-box", width: "100%" }}
           value={label}
           onChange={(e) => setLabel(e.target.value)}
           onFocus={() => setFocused(true)}

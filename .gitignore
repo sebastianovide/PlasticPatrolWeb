@@ -87,3 +87,7 @@ public/first-input-delay.min.js
 bks
 
 functions/dist
+
+#cypress
+cypress/videos
+cypress/screenshots
