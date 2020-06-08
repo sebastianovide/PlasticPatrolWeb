@@ -55,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
     "quantityText quantitySelector"
     "cancel add"
 `,
-    height: "50vh",
+    height: "50%",
     gridTemplateColumns: "50%",
     gridTemplateRows: "1fr min-content min-content min-content",
     maxWidth: window.outerWidth - theme.spacing(2)
