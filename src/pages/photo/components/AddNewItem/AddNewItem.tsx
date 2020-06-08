@@ -42,6 +42,7 @@ const useStyles = makeStyles((theme) => ({
     color: "black",
     fontWeight: "bold",
     marginLeft: theme.spacing(1),
+    width: "100%",
     "&:focus": {
       outline: "none"
     }
@@ -55,8 +56,9 @@ const useStyles = makeStyles((theme) => ({
     "cancel add"
 `,
     height: "50vh",
-    gridTemplateColumns: "1fr 1fr",
-    gridTemplateRows: "1fr min-content min-content min-content"
+    gridTemplateColumns: "50%",
+    gridTemplateRows: "1fr min-content min-content min-content",
+    maxWidth: window.outerWidth - theme.spacing(2)
   },
   type: {
     gridArea: "type"
