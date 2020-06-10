@@ -20,8 +20,6 @@ jobs:
 
       - name: "Automated Version Bump"
         uses: "phips28/gh-action-bump-version@master"
-        with:
-          tag-prefix: "V"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -48,7 +46,7 @@ jobs:
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
         with:
-          args: deploy --only hosting
+          args: deploy --only hosting -m "V${{ steps.package-version.outputs.version }}"
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           PROJECT_ID: plastic-patrol-dev-722eb
@@ -57,4 +55,4 @@ jobs:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
         uses: pullreminders/slack-action@master
         with:
-          args: '{\"channel\":\"C014L0X2R38\",\"text\":\"A new dev version of the app has been released 🚀 https://plastic-patrol-dev-722eb.web.app/#/ \"}'
+          args: '{\"channel\":\"C014L0X2R38\",\"text\":\"Version ${{ steps.package-version.outputs.version }} has just deployed to dev 🚀 \"}'
