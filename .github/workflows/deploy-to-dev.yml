@@ -18,6 +18,20 @@ jobs:
         with:
           node-version: 10.x
 
+      - name: "Automated Version Bump"
+        uses: "phips28/gh-action-bump-version@master"
+        with:
+          tag-prefix: "V"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Read package.json
+        uses: tyankatsu0105/read-package-version-actions@v1
+        id: package-version
+
+      - name: Show version number
+        run: echo "Version is ${{ steps.package-version.outputs.version }}"
+
       - name: Cache node_modules
         id: cache-modules
         uses: actions/cache@v1
