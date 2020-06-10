@@ -30,45 +30,27 @@ jobs:
       - name: Show version number
         run: echo "Version is ${{ steps.package-version.outputs.version }}"
 
-      # - name: Cache node_modules
-      #   id: cache-modules
-      #   uses: actions/cache@v1
-      #   with:
-      #     path: node_modules
-      #     key: ${{ runner.OS }}-node_modules-${{ hashFiles('yarn.lock') }}
-      # - name: yarn
-      #   if: steps.cache-modules.outputs.cache-hit != 'true'
-      #   run: yarn
-      # - name: Build
-      #   run: NODE_ENV=development yarn build
-      # - name: Deploy to Firebase
-      #   uses: w9jds/firebase-action@master
-      #   with:
-      #     args: deploy --only hosting -m "V${{ steps.package-version.outputs.version }}"
-      #   env:
-      #     FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-      #     PROJECT_ID: plastic-patrol-dev-722eb
-      # - name: Notify releases on slack
-      #   env:
-      #     SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-      #   uses: pullreminders/slack-action@master
-      #   with:
-      #     args: '{\"channel\":\"C014L0X2R38\",\"text\":\"Version ${{ steps.package-version.outputs.version }} has just deployed to dev 🚀 \"}'
-
-      - name: changelog
-        uses: scottbrenner/generate-changelog-action@master
-        id: Changelog
-        env:
-          REPO: ${{ github.repository }}
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@latest
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Cache node_modules
+        id: cache-modules
+        uses: actions/cache@v1
         with:
-          tag_name: v${{ steps.package-version.outputs.version }}
-          release_name: Release v${{ steps.package-version.outputs.version }}
-          body: |
-            ${{ steps.Changelog.outputs.changelog }}
-          draft: false
-          prerelease: false
+          path: node_modules
+          key: ${{ runner.OS }}-node_modules-${{ hashFiles('yarn.lock') }}
+      - name: yarn
+        if: steps.cache-modules.outputs.cache-hit != 'true'
+        run: yarn
+      - name: Build
+        run: NODE_ENV=development yarn build
+      - name: Deploy to Firebase
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only hosting -m "V${{ steps.package-version.outputs.version }}"
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          PROJECT_ID: plastic-patrol-dev-722eb
+      - name: Notify releases on slack
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        uses: pullreminders/slack-action@master
+        with:
+          args: '{\"channel\":\"C014L0X2R38\",\"text\":\"Version ${{ steps.package-version.outputs.version }} has just deployed to dev 🚀 \"}'
