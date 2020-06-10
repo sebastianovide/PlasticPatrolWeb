@@ -644,10 +644,6 @@ class App extends Component {
         </main>
 
         <Snackbar open={!this.state.geojson} message="Loading photos..." />
-        <Snackbar
-          open={this.state.welcomeShown && !this.state.online}
-          message="Connecting to our servers..."
-        />
 
         <LoginFirebase
           open={this.state.loginLogoutDialogOpen && !this.state.user}
