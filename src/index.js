@@ -16,10 +16,12 @@ import { gtagInit } from "./gtag.js";
 import LocationProvider from "./LocationProvider";
 import * as Sentry from "@sentry/browser";
 
-Sentry.init({
-  dsn:
-    "https://41de3daa1d7542bd8c9204365283e1b2@o404007.ingest.sentry.io/5267230"
-});
+if (process.env.NODE_ENV !== "development") {
+  Sentry.init({
+    dsn:
+      "https://41de3daa1d7542bd8c9204365283e1b2@o404007.ingest.sentry.io/5267230"
+  });
+}
 
 serviceWorker.register();
 
