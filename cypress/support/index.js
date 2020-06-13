@@ -21,6 +21,11 @@ import "./commands";
 
 beforeEach(() => {
   cy.window().then((win) => {
+    // ensures users aren't persisted between tests
+    win.indexedDB.deleteDatabase("firebaseLocalStorageDb");
+    win.localStorage.clear();
+
+    // assume we're not a brand new user for most tests
     win.localStorage.setItem("welcomeShown", "true");
     win.localStorage.setItem("termsAccepted", "Yes");
   });
