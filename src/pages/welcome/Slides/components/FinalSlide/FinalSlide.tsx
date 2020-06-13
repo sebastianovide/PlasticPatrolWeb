@@ -1,11 +1,11 @@
 import React from "react";
 import Button from "@material-ui/core/Button";
 
-import handPrint from "assets/images/intro/handPrint.PNG";
+import handPrint from "assets/images/intro/handPrint.png";
 
 import "./FinalSlide.scss";
 
-const FinalSlide = ({ onButtonClick }) => {
+export default function FinalSlide({ onButtonClick }: any) {
   return (
     <div className="FinalSlide__container">
       <div className="FinalSlide__title">Ready to make your mark?</div>
@@ -15,6 +15,4 @@ const FinalSlide = ({ onButtonClick }) => {
       </Button>
     </div>
   );
-};
-
-export default FinalSlide;
+}
