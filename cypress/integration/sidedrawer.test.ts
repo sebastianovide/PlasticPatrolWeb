@@ -1,28 +1,45 @@
+import { user, moderator } from "../fixtures/users";
+import { routes, selectors } from "../fixtures/common";
+
+function checkStaticLinks() {
+  cy.contains("Clean-ups").should(
+    "have.attr",
+    "href",
+    "https://plasticpatrol.co.uk/clean-ups/"
+  );
+
+  cy.contains("Terms and Conditions").should(
+    "have.attr",
+    "href",
+    "https://plasticpatrol.co.uk/terms-and-conditions/"
+  );
+
+  cy.contains("Privacy Policy").should(
+    "have.attr",
+    "href",
+    "https://plasticpatrol.co.uk/privacy-policy/"
+  );
+}
+
 describe("sidedrawer ui (checks correct values exist)", () => {
   it("anaonymous side drawer ui", () => {
-    cy.viewport("iphone-5");
-
     cy.window().then((win) => {
       win.localStorage.setItem("welcomeShown", "true");
       win.localStorage.setItem("termsAccepted", "Yes");
     });
-    cy.visit("/");
+    cy.visit(routes.home);
 
-    cy.getTestElement("Burger").click();
+    cy.getTestElement(selectors.burger).click();
+
+    checkStaticLinks();
 
     cy.contains("Account").should("not.exist");
     cy.contains("Photo Approval").should("not.exist");
     cy.contains("Feedback Reports").should("not.exist");
 
-    cy.contains("Leaderboard");
-    cy.contains("Clean-ups").should(
-      "have.attr",
-      "href",
-      "https://plasticpatrol.co.uk/clean-ups/"
-    );
-
-    cy.contains("Tutorial");
-    cy.contains("About");
+    cy.contains("Leaderboard").should("have.attr", "href", routes.leaderboard);
+    cy.contains("Tutorial").should("have.attr", "href", routes.tutorial);
+    cy.contains("About").should("have.attr", "href", routes.about);
     cy.contains("Feedback");
 
     // find the network request that does this
@@ -31,17 +48,58 @@ describe("sidedrawer ui (checks correct values exist)", () => {
     cy.contains("pieces found so far!");
 
     cy.getTestElement("SponsorLogo");
+  });
 
-    cy.contains("Terms and Conditions").should(
+  it("standard user side drawer ui", () => {
+    cy.login(user.email, user.password);
+    // bit gross - waits for fetches to finish
+    //TODO: find the right request
+    cy.wait(2000);
+
+    cy.getTestElement(selectors.burger).click();
+
+    checkStaticLinks();
+
+    cy.contains("Account").should("have.attr", "href", routes.account);
+
+    cy.contains("Photo Approval").should("not.exist");
+    cy.contains("Feedback Reports").should("not.exist");
+
+    cy.contains("Leaderboard").should("have.attr", "href", routes.leaderboard);
+    cy.contains("Tutorial").should("have.attr", "href", routes.tutorial);
+    cy.contains("About").should("have.attr", "href", routes.about);
+    cy.contains("Feedback");
+
+    cy.contains("Logout");
+
+    cy.getTestElement("SponsorLogo");
+  });
+
+  it("moderator side drawer ui", () => {
+    cy.login(moderator.email, moderator.password);
+
+    cy.getTestElement(selectors.burger).click();
+
+    cy.contains("Account").should("have.attr", "href", routes.account);
+    cy.contains("Photo Approval").should(
       "have.attr",
       "href",
-      "https://plasticpatrol.co.uk/terms-and-conditions/"
+      routes.photoApproval
     );
-
-    cy.contains("Privacy Policy").should(
+    cy.contains("Feedback Reports").should(
       "have.attr",
       "href",
-      "https://plasticpatrol.co.uk/privacy-policy/"
+      routes.feedbackReports
     );
+
+    cy.contains("Leaderboard").should("have.attr", "href", routes.leaderboard);
+
+    cy.contains("Tutorial").should("have.attr", "href", routes.tutorial);
+    cy.contains("About").should("have.attr", "href", routes.about);
+    cy.contains("Feedback");
+
+    cy.contains("Logout");
+
+    cy.getTestElement("SponsorLogo");
   });
 });

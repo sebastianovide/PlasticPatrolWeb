@@ -5,6 +5,10 @@
 declare namespace Cypress {
   interface Chainable {
     getTestElement(selector: string): Chainable<Element>;
-    containsTestElement(selector: string, text: string): Chainable<Element>;
+    containsTestElement(selector: string, text: string): Chainable<Element>;\
+
+    login(email:string,password:string):void
   }
+  
+
 }

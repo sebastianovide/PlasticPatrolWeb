@@ -1,5 +1,5 @@
 export const moderator = {
-  email: "admin@test.com",
+  email: "moderator@test.com",
   password: "12345678a"
 };
 

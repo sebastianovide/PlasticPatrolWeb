@@ -13,5 +13,12 @@ export const requestUrls = {
 export const routes = {
   home: "#/",
   login: "#/login",
-  newPhoto: "#/photo/new"
+  newPhoto: "#/photo/new",
+  photoApproval: "#/moderator",
+  account: "#/account",
+  leaderboard: "#/leaderboard",
+  tutorial: "#/tutorial",
+  about: "#/about",
+  feedback: "#/write-feedback",
+  feedbackReports: "#/feedback-reports"
 };
