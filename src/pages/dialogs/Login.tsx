@@ -42,7 +42,11 @@ export default function Login({ handleClose }: Props) {
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={() => setShow(false)} color="primary">
+          <Button
+            onClick={() => setShow(false)}
+            color="primary"
+            data-test="LoginButton"
+          >
             Login
           </Button>
         </DialogActions>

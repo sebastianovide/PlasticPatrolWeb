@@ -32,3 +32,12 @@ Cypress.Commands.add(
       ? subject.get(`[data-test="${selector}"]`)
       : cy.get(`[data-test="${selector}"]`)
 );
+
+Cypress.Commands.add(
+  "containsTestElement",
+  { prevSubject: "optional" },
+  (subject, selector: string, text: string) =>
+    subject
+      ? subject.contains(`[data-test="${selector}"]`, text)
+      : cy.contains(`[data-test="${selector}"]`, text)
+);
