@@ -1,13 +1,32 @@
 import React from "react";
+import { makeStyles } from "@material-ui/core";
 
-import "./MiddleSlide.scss";
+import globe from "assets/images/intro/globe.png";
 
-export default function MiddleSlide({ topText, imgSrc, bottomText }: any) {
+import SlideLayout from "../SlideLayout";
+
+const useStyles = makeStyles(() => ({
+  title: {
+    textTransform: "uppercase",
+    "font-weight": "bold"
+  },
+  image: {
+    maxHeight: "35vh",
+    marginBottom: "5vh"
+  }
+}));
+
+export default function MiddleSlide() {
+  const styles = useStyles();
   return (
-    <div className="MiddleSlide__container">
-      <p className="MiddleSlide__topText"> {topText}</p>
-      <img src={imgSrc} alt="" className="MiddleSlide__image" />
-      <p className="MiddleSlide__bottomText">{bottomText}</p>
-    </div>
+    <SlideLayout title="Creating global change">
+      <>
+        <p>
+          Litter you record helps identify top polluters and influence
+          government change
+        </p>
+        <img src={globe} className={styles.image} alt="globe" />
+      </>
+    </SlideLayout>
   );
 }

@@ -7,6 +7,7 @@ import Button from "@material-ui/core/Button";
 
 import exampleImage from "assets/images/example.jpeg";
 import { useHistory } from "react-router-dom";
+import { makeStyles } from "@material-ui/core";
 
 export type TutorialStep = {
   img?: string;
@@ -15,6 +16,16 @@ export type TutorialStep = {
   Icon?: React.FC<{ className: string }>;
   Button?: React.FC<{ className?: string }>;
 };
+
+const useStyles = makeStyles(() => ({
+  button: {
+    background: "orange",
+    color: "white",
+    "font-weight": "800",
+    fontSize: "18px",
+    borderRadius: "10px"
+  }
+}));
 
 export const tutorialSteps: Array<TutorialStep> = [
   {
@@ -41,12 +52,9 @@ export const tutorialSteps: Array<TutorialStep> = [
       "By litter picking and recording your findings you are helping build the largest and most powerful dataset on litter. We analyse everything you collect to drive impactful and evidence-based changes by government and brands to protect the environment.",
     Button: () => {
       const history = useHistory();
-
+      const styles = useStyles();
       return (
-        <Button
-          className="FinalSlide__button"
-          onClick={() => history.push("/")}
-        >
+        <Button className={styles.button} onClick={() => history.push("/")}>
           Get started
         </Button>
       );
