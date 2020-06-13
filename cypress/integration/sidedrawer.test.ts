@@ -81,7 +81,7 @@ describe("sidedrawer ui (checks correct values exist)", () => {
     cy.getTestElement(selectors.burger).click();
 
     cy.contains("Account").should("have.attr", "href", routes.account);
-    cy.contains("Photo Approval").should(
+    cy.contains("Photo Approval", { timeout: 20000 }).should(
       "have.attr",
       "href",
       routes.photoApproval
