@@ -23,6 +23,8 @@ import MultiFields from "components/pages/AdminApproval/MultiFields";
 
 import data from "./categories.json";
 import { linkToFeedbackReports } from "routes/feedback-reports/links";
+import { linkToTutorialPage } from "routes/tutorial/links";
+import { linkToAboutPage } from "routes/about/links";
 
 const primaryMain = styles.primaryMain;
 const primaryContrastText = styles.primaryContrastText;
@@ -56,13 +58,13 @@ const PAGES: { [pageName: string]: Page } = {
     visible: (user: User | undefined, online: boolean) => !!user
   },
   about: {
-    path: "/about",
+    path: linkToAboutPage(),
     label: "About",
     visible: (user: User | undefined, online: boolean) => true,
     icon: <HelpIcon />
   },
   tutorial: {
-    path: "/tutorial",
+    path: linkToTutorialPage(),
     label: "Tutorial",
     visible: (user: User | undefined, online: boolean) => true,
     icon: <SchoolIcon />
@@ -122,7 +124,42 @@ const PAGES: { [pageName: string]: Page } = {
   }
 };
 
-export default {
+export interface Metadata {
+  metadataServerUrl: string;
+  serverUrl: string;
+  twSite: string;
+  twCreator: string;
+  twDomain: string;
+  _twDescriptionField: string;
+  twDescription: string;
+  twTitle: string;
+}
+
+export interface Config {
+  PAGES: { [pageName: string]: Page };
+  ENABLE_GROUPS: boolean;
+  metadata: Metadata;
+  MAX_IMAGE_SIZE: number;
+  THEME: any;
+  MAP_SOURCE: string;
+  MAPBOX_TOKEN: string;
+  GA_TRACKING_ID: string;
+  GA_PROPERTY_ID: string;
+  PHOTO_ZOOMED_FIELDS: any;
+  ZOOM: number;
+  ZOOM_FLYTO: number;
+  CENTER: [number, number];
+  PHOTO_FIELDS: any;
+  getStats: (photos: any, dbStats: Stats) => number;
+  ENABLE_GRAVATAR_PROFILES: boolean;
+  SECURITY: {
+    UPLOAD_REQUIRES_LOGIN: boolean;
+  };
+  MODERATING_PHOTOS: number;
+  LEADERBOARD_FIELD: any;
+}
+
+const config: Config = {
   metadata: {
     metadataServerUrl: "https://md.plasticpatrol.co.uk",
     serverUrl: "https://app.plasticpatrol.co.uk",
@@ -131,7 +168,7 @@ export default {
     twDomain: "www.plasticpatrol.co.uk",
     _twDescriptionField: "pieces",
     twDescription:
-      "The global movement that is crowdsource cleaning the planet. Download the Plastic Patrol app to join the movement!",
+      "The global movement that is crowdsource cleaning the planet. Download the Planet Patrol app to join the movement!",
     twTitle: "Plastic Patrol"
   },
   MAX_IMAGE_SIZE: 2048,
@@ -217,3 +254,5 @@ export default {
     field: "pieces"
   }
 };
+
+export default config;

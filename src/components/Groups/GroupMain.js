@@ -49,11 +49,7 @@ class Groups extends React.Component {
     const { handleClose, label, classes } = this.props;
 
     return (
-      <PageWrapper
-        label={label}
-        navigationHandler={{ handleClose }}
-        hasLogo={true}
-      >
+      <PageWrapper label={label} navigationHandler={{ handleClose }}>
         <div>
           <Grid container spacing={3}>
             <Grid item xs={3}></Grid>

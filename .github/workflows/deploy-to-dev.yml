@@ -18,23 +18,33 @@ jobs:
         with:
           node-version: 10.x
 
+      - name: "Automated Version Bump"
+        uses: "phips28/gh-action-bump-version@master"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Read package.json
+        uses: tyankatsu0105/read-package-version-actions@v1
+        id: package-version
+
+      - name: Show version number
+        run: echo "Version is ${{ steps.package-version.outputs.version }}"
+
       - name: Cache node_modules
         id: cache-modules
         uses: actions/cache@v1
         with:
           path: node_modules
           key: ${{ runner.OS }}-node_modules-${{ hashFiles('yarn.lock') }}
-
       - name: yarn
         if: steps.cache-modules.outputs.cache-hit != 'true'
         run: yarn
-
       - name: Build
         run: NODE_ENV=development yarn build
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
         with:
-          args: deploy --only hosting
+          args: deploy --only hosting -m "V${{ steps.package-version.outputs.version }}"
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           PROJECT_ID: plastic-patrol-dev-722eb
@@ -43,4 +53,4 @@ jobs:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
         uses: pullreminders/slack-action@master
         with:
-          args: '{\"channel\":\"C014L0X2R38\",\"text\":\"A new dev version of the app has been released 🚀 https://plastic-patrol-dev-722eb.web.app/#/ \"}'
+          args: '{\"channel\":\"C014L0X2R38\",\"text\":\"Version ${{ steps.package-version.outputs.version }} has just deployed to dev 🚀 \"}'

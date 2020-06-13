@@ -22,11 +22,7 @@ class GroupList extends React.Component {
     console.log("groups array:", groupsArray);
 
     return (
-      <PageWrapper
-        label={label}
-        navigationHandler={{ handleClose }}
-        hasLogo={false}
-      >
+      <PageWrapper label={label} navigationHandler={{ handleClose }}>
         <Typography variant="h1" color="inherit" className={classes.message}>
           your groups here - coming soon!
         </Typography>

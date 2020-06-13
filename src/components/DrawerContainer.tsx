@@ -164,6 +164,7 @@ export default function DrawerContainer({
               <span
                 className={classes.sponsoredByContainer}
                 style={{ backgroundImage: "url(" + sponsorImage + ")" }}
+                data-test="SponsorLogo"
               />
             )}
 

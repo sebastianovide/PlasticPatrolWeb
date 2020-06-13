@@ -8,7 +8,6 @@ import User from "types/User";
 import Groups from "components/Groups/GroupMain";
 import GroupList from "components/Groups/GroupList";
 import GroupAdd from "components/Groups/GroupAdd";
-import TutorialPage from "components/pages/TutorialPage";
 import ProfilePage from "components/ProfilePage";
 import ModeratorPage from "components/ModeratorPage";
 import LeaderboardPage from "components/Leaderboard";
@@ -34,6 +33,9 @@ import { linkToFeedbackReports } from "./feedback-reports/links";
 
 import { linkToLogin } from "./login/links";
 import LoginRoute from "./login/Route";
+        
+import TutorialPageRoute from "./tutorial/Route";
+import { linkToTutorialPage } from "./tutorial/links";
 
 type Props = {
   user: User;
@@ -88,11 +90,8 @@ export function Routes({
         />
       </Route>
 
-      <Route path={config.PAGES.tutorial.path}>
-        <TutorialPage
-          label={config.PAGES.tutorial.label}
-          handleClose={history.goBack}
-        />
+      <Route path={linkToTutorialPage()}>
+        <TutorialPageRoute handleClose={history.goBack} />
       </Route>
 
       <Route path={config.PAGES.leaderboard.path}>

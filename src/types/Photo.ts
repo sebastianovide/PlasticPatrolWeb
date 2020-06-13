@@ -5,7 +5,7 @@ type Photo = {
   main: any;
   thumbnail: any;
   updated: any;
-  moderated: any;
+  moderated: Date;
   owner_id: string;
   pieces: number;
 };

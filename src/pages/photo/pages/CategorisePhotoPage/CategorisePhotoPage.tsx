@@ -39,6 +39,7 @@ const useStyles = makeStyles((theme) => ({
   },
   prompt: { textAlign: "center" },
   button: {
+    minHeight: "2em",
     marginTop: "auto",
     textTransform: "none",
     width: "max-content",
@@ -158,7 +159,7 @@ export function CategoriseLitterPageWithFileInfo({
         ) : (
           <>
             <p className={styles.prompt}>
-              Tap on the pieces of litter in your photo to add litter details
+              Tap on a piece of litter in your photo and add details
             </p>
             <ItemOverviewList
               items={items}

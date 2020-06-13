@@ -78,7 +78,8 @@ async function sendFile({
     return {
       brand,
       number: quantity,
-      leafkey: type && type.leafKey
+      leafkey: type && type.leafKey,
+      label: type && type.label
     };
   });
 
