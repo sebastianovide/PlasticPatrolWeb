@@ -17,8 +17,7 @@
     "resolveJsonModule": true,
     "noEmit": true,
     "baseUrl": "src",
-    "isolatedModules": true,
     "typeRoots": ["./types", "./node_modules/@types"]
   },
-  "include": ["src", ".storybook/*"]
+  "include": ["src", ".storybook/*", "scripts"]
 }

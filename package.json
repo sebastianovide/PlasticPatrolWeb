@@ -60,7 +60,8 @@
     "functions:test": "cd functions && npm run test",
     "storybook": "start-storybook",
     "test:cypress": "cypress open",
-    "run:cypress": "cypress run"
+    "run:cypress": "cypress run",
+    "verifyUser": "ts-node ./scripts/verifyUser"
   },
   "devDependencies": {
     "@storybook/react": "^5.3.19",
@@ -87,6 +88,7 @@
     "source-map-loader": "^0.2.4",
     "storybook": "^5.3.19",
     "ts-loader": "^6.2.1",
+    "ts-node": "^8.10.2",
     "typescript": "^3.8.3",
     "wait-on": "^5.0.1",
     "webpack": "4.42.0",
