@@ -7,29 +7,29 @@ import _ from "lodash";
 import Button from "@material-ui/core/Button";
 import Snackbar from "@material-ui/core/Snackbar";
 import { withStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
 
 import { Routes } from "routes/Routes";
 
 import { dbFirebase, authFirebase } from "features/firebase";
+import { linkToNewPhoto } from "routes/photo/routes/new/links";
+import getMapIsVisible from "utils/getMapIsVisible";
+import {
+  linkToLoginWithRedirectOnSuccess,
+  linkToLogin
+} from "routes/login/links";
 
 import WelcomePage from "./components/pages/WelcomePage";
 import Map from "./components/MapPage/Map";
-import LoginFirebase from "./components/LoginFirebase";
 import DrawerContainer from "./components/DrawerContainer";
 import TermsDialog from "./components/TermsDialog";
-import EmailVerifiedDialog from "./components/EmailVerifiedDialog";
+import EmailVerifiedDialog from "./pages/dialogs/EmailVerified";
+import MapLocation from "./types/MapLocation";
 
 import { gtagPageView, gtagEvent } from "./gtag.js";
 import "./App.scss";
-import MapLocation from "./types/MapLocation";
-import { linkToNewPhoto } from "routes/photo/routes/new/links";
-import getMapIsVisible from "utils/getMapIsVisible";
 
 const styles = (theme) => ({
   rootDialog: {
@@ -51,7 +51,6 @@ class App extends Component {
       location: new MapLocation(), // from GPS
       user: null,
       online: false,
-      loginLogoutDialogOpen: false,
       openPhotoDialog: false,
       leftDrawerOpen: false,
       welcomeShown: !!localStorage.getItem("welcomeShown"),
@@ -350,28 +349,18 @@ class App extends Component {
   }
 
   handleClickLoginLogout = () => {
-    let loginLogoutDialogOpen = true;
-
     if (this.state.user) {
       authFirebase.signOut();
-      loginLogoutDialogOpen = false;
+    } else {
+      this.props.history.push(linkToLogin());
     }
-
-    this.setState({ loginLogoutDialogOpen });
-  };
-
-  handleLoginClose = () => {
-    this.setState({ loginLogoutDialogOpen: false });
   };
 
   handleCameraClick = () => {
     if (this.props.config.SECURITY.UPLOAD_REQUIRES_LOGIN && !this.state.user) {
-      this.setState({
-        dialogOpen: true,
-        dialogTitle: "Please login to add a photo",
-        dialogContentText:
-          "Before adding photos, you must be logged into your account."
-      });
+      this.props.history.push(
+        linkToLoginWithRedirectOnSuccess(linkToNewPhoto())
+      );
     } else {
       this.props.history.push(linkToNewPhoto());
     }
@@ -390,13 +379,6 @@ class App extends Component {
   toggleLeftDrawer = (isItOpen) => () => {
     gtagEvent(isItOpen ? "Opened" : "Closed", "Menu");
     this.setState({ leftDrawerOpen: isItOpen });
-  };
-
-  handleLoginPhotoAdd = (e) => {
-    this.setState({
-      loginLogoutDialogOpen: true,
-      dialogOpen: false
-    });
   };
 
   handleNextClick = async () => {
@@ -578,7 +560,7 @@ class App extends Component {
   };
 
   render() {
-    const { classes, config } = this.props;
+    const { config } = this.props;
     return (
       <div className="geovation-app">
         {!this.state.termsAccepted &&
@@ -645,11 +627,6 @@ class App extends Component {
 
         <Snackbar open={!this.state.geojson} message="Loading photos..." />
 
-        <LoginFirebase
-          open={this.state.loginLogoutDialogOpen && !this.state.user}
-          handleClose={this.handleLoginClose}
-        />
-
         <DrawerContainer
           user={this.state.user}
           online={this.state.online}
@@ -659,26 +636,6 @@ class App extends Component {
           stats={this.state.stats}
           sponsorImage={this.state.sponsorImage}
         />
-
-        <Dialog open={this.state.dialogOpen} onClose={this.handleDialogClose}>
-          <DialogTitle disableTypography className={classes.rootDialog}>
-            <Typography variant="h6">{this.state.dialogTitle}</Typography>
-          </DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              {this.state.dialogContentText}
-            </DialogContentText>
-          </DialogContent>
-
-          <DialogActions>
-            <Button onClick={this.handleDialogClose} color="primary">
-              Cancel
-            </Button>
-            <Button onClick={this.handleLoginPhotoAdd} color="primary">
-              Login
-            </Button>
-          </DialogActions>
-        </Dialog>
 
         <Dialog
           open={this.state.confirmDialogOpen}
