@@ -88,6 +88,9 @@ bks
 
 functions/dist
 
+# secrets
+adminCreds.dev.json
+
 #cypress
 cypress/videos
 cypress/screenshots
