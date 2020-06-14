@@ -10,9 +10,8 @@ import Avatar from "@material-ui/core/Avatar";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 
-import "./ProfilePage.scss";
-import PageWrapper from "./PageWrapper";
-import MapLocation from "../types/MapLocation";
+import PageWrapper from "../../components/PageWrapper";
+import MapLocation from "../../types/MapLocation";
 import Feature from "types/Feature";
 import Geojson from "types/Geojson";
 import User from "types/User";
@@ -27,7 +26,6 @@ const useStyles = makeStyles((theme) => ({
   row: {
     display: "flex",
     width: "100%"
-    // padding: `0 ${theme.spacing(2)}px`
   },
   colr: {
     flex: "50%",
@@ -39,26 +37,31 @@ const useStyles = makeStyles((theme) => ({
   },
   centered: {
     textAlign: "center"
+  },
+  profileInfo: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    margin: "20px"
   }
 }));
 
 interface Props {
   user: User;
-  label: string;
   geojson: Geojson;
   handlePhotoClick: (feature: Feature) => void;
   handleClose: () => void;
   config: Config;
 }
 
-const ProfilePage = ({
+export default function AccountPage({
   user,
-  label,
   geojson,
   handlePhotoClick,
   handleClose,
   config
-}: Props) => {
+}: Props) {
   const classes = useStyles();
 
   const calcUrl = useCallback(
@@ -81,13 +84,11 @@ const ProfilePage = ({
     _.sortBy(myPhotos, (o) => o.properties.moderated)
   ).slice(0, 20);
 
-  console.log(myLastPhotos);
-
   const numPieces = _.sumBy(myPhotos, (o) => o.properties.pieces);
 
   return (
-    <PageWrapper label={label} navigationHandler={{ handleClose }}>
-      <div className={"profile-info"}>
+    <PageWrapper label="Account" navigationHandler={{ handleClose }}>
+      <div className={classes.profileInfo}>
         <Avatar
           className={classes.avatar}
           alt="profile-image"
@@ -143,6 +144,4 @@ const ProfilePage = ({
       </div>
     </PageWrapper>
   );
-};
-
-export default ProfilePage;
+}
