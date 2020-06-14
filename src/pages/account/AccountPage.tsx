@@ -1,5 +1,3 @@
-// Profile page to display user details.
-
 import React, { useCallback } from "react";
 
 import _ from "lodash";
@@ -17,7 +15,7 @@ import Geojson from "types/Geojson";
 import User from "types/User";
 import { Config } from "custom/config";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   avatar: {
     margin: 10,
     height: 100,
@@ -27,23 +25,8 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     width: "100%"
   },
-  colr: {
-    flex: "50%",
-    textAlign: "right"
-  },
-  coll: {
-    flex: "50%",
-    textAlign: "left"
-  },
-  centered: {
-    textAlign: "center"
-  },
-  profileInfo: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    margin: "20px"
+  wrapper: {
+    alignItems: "center"
   }
 }));
 
@@ -87,61 +70,60 @@ export default function AccountPage({
   const numPieces = _.sumBy(myPhotos, (o) => o.properties.pieces);
 
   return (
-    <PageWrapper label="Account" navigationHandler={{ handleClose }}>
-      <div className={classes.profileInfo}>
-        <Avatar
-          className={classes.avatar}
-          alt="profile-image"
-          src={user.photoURL}
-        />
-        <Typography gutterBottom variant="h5">
-          {user.displayName}
+    <PageWrapper
+      label="Account"
+      navigationHandler={{ handleClose }}
+      className={classes.wrapper}
+    >
+      <Avatar
+        className={classes.avatar}
+        alt="profile-image"
+        src={user.photoURL}
+      />
+      <Typography gutterBottom variant="h5">
+        {user.displayName}
+      </Typography>
+      <Typography component="p">{user.email}</Typography>
+      <Typography>{user.location}</Typography>
+      <Typography>{user.description}</Typography>
+
+      <br />
+
+      {myPhotos && (
+        <Typography variant="body1">
+          Num. of uploads <strong>{myPhotos.length}</strong>
         </Typography>
-        <Typography component="p">{user.email}</Typography>
-        <Typography>{user.location}</Typography>
-        <Typography>{user.description}</Typography>
+      )}
+      {!isNaN(numPieces) && (
+        <Typography variant="body1">
+          Total Pieces <strong>{numPieces}</strong>
+        </Typography>
+      )}
 
-        <br />
+      <br />
 
-        {myPhotos && (
-          <Typography variant="body1">
-            Num. of uploads <strong>{myPhotos.length}</strong>
+      {myLastPhotos.length && (
+        <>
+          <Typography variant="h6">
+            Last {myLastPhotos.length} approved
           </Typography>
-        )}
-        {!isNaN(numPieces) && (
-          <Typography variant="body1">
-            Total Pieces <strong>{numPieces}</strong>
-          </Typography>
-        )}
 
-        <br />
-
-        {myLastPhotos.length && (
-          <div>
-            <Typography variant="h6" className={classes.centered}>
-              Last {myLastPhotos.length} approved
+          {_.map(myLastPhotos, (photo) => (
+            <Typography variant="body1" key={photo.properties.id}>
+              {photo.properties.pieces && (
+                <span>
+                  <strong>{photo.properties.pieces}</strong> pieces{" "}
+                </span>
+              )}
+              <Link to={calcUrl(photo)} onClick={() => handlePhotoClick(photo)}>
+                {photo.properties.moderated.toDateString
+                  ? photo.properties.moderated.toDateString()
+                  : photo.properties.moderated}
+              </Link>
             </Typography>
-
-            {_.map(myLastPhotos, (photo) => (
-              <div className={classes.centered} key={photo.properties.id}>
-                <Typography variant="body1">
-                  {photo.properties.pieces && (
-                    <span>
-                      <strong>{photo.properties.pieces}</strong> pieces{" "}
-                    </span>
-                  )}
-                  <Link
-                    to={calcUrl(photo)}
-                    onClick={() => handlePhotoClick(photo)}
-                  >
-                    {photo.properties.moderated.toDateString()}
-                  </Link>
-                </Typography>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+          ))}
+        </>
+      )}
     </PageWrapper>
   );
 }
