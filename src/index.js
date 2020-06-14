@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import { HashRouter as Router } from "react-router-dom";
+import * as firebaseui from "firebaseui";
+import firebase from "firebase/app";
 
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 
 import "./index.scss";
 import App from "./App";
-import * as firebaseui from "firebaseui";
-import firebase from "firebase/app";
+
+import firebaseApp from "features/firebase/firebaseInit";
+
 import LoginFirebase from "./components/LoginFirebase";
 import * as serviceWorker from "./serviceWorker";
 import config from "./custom/config";
@@ -24,6 +27,15 @@ if (process.env.NODE_ENV !== "development") {
 }
 
 serviceWorker.register();
+
+function initialiseCypressVars() {
+  if (window.Cypress) {
+    console.log("adding firebase");
+    window.__firebase__ = firebaseApp;
+  }
+}
+
+initialiseCypressVars();
 
 if (isIphoneAndCordova) {
   window.StatusBar.styleDefault();
