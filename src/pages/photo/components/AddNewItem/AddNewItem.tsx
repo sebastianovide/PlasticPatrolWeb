@@ -91,6 +91,8 @@ export default function AddNewItem({
 
   const styles = useStyles();
 
+  const itemButtonIsDisabled = !(quantity && brand && type && type.label);
+
   return (
     <div className={styles.wrapper}>
       <div>
@@ -126,7 +128,7 @@ export default function AddNewItem({
         Cancel
       </Button>
       <Button
-        disabled={quantity === 0}
+        disabled={itemButtonIsDisabled}
         onClick={() =>
           onConfirmClick({
             quantity,
