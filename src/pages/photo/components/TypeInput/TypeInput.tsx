@@ -57,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     background: "#4e4e4e",
     color: "white",
-    padding: `${theme.spacing(0.5)}px ${theme.spacing(1)}px`,
+    padding: theme.spacing(1.5),
     width: "max-content",
     margin: `${theme.spacing(0.5)}px ${theme.spacing(1)}px ${theme.spacing(
       0.5
@@ -76,6 +76,7 @@ const useStyles = makeStyles((theme) => ({
   },
   suggestionListItem: {
     padding: "6px",
+
     marginLeft: "0",
     cursor: "pointer",
     "&:hover": {
