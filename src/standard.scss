@@ -1,9 +1,17 @@
 //  Colors
 
+// Brand guideline colors
+$orange: #fbc476;
+$green: #86c593;
+$blue: #78cade;
+$teal: #2cb5b5;
+$pink: #eb98c0;
+$red: #e9484a;
+
 //Palettes
 
 // Primary
-$primaryMain: #2cb5b5;
+$primaryMain: $teal;
 $primaryContrastText: #fff;
 $primaryTextDisabled: rgba(white, 0.5);
 
@@ -26,4 +34,10 @@ $mediumGrey: #c3c3c3;
   primaryTextDisabled: $primaryTextDisabled;
   lightGrey: $lightGrey;
   mediumGrey: $mediumGrey;
+  orange: $orange;
+  green: $green;
+  blue: $blue;
+  teal: $teal;
+  pink: $pink;
+  red: $red;
 }

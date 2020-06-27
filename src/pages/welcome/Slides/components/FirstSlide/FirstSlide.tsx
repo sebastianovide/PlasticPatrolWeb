@@ -24,7 +24,7 @@ export default function FirstSlide() {
         <p className={styles.text}>Take a photo and record the brand name</p>
 
         <img src={mapIt} alt="Map it" className={styles.image} />
-        <p className={styles.text}>Upload your findings to our global maps</p>
+        <p className={styles.text}>Upload your findings to our global map</p>
       </>
     </SlideLayout>
   );

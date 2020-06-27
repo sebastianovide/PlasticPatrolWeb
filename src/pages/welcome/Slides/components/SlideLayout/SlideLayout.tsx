@@ -22,6 +22,7 @@ const useStyles = makeStyles(() => ({
     marginBottom: "25px"
   },
   title: {
+    marginTop: "3rem",
     textTransform: "uppercase",
     fontSize: "1.3em"
   },

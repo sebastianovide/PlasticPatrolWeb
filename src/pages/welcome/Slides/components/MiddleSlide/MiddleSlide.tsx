@@ -6,10 +6,6 @@ import globe from "assets/images/intro/globe.png";
 import SlideLayout from "../SlideLayout";
 
 const useStyles = makeStyles(() => ({
-  title: {
-    textTransform: "uppercase",
-    "font-weight": "bold"
-  },
   image: {
     maxHeight: "35vh",
     marginBottom: "5vh"
