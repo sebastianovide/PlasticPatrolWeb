@@ -8,7 +8,6 @@ import User from "types/User";
 import Groups from "components/Groups/GroupMain";
 import GroupList from "components/Groups/GroupList";
 import GroupAdd from "components/Groups/GroupAdd";
-import ProfilePage from "components/ProfilePage";
 import ModeratorPage from "components/ModeratorPage";
 import LeaderboardPage from "components/Leaderboard";
 import WriteFeedbackPage from "components/WriteFeedbackPage";
@@ -33,9 +32,12 @@ import { linkToFeedbackReports } from "./feedback-reports/links";
 
 import { linkToLogin } from "./login/links";
 import LoginRoute from "./login/Route";
-        
+
 import TutorialPageRoute from "./tutorial/Route";
 import { linkToTutorialPage } from "./tutorial/links";
+
+import AccountPageRoute from "./account/Route";
+import { linkToAccountPage } from "./account/links";
 
 type Props = {
   user: User;
@@ -159,10 +161,9 @@ export function Routes({
         <PhotoRoute />
       </Route>
 
-      <SignedInRoute path={config.PAGES.account.path} user={user}>
-        <ProfilePage
+      <SignedInRoute path={linkToAccountPage()} user={user}>
+        <AccountPageRoute
           config={config}
-          label={config.PAGES.account.label}
           user={user}
           geojson={geojson}
           handleClose={history.goBack}

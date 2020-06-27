@@ -1,4 +1,5 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
+import classnames from "classnames";
 
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
@@ -266,7 +267,7 @@ const PageWrapper: FunctionComponent<Props> = ({
           </Typography>
         </Toolbar>
       </AppBar>
-      <div className={classes.main}>{children}</div>
+      <div className={classnames(classes.main, className)}>{children}</div>
       <div className={classes.notchBottom} />
       <ConfirmBack
         open={confirmBack}
