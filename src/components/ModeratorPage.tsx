@@ -20,6 +20,7 @@ import PageWrapper from "./PageWrapper";
 import CardComponent from "./CardComponent";
 import "./ModeratorPage.scss";
 import config from "../custom/config";
+import { DialogTitle, DialogActions, Button } from "@material-ui/core";
 
 const placeholderImage = process.env.PUBLIC_URL + "/custom/images/logo.svg";
 
@@ -42,6 +43,11 @@ interface Props {
   handleApproveClick: (photo: Photo) => void;
 }
 
+type Confirmation = {
+  message: string;
+  onConfirmation: () => void;
+};
+
 const ModeratorPage = ({
   label,
   photos,
@@ -52,6 +58,7 @@ const ModeratorPage = ({
   const styles = useStyles();
   const [zoomDialogOpen, setZoomDialogOpen] = useState(false);
   const [photoSelected, setPhotoSelected] = useState<Photo | undefined>();
+  const [confirmation, setConfirmation] = useState<Confirmation | undefined>();
 
   const closeZoomDialog = () => setZoomDialogOpen(false);
   const handlePhotoClick = (photoSelected: Photo) => {
@@ -94,14 +101,24 @@ const ModeratorPage = ({
               <IconButton
                 aria-label="Reject"
                 edge={false}
-                onClick={() => handleRejectClick(photo)}
+                onClick={() => {
+                  setConfirmation({
+                    message: `Are you sure you want to unpublish the photo ?`,
+                    onConfirmation: () => handleRejectClick(photo)
+                  });
+                }}
               >
                 <ThumbDownIcon />
               </IconButton>
               <IconButton
                 aria-label="Approve"
                 edge={false}
-                onClick={() => handleApproveClick(photo)}
+                onClick={() => {
+                  setConfirmation({
+                    message: `Are you sure you want to publish the photo ?`,
+                    onConfirmation: () => handleApproveClick(photo)
+                  });
+                }}
               >
                 <ThumbUpIcon />
               </IconButton>
@@ -110,6 +127,25 @@ const ModeratorPage = ({
         ))}
       </List>
 
+      {confirmation && (
+        <Dialog open={true} onClose={() => setConfirmation(undefined)}>
+          <DialogTitle>{confirmation.message}</DialogTitle>
+          <DialogActions>
+            <Button onClick={() => setConfirmation(undefined)} color="primary">
+              Cancel
+            </Button>
+            <Button
+              onClick={() => {
+                setConfirmation(undefined);
+                confirmation.onConfirmation();
+              }}
+              color="primary"
+            >
+              Ok
+            </Button>
+          </DialogActions>
+        </Dialog>
+      )}
       <Dialog open={zoomDialogOpen} onClose={closeZoomDialog}>
         <DialogContent>
           {photoSelected && (
@@ -127,8 +163,18 @@ const ModeratorPage = ({
           )}
           <CardComponent
             photoSelected={photoSelected}
-            handleRejectClick={handleRejectClick}
-            handleApproveClick={handleApproveClick}
+            handleRejectClick={(photo: Photo) =>
+              setConfirmation({
+                message: `Are you sure you want to unpublish the photo ?`,
+                onConfirmation: () => handleRejectClick(photo)
+              })
+            }
+            handleApproveClick={(photo: Photo) =>
+              setConfirmation({
+                message: `Are you sure you want to publish the photo ?`,
+                onConfirmation: () => handleApproveClick(photo)
+              })
+            }
           />
         </DialogContent>
       </Dialog>

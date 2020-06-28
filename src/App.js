@@ -4,12 +4,8 @@ import { withRouter } from "react-router-dom";
 import * as localforage from "localforage";
 import _ from "lodash";
 
-import Button from "@material-ui/core/Button";
 import Snackbar from "@material-ui/core/Snackbar";
 import { withStyles } from "@material-ui/core/styles";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogTitle from "@material-ui/core/DialogTitle";
 
 import { Routes } from "routes/Routes";
 
@@ -51,16 +47,12 @@ class App extends Component {
       location: new MapLocation(), // from GPS
       user: null,
       online: false,
-      openPhotoDialog: false,
       leftDrawerOpen: false,
       welcomeShown: !!localStorage.getItem("welcomeShown"),
       termsAccepted: !!localStorage.getItem("termsAccepted"),
       geojson: null,
       stats: undefined,
-      dialogOpen: false,
-      confirmDialogOpen: false,
       usersLeaderboard: [],
-      confirmDialogHandleOk: null,
       selectedFeature: undefined, // undefined = not selectd, null = feature not found
       photoAccessedByUrl: false,
       photosToModerate: {},
@@ -106,10 +98,6 @@ class App extends Component {
       }
     };
   }
-
-  handleDialogClose = () => {
-    this.setState({ dialogOpen: false });
-  };
 
   async fetchPhotoIfUndefined(photoId) {
     // it means that we landed on the app with a photoId in the url
@@ -406,73 +394,27 @@ class App extends Component {
     }
   };
 
-  handleConfirmDialogClose = () => {
-    this.setState({ confirmDialogOpen: false });
-  };
-
-  handleRejectClick = (photo) => {
-    this.setState({
-      confirmDialogOpen: true,
-      confirmDialogTitle: `Are you sure you want to unpublish the photo ?`,
-      confirmDialogHandleOk: () => this.rejectPhoto(photo)
-    });
-  };
-
-  handleApproveClick = (photo) => {
-    this.setState({
-      confirmDialogOpen: true,
-      confirmDialogTitle: `Are you sure you want to publish the photo ?`,
-      confirmDialogHandleOk: () => this.approvePhoto(photo)
-    });
-  };
-
   approveRejectPhoto = async (isApproved, photo) => {
-    // close dialogs
-    this.handleConfirmDialogClose();
-
     // publish/unpublish photo in firestore
-    try {
-      if (isApproved) {
-        await dbFirebase.approvePhoto(
-          photo.id,
-          this.state.user ? this.state.user.id : null
-        );
-      } else {
-        await dbFirebase.rejectPhoto(
-          photo.id,
-          this.state.user ? this.state.user.id : null
-        );
-      }
+    if (isApproved) {
+      await dbFirebase.approvePhoto(
+        photo.id,
+        this.state.user ? this.state.user.id : null
+      );
+    } else {
+      await dbFirebase.rejectPhoto(
+        photo.id,
+        this.state.user ? this.state.user.id : null
+      );
+    }
 
-      const selectedFeature = this.state.selectedFeature;
+    const selectedFeature = this.state.selectedFeature;
 
-      photo.published = isApproved;
+    photo.published = isApproved;
 
-      if (_.get(selectedFeature, "properties.id") === photo.id) {
-        selectedFeature.properties.published = isApproved;
-        this.setState({ selectedFeature });
-
-        // const updatedFeatures = this.state.geojson.features.filter(feature => feature.properties.id !== photo.id);
-        // const geojson = {
-        //   "type": "FeatureCollection",
-        //   "features": updatedFeatures
-        // };
-        // // update localStorage
-        // localforage.setItem("cachedGeoJson", geojson);
-        //
-        // // remove thumbnail from the map
-        // this.setState({ geojson }); //update state for next updatedFeatures
-      }
-
-      // alert(`Photo with ID ${photo.id} ${isApproved ? 'published' : 'unpublished'}`)
-    } catch (e) {
-      console.error(e);
-
-      this.setState({
-        confirmDialogOpen: true,
-        confirmDialogTitle: `The photo state has not changed. Please try again, id:${photo.id}`,
-        confirmDialogHandleOk: this.handleConfirmDialogClose
-      });
+    if (_.get(selectedFeature, "properties.id") === photo.id) {
+      selectedFeature.properties.published = isApproved;
+      this.setState({ selectedFeature });
     }
   };
 
@@ -615,8 +557,8 @@ class App extends Component {
             reloadPhotos={this.reloadPhotos}
             // just need the list of photos, don't need the object keyed on the id
             photosToModerate={_.map(this.state.photosToModerate, (x) => x)}
-            handleApproveClick={this.handleApproveClick}
-            handleRejectClick={this.handleRejectClick}
+            handleApproveClick={this.approvePhoto}
+            handleRejectClick={this.rejectPhoto}
             handlePhotoClick={this.handlePhotoClick}
             selectedFeature={this.state.selectedFeature}
             handlePhotoPageClose={this.handlePhotoPageClose}
@@ -636,21 +578,6 @@ class App extends Component {
           stats={this.state.stats}
           sponsorImage={this.state.sponsorImage}
         />
-
-        <Dialog
-          open={this.state.confirmDialogOpen}
-          onClose={this.handleConfirmDialogClose}
-        >
-          <DialogTitle>{this.state.confirmDialogTitle}</DialogTitle>
-          <DialogActions>
-            <Button onClick={this.handleConfirmDialogClose} color="primary">
-              Cancel
-            </Button>
-            <Button onClick={this.state.confirmDialogHandleOk} color="primary">
-              Ok
-            </Button>
-          </DialogActions>
-        </Dialog>
       </div>
     );
   }
