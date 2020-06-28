@@ -16,7 +16,7 @@ import * as serviceWorker from "./serviceWorker";
 import config from "./custom/config";
 import { isIphoneAndCordova } from "./utils";
 import { gtagInit } from "./gtag.js";
-import LocationProvider from "./LocationProvider";
+import LocationProvider, { useGPSLocation } from "./LocationProvider";
 import * as Sentry from "@sentry/browser";
 
 if (process.env.NODE_ENV !== "development") {
@@ -65,6 +65,7 @@ if (devDissableDebugLog) {
 const theme = createMuiTheme(config.THEME);
 
 const Wrapper = () => {
+  const gpsLocation = useGPSLocation();
   const [handledPendingRedirect, setHandledPendingRedirect] = useState(false);
   return (
     <>
@@ -73,9 +74,7 @@ const Wrapper = () => {
         handleClose={() => {}}
         onSignIn={() => setHandledPendingRedirect(true)}
       />
-      <LocationProvider>
-        <App config={config} />
-      </LocationProvider>
+      <App config={config} gpsLocation={gpsLocation} />
     </>
   );
 };
@@ -86,7 +85,9 @@ const startApp = () => {
   ReactDOM.render(
     <Router>
       <MuiThemeProvider theme={theme}>
-        <Wrapper />
+        <LocationProvider>
+          <Wrapper />
+        </LocationProvider>
       </MuiThemeProvider>
     </Router>,
     document.getElementById("root")

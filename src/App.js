@@ -63,39 +63,6 @@ class App extends Component {
     this.featuresDict = {};
   }
 
-  setLocationWatcher() {
-    if (navigator && navigator.geolocation) {
-      this.geoid = navigator.geolocation.watchPosition(
-        (position) => {
-          const location = Object.assign(this.state.location, {
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-            online: true,
-            updated: new Date(position.timestamp) // it indicate the freshness of the location.
-          });
-
-          this.setState({
-            location
-          });
-        },
-        (error) => {
-          console.log("Error: ", error.message);
-          const location = this.state.location;
-          location.online = false;
-          this.setState({
-            location
-          });
-        }
-      );
-    }
-
-    return async () => {
-      if (this.geoid && navigator.geolocation) {
-        navigator.geolocation.clearWatch(this.geoid);
-      }
-    };
-  }
-
   async fetchPhotoIfUndefined(photoId) {
     // it means that we landed on the app with a photoId in the url
     if (photoId && !this.state.selectedFeature) {
@@ -156,7 +123,6 @@ class App extends Component {
       this.setState({ user });
     });
 
-    this.unregisterLocationObserver = this.setLocationWatcher();
     this.unregisterConfigObserver = dbFirebase.configObserver(
       (config) => this.setState(config),
       console.error
@@ -360,7 +326,14 @@ class App extends Component {
 
   handleLocationClick = () => {
     gtagEvent("Location FAB clicked", "Map");
-    this.setState({ mapLocation: this.state.location });
+    const { latitude, longitude } = this.props.gpsLocation;
+    this.setState({
+      mapLocation: new MapLocation(
+        latitude,
+        longitude,
+        this.state.mapLocation.zoom
+      )
+    });
   };
 
   handlePhotoPageClose = () => {
@@ -451,13 +424,13 @@ class App extends Component {
               this.handleMapLocationChange(newMapLocation)
             }
             handleLocationClick={this.handleLocationClick}
-            gpsOffline={!this.state.location.online}
-            gpsDisabled={!this.state.location.updated}
+            gpsOffline={!this.props.gpsLocation.online}
+            gpsDisabled={!this.props.gpsLocation.updated}
           />
           <Routes
             user={this.state.user}
             stats={this.state.stats || EMPTY_STATS}
-            gpsLocation={this.state.location}
+            gpsLocation={this.props.gpsLocation}
             online={this.state.online}
             geojson={this.state.geojson}
             reloadPhotos={this.reloadPhotos}
