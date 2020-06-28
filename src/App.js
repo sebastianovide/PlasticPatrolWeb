@@ -45,18 +45,16 @@ class App extends Component {
 
     this.state = {
       location: new MapLocation(), // from GPS
+      mapLocation: new MapLocation(), // from the map
       user: null,
       online: false,
       leftDrawerOpen: false,
-      welcomeShown: !!localStorage.getItem("welcomeShown"),
-      termsAccepted: !!localStorage.getItem("termsAccepted"),
       geojson: null,
       stats: undefined,
       usersLeaderboard: [],
       selectedFeature: undefined, // undefined = not selectd, null = feature not found
       photoAccessedByUrl: false,
       photosToModerate: {},
-      mapLocation: new MapLocation(), // from the map
       // comes from config
       sponsorImage: undefined
     };
@@ -354,16 +352,6 @@ class App extends Component {
     }
   };
 
-  handleWelcomePageClose = () => {
-    this.setState({ welcomeShown: true });
-    localStorage.setItem("welcomeShown", true);
-  };
-
-  handleTermsPageClose = (e) => {
-    localStorage.setItem("termsAccepted", "Yes");
-    this.setState({ termsAccepted: "Yes" });
-  };
-
   toggleLeftDrawer = (isItOpen) => () => {
     gtagEvent(isItOpen ? "Opened" : "Closed", "Menu");
     this.setState({ leftDrawerOpen: isItOpen });
@@ -505,11 +493,7 @@ class App extends Component {
     const { config } = this.props;
     return (
       <div className="geovation-app">
-        {!this.state.termsAccepted &&
-          !this.props.history.location.pathname.startsWith(
-            this.props.config.PAGES.embeddable.path
-          ) && <TermsDialog handleClose={this.handleTermsPageClose} />}
-
+        <TermsDialog />
         <EmailVerifiedDialog
           user={this.state.user}
           open={
@@ -522,12 +506,7 @@ class App extends Component {
         />
 
         <main className="content">
-          {!this.state.welcomeShown &&
-            config.PAGES.embeddable.path &&
-            !this.props.history.location.pathname.includes(
-              config.PAGES.embeddable.path
-            ) && <WelcomePage handleClose={this.handleWelcomePageClose} />}
-
+          <WelcomePage />
           <Map
             history={this.props.history}
             visible={getMapIsVisible(this.props.history.location.pathname)}
