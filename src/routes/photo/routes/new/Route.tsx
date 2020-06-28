@@ -1,12 +1,20 @@
 import React, { useState } from "react";
 import { Route, useHistory } from "react-router-dom";
 
-import { NewPhotoPage } from "pages/photo";
-import AddPhotoDialog from "pages/photo/components/AddPhotoDialog";
-
-import { linkToAddDialog } from "./links";
-import { linkToCategoriseWithState } from "../categorise/links";
+import { linkToTutorialPage } from "routes/tutorial/links";
 import { CordovaCameraImage } from "types/Photo";
+import AddPhotoDialog from "pages/photo/components/AddPhotoDialog";
+import { NewPhotoPage } from "pages/photo";
+
+import { linkToCategoriseWithState } from "../categorise/links";
+import { linkToAddDialog, linkToNewPhoto } from "./links";
+
+const linkToTutorialWithRedirect = () => ({
+  pathname: linkToTutorialPage(),
+  state: {
+    redirectOnGetStarted: linkToNewPhoto()
+  }
+});
 
 export default function NewPhotoRoute() {
   const history = useHistory();
@@ -18,6 +26,7 @@ export default function NewPhotoRoute() {
 
   // @ts-ignore
   const isCordova = !!window.cordova;
+
   return (
     <>
       <NewPhotoPage
@@ -26,6 +35,7 @@ export default function NewPhotoRoute() {
             ? history.push(linkToAddDialog())
             : inputRef && inputRef.click();
         }}
+        linkToTutorialPage={linkToTutorialWithRedirect}
       />
       <input
         className="hidden"
