@@ -192,9 +192,9 @@ async function getPhotoByID(id: string): Promise<Feature | undefined> {
  * @returns {() => void}
  */
 function photosToModerateRT(
-  howMany,
-  updatePhotoToModerate,
-  removePhotoToModerate
+  howMany: number,
+  updatePhotoToModerate: (photo: Photo) => void,
+  removePhotoToModerate: (photo: Photo) => void
 ) {
   return firestore
     .collection("photos")
@@ -203,6 +203,7 @@ function photosToModerateRT(
     .limit(howMany)
     .onSnapshot((snapshot) => {
       snapshot.docChanges().forEach((change) => {
+        console.log("whats up");
         const photo = extractPhoto(change.doc.data(), change.doc.id);
         if (change.type === "added" || change.type === "modified") {
           updatePhotoToModerate(photo);
@@ -281,10 +282,9 @@ export default {
   savePhoto,
   saveMetadata,
   photosToModerateRT,
-  rejectPhoto: (photoId, userId) => writeModeration(photoId, userId, false),
-  approvePhoto: (photoId, userId) => writeModeration(photoId, userId, true),
   disconnect,
   writeFeedback,
+  writeModeration,
   toggleUnreadFeedback,
   configObserver
 };

@@ -23,6 +23,7 @@ import DrawerContainer from "./components/DrawerContainer";
 import TermsDialog from "./components/TermsDialog";
 import EmailVerifiedDialog from "./pages/dialogs/EmailVerified";
 import MapLocation from "./types/MapLocation";
+import { EMPTY_STATS } from "./types/Stats";
 
 import { gtagPageView, gtagEvent } from "./gtag.js";
 import "./App.scss";
@@ -51,10 +52,8 @@ class App extends Component {
       leftDrawerOpen: false,
       geojson: null,
       stats: undefined,
-      usersLeaderboard: [],
       selectedFeature: undefined, // undefined = not selectd, null = feature not found
       photoAccessedByUrl: false,
-      photosToModerate: {},
       // comes from config
       sponsorImage: undefined
     };
@@ -225,15 +224,9 @@ class App extends Component {
       // into the photoId.
       this.setState({ photoAccessedByUrl: !!this.state.selectedFeature });
 
-      dbFirebase.fetchStats().then((dbStats) => {
-        console.log(dbStats);
+      dbFirebase.fetchStats().then((stats) => {
         this.setState({
-          usersLeaderboard: dbStats.users,
-          dbStats,
-          stats: this.props.config.getStats(
-            this.state.geojson,
-            this.state.dbStats
-          )
+          stats
         });
       });
 
@@ -257,8 +250,7 @@ class App extends Component {
       .then((geojson) => {
         if (geojson) {
           this.geojson = geojson;
-          const stats = this.props.config.getStats(geojson, this.state.dbStats);
-          this.setState({ geojson, stats });
+          this.setState({ geojson });
           this.featuresDict = geojson.features;
         } else {
           this.fetchPhotos();
@@ -286,14 +278,6 @@ class App extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const stats = this.props.config.getStats(
-      this.state.geojson,
-      this.state.dbStats
-    );
-    if (!_.isEqual(this.state.stats, stats)) {
-      this.setState({ stats });
-    }
-
     if (prevProps.location !== this.props.location) {
       gtagPageView(this.props.location.pathname);
 
@@ -303,35 +287,6 @@ class App extends Component {
         _.get(this.state, "selectedFeature.properties.id")
       );
     }
-
-    if (
-      _.get(this.state.user, "isModerator") &&
-      !this.unregisterPhotosToModerate
-    ) {
-      this.unregisterPhotosToModerate = dbFirebase.photosToModerateRT(
-        this.props.config.MODERATING_PHOTOS,
-        (photo) => this.updatePhotoToModerate(photo),
-        (photo) => this.removePhotoToModerate(photo)
-      );
-    }
-  }
-
-  removePhotoToModerate(photo) {
-    console.debug(`removing the photo ${photo.id} from view`);
-
-    const photosToModerate = _.cloneDeep(this.state.photosToModerate);
-    delete photosToModerate[photo.id];
-
-    this.setState({ photosToModerate });
-  }
-
-  updatePhotoToModerate(photo) {
-    console.debug(`updating the photo ${photo.id} in the view`);
-
-    const photosToModerate = _.cloneDeep(this.state.photosToModerate);
-    photosToModerate[photo.id] = photo;
-
-    this.setState({ photosToModerate });
   }
 
   handleClickLoginLogout = () => {
@@ -381,34 +336,6 @@ class App extends Component {
       return message;
     }
   };
-
-  approveRejectPhoto = async (isApproved, photo) => {
-    // publish/unpublish photo in firestore
-    if (isApproved) {
-      await dbFirebase.approvePhoto(
-        photo.id,
-        this.state.user ? this.state.user.id : null
-      );
-    } else {
-      await dbFirebase.rejectPhoto(
-        photo.id,
-        this.state.user ? this.state.user.id : null
-      );
-    }
-
-    const selectedFeature = this.state.selectedFeature;
-
-    photo.published = isApproved;
-
-    if (_.get(selectedFeature, "properties.id") === photo.id) {
-      selectedFeature.properties.published = isApproved;
-      this.setState({ selectedFeature });
-    }
-  };
-
-  approvePhoto = (photo) => this.approveRejectPhoto(true, photo);
-
-  rejectPhoto = (photo) => this.approveRejectPhoto(false, photo);
 
   handleMapLocationChange = (newMapLocation) => {
     if (!getMapIsVisible(this.props.history.location.pathname)) {
@@ -529,19 +456,14 @@ class App extends Component {
           />
           <Routes
             user={this.state.user}
-            usersLeaderboard={this.state.usersLeaderboard}
+            stats={this.state.stats || EMPTY_STATS}
             gpsLocation={this.state.location}
             online={this.state.online}
             geojson={this.state.geojson}
             reloadPhotos={this.reloadPhotos}
-            // just need the list of photos, don't need the object keyed on the id
-            photosToModerate={_.map(this.state.photosToModerate, (x) => x)}
-            handleApproveClick={this.approvePhoto}
-            handleRejectClick={this.rejectPhoto}
             handlePhotoClick={this.handlePhotoClick}
             selectedFeature={this.state.selectedFeature}
             handlePhotoPageClose={this.handlePhotoPageClose}
-            totalNumberOfPieces={this.state.stats}
             sponsorImage={this.state.sponsorImage}
           />
         </main>
@@ -554,7 +476,7 @@ class App extends Component {
           handleClickLoginLogout={this.handleClickLoginLogout}
           leftDrawerOpen={this.state.leftDrawerOpen}
           toggleLeftDrawer={this.toggleLeftDrawer}
-          stats={this.state.stats}
+          stats={this.state.stats || EMPTY_STATS}
           sponsorImage={this.state.sponsorImage}
         />
       </div>

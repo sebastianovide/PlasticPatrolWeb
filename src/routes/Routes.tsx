@@ -38,38 +38,31 @@ import { linkToTutorialPage } from "./tutorial/links";
 
 import AccountPageRoute from "./account/Route";
 import { linkToAccountPage } from "./account/links";
+import Stats from "types/Stats";
 
 type Props = {
   user: User;
-  usersLeaderboard: any;
+  stats: Stats;
   reloadPhotos: () => void;
-  photosToModerate: Photo[];
-  handleApproveClick: () => void;
-  handleRejectClick: () => void;
   gpsLocation: any;
   online: boolean;
   geojson: any;
   handlePhotoClick: () => void;
   selectedFeature: any;
   handlePhotoPageClose: () => void;
-  totalNumberOfPieces: number;
   sponsorImage?: string;
 };
 
 export function Routes({
   user,
-  usersLeaderboard,
+  stats,
   reloadPhotos,
-  photosToModerate,
-  handleApproveClick,
-  handleRejectClick,
   gpsLocation,
   online,
   geojson,
   handlePhotoClick,
   selectedFeature,
   handlePhotoPageClose,
-  totalNumberOfPieces,
   sponsorImage
 }: Props) {
   const history = useHistory();
@@ -77,7 +70,7 @@ export function Routes({
     <Switch>
       <Route path={linkToUploadSuccess()}>
         <UploadPhotoRoute
-          totalNumberOfPieces={totalNumberOfPieces}
+          totalNumberOfPieces={stats.pieces}
           sponsorImage={sponsorImage}
         />
       </Route>
@@ -98,9 +91,8 @@ export function Routes({
 
       <Route path={config.PAGES.leaderboard.path}>
         <LeaderboardPage
-          config={config}
           label={config.PAGES.leaderboard.label}
-          usersLeaderboard={usersLeaderboard}
+          usersLeaderboard={stats.users}
           handleClose={history.goBack}
           user={user}
         />
@@ -145,11 +137,9 @@ export function Routes({
 
       <ModeratorRoute path={config.PAGES.moderator.path} user={user}>
         <ModeratorPage
-          photos={photosToModerate}
+          user={user as User}
           label={config.PAGES.moderator.label}
           handleClose={history.goBack}
-          handleRejectClick={handleRejectClick}
-          handleApproveClick={handleApproveClick}
         />
       </ModeratorRoute>
 
