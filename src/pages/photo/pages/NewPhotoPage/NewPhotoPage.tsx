@@ -25,6 +25,9 @@ const useStyles = makeStyles((theme) => ({
     background: styles.lightGrey,
     border: `${styles.mediumGrey} solid 1px`,
     "&:focus": { background: styles.lightGrey }
+  },
+  link: {
+    color: theme.palette.primary.main
   }
 }));
 
@@ -45,12 +48,15 @@ export default function NewPhotoPage({
           <AddAPhotoIcon className={styles.icon} />
         </Button>
         <div className={styles.text}>
-          <p>Tap on the button above to add a photo of your cleanup.</p>
+          <p>Tap on the button above to add a photo of litter.</p>
 
-          <p>Make sure items are clearly visible in the photo.</p>
+          <p>Make sure all litter is clearly visible.</p>
           <p>
             If you would like to see an example, please check out the{" "}
-            <Link to={linkToTutorialPage()}>tutorial</Link>.
+            <Link to={linkToTutorialPage()} className={styles.link}>
+              tutorial
+            </Link>
+            .
           </p>
         </div>
       </div>
