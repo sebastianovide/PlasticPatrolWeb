@@ -137,7 +137,11 @@ export const PhotoPageWrapper: FunctionComponent<PhotoPageProps> = ({
           {nextClicked ? (
             <BackIcon className={classes.iconButton} onClick={handlePrev} />
           ) : (
-            <CloseIcon className={classes.iconButton} onClick={handleClose} />
+            <CloseIcon
+              className={classes.iconButton}
+              onClick={handleClose}
+              data-test="Close"
+            />
           )}
           <Typography className={classes.grow} variant="h6" color="inherit">
             {label}
@@ -239,7 +243,11 @@ const PageWrapper: FunctionComponent<Props> = ({
   if (isCloseNavigationHandler(navigationHandler)) {
     const { handleClose } = navigationHandler;
     navIcon = (
-      <CloseIcon className={classes.iconButton} onClick={handleClose} />
+      <CloseIcon
+        className={classes.iconButton}
+        onClick={handleClose}
+        data-test="Close"
+      />
     );
   } else {
     const { handleBack, confirm } = navigationHandler;
