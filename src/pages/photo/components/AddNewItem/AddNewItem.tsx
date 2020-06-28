@@ -91,7 +91,7 @@ export default function AddNewItem({
 
   const styles = useStyles();
 
-  const itemButtonIsDisabled = !(quantity && brand && type && type.label);
+  const itemButtonIsDisabled = !(quantity && type && type.label);
 
   return (
     <div className={styles.wrapper}>
