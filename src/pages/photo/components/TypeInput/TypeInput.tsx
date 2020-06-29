@@ -57,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     background: "#4e4e4e",
     color: "white",
-    padding: `${theme.spacing(0.5)}px ${theme.spacing(1)}px`,
+    padding: theme.spacing(1.5),
     width: "max-content",
     margin: `${theme.spacing(0.5)}px ${theme.spacing(1)}px ${theme.spacing(
       0.5
@@ -68,10 +68,6 @@ const useStyles = makeStyles((theme) => ({
     flexWrap: "wrap",
     width: "200%"
   },
-  customTypeWarning: {
-    opacity: 0.5,
-    marginBottom: theme.spacing(1)
-  },
   suggestionList: {
     listStyleType: "none",
     paddingLeft: "0px",
@@ -80,6 +76,7 @@ const useStyles = makeStyles((theme) => ({
   },
   suggestionListItem: {
     padding: "6px",
+
     marginLeft: "0",
     cursor: "pointer",
     "&:hover": {
@@ -128,9 +125,7 @@ export default function TypeInput({ initialType, className, setType }: Props) {
     setTypeRef.current({ leafKey, label: labelRef.current });
   }, [leafKey, label]);
 
-  const showMessage =
-    (!focused && !leafKey) ||
-    (focused && label.length >= 3 && suggestions.length === 0);
+  const showViewListIcon = !focused && !leafKey;
 
   return (
     //@ts-ignore
@@ -144,7 +139,7 @@ export default function TypeInput({ initialType, className, setType }: Props) {
           onChange={(e) => setLabel(e.target.value)}
           onFocus={() => setFocused(true)}
         />
-        {showMessage && (
+        {showViewListIcon && (
           <div
             className={styles.viewListIcon}
             onClick={() => setShowSuggestionList(true)}
@@ -164,12 +159,6 @@ export default function TypeInput({ initialType, className, setType }: Props) {
               onClick={onSuggestionClick}
             />
           ))}
-        {showMessage && (
-          <div className={styles.customTypeWarning}>
-            Sorry we don't have this type in our database at the moment. Once
-            you submit your collection it will be manually approved.
-          </div>
-        )}
       </div>
       <Dialog
         open={showSuggestionList}
