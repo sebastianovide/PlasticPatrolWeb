@@ -1,4 +1,5 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 
 import LocationOn from "@material-ui/icons/LocationOn";
 import CameraAlt from "@material-ui/icons/CameraAlt";
@@ -6,7 +7,10 @@ import CloudUpload from "@material-ui/icons/CloudUpload";
 import Button from "@material-ui/core/Button";
 
 import exampleImage from "assets/images/example.jpeg";
-import { useHistory } from "react-router-dom";
+
+import useLocationOnMount from "hooks/useLocationOnMount";
+
+import { linkToMap } from "custom/config";
 
 export type TutorialStep = {
   img?: string;
@@ -41,11 +45,20 @@ export const tutorialSteps: Array<TutorialStep> = [
       "By litter picking and recording your findings you are helping build the largest and most powerful dataset on litter. We analyse everything you collect to drive impactful and evidence-based changes by government and brands to protect the environment.",
     Button: () => {
       const history = useHistory();
+      const location = useLocationOnMount<{ redirectOnGetStarted?: string }>();
+
+      const locationState = location.state;
+      const redirectOnGetStarted =
+        locationState && locationState.redirectOnGetStarted;
 
       return (
         <Button
           className="FinalSlide__button"
-          onClick={() => history.push("/")}
+          onClick={() =>
+            history.push(
+              redirectOnGetStarted ? redirectOnGetStarted : linkToMap()
+            )
+          }
         >
           Get started
         </Button>

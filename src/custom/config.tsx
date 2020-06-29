@@ -31,9 +31,11 @@ const primaryContrastText = styles.primaryContrastText;
 const secondaryMain = styles.secondaryMain;
 const secondaryContrastText = styles.primaryContrastText;
 
+export const linkToMap = () => "/";
+
 const PAGES: { [pageName: string]: Page } = {
   map: {
-    path: "/",
+    path: linkToMap(),
     label: "Map"
   },
   embeddable: {

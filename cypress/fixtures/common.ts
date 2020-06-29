@@ -2,7 +2,8 @@ export const selectors = {
   burger: "Burger",
   emailInput: "#ui-sign-in-email-input",
   passwordInput: "#ui-sign-in-password-input",
-  loginButton: "LoginButton"
+  loginButton: "LoginButton",
+  close: "Close"
 };
 
 export const requestUrls = {
