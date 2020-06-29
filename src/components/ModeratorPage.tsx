@@ -20,10 +20,10 @@ import PageWrapper from "./PageWrapper";
 import CardComponent from "./CardComponent";
 import "./ModeratorPage.scss";
 import config from "../custom/config";
-import { DialogTitle, DialogActions, Button } from "@material-ui/core";
 import User from "types/User";
 import usePhotosToModerate from "hooks/usePhotosToModerate";
 import { dbFirebase } from "features/firebase";
+import ConfirmationDialog, { Confirmation } from "./common/ConfirmationDialog";
 
 const placeholderImage = process.env.PUBLIC_URL + "/custom/images/logo.svg";
 
@@ -43,11 +43,6 @@ interface Props {
   label: string;
   handleClose: () => void;
 }
-
-type Confirmation = {
-  message: string;
-  onConfirmation: () => void;
-};
 
 const ModeratorPage = ({ user, label, handleClose }: Props) => {
   const styles = useStyles();
@@ -128,25 +123,11 @@ const ModeratorPage = ({ user, label, handleClose }: Props) => {
         ))}
       </List>
 
-      {confirmation && (
-        <Dialog open={true} onClose={() => setConfirmation(undefined)}>
-          <DialogTitle>{confirmation.message}</DialogTitle>
-          <DialogActions>
-            <Button onClick={() => setConfirmation(undefined)} color="primary">
-              Cancel
-            </Button>
-            <Button
-              onClick={() => {
-                setConfirmation(undefined);
-                confirmation.onConfirmation();
-              }}
-              color="primary"
-            >
-              Ok
-            </Button>
-          </DialogActions>
-        </Dialog>
-      )}
+      <ConfirmationDialog
+        confirmation={confirmation}
+        setConfirmation={setConfirmation}
+      />
+
       <Dialog open={zoomDialogOpen} onClose={closeZoomDialog}>
         <DialogContent>
           {photoSelected && (

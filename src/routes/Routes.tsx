@@ -180,8 +180,6 @@ export function Routes({
           <DisplayPhoto
             user={user}
             config={config}
-            handleRejectClick={handleRejectClick}
-            handleApproveClick={handleApproveClick}
             handleClose={handlePhotoPageClose}
             feature={selectedFeature}
             location={location}

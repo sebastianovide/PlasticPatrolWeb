@@ -113,6 +113,11 @@ class App extends Component {
         this.someInits(photoId);
       }
 
+      if (user && !this.userInitDone) {
+        this.userInitDone = true;
+        this.someUserInits(user.id);
+      }
+
       // lets start fresh if the user logged out
       if (this.state.user && !user) {
         gtagEvent("Signed out", "User");
@@ -158,16 +163,17 @@ class App extends Component {
     }, 100);
   };
 
-  modifyFeature = (photo) => {
-    this.featuresDict[photo.id] = {
-      type: "Feature",
-      geometry: {
-        type: "Point",
-        coordinates: [photo.location.longitude, photo.location.latitude]
-      },
-      properties: photo
-    };
+  photoToFeature = (photo) => ({
+    type: "Feature",
+    geometry: {
+      type: "Point",
+      coordinates: [photo.location.longitude, photo.location.latitude]
+    },
+    properties: photo
+  });
 
+  modifyFeature = (photo) => {
+    this.featuresDict[photo.id] = this.photoToFeature(photo);
     this.delayedSaveGeojson();
   };
 
@@ -177,6 +183,20 @@ class App extends Component {
     delete this.featuresDict[photo.id];
     this.delayedSaveGeojson();
   };
+
+  someUserInits(userId) {
+    dbFirebase.ownPhotosRT(
+      userId,
+      this.addFeature,
+      this.modifyFeature,
+      this.removeFeature,
+      (error) => {
+        console.log(error);
+        alert(error);
+        window.location.reload();
+      }
+    );
+  }
 
   someInits(photoId) {
     this.unregisterConnectionObserver = dbFirebase.onConnectionStateChanged(
@@ -197,7 +217,6 @@ class App extends Component {
       });
 
       gtagPageView(this.props.location.pathname);
-
       dbFirebase.photosRT(
         this.addFeature,
         this.modifyFeature,
@@ -237,7 +256,6 @@ class App extends Component {
     // Terrible hack !!! it will be fixed with redux
     this.setState = console.log;
     await this.unregisterAuthObserver();
-    await this.unregisterLocationObserver();
     await this.unregisterConnectionObserver();
     await this.unregisterConfigObserver();
     await dbFirebase.disconnect();

@@ -53,6 +53,17 @@ function extractPhoto(data, id) {
   return photo;
 }
 
+function ownPhotosRT(ownerId, addedFn, modifiedFn, removedFn, errorFn) {
+  firestore
+    .collection("photos")
+    .where("published", "==", true)
+    .where("owner_id", "==", ownerId)
+    .orderBy("moderated", "desc")
+    .onSnapshot((snapshot) => {
+      snapshot.docChanges().forEach(onChange(addedFn, modifiedFn, removedFn));
+    }, errorFn);
+}
+
 function photosRT(addedFn, modifiedFn, removedFn, errorFn) {
   firestore
     .collection("photos")
@@ -60,25 +71,30 @@ function photosRT(addedFn, modifiedFn, removedFn, errorFn) {
     .orderBy("moderated", "desc")
     .limit(100)
     .onSnapshot((snapshot) => {
-      snapshot.docChanges().forEach((change) => {
-        var photo;
-        try {
-          photo = extractPhoto(change.doc.data(), change.doc.id);
-        } catch (e) {
-          console.error(`the document with ID ${change.doc.id} is malformed`);
-          return;
-        }
-        if (change.type === "added") {
-          addedFn(photo);
-        } else if (change.type === "modified") {
-          modifiedFn(photo);
-        } else if (change.type === "removed") {
-          removedFn(photo);
-        } else {
-          console.error(`the photo ${photo.id} as type ${change.type}`);
-        }
-      });
+      snapshot.docChanges().forEach(onChange(addedFn, modifiedFn, removedFn));
     }, errorFn);
+}
+
+function onChange(addedFn, modifiedFn, removedFn) {
+  return (change) => {
+    var photo;
+    try {
+      photo = extractPhoto(change.doc.data(), change.doc.id);
+    } catch (e) {
+      console.error(`the document with ID ${change.doc.id} is malformed`);
+      return;
+    }
+    if (change.type === "added") {
+      console.log("added");
+      addedFn(photo);
+    } else if (change.type === "modified") {
+      modifiedFn(photo);
+    } else if (change.type === "removed") {
+      removedFn(photo);
+    } else {
+      console.error(`the photo ${photo.id} as type ${change.type}`);
+    }
+  };
 }
 
 const configObserver = (onNext, onError) => {
@@ -272,6 +288,7 @@ async function toggleUnreadFeedback(id, resolved, userId) {
 
 export default {
   onConnectionStateChanged,
+  ownPhotosRT,
   photosRT,
   fetchStats,
   fetchFeedbacks,
