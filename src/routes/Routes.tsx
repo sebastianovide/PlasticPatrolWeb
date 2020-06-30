@@ -49,7 +49,6 @@ type Props = {
   geojson: any;
   handlePhotoClick: () => void;
   selectedFeature: any;
-  handlePhotoPageClose: () => void;
   sponsorImage?: string;
 };
 
@@ -62,7 +61,6 @@ export function Routes({
   geojson,
   handlePhotoClick,
   selectedFeature,
-  handlePhotoPageClose,
   sponsorImage
 }: Props) {
   const history = useHistory();
@@ -180,7 +178,7 @@ export function Routes({
           <DisplayPhoto
             user={user}
             config={config}
-            handleClose={handlePhotoPageClose}
+            handleClose={history.goBack}
             feature={selectedFeature}
             location={location}
           />

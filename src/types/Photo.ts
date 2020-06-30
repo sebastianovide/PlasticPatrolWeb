@@ -1,4 +1,7 @@
 import { LatLong } from "types/GPSLocation";
+import { Map } from "immutable";
+import Geojson from "./Geojson";
+import Feature from "./Feature";
 
 type Photo = {
   id: any;
@@ -8,6 +11,12 @@ type Photo = {
   moderated: Date;
   owner_id: string;
   pieces: number;
+  location: firebase.firestore.GeoPoint;
+};
+
+export type PhotosContainer = {
+  geojson: Geojson;
+  featuresDict: Map<string, Feature>;
 };
 
 export type FilePath = string;

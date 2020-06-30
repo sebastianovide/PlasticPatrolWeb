@@ -17,6 +17,7 @@ import config from "./custom/config";
 import { isIphoneAndCordova } from "./utils";
 import { gtagInit } from "./gtag.js";
 import LocationProvider, { useGPSLocation } from "./LocationProvider";
+import { useOnline } from "./OnlineProvider";
 import * as Sentry from "@sentry/browser";
 
 if (process.env.NODE_ENV !== "development") {
@@ -66,6 +67,10 @@ const theme = createMuiTheme(config.THEME);
 
 const Wrapper = () => {
   const gpsLocation = useGPSLocation();
+  const photos = usePhotos();
+  const online = useOnline();
+  const stats = useStats();
+
   const [handledPendingRedirect, setHandledPendingRedirect] = useState(false);
   return (
     <>
@@ -74,7 +79,12 @@ const Wrapper = () => {
         handleClose={() => {}}
         onSignIn={() => setHandledPendingRedirect(true)}
       />
-      <App config={config} gpsLocation={gpsLocation} />
+      <App
+        config={config}
+        gpsLocation={gpsLocation}
+        photos={photos}
+        online={online}
+      />
     </>
   );
 };

@@ -66,6 +66,7 @@ export default function AccountPage({
   const myLastPhotos: Feature[] = _.reverse(
     _.sortBy(myPhotos, (o) => o.properties.moderated)
   ).slice(0, 20);
+  myLastPhotos.forEach((p) => console.log(p.properties.id));
 
   const numPieces = _.sumBy(myPhotos, (o) => o.properties.pieces);
 
