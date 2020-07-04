@@ -1,12 +1,11 @@
 import React from "react";
 
-import ProfilePage from "./ProfilePage";
+import ProfilePage from "./AccountPage";
 import User from "types/User";
 import Geojson from "types/Geojson";
 import Feature from "types/Feature";
 import config, { Metadata } from "custom/config";
-import { ownerWindow } from "@material-ui/core";
-import { Router } from "react-router-dom";
+
 import { MemoryRouter } from "react-router";
 
 export default { title: "ProfilePage", component: ProfilePage };

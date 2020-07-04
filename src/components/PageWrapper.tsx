@@ -1,4 +1,5 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
+import classnames from "classnames";
 
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
@@ -136,7 +137,11 @@ export const PhotoPageWrapper: FunctionComponent<PhotoPageProps> = ({
           {nextClicked ? (
             <BackIcon className={classes.iconButton} onClick={handlePrev} />
           ) : (
-            <CloseIcon className={classes.iconButton} onClick={handleClose} />
+            <CloseIcon
+              className={classes.iconButton}
+              onClick={handleClose}
+              data-test="Close"
+            />
           )}
           <Typography className={classes.grow} variant="h6" color="inherit">
             {label}
@@ -238,7 +243,11 @@ const PageWrapper: FunctionComponent<Props> = ({
   if (isCloseNavigationHandler(navigationHandler)) {
     const { handleClose } = navigationHandler;
     navIcon = (
-      <CloseIcon className={classes.iconButton} onClick={handleClose} />
+      <CloseIcon
+        className={classes.iconButton}
+        onClick={handleClose}
+        data-test="Close"
+      />
     );
   } else {
     const { handleBack, confirm } = navigationHandler;
@@ -266,7 +275,7 @@ const PageWrapper: FunctionComponent<Props> = ({
           </Typography>
         </Toolbar>
       </AppBar>
-      <div className={classes.main}>{children}</div>
+      <div className={classnames(classes.main, className)}>{children}</div>
       <div className={classes.notchBottom} />
       <ConfirmBack
         open={confirmBack}

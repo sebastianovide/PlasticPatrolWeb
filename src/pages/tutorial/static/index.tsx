@@ -9,6 +9,9 @@ import { makeStyles } from "@material-ui/core";
 
 import exampleImage from "assets/images/example.jpeg";
 
+import useLocationOnMount from "hooks/useLocationOnMount";
+
+import { linkToMap } from "custom/config";
 import styles from "standard.scss";
 
 export type TutorialStep = {
@@ -58,8 +61,22 @@ export const tutorialSteps: Array<TutorialStep> = [
     Button: () => {
       const history = useHistory();
       const styles = useStyles();
+
+      const location = useLocationOnMount<{ redirectOnGetStarted?: string }>();
+
+      const locationState = location.state;
+      const redirectOnGetStarted =
+        locationState && locationState.redirectOnGetStarted;
+
       return (
-        <Button className={styles.button} onClick={() => history.push("/")}>
+        <Button
+          className={styles.button}
+          onClick={() =>
+            history.push(
+              redirectOnGetStarted ? redirectOnGetStarted : linkToMap()
+            )
+          }
+        >
           Get started
         </Button>
       );

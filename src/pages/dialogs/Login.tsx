@@ -1,5 +1,5 @@
-import React, { useRef, useState } from "react";
-import { useLocation, useHistory } from "react-router-dom";
+import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -11,6 +11,7 @@ import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 
 import LoginFirebase from "components/LoginFirebase";
+import useLocationOnMount from "hooks/useLocationOnMount";
 
 type Props = { handleClose: () => void };
 
@@ -42,7 +43,11 @@ export default function Login({ handleClose }: Props) {
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={() => setShow(false)} color="primary">
+          <Button
+            onClick={() => setShow(false)}
+            color="primary"
+            data-test="LoginButton"
+          >
             Login
           </Button>
         </DialogActions>
@@ -58,9 +63,8 @@ export default function Login({ handleClose }: Props) {
 }
 
 function useGetRedirectOnSuccess() {
-  const location = useLocation<{ redirectToOnSuccess?: string }>();
-  const locationRef = useRef(location);
-  const locationState = locationRef.current.state;
+  const location = useLocationOnMount<{ redirectToOnSuccess?: string }>();
+  const locationState = location.state;
   const redirectToOnSuccess =
     locationState && locationState.redirectToOnSuccess;
   const history = useHistory();
