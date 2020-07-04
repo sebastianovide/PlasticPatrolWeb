@@ -9,7 +9,7 @@ import { makeStyles } from "@material-ui/core";
 
 import exampleImage from "assets/images/example.jpeg";
 
-import styles from "index.scss";
+import styles from "standard.scss";
 
 export type TutorialStep = {
   img?: string;
@@ -25,7 +25,10 @@ const useStyles = makeStyles(() => ({
     color: "white",
     "font-weight": "800",
     fontSize: "18px",
-    borderRadius: "10px"
+    borderRadius: "10px",
+    "&:hover": {
+      background: styles.orange
+    }
   }
 }));
 

@@ -4,6 +4,8 @@ import { makeStyles } from "@material-ui/core";
 
 import handPrint from "assets/images/intro/handPrint.png";
 
+import styles from "standard.scss";
+
 import SlideLayout from "../SlideLayout";
 
 const useStyles = makeStyles(() => ({
@@ -11,11 +13,14 @@ const useStyles = makeStyles(() => ({
     maxHeight: "30vh"
   },
   button: {
-    background: "orange",
+    background: styles.orange,
     color: "white",
     "font-weight": "800",
     fontSize: "18px",
-    borderRadius: "10px"
+    borderRadius: "10px",
+    "&:hover": {
+      background: styles.orange
+    }
   }
 }));
 
