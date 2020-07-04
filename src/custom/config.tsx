@@ -177,6 +177,9 @@ const config: Config = {
       primary: { main: primaryMain, contrastText: primaryContrastText },
       secondary: { main: secondaryMain, contrastText: secondaryContrastText }
     },
+    typography: {
+      fontFamily: ["BrownSTD"]
+    },
     spacing: 10
   },
   MAP_SOURCE: "mapbox://styles/mapbox/streets-v10",
