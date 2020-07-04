@@ -1,0 +1,23 @@
+@import "standard.scss";
+
+.WelcomePage__container {
+  width: 100vw;
+  //TODO: get new asset so $secondary can be used
+  background: $primaryMain;
+  position: absolute;
+  z-index: 100;
+}
+
+.WelcomePage__navDotsWrapper {
+  position: absolute;
+  bottom: 10px;
+}
+
+.WelcomePage__navDot {
+  background: rgba(255, 255, 255, 0.4);
+  border: none;
+}
+
+.WelcomePage__navDotActive {
+  background: white;
+}

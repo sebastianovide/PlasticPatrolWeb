@@ -9,7 +9,7 @@ describe("basic anonymous user functionality", () => {
 
     cy.contains("Next").should("not.be.disabled").click();
 
-    cy.getTestElement("NavDot-3").click();
+    cy.getTestElement("NavDot-2").click();
 
     cy.contains("Get started").click();
 

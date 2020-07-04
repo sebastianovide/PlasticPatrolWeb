@@ -21,7 +21,7 @@ import {
   linkToLogin
 } from "routes/login/links";
 
-import WelcomePage from "./components/pages/WelcomePage";
+import WelcomePage from "./pages/welcome";
 import Map from "./components/MapPage/Map";
 import DrawerContainer from "./components/DrawerContainer";
 import TermsDialog from "./components/TermsDialog";
