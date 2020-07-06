@@ -22,8 +22,15 @@ const getProvider = (user) => {
   return null;
 };
 
-const onAuthStateChanged = (fn: (user: User) => void) => {
+const onAuthStateChanged = (fn: (user: User | undefined) => void) => {
   const firebaseStatusChange = (user) => {
+    console.log("got user");
+    console.log(user);
+    if (!user) {
+      fn(undefined);
+      return;
+    }
+
     gtagSetId(user.uid);
     gtagEvent("Logged in", "User", user.uid);
 

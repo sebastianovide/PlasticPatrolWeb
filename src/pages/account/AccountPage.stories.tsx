@@ -1,5 +1,6 @@
 import React from "react";
 
+import firebase from "firebase/app";
 import ProfilePage from "./AccountPage";
 import User from "types/User";
 import Geojson from "types/Geojson";
@@ -49,7 +50,8 @@ const makeFeature = (ownerId: string, pictureId: string): Feature => {
       updated: "",
       moderated: new Date(),
       owner_id: ownerId,
-      pieces: 10
+      pieces: 10,
+      location: new firebase.firestore.GeoPoint(0, 0)
     }
   };
   return feature;

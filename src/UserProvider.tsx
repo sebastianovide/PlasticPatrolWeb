@@ -22,6 +22,9 @@ export const useUser = (): User | undefined => {
     },
     [user, history]
   );
-  useEffect(() => authFirebase.onAuthStateChanged(authStateChangedCallback));
+  useEffect(
+    () => authFirebase.onAuthStateChanged(authStateChangedCallback),
+    []
+  );
   return user;
 };

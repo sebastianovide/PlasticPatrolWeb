@@ -1,6 +1,6 @@
 import Geojson from "types/Geojson";
 import * as localforage from "localforage";
-import Rx from "rxjs";
+import * as Rx from "rxjs";
 import { bufferTime } from "rxjs/operators";
 import { Map } from "immutable";
 import { useEffect, useState, useCallback } from "react";
@@ -13,9 +13,11 @@ import { useLocation } from "react-router-dom";
 import { Location, History } from "history";
 import { RealtimeUpdate } from "features/firebase/dbFirebase";
 import _ from "lodash";
+import { useAsyncEffect } from "utils";
+import { useUser } from "UserProvider";
 
 const photoToFeature = (photo: Photo): Feature => ({
-  type: "Feature",
+  feature: "Feature",
   geometry: {
     type: "Point",
     coordinates: [photo.location.longitude, photo.location.latitude]
@@ -132,9 +134,8 @@ const applyUpdates = (
   };
 };
 
-const usePhotos = (): [PhotosContainer, () => void] => {
+export const usePhotos = (): [PhotosContainer, () => void] => {
   const location = useLocation();
-  const { photoId } = extractPathnameParams(location);
   const [photos, setPhotos] = useState<PhotosContainer>(EMPTY);
   const user = useUser();
   useAsyncEffect(async () => {

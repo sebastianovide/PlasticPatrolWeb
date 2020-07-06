@@ -11,6 +11,7 @@ import Stats from "types/Stats";
 import Feature from "types/Feature";
 import { Feedback } from "types/Feedback";
 import Photo from "types/Photo";
+import Config from "types/Config";
 
 const firestore = firebase.firestore();
 const storageRef = firebase.storage().ref();
@@ -103,7 +104,10 @@ const onChange = (onUpdate: (udpate: RealtimeUpdate) => void) => {
   };
 };
 
-const configObserver = (onNext, onError) => {
+const configObserver = (
+  onNext: (config: Config) => void,
+  onError = undefined
+) => {
   localforage.getItem("config").then(onNext).catch(console.log);
 
   return firestore
@@ -112,7 +116,7 @@ const configObserver = (onNext, onError) => {
     .onSnapshot((snapshot) => {
       const config = snapshot.data();
       localforage.setItem("config", config);
-      onNext(config);
+      onNext(config as Config);
     }, onError);
 };
 

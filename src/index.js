@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import { HashRouter as Router } from "react-router-dom";
 import * as firebaseui from "firebaseui";
@@ -17,8 +17,14 @@ import config from "./custom/config";
 import { isIphoneAndCordova } from "./utils";
 import { gtagInit } from "./gtag.js";
 import LocationProvider, { useGPSLocation } from "./LocationProvider";
+import { usePhotos } from "./PhotosProvider";
+import { useSelectedFeature } from "./SelectedFeatureProvider";
+import { useConfig } from "./ConfigProvider";
 import { useOnline } from "./OnlineProvider";
+import { useUser } from "./UserProvider";
+import { useStats } from "./StatsProvider";
 import * as Sentry from "@sentry/browser";
+import { dbFirebase } from "features/firebase";
 
 if (process.env.NODE_ENV !== "development") {
   Sentry.init({
@@ -67,9 +73,16 @@ const theme = createMuiTheme(config.THEME);
 
 const Wrapper = () => {
   const gpsLocation = useGPSLocation();
-  const photos = usePhotos();
+  const [{ geojson }, reloadPhotos] = usePhotos();
   const online = useOnline();
+  const selectedFeature = useSelectedFeature();
   const stats = useStats();
+  const { sponsorImage } = useConfig();
+  const user = useUser();
+
+  useEffect(() => {
+    return () => dbFirebase.disconnect();
+  }, []);
 
   const [handledPendingRedirect, setHandledPendingRedirect] = useState(false);
   return (
@@ -82,8 +95,13 @@ const Wrapper = () => {
       <App
         config={config}
         gpsLocation={gpsLocation}
-        photos={photos}
+        geojson={geojson}
+        reloadPhotos={reloadPhotos}
         online={online}
+        sponsorImage={sponsorImage}
+        stats={stats}
+        selectedFeature={selectedFeature}
+        user={user}
       />
     </>
   );

@@ -44,24 +44,22 @@ const TermsDialog: React.FC<{}> = () => {
       <DialogTitle id="responsive-dialog-title" style={{ textAlign: "center" }}>
         Welcome to Planet Patrol
       </DialogTitle>
-      <DialogContent>
-        <DialogContentText style={{ textAlign: "center" }}>
-          <Typography className={classes.text}>Please read our</Typography>
-          <a href={tAndCLink}>Terms and Conditions</a>{" "}
-          <Typography className={classes.text}>and</Typography>
-          <a href={privatePolicyLink}>Privacy Policy</a>
-          <br /> <br />
-          <FormControlLabel
-            control={
-              <Checkbox
-                onChange={(e) => setIsChecked(e.target.checked)}
-                checked={isChecked}
-                color="primary"
-              />
-            }
-            label="I have read and agree to the Terms and Conditions, and Privacy Policy."
-          />
-        </DialogContentText>
+      <DialogContent style={{ textAlign: "center" }}>
+        <Typography className={classes.text}>Please read our</Typography>
+        <a href={tAndCLink}>Terms and Conditions</a>{" "}
+        <Typography className={classes.text}>and</Typography>
+        <a href={privatePolicyLink}>Privacy Policy</a>
+        <br /> <br />
+        <FormControlLabel
+          control={
+            <Checkbox
+              onChange={(e) => setIsChecked(e.target.checked)}
+              checked={isChecked}
+              color="primary"
+            />
+          }
+          label="I have read and agree to the Terms and Conditions, and Privacy Policy."
+        />
       </DialogContent>
 
       <DialogActions>

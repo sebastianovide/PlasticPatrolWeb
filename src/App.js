@@ -24,6 +24,7 @@ import TermsDialog from "./components/TermsDialog";
 import EmailVerifiedDialog from "./pages/dialogs/EmailVerified";
 import MapLocation from "./types/MapLocation";
 import config from "./custom/config";
+import { extractPathnameParams } from "PhotosProvider";
 
 import { gtagPageView, gtagEvent } from "./gtag.js";
 import "./App.scss";
@@ -45,64 +46,23 @@ class App extends Component {
     super(props);
 
     this.state = {
-      mapLocation: new MapLocation(), // from the map
       user: null,
       leftDrawerOpen: false,
-      selectedFeature: undefined, // undefined = not selectd, null = feature not found
-      // comes from config
-      sponsorImage: undefined
+      mapLocation: new MapLocation()
     };
 
     this.domRefInput = {};
   }
 
-  async fetchPhotoIfUndefined(photoId) {
-    // it means that we landed on the app with a photoId in the url
-    if (photoId && !this.state.selectedFeature) {
-      try {
-        const photo = await dbFirebase.getPhotoByID(photoId);
-        this.setState({ selectedFeature: photo });
-      } catch (e) {
-        this.setState({ selectedFeature: null });
-      }
-    }
-  }
-
   async componentDidMount() {
-    let { photoId, mapLocation } = extractPathnameParams();
-    this.setState({ photoId, mapLocation });
-    this.someInits(photoId);
-  }
-
-  someInits(photoId) {
-    this.fetchPhotoIfUndefined(photoId).then(async () => {});
+    let { mapLocation } = extractPathnameParams(this.props.location);
+    this.setState({ mapLocation });
   }
 
   async componentWillUnmount() {
     // Terrible hack !!! it will be fixed with redux
     this.setState = console.log;
-    await this.unregisterConfigObserver();
-    await dbFirebase.disconnect();
   }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (prevProps.location !== this.props.location) {
-      gtagPageView(this.props.location.pathname);
-
-      // if it updates, then it is guaranteed that we didn't landed into the photo
-      this.fetchPhotoIfUndefined(
-        _.get(this.state, "selectedFeature.properties.id")
-      );
-    }
-  }
-
-  handleClickLoginLogout = () => {
-    if (this.props.user) {
-      authFirebase.signOut();
-    } else {
-      this.props.history.push(linkToLogin());
-    }
-  };
 
   handleCameraClick = () => {
     if (config.SECURITY.UPLOAD_REQUIRES_LOGIN && !this.state.user) {
@@ -195,6 +155,14 @@ class App extends Component {
     history.push(`${pathname}@${coordsUrl}`);
   };
 
+  handleClickLoginLogout = () => {
+    if (this.props.user) {
+      authFirebase.signOut();
+    } else {
+      this.props.history.push(linkToLogin());
+    }
+  };
+
   render() {
     const {
       user,
@@ -205,7 +173,7 @@ class App extends Component {
       stats,
       sponsorImage
     } = this.props;
-    const { mapLocation, leftDrawerOpen, selectedFeature } = this.state;
+    const { leftDrawerOpen, selectedFeature, mapLocation } = this.state;
     return (
       <div className="geovation-app">
         <TermsDialog />
@@ -250,7 +218,7 @@ class App extends Component {
           />
         </main>
 
-        <Snackbar open={!this.state.geojson} message="Loading photos..." />
+        <Snackbar open={!geojson} message="Loading photos..." />
 
         <DrawerContainer
           user={user}
