@@ -492,9 +492,10 @@ class App extends Component {
       currentMapLocation == null ||
       !currentMapLocation.isEqual(newMapLocation)
     ) {
-      const currentUrl = this.props.history.location;
+      const currentUrl = this.props.location;
       const prefix = currentUrl.pathname.split("@")[0];
-      const newUrl = `${prefix}@${newMapLocation.urlFormated()}`;
+      const withSlash = prefix.endsWith("/") ? prefix : `${prefix}/`;
+      const newUrl = `${withSlash}@${newMapLocation.urlFormated()}`;
 
       this.props.history.replace(newUrl);
       this.setState({ mapLocation: newMapLocation });
@@ -588,7 +589,7 @@ class App extends Component {
 
           <Map
             history={this.props.history}
-            visible={getMapIsVisible(this.props.history.location.pathname)}
+            visible={getMapIsVisible(this.props.location.pathname)}
             geojson={this.state.geojson}
             user={this.state.user}
             config={config}
