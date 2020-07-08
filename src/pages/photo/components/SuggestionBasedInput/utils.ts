@@ -1,32 +1,33 @@
 import _ from "lodash";
-import categories from "custom/categories.json";
 
-type Category = { key: string; label: string; synonyms?: string[] };
-type CategoriesArr = Array<Category>;
+type Suggestion = { key: string; label: string; synonyms?: string[] };
+type SuggestionArr = Array<Suggestion>;
 
-export const categoriesArr: CategoriesArr = _.sortBy(
-  Object.keys(categories).map((key) => {
-    return {
-      key,
-      //@ts-ignore
-      label: categories[key].label,
-      //@ts-ignore
-      synonyms: categories[key].synonyms
-    };
-  }),
-  ({ label }) => label
-);
+export function getSortedSuggestions(sourceData: Object) {
+  return _.sortBy(
+    Object.keys(sourceData).map((key) => {
+      return {
+        key,
+        //@ts-ignore
+        label: sourceData[key].label,
+        //@ts-ignore
+        synonyms: sourceData[key].synonyms
+      };
+    }),
+    ({ label }) => label
+  );
+}
 
 const any = (bools: boolean[]): boolean => {
   return !bools.map((b) => !b).every((x) => x);
 };
 
-export function getSuggestions(input: string) {
-  return categoriesArr.filter(filterCat(input));
+export function getSuggestions(sourceData: object, input: string) {
+  return getSortedSuggestions(sourceData).filter(filterCat(input));
 }
 
 function filterCat(input: string) {
-  return function (category: Category) {
+  return function (category: Suggestion) {
     if (input.length === 0) {
       return false;
     }
@@ -44,13 +45,13 @@ function filterCat(input: string) {
   };
 }
 
-export function getLeafKey(input: string) {
+export function getLeafKey(sourceData: object, input: string) {
   if (input.length === 0) {
     return "none";
   }
   const normalisedInput = input.toLowerCase();
 
-  const category = categoriesArr.find(
+  const category = getSortedSuggestions(sourceData).find(
     ({ label }) => label.toLowerCase() === normalisedInput
   );
 

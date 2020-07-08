@@ -6,8 +6,8 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import useOnOutsideClick from "hooks/useOnOutsideClick";
 
-import { Type } from "../../types";
-import { getSuggestions, getLeafKey, categoriesArr } from "./utils";
+import { SuggestionBasedText } from "../../types";
+import { getSuggestions, getLeafKey, getSortedSuggestions } from "./utils";
 
 import styles from "standard.scss";
 import {
@@ -92,20 +92,22 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 type Props = {
-  setType: (type: Type) => void;
+  sourceData: Object;
+  inputPrompt: string;
+  setType: (type: SuggestionBasedText) => void;
   className: string;
-  initialType?: Type;
+  initialType?: SuggestionBasedText;
 };
 
-export default function TypeInput({ initialType, className, setType }: Props) {
+export default function SuggestionBasedInput({ sourceData, inputPrompt, initialType, className, setType }: Props) {
   const styles = useStyles();
   const [label, setLabel] = useState(initialType?.label || "");
   const [focused, setFocused] = useState(false);
   const [showSuggestionList, setShowSuggestionList] = useState(false);
   const outsideClickRef = useOnOutsideClick(() => setFocused(false));
 
-  const suggestions = getSuggestions(label);
-  const leafKey = getLeafKey(label);
+  const suggestions = getSuggestions(sourceData, label);
+  const leafKey = getLeafKey(sourceData, label);
   const onSuggestionClick = useCallback((suggestion: string) => {
     setLabel(suggestion);
     setShowSuggestionList(false);
@@ -133,7 +135,7 @@ export default function TypeInput({ initialType, className, setType }: Props) {
       <div className={styles.inputWrapper}>
         <Search />
         <input
-          placeholder='Search for the type of litter e.g. "plastic bottle" or "crisp packet"'
+          placeholder={inputPrompt}
           className={styles.input}
           value={label}
           onChange={(e) => setLabel(e.target.value)}
@@ -168,8 +170,9 @@ export default function TypeInput({ initialType, className, setType }: Props) {
       >
         <DialogContent>
           <ul className={styles.suggestionList}>
-            {categoriesArr.map(({ label }) => (
+            {getSortedSuggestions(sourceData).map(({ label }) => (
               <li
+                key={label}
                 onClick={() => onSuggestionClick(label)}
                 className={styles.suggestionListItem}
               >

@@ -1,10 +1,10 @@
-export type Type = {
+export type SuggestionBasedText = {
   leafKey?: string | null;
   label?: string | null;
 };
 
 export type Item = {
   quantity: number;
-  type: Type;
-  brand?: string;
+  type: SuggestionBasedText;
+  brand: SuggestionBasedText;
 };
