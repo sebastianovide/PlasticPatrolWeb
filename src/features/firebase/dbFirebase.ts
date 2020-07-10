@@ -63,9 +63,9 @@ export type RealtimeUpdate = {
 function ownPhotosRT(
   ownerId: string,
   onUpdate: (update: RealtimeUpdate) => void
-) {
+): () => void {
   const callback = onChange(onUpdate);
-  firestore
+  return firestore
     .collection("photos")
     .where("published", "==", true)
     .where("owner_id", "==", ownerId)
@@ -229,7 +229,6 @@ function photosToModerateRT(
     .limit(howMany)
     .onSnapshot((snapshot) => {
       snapshot.docChanges().forEach((change) => {
-        console.log("whats up");
         const photo = extractPhoto(change.doc.data(), change.doc.id);
         if (change.type === "added" || change.type === "modified") {
           updatePhotoToModerate(photo);

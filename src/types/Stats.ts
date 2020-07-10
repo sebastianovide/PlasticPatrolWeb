@@ -3,6 +3,8 @@ export type StatsUser = {
   pieces: number;
   uid: string;
   uploaded: number;
+  largeCollectionUploads?: number;
+  largeCollectionPieces?: number;
 };
 
 type Stats = {

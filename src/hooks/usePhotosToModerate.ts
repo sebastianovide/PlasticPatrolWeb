@@ -17,7 +17,6 @@ const usePhotosToModerate = (): Photo[] => {
       ),
     []
   );
-  console.log(toModerate);
   return Array.from(toModerate.values());
 };
 

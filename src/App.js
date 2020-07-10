@@ -171,9 +171,10 @@ class App extends Component {
       geojson,
       online,
       stats,
-      sponsorImage
+      sponsorImage,
+      selectedFeature
     } = this.props;
-    const { leftDrawerOpen, selectedFeature, mapLocation } = this.state;
+    const { leftDrawerOpen, mapLocation } = this.state;
     return (
       <div className="geovation-app">
         <TermsDialog />

@@ -229,12 +229,20 @@ export default function ReactVirtualizedTable({
   handleClose,
   label
 }: Props) {
-  const copy = usersLeaderboard.filter(({ pieces }) => pieces > 0);
+  const copy = usersLeaderboard
+    .filter(({ pieces }) => pieces > 0)
+    .map(({ pieces, largeCollectionPieces, ...rest }) => ({
+      pieces:
+        pieces -
+        (largeCollectionPieces === undefined ? 0 : largeCollectionPieces),
+      largeCollectionPieces,
+      ...rest
+    }));
   sortArrayByObjectKey(copy, "pieces").reverse();
   const withRank = copy.map(({ displayName, ...value }, index) => ({
     displayName: displayName.split("@")[0],
-    ...value,
-    rank: index + 1
+    rank: index + 1,
+    ...value
   }));
   const width = window.innerWidth;
   return (

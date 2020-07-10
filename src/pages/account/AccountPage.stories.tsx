@@ -1,6 +1,15 @@
 import React from "react";
 
 import firebase from "firebase/app";
+import "firebase/auth";
+import "firebase/database";
+import "firebase/firestore";
+import "firebase/performance";
+// import 'firebase/messaging';
+// import 'firebase/functions';
+import "firebase/storage";
+import "firebase/analytics";
+
 import ProfilePage from "./AccountPage";
 import User from "types/User";
 import Geojson from "types/Geojson";

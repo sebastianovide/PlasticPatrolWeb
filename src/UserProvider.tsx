@@ -12,6 +12,10 @@ export const useUser = (): User | undefined => {
   const history = useHistory();
   const authStateChangedCallback = useCallback(
     (newUser) => {
+      if (user === newUser) {
+        return;
+      }
+
       if (user && !newUser) {
         gtagEvent("Signed out", "User");
 

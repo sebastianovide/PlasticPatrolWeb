@@ -24,8 +24,6 @@ const getProvider = (user) => {
 
 const onAuthStateChanged = (fn: (user: User | undefined) => void) => {
   const firebaseStatusChange = (user) => {
-    console.log("got user");
-    console.log(user);
     if (!user) {
       fn(undefined);
       return;

@@ -1,7 +1,7 @@
 import Geojson from "types/Geojson";
 import * as localforage from "localforage";
 import * as Rx from "rxjs";
-import { bufferTime } from "rxjs/operators";
+import { bufferTime, filter } from "rxjs/operators";
 import { Map } from "immutable";
 import { useEffect, useState, useCallback } from "react";
 import { dbFirebase } from "features/firebase";
@@ -9,7 +9,6 @@ import Photo, { PhotosContainer } from "types/Photo";
 import Feature from "types/Feature";
 import MapLocation from "types/MapLocation";
 import config from "custom/config";
-import { useLocation } from "react-router-dom";
 import { Location, History } from "history";
 import { RealtimeUpdate } from "features/firebase/dbFirebase";
 import _ from "lodash";
@@ -135,7 +134,6 @@ const applyUpdates = (
 };
 
 export const usePhotos = (): [PhotosContainer, () => void] => {
-  const location = useLocation();
   const [photos, setPhotos] = useState<PhotosContainer>(EMPTY);
   const user = useUser();
   useAsyncEffect(async () => {
@@ -165,22 +163,28 @@ export const usePhotos = (): [PhotosContainer, () => void] => {
     }
 
     const updates = new Rx.Subject<RealtimeUpdate>();
-    dbFirebase.ownPhotosRT(user.id, (update) => updates.next(update));
+    const unsubscribe = dbFirebase.ownPhotosRT(user.id, (update) =>
+      updates.next(update)
+    );
 
     // buffer updates to collapse 500ms of realtime updates so that we don't
     // repeatedly refresh the photos list (its very large)
-    updates.pipe(bufferTime(500)).subscribe((updates) => {
-      setPhotos((current) => applyUpdates(current, updates));
-    });
-  }, [user]);
+    updates
+      .pipe(
+        bufferTime(500),
+        filter((x) => x.length > 0)
+      )
+      .subscribe((updates) => {
+        setPhotos((current) => applyUpdates(current, updates));
+      });
 
-  const reload = useCallback(() => {
+    return unsubscribe;
+  }, [user, setPhotos]);
+
+  const reload = useCallback(async () => {
     setPhotos(EMPTY);
-    dbFirebase.fetchPhotos().then((photosList) => {
-      setPhotos((current) =>
-        merge(current, photosToPhotosContainer(photosList))
-      );
-    });
+    const photosList = await dbFirebase.fetchPhotos();
+    setPhotos((current) => merge(current, photosToPhotosContainer(photosList)));
   }, [setPhotos]);
 
   return [photos, reload];
