@@ -131,33 +131,35 @@ const ModeratorPage = ({ user, label, handleClose }: Props) => {
       <Dialog open={zoomDialogOpen} onClose={closeZoomDialog}>
         <DialogContent>
           {photoSelected && (
-            <div style={{ textAlign: "center" }}>
-              <img
-                className={"main-image"}
-                onError={(e) => {
-                  // @ts-ignore
-                  e.target.src = placeholderImage;
-                }}
-                alt={photoSelected.id}
-                src={photoSelected.main}
+            <>
+              <div style={{ textAlign: "center" }}>
+                <img
+                  className={"main-image"}
+                  onError={(e) => {
+                    // @ts-ignore
+                    e.target.src = placeholderImage;
+                  }}
+                  alt={photoSelected.id}
+                  src={photoSelected.main}
+                />
+              </div>
+              <CardComponent
+                photoSelected={photoSelected}
+                handleReject={() =>
+                  setConfirmation({
+                    message: `Are you sure you want to unpublish the photo ?`,
+                    onConfirmation: () => reject(photoSelected)
+                  })
+                }
+                handleApprove={() =>
+                  setConfirmation({
+                    message: `Are you sure you want to publish the photo ?`,
+                    onConfirmation: () => approve(photoSelected)
+                  })
+                }
               />
-            </div>
+            </>
           )}
-          <CardComponent
-            photoSelected={photoSelected}
-            handleRejectClick={(photo: Photo) =>
-              setConfirmation({
-                message: `Are you sure you want to unpublish the photo ?`,
-                onConfirmation: () => reject(photo)
-              })
-            }
-            handleApproveClick={(photo: Photo) =>
-              setConfirmation({
-                message: `Are you sure you want to publish the photo ?`,
-                onConfirmation: () => approve(photo)
-              })
-            }
-          />
         </DialogContent>
       </Dialog>
     </PageWrapper>

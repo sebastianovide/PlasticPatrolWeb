@@ -56,11 +56,13 @@ const makeFeature = (ownerId: string, pictureId: string): Feature => {
       id: pictureId,
       main: "",
       thumbnail: "",
-      updated: "",
+      updated: new Date(),
       moderated: new Date(),
       owner_id: ownerId,
       pieces: 10,
-      location: new firebase.firestore.GeoPoint(0, 0)
+      location: new firebase.firestore.GeoPoint(0, 0),
+      published: true,
+      categories: []
     }
   };
   return feature;

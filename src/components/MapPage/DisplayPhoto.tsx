@@ -172,7 +172,7 @@ export default function DisplayPhoto({
                         <ExpansionPanelDetails>
                           <CardComponent
                             photoSelected={feature.properties}
-                            handleRejectClick={() => {
+                            handleReject={() => {
                               setConfirmation({
                                 message: `Are you sure you want to unpublish the photo ?`,
                                 onConfirmation: () =>
@@ -183,7 +183,7 @@ export default function DisplayPhoto({
                                   )
                               });
                             }}
-                            handleApproveClick={() => {
+                            handleApprove={() => {
                               setConfirmation({
                                 message: `Are you sure you want to publish the photo ?`,
                                 onConfirmation: () =>

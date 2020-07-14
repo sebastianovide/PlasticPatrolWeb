@@ -4,7 +4,6 @@ import _ from "lodash";
 
 import * as localforage from "localforage";
 
-import appConfig from "custom/config";
 import firebaseApp from "./firebaseInit.js";
 import firebaseConfig from "./config";
 import Stats from "types/Stats";
@@ -163,8 +162,14 @@ function saveMetadata(data) {
   data.updated = firebase.firestore.FieldValue.serverTimestamp();
   data.moderated = null;
 
-  let fieldsToSave = ["moderated", "updated", "location", "owner_id"];
-  _.forEach(appConfig.PHOTO_FIELDS, (field) => fieldsToSave.push(field.name));
+  let fieldsToSave = [
+    "moderated",
+    "updated",
+    "location",
+    "owner_id",
+    "pieces",
+    "categories"
+  ];
 
   return firestore.collection("photos").add(_.pick(data, fieldsToSave));
 }
