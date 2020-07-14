@@ -1,4 +1,6 @@
 import React from "react";
+import { Link } from "react-router-dom";
+
 import { Button, makeStyles } from "@material-ui/core";
 import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
 
@@ -23,13 +25,20 @@ const useStyles = makeStyles((theme) => ({
     background: styles.lightGrey,
     border: `${styles.mediumGrey} solid 1px`,
     "&:focus": { background: styles.lightGrey }
+  },
+  link: {
+    color: theme.palette.primary.main
   }
 }));
 
 type Props = {
   onPhotoClick: () => void;
+  linkToTutorialPage: () => string | Object;
 };
-export default function NewPhotoPage({ onPhotoClick }: Props) {
+export default function NewPhotoPage({
+  onPhotoClick,
+  linkToTutorialPage
+}: Props) {
   const styles = useStyles();
 
   return (
@@ -39,13 +48,15 @@ export default function NewPhotoPage({ onPhotoClick }: Props) {
           <AddAPhotoIcon className={styles.icon} />
         </Button>
         <div className={styles.text}>
-          <p>Tap on the button above to add a photo of your cleanup</p>
+          <p>Tap on the button above to add a photo of litter.</p>
 
+          <p>Make sure all litter is clearly visible.</p>
           <p>
-            Please make sure items are clearly visible in the photo.
-            <br />
-            If you would like to see an example, please check out the tutorial
-            in the menu bar.
+            If you would like to see an example, please check out the{" "}
+            <Link to={linkToTutorialPage()} className={styles.link}>
+              tutorial
+            </Link>
+            .
           </p>
         </div>
       </div>

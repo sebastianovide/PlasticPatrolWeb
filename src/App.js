@@ -1,15 +1,12 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 
-import _ from "lodash";
-import { bufferTime } from "rxjs/operators";
-
 import Snackbar from "@material-ui/core/Snackbar";
 import { withStyles } from "@material-ui/core/styles";
 
 import { Routes } from "routes/Routes";
 
-import { dbFirebase, authFirebase } from "features/firebase";
+import { authFirebase } from "features/firebase";
 import { linkToNewPhoto } from "routes/photo/routes/new/links";
 import getMapIsVisible from "utils/getMapIsVisible";
 import {
@@ -17,7 +14,7 @@ import {
   linkToLogin
 } from "routes/login/links";
 
-import WelcomePage from "./components/pages/WelcomePage";
+import WelcomePage from "./pages/welcome";
 import Map from "./components/MapPage/Map";
 import DrawerContainer from "./components/DrawerContainer";
 import TermsDialog from "./components/TermsDialog";
@@ -26,7 +23,7 @@ import MapLocation from "./types/MapLocation";
 import config from "./custom/config";
 import { extractPathnameParams } from "PhotosProvider";
 
-import { gtagPageView, gtagEvent } from "./gtag.js";
+import { gtagEvent } from "./gtag.js";
 import "./App.scss";
 
 const styles = (theme) => ({
@@ -65,7 +62,7 @@ class App extends Component {
   }
 
   handleCameraClick = () => {
-    if (config.SECURITY.UPLOAD_REQUIRES_LOGIN && !this.state.user) {
+    if (config.SECURITY.UPLOAD_REQUIRES_LOGIN && !this.props.user) {
       this.props.history.push(
         linkToLoginWithRedirectOnSuccess(linkToNewPhoto())
       );
@@ -105,16 +102,25 @@ class App extends Component {
   };
 
   handleMapLocationChange = (mapLocation) => {
-    if (!getMapIsVisible(this.props.history.location.pathname)) {
+    const { location } = this.props.history;
+    if (!getMapIsVisible(location.pathname)) {
       return;
     }
 
-    const currentUrl = this.props.history.location;
-    const prefix = currentUrl.pathname.split("@")[0];
-    const newUrl = `${prefix}@${mapLocation.urlFormated()}`;
+    const currentMapLocation = extractPathnameParams(location).mapLocation;
 
-    this.props.history.replace(newUrl);
-    this.setState({ mapLocation });
+    // change url coords if the coords are different and if we are in the map
+    if (
+      currentMapLocation == null ||
+      !currentMapLocation.isEqual(mapLocation)
+    ) {
+      const currentUrl = this.props.location;
+      const prefix = currentUrl.pathname.split("@")[0];
+      const withSlash = prefix.endsWith("/") ? prefix : `${prefix}/`;
+      const newUrl = `${withSlash}@${mapLocation.urlFormated()}`;
+      this.props.history.replace(newUrl);
+      this.setState({ mapLocation });
+    }
   };
 
   handleLocationClick = () => {

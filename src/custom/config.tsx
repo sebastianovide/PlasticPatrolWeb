@@ -31,9 +31,11 @@ const primaryContrastText = styles.primaryContrastText;
 const secondaryMain = styles.secondaryMain;
 const secondaryContrastText = styles.primaryContrastText;
 
+export const linkToMap = () => "/";
+
 const PAGES: { [pageName: string]: Page } = {
   map: {
-    path: "/",
+    path: linkToMap(),
     label: "Map"
   },
   embeddable: {
@@ -176,6 +178,9 @@ const config: Config = {
     palette: {
       primary: { main: primaryMain, contrastText: primaryContrastText },
       secondary: { main: secondaryMain, contrastText: secondaryContrastText }
+    },
+    typography: {
+      fontFamily: ["BrownSTD"]
     },
     spacing: 10
   },

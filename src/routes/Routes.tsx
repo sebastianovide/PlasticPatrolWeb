@@ -13,7 +13,6 @@ import LeaderboardPage from "components/Leaderboard";
 import WriteFeedbackPage from "components/WriteFeedbackPage";
 
 import DisplayPhoto from "components/MapPage/DisplayPhoto";
-import Photo from "types/Photo";
 
 import ModeratorRoute from "./components/ModeratorRoute";
 import SignedInRoute from "./components/SignedInRoute";

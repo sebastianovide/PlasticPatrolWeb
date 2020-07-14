@@ -10,9 +10,57 @@ body,
   -webkit-user-select: none;
   -webkit-tap-highlight-color: transparent;
   -webkit-touch-callout: none;
+  font-family: BrownSTD;
 }
 
 @font-face {
-  font-family: rockedRegular;
-  src: url(./assets/fonts/Rocked-Regular.otf);
+  font-family: BrownSTD;
+  src: url(./assets/fonts/BrownSTD/BrownStd-Thin.otf);
+  font-weight: 100;
+}
+
+@font-face {
+  font-family: BrownSTD;
+  src: url(./assets/fonts/BrownSTD/BrownStd-Light.otf);
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: BrownSTD;
+  src: url(./assets/fonts/BrownSTD/BrownStd-Regular.otf);
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: BrownSTD;
+  src: url(./assets/fonts/BrownSTD/BrownStd-Bold.otf);
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: BrownSTD;
+  src: url(./assets/fonts/BrownSTD/BrownStd-ThinItalic.otf);
+  font-weight: 100;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: BrownSTD;
+  src: url(./assets/fonts/BrownSTD/BrownStd-LightItalic.otf);
+  font-weight: 300;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: BrownSTD;
+  src: url(./assets/fonts/BrownSTD/BrownStd-Italic.otf);
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: BrownSTD;
+  src: url(./assets/fonts/BrownSTD/BrownStd-BoldItalic.otf);
+  font-weight: 700;
+  font-style: italic;
 }

@@ -16,6 +16,7 @@ import { isIphoneWithNotchAndCordova, isIphoneAndCordova } from "utils";
 import User from "types/User";
 import Page from "types/Page";
 import config from "custom/config";
+import Stats from "types/Stats";
 
 const drawerWidth = "80%";
 const drawerMaxWidth = 360;
@@ -60,7 +61,7 @@ type Props = {
   user: User | undefined;
   online: boolean;
   leftDrawerOpen: boolean;
-  stats: number;
+  stats: Stats;
   sponsorImage: string;
   toggleLeftDrawer: (open: boolean) => () => void;
   handleClickLoginLogout: () => void;
@@ -158,7 +159,7 @@ export default function DrawerContainer({
           </List>
           <div className={classes.info}>
             <Typography className={classes.stats} color={"primary"}>
-              {`${stats | 0} pieces found so far!`}
+              {`${stats.pieces} pieces found so far!`}
             </Typography>
             {sponsorImage && (
               <span

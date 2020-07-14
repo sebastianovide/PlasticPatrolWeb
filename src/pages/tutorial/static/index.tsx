@@ -1,12 +1,18 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 
 import LocationOn from "@material-ui/icons/LocationOn";
 import CameraAlt from "@material-ui/icons/CameraAlt";
 import CloudUpload from "@material-ui/icons/CloudUpload";
 import Button from "@material-ui/core/Button";
+import { makeStyles } from "@material-ui/core";
 
 import exampleImage from "assets/images/example.jpeg";
-import { useHistory } from "react-router-dom";
+
+import useLocationOnMount from "hooks/useLocationOnMount";
+
+import { linkToMap } from "custom/config";
+import styles from "standard.scss";
 
 export type TutorialStep = {
   img?: string;
@@ -15,6 +21,19 @@ export type TutorialStep = {
   Icon?: React.FC<{ className: string }>;
   Button?: React.FC<{ className?: string }>;
 };
+
+const useStyles = makeStyles(() => ({
+  button: {
+    background: styles.orange,
+    color: "white",
+    "font-weight": "800",
+    fontSize: "18px",
+    borderRadius: "10px",
+    "&:hover": {
+      background: styles.orange
+    }
+  }
+}));
 
 export const tutorialSteps: Array<TutorialStep> = [
   {
@@ -41,11 +60,22 @@ export const tutorialSteps: Array<TutorialStep> = [
       "By litter picking and recording your findings you are helping build the largest and most powerful dataset on litter. We analyse everything you collect to drive impactful and evidence-based changes by government and brands to protect the environment.",
     Button: () => {
       const history = useHistory();
+      const styles = useStyles();
+
+      const location = useLocationOnMount<{ redirectOnGetStarted?: string }>();
+
+      const locationState = location.state;
+      const redirectOnGetStarted =
+        locationState && locationState.redirectOnGetStarted;
 
       return (
         <Button
-          className="FinalSlide__button"
-          onClick={() => history.push("/")}
+          className={styles.button}
+          onClick={() =>
+            history.push(
+              redirectOnGetStarted ? redirectOnGetStarted : linkToMap()
+            )
+          }
         >
           Get started
         </Button>

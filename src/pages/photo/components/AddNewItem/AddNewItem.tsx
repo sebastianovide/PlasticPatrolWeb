@@ -42,6 +42,7 @@ const useStyles = makeStyles((theme) => ({
     color: "black",
     fontWeight: "bold",
     marginLeft: theme.spacing(1),
+    fontSize: 11,
     width: "100%",
     "&:focus": {
       outline: "none"
@@ -91,7 +92,7 @@ export default function AddNewItem({
 
   const styles = useStyles();
 
-  const itemButtonIsDisabled = !(quantity && brand && type && type.label);
+  const itemButtonIsDisabled = !(quantity && type && type.label);
 
   return (
     <div className={styles.wrapper}>

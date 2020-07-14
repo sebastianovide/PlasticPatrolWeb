@@ -2,7 +2,6 @@
 import firebase from "firebase/app";
 import md5 from "md5";
 
-import config from "custom/config";
 import User from "types/User";
 import { gtagEvent, gtagSetId } from "gtag.js";
 
