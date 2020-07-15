@@ -21,7 +21,7 @@ import {
 import loadPhoto from "./utils";
 import UploadPhotoDialog from "pages/photo/components/UploadPhotoDialog";
 import { linkToNewPhoto } from "routes/photo/routes/new/links";
-import { useGPSLocation } from "LocationProvider";
+import { useGPSLocation } from "providers/LocationProvider";
 import useEffectOnMount from "hooks/useEffectOnMount";
 
 const useStyles = makeStyles((theme) => ({

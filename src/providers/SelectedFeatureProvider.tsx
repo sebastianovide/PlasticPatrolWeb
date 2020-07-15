@@ -1,12 +1,15 @@
 // TODO make this into an actual provider so we can use it at arbitrary
 // depths in the tree?
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import { gtagPageView } from "gtag";
+
 import { dbFirebase } from "features/firebase";
 import Feature from "types/Feature";
-import { useLocation } from "react-router-dom";
-import { extractPathnameParams } from "PhotosProvider";
+
 import useAsyncEffect from "hooks/useAsyncEffect";
-import { gtagPageView } from "gtag";
+
+import { extractPathnameParams } from "./PhotosProvider";
 
 export const useSelectedFeature = () => {
   const [selectedFeature, setSelectedFeature] = useState<Feature | undefined>();

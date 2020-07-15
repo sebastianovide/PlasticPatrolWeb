@@ -21,7 +21,7 @@ import TermsDialog from "./components/TermsDialog";
 import EmailVerifiedDialog from "./pages/dialogs/EmailVerified";
 import MapLocation from "./types/MapLocation";
 import config from "./custom/config";
-import { extractPathnameParams } from "PhotosProvider";
+import { extractPathnameParams } from "./providers/PhotosProvider";
 
 import { gtagEvent } from "./gtag.js";
 import "./App.scss";
