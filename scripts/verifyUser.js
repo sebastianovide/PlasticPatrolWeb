@@ -1,13 +1,14 @@
 const admin = require("firebase-admin");
 
-const serviceAccount = require("../adminCreds.dev.json");
+const serviceAccount = require("../adminCreds.prod.json");
 
-const userId = "ZuyJV8JF4qfMGuHBgPnJJ48VPtA2";
+const userId = "ukrJWbR7oxXiViT7UGY3MVEs6u52";
 
 // get credentials to run this from https://console.firebase.google.com/u/0/project/plastic-patrol-dev-722eb/settings/serviceaccounts/adminsdk
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: "https://plastic-patrol-dev-722eb.firebaseio.com"
+  // databaseURL: "https://plastic-patrol-fd3b3.firebaseio.com"
 });
 
 async function verify() {
