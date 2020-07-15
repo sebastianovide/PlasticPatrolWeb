@@ -12,8 +12,6 @@ import dbFirebase from "./dbFirebase";
  * @param fn
  */
 
-let currentUser;
-
 const getProvider = (user) => {
   if (user.providerData.length > 0) {
     return user.providerData[0].providerId;

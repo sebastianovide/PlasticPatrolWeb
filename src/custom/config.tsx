@@ -1,5 +1,4 @@
 import React from "react";
-import _ from "lodash";
 
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";

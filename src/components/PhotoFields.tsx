@@ -1,6 +1,5 @@
 import React from "react";
 import Photo from "types/Photo";
-import { string } from "prop-types";
 
 interface Props {
   photo: Photo;
