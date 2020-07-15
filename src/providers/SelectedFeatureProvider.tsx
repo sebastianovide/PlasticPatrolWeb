@@ -17,12 +17,13 @@ export const useSelectedFeature = () => {
   useEffect(() => {
     gtagPageView(location.pathname);
   }, [location]);
+  const { photoId } = extractPathnameParams(location);
   useAsyncEffect(async () => {
-    const { photoId } = extractPathnameParams(location);
     if (photoId) {
       const photo = await dbFirebase.getPhotoByID(photoId);
       setSelectedFeature(photo);
     }
-  }, [location]);
+  }, [photoId]);
+
   return selectedFeature;
 };
