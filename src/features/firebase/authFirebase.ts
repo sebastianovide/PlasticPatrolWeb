@@ -25,6 +25,7 @@ const onAuthStateChanged = ({ onSignOut, setUser }: Args) => {
   let userRef;
   const firebaseStatusChange = (user) => {
     if (userRef && !user) {
+      userRef = undefined;
       onSignOut(undefined);
       setUser(undefined);
       return;
@@ -67,12 +68,15 @@ const onAuthStateChanged = ({ onSignOut, setUser }: Args) => {
     script.src = `${gravatarURL}?callback=userFromGravatar`;
     document.head.append(script);
 
-    dbFirebase.getUser(user.uid).then((fbUser) => {
-      currentUser.isModerator = fbUser ? fbUser.isModerator : false;
-      setUser(currentUser);
-    });
     setUser(currentUser);
     userRef = currentUser;
+
+    dbFirebase.getUser(user.uid).then((fbUser) => {
+      currentUser.isModerator = fbUser ? fbUser.isModerator : false;
+
+      // creates a new object ref so react updates
+      setUser({ ...currentUser });
+    });
   };
   return firebase.auth().onAuthStateChanged(firebaseStatusChange);
 };
