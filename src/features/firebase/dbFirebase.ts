@@ -41,6 +41,8 @@ function extractPhoto(data, id): Photo {
   photo.moderated =
     photo.moderated instanceof firebase.firestore.Timestamp
       ? photo.moderated.toDate()
+      : photo.moderated === null
+      ? undefined
       : new Date(photo.moderated);
 
   // when comming from json, it looses the type

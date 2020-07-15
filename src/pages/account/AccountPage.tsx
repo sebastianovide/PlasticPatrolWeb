@@ -140,7 +140,8 @@ export default function AccountPage({
                 </span>
               )}
               <Link to={calcUrl(photo)} onClick={() => handlePhotoClick(photo)}>
-                {photo.properties.moderated.toDateString
+                {photo.properties.moderated &&
+                photo.properties.moderated.toDateString
                   ? photo.properties.moderated.toDateString()
                   : photo.properties.moderated}
               </Link>

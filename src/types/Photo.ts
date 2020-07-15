@@ -9,7 +9,7 @@ type Photo = {
   main: any;
   thumbnail: any;
   updated: Date;
-  moderated: Date;
+  moderated?: Date;
   owner_id: string;
   pieces: number;
   location: firebase.firestore.GeoPoint;

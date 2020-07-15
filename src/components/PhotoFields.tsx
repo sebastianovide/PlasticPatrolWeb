@@ -39,7 +39,10 @@ const PhotoFields = ({ photo }: Props) => {
       <Field fieldName={"owner"} value={owner_id} />
       <Field fieldName={"pieces"} value={String(pieces)} />
       <Field fieldName={"updated"} value={updated.toDateString()} />
-      <Field fieldName={"moderated"} value={moderated.toDateString()} />
+      <Field
+        fieldName={"moderated"}
+        value={moderated ? moderated.toDateString() : "null"}
+      />
       <Field
         fieldName={"location"}
         value={
@@ -72,8 +75,8 @@ const PhotoFields = ({ photo }: Props) => {
         fieldName={"categories"}
         value={
           <ul>
-            {categories.map(({ number, label, brand }) => (
-              <li>
+            {categories.map(({ number, label, brand }, idx) => (
+              <li key={idx}>
                 <Field
                   fieldName={"number"}
                   value={number ? String(number) : ""}
