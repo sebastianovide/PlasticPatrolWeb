@@ -21,7 +21,7 @@ import { usePhotos } from "./PhotosProvider";
 import { useSelectedFeature } from "./SelectedFeatureProvider";
 import { useConfig } from "./ConfigProvider";
 import { useOnline } from "./OnlineProvider";
-import { useUser } from "./UserProvider";
+import UserProvider, { useUser } from "./UserProvider";
 import { useStats } from "./StatsProvider";
 import * as Sentry from "@sentry/browser";
 import { dbFirebase } from "features/firebase";
@@ -114,7 +114,9 @@ const startApp = () => {
     <Router>
       <MuiThemeProvider theme={theme}>
         <LocationProvider>
-          <Wrapper />
+          <UserProvider>
+            <Wrapper />
+          </UserProvider>
         </LocationProvider>
       </MuiThemeProvider>
     </Router>,

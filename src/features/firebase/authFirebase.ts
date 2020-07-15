@@ -7,11 +7,6 @@ import { gtagEvent, gtagSetId } from "gtag.js";
 
 import dbFirebase from "./dbFirebase";
 
-/**
- * When the user login call fn
- * @param fn
- */
-
 const getProvider = (user) => {
   if (user.providerData.length > 0) {
     return user.providerData[0].providerId;
@@ -19,10 +14,19 @@ const getProvider = (user) => {
   return null;
 };
 
-const onAuthStateChanged = (fn: (user: User | undefined) => void) => {
+type _User = User | undefined;
+
+type Args = {
+  onSignOut: () => void;
+  setUser: (_User) => void;
+};
+
+const onAuthStateChanged = ({ onSignOut, setUser }: Args) => {
+  let userRef;
   const firebaseStatusChange = (user) => {
-    if (!user) {
-      fn(undefined);
+    if (userRef && !user) {
+      onSignOut(undefined);
+      setUser(undefined);
       return;
     }
 
@@ -65,9 +69,10 @@ const onAuthStateChanged = (fn: (user: User | undefined) => void) => {
 
     dbFirebase.getUser(user.uid).then((fbUser) => {
       currentUser.isModerator = fbUser ? fbUser.isModerator : false;
-      fn(currentUser);
+      setUser(currentUser);
     });
-    fn(currentUser);
+    setUser(currentUser);
+    userRef = currentUser;
   };
   return firebase.auth().onAuthStateChanged(firebaseStatusChange);
 };

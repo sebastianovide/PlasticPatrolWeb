@@ -1,34 +1,33 @@
-// TODO make this into an actual provider so we can use it at arbitrary
-// depths in the tree?
-import { useState, useEffect, useCallback } from "react";
+import React, { useState, useContext } from "react";
 import { authFirebase } from "features/firebase";
 import User from "types/User";
 import { gtagEvent } from "gtag";
 import config from "custom/config";
 import { useHistory } from "react-router-dom";
+import useEffectOnMount from "hooks/useEffectOnMount";
 
-export const useUser = (): User | undefined => {
+const UserContext = React.createContext<User | undefined>(undefined);
+
+type Props = { children: React.ElementType };
+
+export default function UserProvider({ children }: Props) {
   const [user, setUser] = useState<User>();
   const history = useHistory();
-  const authStateChangedCallback = useCallback(
-    (newUser) => {
-      if (user === newUser) {
-        return;
-      }
+  const onSignOut = () => {
+    gtagEvent("Signed out", "User");
 
-      if (user && !newUser) {
-        gtagEvent("Signed out", "User");
+    history.push(config.PAGES.map.path);
+    window.location.reload();
+  };
 
-        history.push(config.PAGES.map.path);
-        window.location.reload();
-      }
-      setUser(newUser);
-    },
-    [user, history]
-  );
-  useEffect(
-    () => authFirebase.onAuthStateChanged(authStateChangedCallback),
-    []
-  );
-  return user;
-};
+  useEffectOnMount(() => {
+    authFirebase.onAuthStateChanged({
+      onSignOut,
+      setUser
+    });
+  });
+
+  return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
+}
+
+export const useUser = () => useContext(UserContext);
