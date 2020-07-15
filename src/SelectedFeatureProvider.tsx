@@ -5,7 +5,7 @@ import { dbFirebase } from "features/firebase";
 import Feature from "types/Feature";
 import { useLocation } from "react-router-dom";
 import { extractPathnameParams } from "PhotosProvider";
-import { useAsyncEffect } from "utils";
+import useAsyncEffect from "hooks/useAsyncEffect";
 import { gtagPageView } from "gtag";
 
 export const useSelectedFeature = () => {

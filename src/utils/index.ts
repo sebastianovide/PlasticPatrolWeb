@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-
 //to get round window.cordova being undefined
 declare var window: any;
 
@@ -18,12 +16,6 @@ export const device = () => {
   } else {
     return "Web";
   }
-};
-
-export const useAsyncEffect = (f: () => Promise<void>, deps: any[]) => {
-  useEffect(() => {
-    f();
-  }, deps);
 };
 
 export const isIphoneAndCordova = !!(device() === "iOS" && window.cordova);

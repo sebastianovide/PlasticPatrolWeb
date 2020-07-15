@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { dbFirebase } from "features/firebase";
 import Stats, { EMPTY_STATS } from "types/Stats";
-import { useAsyncEffect } from "utils";
+import useAsyncEffect from "hooks/useAsyncEffect";
 
 export const useStats = (): Stats => {
   const [stats, setStats] = useState<Stats>(EMPTY_STATS);

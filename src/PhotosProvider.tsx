@@ -12,7 +12,7 @@ import config from "custom/config";
 import { Location, History } from "history";
 import { RealtimeUpdate } from "features/firebase/dbFirebase";
 import _ from "lodash";
-import { useAsyncEffect } from "utils";
+import useAsyncEffect from "hooks/useAsyncEffect";
 import { useUser } from "UserProvider";
 
 const photoToFeature = (photo: Photo): Feature => ({
