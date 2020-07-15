@@ -176,7 +176,6 @@ class App extends Component {
       gpsLocation,
       geojson,
       online,
-      stats,
       sponsorImage,
       selectedFeature
     } = this.props;
@@ -214,7 +213,6 @@ class App extends Component {
           />
           <Routes
             user={user}
-            stats={stats}
             gpsLocation={gpsLocation}
             online={online}
             geojson={geojson}
@@ -233,7 +231,6 @@ class App extends Component {
           handleClickLoginLogout={this.handleClickLoginLogout}
           leftDrawerOpen={leftDrawerOpen}
           toggleLeftDrawer={this.toggleLeftDrawer}
-          stats={stats}
           sponsorImage={sponsorImage}
         />
       </div>

@@ -1,6 +1,4 @@
-// TODO make this into an actual provider so we can use it at arbitrary
-// depths in the tree?
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useLocation } from "react-router-dom";
 import { gtagPageView } from "gtag";
 
@@ -11,7 +9,13 @@ import useAsyncEffect from "hooks/useAsyncEffect";
 
 import { extractPathnameParams } from "./PhotosProvider";
 
-export const useSelectedFeature = () => {
+const SelectedFeatureContext = React.createContext<Feature | undefined>(
+  undefined
+);
+
+type Props = { children: React.ElementType };
+
+export default function SelectedFeatureProvider({ children }: Props) {
   const [selectedFeature, setSelectedFeature] = useState<Feature | undefined>();
   const location = useLocation();
   useEffect(() => {
@@ -25,5 +29,11 @@ export const useSelectedFeature = () => {
     }
   }, [photoId]);
 
-  return selectedFeature;
-};
+  return (
+    <SelectedFeatureContext.Provider value={selectedFeature}>
+      {children}
+    </SelectedFeatureContext.Provider>
+  );
+}
+
+export const useSelectedFeature = () => useContext(SelectedFeatureContext);

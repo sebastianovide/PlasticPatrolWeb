@@ -37,11 +37,10 @@ import { linkToTutorialPage } from "./tutorial/links";
 
 import AccountPageRoute from "./account/Route";
 import { linkToAccountPage } from "./account/links";
-import Stats from "types/Stats";
+import { useStats } from "providers/StatsProvider";
 
 type Props = {
   user: User;
-  stats: Stats;
   reloadPhotos: () => void;
   gpsLocation: any;
   online: boolean;
@@ -53,7 +52,6 @@ type Props = {
 
 export function Routes({
   user,
-  stats,
   reloadPhotos,
   gpsLocation,
   online,
@@ -63,6 +61,8 @@ export function Routes({
   sponsorImage
 }: Props) {
   const history = useHistory();
+
+  const stats = useStats();
   return (
     <Switch>
       <Route path={linkToUploadSuccess()}>

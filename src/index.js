@@ -18,11 +18,13 @@ import { isIphoneAndCordova } from "./utils";
 import { gtagInit } from "./gtag.js";
 import LocationProvider, { useGPSLocation } from "./providers/LocationProvider";
 import { usePhotos } from "./providers/PhotosProvider";
-import { useSelectedFeature } from "./providers/SelectedFeatureProvider";
+import SelectedFeatureProvider, {
+  useSelectedFeature
+} from "./providers/SelectedFeatureProvider";
 import { useConfig } from "./providers/ConfigProvider";
 import { useOnline } from "./providers/OnlineProvider";
 import UserProvider, { useUser } from "./providers/UserProvider";
-import { useStats } from "./providers/StatsProvider";
+import StatsProvider from "./providers/StatsProvider";
 import * as Sentry from "@sentry/browser";
 import { dbFirebase } from "features/firebase";
 
@@ -37,7 +39,6 @@ serviceWorker.register();
 
 function initialiseCypressVars() {
   if (window.Cypress) {
-    console.log("adding firebase");
     window.__firebase__ = firebaseApp;
   }
 }
@@ -76,7 +77,6 @@ const Wrapper = () => {
   const [{ geojson }, reloadPhotos] = usePhotos();
   const online = useOnline();
   const selectedFeature = useSelectedFeature();
-  const stats = useStats();
   const { sponsorImage } = useConfig();
   const user = useUser();
 
@@ -99,7 +99,6 @@ const Wrapper = () => {
         reloadPhotos={reloadPhotos}
         online={online}
         sponsorImage={sponsorImage}
-        stats={stats}
         selectedFeature={selectedFeature}
         user={user}
       />
@@ -114,9 +113,13 @@ const startApp = () => {
     <Router>
       <MuiThemeProvider theme={theme}>
         <LocationProvider>
-          <UserProvider>
-            <Wrapper />
-          </UserProvider>
+          <SelectedFeatureProvider>
+            <StatsProvider>
+              <UserProvider>
+                <Wrapper />
+              </UserProvider>
+            </StatsProvider>
+          </SelectedFeatureProvider>
         </LocationProvider>
       </MuiThemeProvider>
     </Router>,

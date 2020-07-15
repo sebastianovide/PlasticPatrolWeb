@@ -1,15 +1,22 @@
-// TODO make this into an actual provider so we can use it at arbitrary
-// depths in the tree?
-import { useState } from "react";
+import React, { useState, useContext } from "react";
 import { dbFirebase } from "features/firebase";
 import Stats, { EMPTY_STATS } from "types/Stats";
 import useAsyncEffect from "hooks/useAsyncEffect";
 
-export const useStats = (): Stats => {
+const StatsContext = React.createContext<Stats>(EMPTY_STATS);
+
+type Props = { children: React.ElementType };
+
+export default function StatsProvider({ children }: Props) {
   const [stats, setStats] = useState<Stats>(EMPTY_STATS);
   useAsyncEffect(async () => {
     const stats = await dbFirebase.fetchStats();
     setStats(stats);
   }, []);
-  return stats;
-};
+
+  return (
+    <StatsContext.Provider value={stats}>{children}</StatsContext.Provider>
+  );
+}
+
+export const useStats = () => useContext(StatsContext);

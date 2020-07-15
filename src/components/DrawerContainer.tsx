@@ -16,7 +16,7 @@ import { isIphoneWithNotchAndCordova, isIphoneAndCordova } from "utils";
 import User from "types/User";
 import Page from "types/Page";
 import config from "custom/config";
-import Stats from "types/Stats";
+import { useStats } from "providers/StatsProvider";
 
 const drawerWidth = "80%";
 const drawerMaxWidth = 360;
@@ -61,7 +61,6 @@ type Props = {
   user: User | undefined;
   online: boolean;
   leftDrawerOpen: boolean;
-  stats: Stats;
   sponsorImage: string;
   toggleLeftDrawer: (open: boolean) => () => void;
   handleClickLoginLogout: () => void;
@@ -71,13 +70,13 @@ export default function DrawerContainer({
   user,
   online,
   leftDrawerOpen,
-  stats,
   sponsorImage,
   toggleLeftDrawer,
   handleClickLoginLogout
 }: Props) {
   const theme = useTheme();
   const classes = useStyles();
+  const stats = useStats();
   // these list items are only rendered when there is a user
   const listItemsTop: Page[] = [PAGES.account, PAGES.moderator];
   const listItemsTopUnderBreak: Page[] = [
