@@ -26,7 +26,7 @@ const TermsDialog: React.FC<{}> = () => {
   const history = useHistory();
   const [open, setOpen] = useState(
     !history.location.pathname.startsWith(config.PAGES.embeddable.path) &&
-      !localStorage.getItem("TermsAccepted")
+      !localStorage.getItem("termsAccepted")
   );
   const [isChecked, setIsChecked] = useState(false);
   const classes = useStyles();
@@ -66,7 +66,7 @@ const TermsDialog: React.FC<{}> = () => {
           color="primary"
           disabled={!isChecked}
           onClick={() => {
-            localStorage.setItem("TermsAccepted", "Yes");
+            localStorage.setItem("termsAccepted", "Yes");
             setOpen(false);
           }}
         >
