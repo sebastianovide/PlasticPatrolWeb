@@ -1,8 +1,25 @@
 import _ from "lodash";
 import admin from "firebase-admin";
 import { QuerySnapshot, QueryDocumentSnapshot } from "@google-cloud/firestore";
-import { Stats, UserStats, GroupStats, notEmpty } from "./types";
+import { Stats, UserStats, GroupStats, notEmpty, BaseStats } from "./types";
 import { firestore, auth } from "./firestore";
+
+const LARGE_COLLECTION_THRESHOLD = 1000;
+
+export const updateStatsWithPieces = (
+  stats: BaseStats,
+  pieces: number
+): void => {
+  stats.uploaded++;
+  stats.totalUploaded++;
+  if (pieces > 0) {
+    stats.pieces += pieces;
+  }
+  if (pieces > LARGE_COLLECTION_THRESHOLD) {
+    stats.largeCollectionUploads++;
+    stats.largeCollectionPieces += pieces;
+  }
+};
 
 /**
  * compute the stats from the given data about users, groups and photos
@@ -18,7 +35,10 @@ export const computeStats = (
       uid: user.uid,
       displayName: user.displayName || "",
       pieces: 0,
-      uploaded: 0
+      totalUploaded: 0,
+      uploaded: 0,
+      largeCollectionUploads: 0,
+      largeCollectionPieces: 0
     };
     return userShort;
   });
@@ -30,16 +50,22 @@ export const computeStats = (
       gid: doc.id,
       displayName: displayName || "",
       pieces: 0,
-      uploaded: 0
+      uploaded: 0,
+      totalUploaded: 0,
+      largeCollectionUploads: 0,
+      largeCollectionPieces: 0
     });
   });
 
   const stats: Stats = {
-    totalUploaded: 0,
     moderated: 0,
     published: 0,
     rejected: 0,
     pieces: 0,
+    totalUploaded: 0,
+    uploaded: 0,
+    largeCollectionUploads: 0,
+    largeCollectionPieces: 0,
     users,
     groups
   };
@@ -58,16 +84,8 @@ export const computeStats = (
     }
   });
 
-  // console.info(users);
-  // console.info(users.find(user => !user.uid));
-
   photosSnapshot.forEach((doc) => {
-    // console.info(users.find(user => !user.uid));
-
     const data = doc.data();
-    // console.info(data);
-
-    stats.totalUploaded++;
 
     // has the upload been reviewed by a moderator ?
     if (data.moderated) {
@@ -78,9 +96,7 @@ export const computeStats = (
         stats.published++;
 
         const pieces = Number(data.pieces);
-        if (pieces > 0) stats.pieces += pieces;
-        // console.info(data.owner_id);
-        // console.info(users.find(user => !user.uid));
+        updateStatsWithPieces(stats, pieces);
 
         const owner = users.find((user) => user.uid === data.owner_id);
 
@@ -88,22 +104,13 @@ export const computeStats = (
         // # of pieces to that group's total count
         if (owner && owner.uid in userToGroups) {
           userToGroups[owner.uid].forEach((group) => {
-            group.uploaded++;
-            group.pieces += pieces;
+            updateStatsWithPieces(group, pieces);
           });
         }
 
-        // console.info(owner);
-
         if (owner) {
-          // console.info("found: ", owner);
-          if (pieces > 0) owner.pieces += pieces;
-          owner.uploaded++;
+          updateStatsWithPieces(owner, pieces);
           owner.displayName = owner.displayName || "";
-
-          // console.info(owner);
-        } else {
-          // console.info(`No user with id = '${data.owner_id}'`);
         }
       } else {
         stats.rejected++;
