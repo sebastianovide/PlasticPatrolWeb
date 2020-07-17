@@ -44,7 +44,6 @@ const CardComponent = ({
         >
           <ThumbDownIcon />
         </IconButton>
-        )
         <IconButton
           aria-label="Approve"
           disabled={!!photoSelected.published}
@@ -52,7 +51,6 @@ const CardComponent = ({
         >
           <ThumbUpIcon />
         </IconButton>
-        )
       </CardActions>
     </Card>
   );

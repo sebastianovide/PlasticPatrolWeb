@@ -249,8 +249,6 @@ function photosToModerateRT(
 }
 
 function writeModeration(photoId, userId, published) {
-  console.log(`The photo ${photoId} will have field published = ${published}`);
-
   if (typeof published !== "boolean") {
     throw new Error("Only boolean pls");
   }
