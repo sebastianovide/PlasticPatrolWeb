@@ -1,5 +1,4 @@
 import React from "react";
-import _ from "lodash";
 
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
@@ -13,15 +12,9 @@ import LibraryBooksIcon from "@material-ui/icons/LibraryBooks";
 
 import styles from "standard.scss";
 
-import enums from "types/enums";
 import User from "types/User";
 import Page from "types/Page";
-import Stats from "types/Stats";
 
-import TitleTextField from "components/pages/AdminApproval/TitleTextField";
-import MultiFields from "components/pages/AdminApproval/MultiFields";
-
-import data from "./categories.json";
 import { linkToFeedbackReports } from "routes/feedback-reports/links";
 import { linkToTutorialPage } from "routes/tutorial/links";
 import { linkToAboutPage } from "routes/about/links";
@@ -151,8 +144,6 @@ export interface Config {
   ZOOM: number;
   ZOOM_FLYTO: number;
   CENTER: [number, number];
-  PHOTO_FIELDS: any;
-  getStats: (photos: any, dbStats: Stats) => number;
   ENABLE_GRAVATAR_PROFILES: boolean;
   SECURITY: {
     UPLOAD_REQUIRES_LOGIN: boolean;
@@ -198,56 +189,7 @@ const config: Config = {
   ZOOM: 5,
   ZOOM_FLYTO: 15,
   CENTER: [-2, 55],
-  PHOTO_FIELDS: {
-    pieces: {
-      name: "pieces",
-      title: "Number of pieces collected",
-      type: enums.TYPES.number,
-      placeholder: "eg. 123",
-      inputProps: { min: 0, step: 1 },
-      regexValidation: "^[0-9]+",
-      component: TitleTextField
-    },
-    categories: {
-      component: MultiFields.MultiFieldsWithStyles,
-      nakedComponent: MultiFields.MultiFieldsOriginal,
-      name: "categories",
-
-      placeholder: "Add litter category",
-      data: data,
-      noOptionsMessage: "No more categories",
-      sanitize: (value: any) => {
-        _.forEach(value, (category: any) => {
-          category.brand =
-            category.brand.replace &&
-            category.brand.replace(/\s+/g, " ").trim();
-        });
-        return value;
-      },
-
-      subfields: {
-        number: {
-          component: TitleTextField,
-          inputProps: { min: 0, step: 1 },
-          name: "number",
-          title: "Number",
-          type: enums.TYPES.number,
-          placeholder: "eg. 123",
-          regexValidation: "^[0-9]+"
-        },
-        brand: {
-          component: TitleTextField,
-          name: "brand",
-          title: "Brand",
-          type: enums.TYPES.string,
-          placeholder: "eg. whatever",
-          regexValidation: ".+"
-        }
-      }
-    }
-  },
   PAGES,
-  getStats: (photos: any, dbStats: Stats) => (dbStats && dbStats.pieces) || 0,
   ENABLE_GRAVATAR_PROFILES: true, //To update user-profile from Gravatar, value: true or false.
   ENABLE_GROUPS: false,
   SECURITY: {

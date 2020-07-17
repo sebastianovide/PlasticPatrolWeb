@@ -12,8 +12,17 @@ import PageWrapper from "../../components/PageWrapper";
 import MapLocation from "../../types/MapLocation";
 import Feature from "types/Feature";
 import Geojson from "types/Geojson";
+import Tooltip from "components/common/Tooltip";
 import User from "types/User";
 import { Config } from "custom/config";
+
+const LARGE_COLLECTION_THRESHOLD = 1000;
+
+const LARGE_UPLOAD_TOOLTIP =
+  `Large uploads track any individual uploads ` +
+  `that contain more than ${LARGE_COLLECTION_THRESHOLD} ` +
+  `pieces. These are accounted for separately in the ` +
+  `leaderboard and here in your account for bookkeeping purposes.`;
 
 const useStyles = makeStyles(() => ({
   avatar: {
@@ -63,6 +72,9 @@ export default function AccountPage({
   const myPhotos =
     geojson &&
     geojson.features.filter((f) => f.properties.owner_id === user.id);
+  const largeUploads = myPhotos.filter(
+    (f) => f.properties.pieces > LARGE_COLLECTION_THRESHOLD
+  );
   const myLastPhotos: Feature[] = _.reverse(
     _.sortBy(myPhotos, (o) => o.properties.moderated)
   ).slice(0, 20);
@@ -96,8 +108,20 @@ export default function AccountPage({
       )}
       {!isNaN(numPieces) && (
         <Typography variant="body1">
-          Total Pieces <strong>{numPieces}</strong>
+          Total pieces <strong>{numPieces}</strong>
         </Typography>
+      )}
+      {largeUploads.length > 0 && (
+        <>
+          <Typography variant="body1">
+            Num. of large uploads <strong>{largeUploads.length}</strong>
+            <Tooltip tooltip={LARGE_UPLOAD_TOOLTIP} />
+          </Typography>
+          <Typography variant="body1">
+            Total Pieces in large uploads{" "}
+            <strong>{_.sumBy(largeUploads, (f) => f.properties.pieces)}</strong>
+          </Typography>
+        </>
       )}
 
       <br />
@@ -116,7 +140,8 @@ export default function AccountPage({
                 </span>
               )}
               <Link to={calcUrl(photo)} onClick={() => handlePhotoClick(photo)}>
-                {photo.properties.moderated.toDateString
+                {photo.properties.moderated &&
+                photo.properties.moderated.toDateString
                   ? photo.properties.moderated.toDateString()
                   : photo.properties.moderated}
               </Link>

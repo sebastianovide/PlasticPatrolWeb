@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import { HashRouter as Router } from "react-router-dom";
 import * as firebaseui from "firebaseui";
@@ -16,8 +16,17 @@ import * as serviceWorker from "./serviceWorker";
 import config from "./custom/config";
 import { isIphoneAndCordova } from "./utils";
 import { gtagInit } from "./gtag.js";
-import LocationProvider from "./LocationProvider";
+import LocationProvider, { useGPSLocation } from "./providers/LocationProvider";
+import { usePhotos } from "./providers/PhotosProvider";
+import SelectedFeatureProvider, {
+  useSelectedFeature
+} from "./providers/SelectedFeatureProvider";
+import { useConfig } from "./providers/ConfigProvider";
+import { useOnline } from "./providers/OnlineProvider";
+import UserProvider, { useUser } from "./providers/UserProvider";
+import StatsProvider from "./providers/StatsProvider";
 import * as Sentry from "@sentry/browser";
+import { dbFirebase } from "features/firebase";
 
 if (process.env.NODE_ENV !== "development") {
   Sentry.init({
@@ -30,7 +39,6 @@ serviceWorker.register();
 
 function initialiseCypressVars() {
   if (window.Cypress) {
-    console.log("adding firebase");
     window.__firebase__ = firebaseApp;
   }
 }
@@ -65,6 +73,17 @@ if (devDissableDebugLog) {
 const theme = createMuiTheme(config.THEME);
 
 const Wrapper = () => {
+  const gpsLocation = useGPSLocation();
+  const [{ geojson }, reloadPhotos] = usePhotos();
+  const online = useOnline();
+  const selectedFeature = useSelectedFeature();
+  const { sponsorImage } = useConfig();
+  const user = useUser();
+
+  useEffect(() => {
+    return () => dbFirebase.disconnect();
+  }, []);
+
   const [handledPendingRedirect, setHandledPendingRedirect] = useState(false);
   return (
     <>
@@ -73,9 +92,16 @@ const Wrapper = () => {
         handleClose={() => {}}
         onSignIn={() => setHandledPendingRedirect(true)}
       />
-      <LocationProvider>
-        <App config={config} />
-      </LocationProvider>
+      <App
+        config={config}
+        gpsLocation={gpsLocation}
+        geojson={geojson}
+        reloadPhotos={reloadPhotos}
+        online={online}
+        sponsorImage={sponsorImage}
+        selectedFeature={selectedFeature}
+        user={user}
+      />
     </>
   );
 };
@@ -86,7 +112,15 @@ const startApp = () => {
   ReactDOM.render(
     <Router>
       <MuiThemeProvider theme={theme}>
-        <Wrapper />
+        <LocationProvider>
+          <SelectedFeatureProvider>
+            <StatsProvider>
+              <UserProvider>
+                <Wrapper />
+              </UserProvider>
+            </StatsProvider>
+          </SelectedFeatureProvider>
+        </LocationProvider>
       </MuiThemeProvider>
     </Router>,
     document.getElementById("root")

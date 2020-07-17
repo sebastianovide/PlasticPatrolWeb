@@ -6,6 +6,8 @@ import NavDots from "components/common/NavDots";
 import { FirstSlide, MiddleSlide, FinalSlide } from "../Slides";
 
 import "./WelcomePage.scss";
+import { useHistory } from "react-router-dom";
+import config from "custom/config";
 
 const carouselStyle = {
   wrapper: {
@@ -17,8 +19,13 @@ const carouselStyle = {
 
 const NUMBER_OF_DOTS = 3;
 
-export default function WelcomePage({ handleClose }: any) {
-  const reactSwipeEl = useRef();
+const WelcomePage = () => {
+  const history = useHistory();
+  const [open, setOpen] = useState(
+    !history.location.pathname.includes(config.PAGES.embeddable.path) &&
+      !localStorage.getItem("welcomeShown")
+  );
+  const reactSwipeEl = useRef<ReactSwipe | null>(null);
   const [navDotActiveIndex, setNavDotActiveIndex] = useState(0);
 
   const handleNavdotClick = (index: number) => {
@@ -30,6 +37,10 @@ export default function WelcomePage({ handleClose }: any) {
   const onSwipe = (index: number) => {
     setNavDotActiveIndex(index);
   };
+
+  if (!open) {
+    return [];
+  }
 
   return (
     <div className="WelcomePage__container">
@@ -47,7 +58,12 @@ export default function WelcomePage({ handleClose }: any) {
       >
         <FirstSlide />
         <MiddleSlide />
-        <FinalSlide onButtonClick={handleClose} />
+        <FinalSlide
+          onButtonClick={() => {
+            localStorage.setItem("welcomeShown", "Yes");
+            setOpen(false);
+          }}
+        />
       </ReactSwipe>
       <NavDots
         numberOfDots={NUMBER_OF_DOTS}
@@ -59,4 +75,6 @@ export default function WelcomePage({ handleClose }: any) {
       />
     </div>
   );
-}
+};
+
+export default WelcomePage;

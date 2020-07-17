@@ -20,6 +20,10 @@ import PageWrapper from "./PageWrapper";
 import CardComponent from "./CardComponent";
 import "./ModeratorPage.scss";
 import config from "../custom/config";
+import User from "types/User";
+import usePhotosToModerate from "hooks/usePhotosToModerate";
+import { dbFirebase } from "features/firebase";
+import ConfirmationDialog, { Confirmation } from "./common/ConfirmationDialog";
 
 const placeholderImage = process.env.PUBLIC_URL + "/custom/images/logo.svg";
 
@@ -35,23 +39,17 @@ const useStyles = makeStyles(() => ({
 }));
 
 interface Props {
+  user: User;
   label: string;
-  photos: Photo[];
   handleClose: () => void;
-  handleRejectClick: (photo: Photo) => void;
-  handleApproveClick: (photo: Photo) => void;
 }
 
-const ModeratorPage = ({
-  label,
-  photos,
-  handleRejectClick,
-  handleApproveClick,
-  handleClose
-}: Props) => {
+const ModeratorPage = ({ user, label, handleClose }: Props) => {
   const styles = useStyles();
   const [zoomDialogOpen, setZoomDialogOpen] = useState(false);
   const [photoSelected, setPhotoSelected] = useState<Photo | undefined>();
+  const [confirmation, setConfirmation] = useState<Confirmation | undefined>();
+  const photos = usePhotosToModerate();
 
   const closeZoomDialog = () => setZoomDialogOpen(false);
   const handlePhotoClick = (photoSelected: Photo) => {
@@ -66,6 +64,11 @@ const ModeratorPage = ({
       </PageWrapper>
     );
   }
+
+  const reject = (photo: Photo) =>
+    dbFirebase.writeModeration(photo.id, user.id, false);
+  const approve = (photo: Photo) =>
+    dbFirebase.writeModeration(photo.id, user.id, true);
 
   return (
     <PageWrapper label={label} navigationHandler={{ handleClose }}>
@@ -94,14 +97,24 @@ const ModeratorPage = ({
               <IconButton
                 aria-label="Reject"
                 edge={false}
-                onClick={() => handleRejectClick(photo)}
+                onClick={() => {
+                  setConfirmation({
+                    message: `Are you sure you want to unpublish the photo ?`,
+                    onConfirmation: () => reject(photo)
+                  });
+                }}
               >
                 <ThumbDownIcon />
               </IconButton>
               <IconButton
                 aria-label="Approve"
                 edge={false}
-                onClick={() => handleApproveClick(photo)}
+                onClick={() => {
+                  setConfirmation({
+                    message: `Are you sure you want to publish the photo ?`,
+                    onConfirmation: () => approve(photo)
+                  });
+                }}
               >
                 <ThumbUpIcon />
               </IconButton>
@@ -110,26 +123,43 @@ const ModeratorPage = ({
         ))}
       </List>
 
+      <ConfirmationDialog
+        confirmation={confirmation}
+        setConfirmation={setConfirmation}
+      />
+
       <Dialog open={zoomDialogOpen} onClose={closeZoomDialog}>
         <DialogContent>
           {photoSelected && (
-            <div style={{ textAlign: "center" }}>
-              <img
-                className={"main-image"}
-                onError={(e) => {
-                  // @ts-ignore
-                  e.target.src = placeholderImage;
-                }}
-                alt={photoSelected.id}
-                src={photoSelected.main}
+            <>
+              <div style={{ textAlign: "center" }}>
+                <img
+                  className={"main-image"}
+                  onError={(e) => {
+                    // @ts-ignore
+                    e.target.src = placeholderImage;
+                  }}
+                  alt={photoSelected.id}
+                  src={photoSelected.main}
+                />
+              </div>
+              <CardComponent
+                photoSelected={photoSelected}
+                handleReject={() =>
+                  setConfirmation({
+                    message: `Are you sure you want to unpublish the photo ?`,
+                    onConfirmation: () => reject(photoSelected)
+                  })
+                }
+                handleApprove={() =>
+                  setConfirmation({
+                    message: `Are you sure you want to publish the photo ?`,
+                    onConfirmation: () => approve(photoSelected)
+                  })
+                }
               />
-            </div>
+            </>
           )}
-          <CardComponent
-            photoSelected={photoSelected}
-            handleRejectClick={handleRejectClick}
-            handleApproveClick={handleApproveClick}
-          />
         </DialogContent>
       </Dialog>
     </PageWrapper>

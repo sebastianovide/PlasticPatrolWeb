@@ -12,10 +12,10 @@ const props = {
   usersLeaderboard: Array.from({ length: 200 }, (_: any, i: number) => ({
     uid: `user-${i}`,
     displayName: `User ${i}`,
+    uploaded: -1,
     pieces: i
   })),
   user: user,
-  config: {},
   handleClose: () => {},
   label: "my label"
 };
@@ -27,8 +27,8 @@ export const withZeros = () => (
     {...{
       ...props,
       usersLeaderboard: [
-        { uid: "Bob", displayName: "Bob", pieces: 10 },
-        { uid: "Alice", displayName: "Alice", pieces: 0 }
+        { uid: "Bob", displayName: "Bob", pieces: 10, uploaded: 10 },
+        { uid: "Alice", displayName: "Alice", pieces: 0, uploaded: 0 }
       ]
     }}
   />

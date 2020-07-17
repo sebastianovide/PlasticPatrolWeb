@@ -4,12 +4,13 @@ import _ from "lodash";
 
 import * as localforage from "localforage";
 
-import appConfig from "custom/config";
 import firebaseApp from "./firebaseInit.js";
 import firebaseConfig from "./config";
 import Stats from "types/Stats";
 import Feature from "types/Feature";
 import { Feedback } from "types/Feedback";
+import Photo from "types/Photo";
+import Config from "types/Config";
 
 const firestore = firebase.firestore();
 const storageRef = firebase.storage().ref();
@@ -17,7 +18,7 @@ const MAX_NUMBER_OF_FEEDBACKS_TO_FETCH = 50;
 
 // TODO: add caching
 
-function extractPhoto(data, id) {
+function extractPhoto(data, id): Photo {
   const prefix = `https://storage.googleapis.com/${storageRef.location.bucket}/photos/${id}`;
 
   // some data from Firebase cannot be stringified into json, so we need to convert it into other format first.
@@ -40,6 +41,8 @@ function extractPhoto(data, id) {
   photo.moderated =
     photo.moderated instanceof firebase.firestore.Timestamp
       ? photo.moderated.toDate()
+      : photo.moderated === null
+      ? undefined
       : new Date(photo.moderated);
 
   // when comming from json, it looses the type
@@ -53,35 +56,59 @@ function extractPhoto(data, id) {
   return photo;
 }
 
-function photosRT(addedFn, modifiedFn, removedFn, errorFn) {
-  firestore
+export type RealtimeUpdate = {
+  type: "added" | "modified" | "removed";
+  photo: Photo;
+};
+
+function ownPhotosRT(
+  ownerId: string,
+  onUpdate: (update: RealtimeUpdate) => void
+): () => void {
+  const callback = onChange(onUpdate);
+  return firestore
     .collection("photos")
     .where("published", "==", true)
+    .where("owner_id", "==", ownerId)
     .orderBy("moderated", "desc")
-    .limit(100)
-    .onSnapshot((snapshot) => {
-      snapshot.docChanges().forEach((change) => {
-        var photo;
-        try {
-          photo = extractPhoto(change.doc.data(), change.doc.id);
-        } catch (e) {
-          console.error(`the document with ID ${change.doc.id} is malformed`);
-          return;
-        }
-        if (change.type === "added") {
-          addedFn(photo);
-        } else if (change.type === "modified") {
-          modifiedFn(photo);
-        } else if (change.type === "removed") {
-          removedFn(photo);
-        } else {
-          console.error(`the photo ${photo.id} as type ${change.type}`);
-        }
-      });
-    }, errorFn);
+    .onSnapshot(
+      (snapshot) => {
+        snapshot.docChanges().forEach(callback);
+      },
+      (e) => {
+        console.error(
+          "failed to subscribe to realtime updates for my photos: %s",
+          e
+        );
+      }
+    );
 }
 
-const configObserver = (onNext, onError) => {
+const onChange = (onUpdate: (udpate: RealtimeUpdate) => void) => {
+  return (change) => {
+    var photo;
+    try {
+      photo = extractPhoto(change.doc.data(), change.doc.id);
+    } catch (e) {
+      console.error(`the document with ID ${change.doc.id} is malformed`);
+      return;
+    }
+    if (change.type === "added") {
+      onUpdate({ type: change.type, photo });
+    } else if (change.type === "modified") {
+      onUpdate({ type: change.type, photo });
+    } else if (change.type === "removed") {
+      onUpdate({ type: change.type, photo });
+    } else {
+      console.error(`the photo ${photo.id} as type ${change.type}`);
+    }
+  };
+};
+
+const configObserver = (
+  onNext: (config: Config) => void,
+  onError = undefined
+) => {
   localforage.getItem("config").then(onNext).catch(console.log);
 
   return firestore
@@ -90,7 +117,7 @@ const configObserver = (onNext, onError) => {
     .onSnapshot((snapshot) => {
       const config = snapshot.data();
       localforage.setItem("config", config);
-      onNext(config);
+      onNext(config as Config);
     }, onError);
 };
 
@@ -102,7 +129,7 @@ async function fetchStats(): Promise<Stats> {
   return json;
 }
 
-async function fetchPhotos() {
+async function fetchPhotos(): Promise<Photo[]> {
   const photosResponse = await fetch(firebaseConfig.apiURL + "/photos.json", {
     mode: "cors"
   });
@@ -137,8 +164,14 @@ function saveMetadata(data) {
   data.updated = firebase.firestore.FieldValue.serverTimestamp();
   data.moderated = null;
 
-  let fieldsToSave = ["moderated", "updated", "location", "owner_id"];
-  _.forEach(appConfig.PHOTO_FIELDS, (field) => fieldsToSave.push(field.name));
+  let fieldsToSave = [
+    "moderated",
+    "updated",
+    "location",
+    "owner_id",
+    "pieces",
+    "categories"
+  ];
 
   return firestore.collection("photos").add(_.pick(data, fieldsToSave));
 }
@@ -192,9 +225,9 @@ async function getPhotoByID(id: string): Promise<Feature | undefined> {
  * @returns {() => void}
  */
 function photosToModerateRT(
-  howMany,
-  updatePhotoToModerate,
-  removePhotoToModerate
+  howMany: number,
+  updatePhotoToModerate: (photo: Photo) => void,
+  removePhotoToModerate: (photo: Photo) => void
 ) {
   return firestore
     .collection("photos")
@@ -232,7 +265,7 @@ async function disconnect() {
   return firebaseApp.delete();
 }
 
-function onConnectionStateChanged(fn) {
+function onConnectionStateChanged(fn: (online: boolean) => void) {
   const conRef = firebase.database().ref(".info/connected");
 
   function connectedCallBack(snapshot) {
@@ -240,7 +273,7 @@ function onConnectionStateChanged(fn) {
   }
   conRef.on("value", connectedCallBack);
 
-  return async () => conRef.off("value", connectedCallBack);
+  return () => conRef.off("value", connectedCallBack);
 }
 
 async function writeFeedback(data) {
@@ -271,7 +304,7 @@ async function toggleUnreadFeedback(id, resolved, userId) {
 
 export default {
   onConnectionStateChanged,
-  photosRT,
+  ownPhotosRT,
   fetchStats,
   fetchFeedbacks,
   fetchPhotos,
@@ -281,10 +314,9 @@ export default {
   savePhoto,
   saveMetadata,
   photosToModerateRT,
-  rejectPhoto: (photoId, userId) => writeModeration(photoId, userId, false),
-  approvePhoto: (photoId, userId) => writeModeration(photoId, userId, true),
   disconnect,
   writeFeedback,
+  writeModeration,
   toggleUnreadFeedback,
   configObserver
 };

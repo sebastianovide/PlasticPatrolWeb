@@ -42,6 +42,7 @@ const useStyles = makeStyles((theme) => ({
     color: "black",
     fontWeight: "bold",
     marginLeft: theme.spacing(1),
+    fontSize: 11,
     width: "100%",
     "&:focus": {
       outline: "none"

@@ -363,7 +363,7 @@ class Map extends Component {
             <Dehaze
               className={classes.burger}
               onClick={this.props.toggleLeftDrawer(true)}
-              data-test={'Burger'}
+              data-test={"Burger"}
             />
           </div>
         )}

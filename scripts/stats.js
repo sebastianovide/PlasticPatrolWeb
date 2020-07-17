@@ -5,6 +5,8 @@ const prompt = require("prompt-sync")();
 
 const COMPUTE_STATS_URL =
   "https://us-central1-plastic-patrol-dev-722eb.cloudfunctions.net/computeStats";
+const FETCH_STATS_URL =
+  "https://us-central1-plastic-patrol-dev-722eb.cloudfunctions.net/api/stats";
 
 const argv = yargs
   .option("save", {
@@ -13,6 +15,11 @@ const argv = yargs
   })
   .option("cached", {
     description: "Will print the cached stats in firebase",
+    type: "boolean"
+  })
+  .option("compute", {
+    description:
+      "Whether we should trigger the compute stats function instead of just fetching them",
     type: "boolean"
   })
   .help()
@@ -31,7 +38,9 @@ const argv = yargs
     return;
   }
 
-  const result = await fetch(COMPUTE_STATS_URL);
+  const result = await fetch(
+    argv.compute ? COMPUTE_STATS_URL : FETCH_STATS_URL
+  );
   const stats = await result.json();
   console.log(stats);
   if (argv.save !== true) {

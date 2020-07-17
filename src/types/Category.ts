@@ -3,6 +3,7 @@ export type Category = {
   number?: number;
   brand?: string;
   error: boolean;
+  label?: string;
 };
 
 export type KeyedCategoryData = { [key: string]: CategoryData };

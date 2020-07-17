@@ -1,10 +1,16 @@
 import React, { useState, useContext, useEffect } from "react";
 import { GPSLocation } from "types/GPSLocation";
+import config from "custom/config";
 
 const LocationContext = React.createContext<GPSLocation | undefined>(undefined);
 
 const LocationProvider: React.FC<{}> = ({ children }) => {
-  const [location, setLocation] = useState<GPSLocation | undefined>();
+  const [location, setLocation] = useState<GPSLocation>({
+    latitude: config.CENTER[1],
+    longitude: config.CENTER[0],
+    online: false,
+    updated: undefined
+  });
 
   useEffect(() => {
     if (!navigator || !navigator.geolocation) {
@@ -23,12 +29,10 @@ const LocationProvider: React.FC<{}> = ({ children }) => {
         console.log("Error: ", error.message);
 
         setLocation((currentLocation) => {
-          if (currentLocation) {
-            return {
-              ...currentLocation,
-              online: false
-            };
-          }
+          return {
+            ...currentLocation,
+            online: false
+          };
         });
       }
     );

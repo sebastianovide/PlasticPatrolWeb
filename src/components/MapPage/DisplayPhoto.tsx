@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import _ from "lodash";
 
@@ -26,7 +26,10 @@ import { tweetMessage } from "static/info";
 import CardComponent from "../CardComponent";
 import Feature from "types/Feature";
 import User from "types/User";
-import Photo from "types/Photo";
+import { dbFirebase } from "features/firebase";
+import ConfirmationDialog, {
+  Confirmation
+} from "components/common/ConfirmationDialog";
 
 const tweetLogo = process.env.PUBLIC_URL + "/images/twitter.svg";
 const placeholderImage = process.env.PUBLIC_URL + "/custom/images/logo.svg";
@@ -60,8 +63,6 @@ interface Props {
   config: any;
   feature?: Feature;
   handleClose: () => void;
-  handleRejectClick: (photo: Photo) => void;
-  handleApproveClick: (photo: Photo) => void;
   location: any;
 }
 
@@ -70,8 +71,6 @@ export default function DisplayPhoto({
   config,
   feature,
   handleClose,
-  handleRejectClick,
-  handleApproveClick,
   location
 }: Props) {
   const formatField = (value: string, fieldName: string): string => {
@@ -87,6 +86,7 @@ export default function DisplayPhoto({
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
+  const [confirmation, setConfirmation] = useState<Confirmation | undefined>();
   const photoID = _.get(feature, "properties.id", "");
   const coords = location.pathname.split("@")[1];
   const photoUrl = `${config.metadata.metadataServerUrl}/${photoID}@${coords}`;
@@ -172,18 +172,38 @@ export default function DisplayPhoto({
                         <ExpansionPanelDetails>
                           <CardComponent
                             photoSelected={feature.properties}
-                            handleRejectClick={() =>
-                              handleRejectClick(feature.properties)
-                            }
-                            handleApproveClick={() =>
-                              handleApproveClick(feature.properties)
-                            }
+                            handleReject={() => {
+                              setConfirmation({
+                                message: `Are you sure you want to unpublish the photo ?`,
+                                onConfirmation: () =>
+                                  dbFirebase.writeModeration(
+                                    feature.properties.id,
+                                    user.id,
+                                    false
+                                  )
+                              });
+                            }}
+                            handleApprove={() => {
+                              setConfirmation({
+                                message: `Are you sure you want to publish the photo ?`,
+                                onConfirmation: () =>
+                                  dbFirebase.writeModeration(
+                                    feature.properties.id,
+                                    user.id,
+                                    true
+                                  )
+                              });
+                            }}
                           />
                         </ExpansionPanelDetails>
                       </ExpansionPanel>
                     </div>
                   </div>
                 )}
+                <ConfirmationDialog
+                  confirmation={confirmation}
+                  setConfirmation={setConfirmation}
+                />
               </Card>
             )}
           </DialogContent>

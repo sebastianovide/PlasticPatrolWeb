@@ -13,6 +13,7 @@
     "classnames": "^2.2.6",
     "dms2dec": "^1.1.0",
     "firebase": "^7.4.0",
+    "immutable": "^4.0.0-rc.12",
     "localforage": "^1.7.3",
     "lodash": "^4.17.15",
     "mapbox-gl": "^1.5.0",
@@ -27,6 +28,7 @@
     "react-virtualized": "^9.21.2",
     "react-virtualized-auto-sizer": "^1.0.2",
     "react-window": "^1.8.5",
+    "rxjs": "^6.5.5",
     "storybook-addon-material-ui": "^0.9.0-alpha.21"
   },
   "scripts": {

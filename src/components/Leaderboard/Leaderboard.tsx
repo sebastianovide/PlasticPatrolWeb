@@ -19,7 +19,7 @@ import {
 import { sortArrayByObjectKey } from "utils";
 
 import PageWrapper from "../PageWrapper";
-import { LeaderboardUser, LeaderboardT, CurrentUser } from "./types";
+import { StatsUser } from "types/Stats";
 
 declare module "@material-ui/core/styles/withStyles" {
   // Augment the BaseCSSProperties so that we can control jss-rtl
@@ -93,7 +93,7 @@ interface MuiVirtualizedTableProps extends WithStyles<typeof styles> {
   headerHeight?: number;
   onRowClick?: () => void;
   rowCount: number;
-  rowGetter: (row: Row) => LeaderboardUser;
+  rowGetter: (row: Row) => StatsUser;
   rowHeight?: number;
   userId?: string;
 }
@@ -217,26 +217,32 @@ class MuiVirtualizedTable extends React.PureComponent<
 const VirtualizedTable = withStyles(styles)(MuiVirtualizedTable);
 
 type Props = {
-  usersLeaderboard: LeaderboardT;
-  user: CurrentUser;
-  config: any;
+  usersLeaderboard: StatsUser[];
+  user: { id?: string };
   handleClose: () => void;
   label: string;
 };
 
 export default function ReactVirtualizedTable({
-  config,
   user,
   usersLeaderboard,
   handleClose,
   label
 }: Props) {
-  const copy = usersLeaderboard.filter(({ pieces }) => pieces > 0);
+  const copy = usersLeaderboard
+    .filter(({ pieces }) => pieces > 0)
+    .map(({ pieces, largeCollectionPieces, ...rest }) => ({
+      pieces:
+        pieces -
+        (largeCollectionPieces === undefined ? 0 : largeCollectionPieces),
+      largeCollectionPieces,
+      ...rest
+    }));
   sortArrayByObjectKey(copy, "pieces").reverse();
   const withRank = copy.map(({ displayName, ...value }, index) => ({
     displayName: displayName.split("@")[0],
-    ...value,
-    rank: index + 1
+    rank: index + 1,
+    ...value
   }));
   const width = window.innerWidth;
   return (
