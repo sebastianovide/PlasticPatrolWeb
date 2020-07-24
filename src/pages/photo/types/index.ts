@@ -6,5 +6,5 @@ export type SuggestionBasedText = {
 export type Item = {
   quantity: number;
   type: SuggestionBasedText;
-  brand: SuggestionBasedText;
+  brand: string;
 };

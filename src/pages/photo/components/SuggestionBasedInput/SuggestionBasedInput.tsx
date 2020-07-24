@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useRef } from "react";
+import React, { useState, useCallback, useEffect, useRef, useMemo } from "react";
 
 import Search from "@material-ui/icons/Search";
 import VisibilityIcon from "@material-ui/icons/Visibility";
@@ -7,7 +7,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import useOnOutsideClick from "hooks/useOnOutsideClick";
 
 import { SuggestionBasedText } from "../../types";
-import { getSuggestions, getLeafKey, getSortedSuggestions } from "./utils";
+import { getSuggestionsMatchingInput, getLeafKey, getSortedSuggestions } from "./utils";
 
 import styles from "standard.scss";
 import {
@@ -96,18 +96,20 @@ type Props = {
   inputPrompt: string;
   setType: (type: SuggestionBasedText) => void;
   className: string;
-  initialType?: SuggestionBasedText;
+  initialLabel?: string;
 };
 
-export default function SuggestionBasedInput({ sourceData, inputPrompt, initialType, className, setType }: Props) {
+export default function SuggestionBasedInput({ sourceData, inputPrompt, initialLabel, className, setType }: Props) {
   const styles = useStyles();
-  const [label, setLabel] = useState(initialType?.label || "");
+  const [label, setLabel] = useState(initialLabel || "");
   const [focused, setFocused] = useState(false);
   const [showSuggestionList, setShowSuggestionList] = useState(false);
   const outsideClickRef = useOnOutsideClick(() => setFocused(false));
 
-  const suggestions = getSuggestions(sourceData, label);
-  const leafKey = getLeafKey(sourceData, label);
+  const allSuggestions = useMemo(() => getSortedSuggestions(sourceData), [sourceData]);
+  const suggestionsMatchingLabel = useMemo(() => getSuggestionsMatchingInput(allSuggestions, label), [allSuggestions, label]);
+  const leafKey = useMemo(() => getLeafKey(allSuggestions, label), [allSuggestions, label]);
+
   const onSuggestionClick = useCallback((suggestion: string) => {
     setLabel(suggestion);
     setShowSuggestionList(false);
@@ -152,7 +154,7 @@ export default function SuggestionBasedInput({ sourceData, inputPrompt, initialT
       </div>
       <div className={styles.suggestionWrapper}>
         {focused &&
-          suggestions.map(({ label, key }) => (
+          suggestionsMatchingLabel.map(({ label, key }) => (
             <Suggestion
               label={label}
               Key={key}
@@ -170,7 +172,7 @@ export default function SuggestionBasedInput({ sourceData, inputPrompt, initialT
       >
         <DialogContent>
           <ul className={styles.suggestionList}>
-            {getSortedSuggestions(sourceData).map(({ label }) => (
+            {allSuggestions.map(({ label }) => (
               <li
                 key={label}
                 onClick={() => onSuggestionClick(label)}

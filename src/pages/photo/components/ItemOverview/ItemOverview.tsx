@@ -33,8 +33,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ItemOverview({
   quantity,
-  brand: { label: brandLabel },
-  type: { label: typeLabel },
+  brand,
+  type: { label },
   handleRemove,
   handleClick
 }: Props) {
@@ -43,7 +43,7 @@ export default function ItemOverview({
 
   return (
     <div className={styles.wrapper} onClick={handleClick}>
-      {quantity} {brandLabel} {typeLabel}
+      {quantity} {brand} {label}
       <CloseIcon
         className={styles.cross}
         onClick={(e) => {

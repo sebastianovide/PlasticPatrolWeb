@@ -89,7 +89,7 @@ export default function AddNewItem({
 }: Props) {
   const [quantity, setQuantity] = useState(initialItem?.quantity || 0);
   const [type, setType] = useState<SuggestionBasedText>(initialItem?.type || {});
-  const [brand, setBrand] = useState<SuggestionBasedText>(initialItem?.brand || {});
+  const [brand, setBrand] = useState<string>(initialItem?.brand || "");
 
   const styles = useStyles();
 
@@ -103,14 +103,14 @@ export default function AddNewItem({
           inputPrompt={"Search for the litter type e.g. \"plastic bottle\" or \"crisp packet\""}
           setType={setType}
           className={styles.type}
-          initialType={initialItem?.type}
+          initialLabel={initialItem?.type?.label || ""}
         />
         <SuggestionBasedInput
           sourceData={brands}
           inputPrompt={"Search for the litter brand e.g. \"Coca Cola\" or \"Cadbury\""}
-          setType={setBrand}
+          setType={(suggestion: SuggestionBasedText) => setBrand(suggestion?.label || "")}
           className={styles.type}
-          initialType={initialItem?.brand}
+          initialLabel={initialItem?.brand}
         />
       </div>
       <p className={styles.quantityText}>Quantity</p>

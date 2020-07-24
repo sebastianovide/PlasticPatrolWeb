@@ -3,7 +3,7 @@ import _ from "lodash";
 type Suggestion = { key: string; label: string; synonyms?: string[] };
 type SuggestionArr = Array<Suggestion>;
 
-export function getSortedSuggestions(sourceData: Object) {
+export function getSortedSuggestions(sourceData: Object): SuggestionArr {
   return _.sortBy(
     Object.keys(sourceData).map((key) => {
       return {
@@ -18,15 +18,11 @@ export function getSortedSuggestions(sourceData: Object) {
   );
 }
 
-const any = (bools: boolean[]): boolean => {
-  return !bools.map((b) => !b).every((x) => x);
-};
-
-export function getSuggestions(sourceData: object, input: string) {
-  return getSortedSuggestions(sourceData).filter(filterCat(input));
+export function getSuggestionsMatchingInput(sortedSuggestions: SuggestionArr, input: string): SuggestionArr {
+  return sortedSuggestions.filter(filterCat(input));
 }
 
-function filterCat(input: string) {
+function filterCat(input: string): (category: Suggestion) => boolean {
   return function (category: Suggestion) {
     if (input.length === 0) {
       return false;
@@ -37,15 +33,13 @@ function filterCat(input: string) {
       .concat(synonyms || [])
       .map((x) => x.toLowerCase());
 
-    return any(
-      normalisedCategories.map((normalisedCategory) =>
-        normalisedCategory.includes(normalisedInput)
-      )
-    );
+    return normalisedCategories
+      .map(category => category.includes(normalisedInput))
+      .includes(true);
   };
 }
 
-export function getLeafKey(sourceData: object, input: string) {
+export function getLeafKey(sourceData: object, input: string): string | null {
   if (input.length === 0) {
     return "none";
   }
