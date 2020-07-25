@@ -1,9 +1,6 @@
 // https://material-ui.com/demos/autocomplete/#react-select
 
-/* eslint-disable react/prop-types, react/jsx-handler-names */
-
 import React from "react";
-import PropTypes from "prop-types";
 import classNames from "classnames";
 import Select from "react-select";
 import { withStyles } from "@material-ui/core/styles";
@@ -275,7 +272,6 @@ class SelectControlSingleValue extends React.Component {
   }
 
   render() {
-    // TODO add propTypes
     const { classes, theme, field } = this.props;
 
     const selectStyles = {
@@ -314,12 +310,6 @@ class SelectControlSingleValue extends React.Component {
     );
   }
 }
-
-// TODO: describe the props.
-SelectControlSingleValue.propTypes = {
-  classes: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired
-};
 
 export default withStyles(styles, { withTheme: true })(
   SelectControlSingleValue
