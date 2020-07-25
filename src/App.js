@@ -18,7 +18,7 @@ import WelcomePage from "./pages/welcome";
 import Map from "./components/MapPage/Map";
 import DrawerContainer from "./components/DrawerContainer";
 import TermsDialog from "./components/TermsDialog";
-import EmailVerifiedDialog from "./pages/dialogs/EmailVerified";
+
 import MapLocation from "./types/MapLocation";
 import config from "./custom/config";
 import { extractPathnameParams } from "./providers/PhotosProvider";
@@ -74,31 +74,6 @@ class App extends Component {
   toggleLeftDrawer = (isItOpen) => () => {
     gtagEvent(isItOpen ? "Opened" : "Closed", "Menu");
     this.setState({ leftDrawerOpen: isItOpen });
-  };
-
-  handleNextClick = async () => {
-    const user = await authFirebase.reloadUser();
-    if (authFirebase.shouldConsiderEmailVerified(user)) {
-      this.setState({
-        user: {
-          ...this.state.user,
-
-          emailVerified: authFirebase.shouldConsiderEmailVerified(user)
-        }
-      });
-      let message = {
-        title: "Confirmation",
-        body: "Thank you for verifying your email."
-      };
-      return message;
-    } else {
-      let message = {
-        title: "Warning",
-        body:
-          "Email not verified yet. Please click the link in the email we sent you."
-      };
-      return message;
-    }
   };
 
   handleMapLocationChange = (mapLocation) => {
@@ -183,11 +158,6 @@ class App extends Component {
     return (
       <div className="geovation-app">
         <TermsDialog />
-        <EmailVerifiedDialog
-          user={user}
-          open={!!(user && !authFirebase.shouldConsiderEmailVerified(user))}
-          handleNextClick={this.handleNextClick}
-        />
 
         <main className="content">
           <WelcomePage />

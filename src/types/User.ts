@@ -3,7 +3,6 @@ class User {
   displayName: string;
   isModerator: boolean;
   email: string;
-  emailVerified: boolean;
   isAnonymous: boolean;
   phoneNumber: string;
   photoURL: string;
@@ -16,7 +15,6 @@ class User {
     displayName: string,
     isModerator: boolean,
     email: string,
-    emailVerified: boolean,
     isAnonymous: boolean,
     phoneNumber: string,
     photoURL: string,
@@ -28,7 +26,6 @@ class User {
     this.displayName = displayName;
     this.isModerator = isModerator;
     this.email = email;
-    this.emailVerified = emailVerified;
     this.isAnonymous = isAnonymous;
     this.phoneNumber = phoneNumber;
     this.photoURL = photoURL;

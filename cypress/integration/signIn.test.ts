@@ -42,7 +42,7 @@ describe("sign in", () => {
     cy.contains("Logout", { timeout: 20000 });
   });
 
-  it.only("users that login via the upload photo button are redirected to the new login page", () => {
+  it("users that login via the upload photo button are redirected to the new login page", () => {
     cy.visit(routes.home);
 
     cy.contains("Record").click();
