@@ -33,7 +33,9 @@ const useStyles = makeStyles((theme) => ({
     boxSizing: "border-box"
   },
   img: {
+    minHeight: "50%",
     height: "50%",
+    width: "100%",
     alignSelf: "center",
     marginBottom: theme.spacing(1)
   },

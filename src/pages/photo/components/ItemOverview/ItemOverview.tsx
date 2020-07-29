@@ -24,7 +24,8 @@ const useStyles = makeStyles((theme) => ({
     background: "#4e4e4e",
     color: "white",
     padding: `${theme.spacing(0.5)}px ${theme.spacing(1)}px`,
-    marginBottom: theme.spacing(0.5)
+    marginBottom: theme.spacing(0.5),
+    minHeight: "30px"
   },
   cross: {
     marginLeft: "auto"
