@@ -42,7 +42,6 @@ const onAuthStateChanged = ({ onSignOut, setUser }: Args) => {
       user.displayName,
       false,
       user.email,
-      user.emailVerified,
       user.isAnonymous,
       user.phoneNumber,
       photoURL,
@@ -112,14 +111,9 @@ const reloadUser = async () => {
   return firebase.auth().currentUser;
 };
 
-const shouldConsiderEmailVerified = (user) => {
-  return user.emailVerified || "facebook.com" === user.provider;
-};
-
 export default {
   onAuthStateChanged,
   signOut,
   sendEmailVerification,
-  reloadUser,
-  shouldConsiderEmailVerified
+  reloadUser
 };

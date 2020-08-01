@@ -36,7 +36,6 @@ const user: User = {
   displayName: "Alfred Test",
   isModerator: false,
   email: "test@test.com",
-  emailVerified: true,
   isAnonymous: true,
   phoneNumber: "19175551919",
   photoURL: "",
