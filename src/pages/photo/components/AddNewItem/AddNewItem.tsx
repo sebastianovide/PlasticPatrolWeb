@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { Button, makeStyles } from "@material-ui/core";
 
-import { Item, Type } from "../../types";
+import { Item, SuggestionBasedText } from "../../types";
 import QuantitySelector from "../QuantitySelector";
-import BusinessIcon from "@material-ui/icons/Business";
-import TypeInput from "../TypeInput";
+import SuggestionBasedInput from "../SuggestionBasedInput";
+import categories from "custom/categories.json";
+import brands from "custom/brands.json";
 
 import styles from "standard.scss";
 
@@ -87,7 +88,7 @@ export default function AddNewItem({
   initialItem
 }: Props) {
   const [quantity, setQuantity] = useState(initialItem?.quantity || 0);
-  const [type, setType] = useState<Type>(initialItem?.type || {});
+  const [type, setType] = useState<SuggestionBasedText>(initialItem?.type || {});
   const [brand, setBrand] = useState<string>(initialItem?.brand || "");
 
   const styles = useStyles();
@@ -97,21 +98,20 @@ export default function AddNewItem({
   return (
     <div className={styles.wrapper}>
       <div>
-        <TypeInput
+        <SuggestionBasedInput
+          sourceData={categories}
+          inputPrompt={"Search for the litter type e.g. \"plastic bottle\" or \"crisp packet\""}
           setType={setType}
           className={styles.type}
-          initialType={initialItem?.type}
+          initialLabel={initialItem?.type?.label || ""}
         />
-        <div className={styles.brandWrapper}>
-          <BusinessIcon />
-          <input
-            placeholder="Enter brand"
-            value={brand}
-            onChange={(e) => setBrand(e.target.value)}
-            type="text"
-            className={styles.brand}
-          />
-        </div>
+        <SuggestionBasedInput
+          sourceData={brands}
+          inputPrompt={"Search for the litter brand e.g. \"Coca Cola\" or \"Cadbury\""}
+          setType={(suggestion: SuggestionBasedText) => setBrand(suggestion?.label || "")}
+          className={styles.type}
+          initialLabel={initialItem?.brand}
+        />
       </div>
       <p className={styles.quantityText}>Quantity</p>
       <QuantitySelector

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useRef } from "react";
+import React, { useState, useCallback, useEffect, useRef, useMemo } from "react";
 
 import Search from "@material-ui/icons/Search";
 import VisibilityIcon from "@material-ui/icons/Visibility";
@@ -6,8 +6,8 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import useOnOutsideClick from "hooks/useOnOutsideClick";
 
-import { Type } from "../../types";
-import { getSuggestions, getLeafKey, categoriesArr } from "./utils";
+import { SuggestionBasedText } from "../../types";
+import { getSuggestionsMatchingInput, getLeafKey, getSortedSuggestions } from "./utils";
 
 import styles from "standard.scss";
 import {
@@ -92,20 +92,24 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 type Props = {
-  setType: (type: Type) => void;
+  sourceData: Object;
+  inputPrompt: string;
+  setType: (type: SuggestionBasedText) => void;
   className: string;
-  initialType?: Type;
+  initialLabel?: string;
 };
 
-export default function TypeInput({ initialType, className, setType }: Props) {
+export default function SuggestionBasedInput({ sourceData, inputPrompt, initialLabel, className, setType }: Props) {
   const styles = useStyles();
-  const [label, setLabel] = useState(initialType?.label || "");
+  const [label, setLabel] = useState(initialLabel || "");
   const [focused, setFocused] = useState(false);
   const [showSuggestionList, setShowSuggestionList] = useState(false);
   const outsideClickRef = useOnOutsideClick(() => setFocused(false));
 
-  const suggestions = getSuggestions(label);
-  const leafKey = getLeafKey(label);
+  const allSuggestions = useMemo(() => getSortedSuggestions(sourceData), [sourceData]);
+  const suggestionsMatchingLabel = useMemo(() => getSuggestionsMatchingInput(allSuggestions, label), [allSuggestions, label]);
+  const leafKey = useMemo(() => getLeafKey(allSuggestions, label), [allSuggestions, label]);
+
   const onSuggestionClick = useCallback((suggestion: string) => {
     setLabel(suggestion);
     setShowSuggestionList(false);
@@ -133,7 +137,7 @@ export default function TypeInput({ initialType, className, setType }: Props) {
       <div className={styles.inputWrapper}>
         <Search />
         <input
-          placeholder='Search for the type of litter e.g. "plastic bottle" or "crisp packet"'
+          placeholder={inputPrompt}
           className={styles.input}
           value={label}
           onChange={(e) => setLabel(e.target.value)}
@@ -150,7 +154,7 @@ export default function TypeInput({ initialType, className, setType }: Props) {
       </div>
       <div className={styles.suggestionWrapper}>
         {focused &&
-          suggestions.map(({ label, key }) => (
+          suggestionsMatchingLabel.map(({ label, key }) => (
             <Suggestion
               label={label}
               Key={key}
@@ -168,8 +172,9 @@ export default function TypeInput({ initialType, className, setType }: Props) {
       >
         <DialogContent>
           <ul className={styles.suggestionList}>
-            {categoriesArr.map(({ label }) => (
+            {allSuggestions.map(({ label }) => (
               <li
+                key={label}
                 onClick={() => onSuggestionClick(label)}
                 className={styles.suggestionListItem}
               >
