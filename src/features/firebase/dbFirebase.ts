@@ -53,6 +53,13 @@ function extractPhoto(data, id): Photo {
     );
   }
 
+  // old photos might not have the categories field set, so just set it
+  // to an empty list so the rest of the application can assume the field
+  // is there
+  if (photo.categories === undefined) {
+    photo.categories = [];
+  }
+
   return photo;
 }
 
