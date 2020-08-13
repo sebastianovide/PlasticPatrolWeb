@@ -52,8 +52,8 @@ export default function UploadSuccessDialog({
         <span className={styles.bold}>Thank you.</span>
         <br />
         <br />
-        Your upload is now being moderated and will appear on the global map
-        within 48 hours.
+        Your upload is in progress and once it has been moderated will appear on
+        the global map within 48 hours.
         <br />
         <br />
         We analyse all the data you collect to understand the trends and

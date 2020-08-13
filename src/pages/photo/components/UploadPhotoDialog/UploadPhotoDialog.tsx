@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -8,33 +8,38 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 import Button from "@material-ui/core/Button";
 
 import useSendFile from "./useSendFile";
+import { useHistory } from "react-router-dom";
+import { linkToUploadSuccess } from "routes/upload-success/links";
+import _ from "lodash";
+import { Item } from "pages/photo/types";
 
 interface Props {
   imgLocation: any;
   imgSrc: any;
   online: boolean;
   items: any;
-  onCancelUpload: () => void;
 }
 
 export default function UploadPhotoDialog({
   imgLocation,
   imgSrc,
   online,
-  items,
-  onCancelUpload
+  items
 }: Props) {
-  const {
-    cancelUpload,
-    errorMessage,
-    closeErrorDialog,
-    sendingProgress
-  } = useSendFile({
+  const history = useHistory();
+  const [success, setSuccess] = useState(false);
+  const totalCount = _.sumBy(items, ({ quantity }: Item) => quantity);
+  const { errorMessage, closeErrorDialog } = useSendFile({
     imgSrc,
     online,
     imgLocation,
     items,
-    onCancelUpload
+    setUploadTask: (task: any) => {
+      setSuccess(true);
+      setTimeout(() => {
+        history.push(linkToUploadSuccess(totalCount as any));
+      }, 1000);
+    }
   });
 
   return (
@@ -60,22 +65,9 @@ export default function UploadPhotoDialog({
       <Dialog open={!errorMessage}>
         <DialogContent className={"dialogs__contentProgress"}>
           <DialogContentText id="loading-dialog-text">
-            {sendingProgress} % done. Be patient ;)
+            {success ? "Done." : "Initiating upload..."}
           </DialogContentText>
-          <div className={"dialogs__linearProgress"}>
-            <br />
-            <LinearProgress
-              variant="determinate"
-              color="primary"
-              value={sendingProgress}
-            />
-          </div>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={cancelUpload} color="primary">
-            Cancel
-          </Button>
-        </DialogActions>
       </Dialog>
     </>
   );

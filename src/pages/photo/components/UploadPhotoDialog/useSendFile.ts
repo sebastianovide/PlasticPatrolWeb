@@ -10,45 +10,30 @@ import { Item } from "pages/photo/types";
 import { linkToUploadSuccess } from "routes/upload-success/links";
 import useEffectOnMount from "hooks/useEffectOnMount";
 
-type HookArgs = {
+type Args = {
   imgSrc: string;
   online?: boolean;
   imgLocation: any;
   items: Item[];
+  setUploadTask: (task: any) => void;
   onSuccess?: (n: number) => void;
-  onCancelUpload: () => void;
 };
 
-type Args = {
-  setSendingProgress: (progress: number) => void;
-  setUploadTask: (task: any) => void;
-  history: any;
-} & HookArgs;
-
-export default function useSendFile(args: HookArgs) {
-  const [uploadTask, setUploadTask] = useState<any>();
-  const [sendingProgress, setSendingProgress] = useState(0);
+export default function useSendFile(args: Args) {
   const [errorMessage, setErrorMessage] = useState<string>();
-  const history = useHistory();
 
   const sendFileFunc = async () => {
     try {
-      await sendFile({ ...args, setUploadTask, setSendingProgress, history });
+      await sendFile({ ...args });
     } catch (err) {
       setErrorMessage(err.message);
     }
-  };
-  const cancelUpload = () => {
-    uploadTask && uploadTask.cancel();
-    history.goBack();
   };
 
   useEffectOnMount(sendFileFunc);
 
   return {
     sendFile: sendFileFunc,
-    sendingProgress,
-    cancelUpload,
     errorMessage,
     closeErrorDialog: () => setErrorMessage(undefined)
   };
@@ -59,10 +44,7 @@ async function sendFile({
   online,
   imgLocation,
   items,
-  history,
-  setSendingProgress,
-  setUploadTask,
-  onCancelUpload
+  setUploadTask
 }: Args) {
   if (!online) {
     throw new Error(
@@ -107,41 +89,4 @@ async function sendFile({
   const uploadTask = dbFirebase.savePhoto(photoRef.id, base64);
 
   setUploadTask(uploadTask);
-
-  uploadTask.on(
-    "state_changed",
-    (snapshot) => {
-      const sendingProgress = Math.ceil(
-        (snapshot.bytesTransferred / snapshot.totalBytes) * 98 + 1
-      );
-      setSendingProgress(sendingProgress);
-
-      switch (snapshot.state) {
-        case firebase.storage.TaskState.PAUSED: // or 'paused'
-          console.log("Upload is paused");
-          break;
-        case firebase.storage.TaskState.RUNNING: // or 'running'
-          console.log("Upload is running");
-          break;
-        default:
-          console.log(snapshot.state);
-      }
-    },
-    (error) => {
-      // @ts-ignore
-      if (error.code === "storage/canceled") {
-        onCancelUpload();
-      } else {
-        console.log(error);
-        const extraInfo =
-          error.message === "storage/canceled"
-            ? ""
-            : `Try again (${error.message})`;
-        throw Error(`Photo upload was canceled. ${extraInfo}`);
-      }
-    },
-    () => {
-      history.push(linkToUploadSuccess(totalCount as any));
-    }
-  );
 }
