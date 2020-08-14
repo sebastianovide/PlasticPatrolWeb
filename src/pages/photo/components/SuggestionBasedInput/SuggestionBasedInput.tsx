@@ -111,6 +111,8 @@ export default function SuggestionBasedInput({ sourceData, inputPrompt, initialL
   const leafKey = useMemo(() => getLeafKey(allSuggestions, label), [allSuggestions, label]);
 
   const onSuggestionClick = useCallback((suggestion: string) => {
+    console.error("onSuggestionClick " + suggestion);
+
     setLabel(suggestion);
     setShowSuggestionList(false);
     setFocused(false);
@@ -207,8 +209,10 @@ type SuggestionProps = {
 
 function Suggestion({ label, className, onClick }: SuggestionProps) {
   return (
-    <div className={className} onClick={() => onClick(label)}>
-      {label}
-    </div>
+    <Button
+      className={className} onClick={() => onClick(label)}
+      color="primary">
+        {label}
+    </Button>
   );
 }
