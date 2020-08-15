@@ -56,8 +56,11 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
     background: "#4e4e4e",
+    "&:hover": {
+      background: "#4e4e4e",
+    },
     color: "white",
-    padding: theme.spacing(1.5),
+    textTransform: "none",
     width: "max-content",
     margin: `${theme.spacing(0.5)}px ${theme.spacing(1)}px ${theme.spacing(
       0.5
