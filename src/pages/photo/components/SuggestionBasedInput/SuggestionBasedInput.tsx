@@ -114,8 +114,6 @@ export default function SuggestionBasedInput({ sourceData, inputPrompt, initialL
   const leafKey = useMemo(() => getLeafKey(allSuggestions, label), [allSuggestions, label]);
 
   const onSuggestionClick = useCallback((suggestion: string) => {
-    console.error("onSuggestionClick " + suggestion);
-
     setLabel(suggestion);
     setShowSuggestionList(false);
     setFocused(false);
