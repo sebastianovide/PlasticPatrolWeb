@@ -136,6 +136,16 @@ async function fetchStats(): Promise<Stats> {
   return json;
 }
 
+export interface ProductInfo {
+  brand: string;
+  productName: string;
+}
+
+async function getBarcodeInfo(id: number): Promise<ProductInfo> {
+  const barcodeLookup = firebase.functions().httpsCallable("barcodeLookup");
+  return await barcodeLookup({ id });
+}
+
 async function fetchPhotos(): Promise<Photo[]> {
   const photosResponse = await fetch(firebaseConfig.apiURL + "/photos.json", {
     mode: "cors"
@@ -323,5 +333,6 @@ export default {
   writeFeedback,
   writeModeration,
   toggleUnreadFeedback,
-  configObserver
+  configObserver,
+  getBarcodeInfo
 };
