@@ -1,7 +1,7 @@
 {
   "name": "plastic-patrol",
   "title": "Plastic Patrol",
-  "version": "2.14.1",
+  "version": "2.14.2",
   "public": true,
   "homepage": "./",
   "dependencies": {
