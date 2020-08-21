@@ -139,11 +139,13 @@ async function fetchStats(): Promise<Stats> {
 export interface ProductInfo {
   brand: string;
   productName: string;
+  barcode: number;
 }
 
 async function getBarcodeInfo(id: number): Promise<ProductInfo> {
   const barcodeLookup = firebase.functions().httpsCallable("barcodeLookup");
-  return await barcodeLookup({ id });
+  const { data } = await barcodeLookup({ id });
+  return { ...data, barcode: id };
 }
 
 async function fetchPhotos(): Promise<Photo[]> {

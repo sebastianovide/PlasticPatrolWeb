@@ -36,5 +36,5 @@ export const barcodeLookup = async (data: any, context: CallableContext) => {
     );
   }
 
-  await doBarcodeLookup(data);
+  return await doBarcodeLookup(data.id);
 };

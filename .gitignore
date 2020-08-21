@@ -94,3 +94,5 @@ adminCreds.*.json
 #cypress
 cypress/videos
 cypress/screenshots
+
+.runtimeconfig.json

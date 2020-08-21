@@ -95,7 +95,7 @@ export default function AddNewItem({
 }: Props) {
   const [quantity, setQuantity] = useState(initialItem?.quantity || 0);
   const [type, setType] = useState<SuggestionBasedText>(
-    initialItem?.type || {}
+    initialItem?.type || { leafKey: null, label: null }
   );
   const [brand, setBrand] = useState<string>(initialItem?.brand || "");
 

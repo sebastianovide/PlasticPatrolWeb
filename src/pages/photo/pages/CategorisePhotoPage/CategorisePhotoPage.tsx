@@ -149,7 +149,7 @@ export function CategoriseLitterPageWithFileInfo({
     }
   };
 
-  const isCordova = true || !!window.cordova;
+  const isCordova = !!window.cordova;
 
   return (
     <>
@@ -182,11 +182,13 @@ export function CategoriseLitterPageWithFileInfo({
                 <BarcodeScanner
                   className={styles.scanButton}
                   onResult={(result) => {
+                    console.log(result);
                     if (isProductInfo(result)) {
                       addNewItem({
                         quantity: 1,
                         brand: result.brand,
-                        type: { label: result.productName }
+                        type: { label: result.productName, leafKey: null },
+                        barcode: result.barcode
                       });
                     } else {
                       alert(result);
