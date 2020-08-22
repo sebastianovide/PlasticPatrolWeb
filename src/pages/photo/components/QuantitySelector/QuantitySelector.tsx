@@ -56,13 +56,11 @@ export default function QuantitySelector({
       </IconButton>
       <input
         className={styles.quantityWrapper}
-        value={quantity}
+        value={quantity.toString()}
         type="number"
         inputMode="numeric"
         min="0"
-        onChange={(e) => {
-          setQuantity(Number(e.currentTarget.value));
-        }}
+        onChange={(e) => setQuantity(Number(e.currentTarget.value))}
       />
       <IconButton
         onClick={() => setQuantity(quantity + 1)}
