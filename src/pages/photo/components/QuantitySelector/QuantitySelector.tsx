@@ -14,6 +14,8 @@ const standardFlex = {
 
 const useStyles = makeStyles((theme) => ({
   quantityWrapper: {
+    outline: "none",
+    textAlign: "center",
     margin: `0 ${theme.spacing(1)}px`,
     background: "#eaeaea",
     border: "#c3c3c3 solid 1px",
@@ -52,7 +54,21 @@ export default function QuantitySelector({
       >
         <MinusIcon></MinusIcon>
       </IconButton>
-      <div className={styles.quantityWrapper}>{quantity}</div>
+      <input
+        className={styles.quantityWrapper}
+        value={quantity}
+        onChange={(e) => {
+          const value = e.currentTarget.value;
+          if (value === "") {
+            setQuantity(0);
+            return;
+          }
+          const valueInt = parseInt(value);
+          if (!isNaN(valueInt)) {
+            setQuantity(valueInt);
+          }
+        }}
+      />
       <IconButton
         onClick={() => setQuantity(quantity + 1)}
         disableRipple
