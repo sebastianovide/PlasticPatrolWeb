@@ -27,6 +27,8 @@ type Props = {
 };
 export default function GeoTagMap({ onLocationUpdate }: Props) {
   const mapRef = useRef(null);
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [map, setMap] = useState<any>(null);
 
   const initialLocation = useGPSLocation();
@@ -38,6 +40,11 @@ export default function GeoTagMap({ onLocationUpdate }: Props) {
     const center = initialLocation
       ? { lat: initialLocation.latitude, lon: initialLocation.longitude }
       : { lat: config.CENTER[1], lon: config.CENTER[0] };
+
+    onLocationUpdate({
+      latitude: center.lat,
+      longitude: center.lon
+    });
 
     const map = new mapboxgl.Map({
       //@ts-ignore
