@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Route, useHistory, useParams } from "react-router";
+import { Route, useHistory } from "react-router";
 
 import { makeStyles } from "@material-ui/core/styles";
 import { Button } from "@material-ui/core";
@@ -9,20 +9,24 @@ import Link from "@material-ui/core/Link";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 
+import { linkToUploadPhotoDialog } from "routes/photo/routes/categorise/links";
+import { linkToNewPhoto } from "routes/photo/routes/new/links";
+
+import { useGPSLocation } from "providers/LocationProvider";
+
+import UploadPhotoDialog from "pages/photo/components/UploadPhotoDialog";
+import { usePhotoPageState } from "pages/photo/state";
+import { isCordovaImageState, isInitialState } from "pages/photo/state/types";
+
+import useEffectOnMount from "hooks/useEffectOnMount";
+
+import { ImageMetadata } from "types/Photo";
+
 import { Item } from "../../types";
 import AddNewItem from "../../components/AddNewItem/AddNewItem";
 import ItemOverviewList from "../../components/ItemOverviewList/ItemOverviewList";
-import { ImageMetadata, isCordovaFileState } from "types/Photo";
 
-import {
-  useGetLocationFileState,
-  linkToUploadPhotoDialog
-} from "routes/photo/routes/categorise/links";
 import loadPhoto from "./utils";
-import UploadPhotoDialog from "pages/photo/components/UploadPhotoDialog";
-import { linkToNewPhoto } from "routes/photo/routes/new/links";
-import { useGPSLocation } from "providers/LocationProvider";
-import useEffectOnMount from "hooks/useEffectOnMount";
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -54,49 +58,42 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function CategoriseLitterPage() {
-  const fileState = useGetLocationFileState();
-  const { fileName } = useParams();
+  const fileState = usePhotoPageState();
   const history = useHistory();
   const gpsLocation = useGPSLocation();
 
   const [photo, setPhoto] = useState<ImageMetadata | undefined>();
   useEffectOnMount(() => {
-    if (fileState === undefined) {
+    if (isInitialState(fileState)) {
       history.push(linkToNewPhoto());
-    } else {
-      var fileOrFilePath, cordovaMetadata;
-      if (isCordovaFileState(fileState)) {
-        fileOrFilePath = fileState.filePath;
-        cordovaMetadata = fileState.cordovaMetadata;
-      } else {
-        fileOrFilePath = fileState.file;
-        cordovaMetadata = undefined;
-      }
+    } else if (isCordovaImageState(fileState)) {
+      const { file, fromCamera } = fileState;
       loadPhoto({
-        photoToLoad: fileOrFilePath,
-        fromCamera: fileState.fromCamera,
+        fileOrFileName: file.filename,
+        fromCamera,
         gpsLocation,
-        cordovaMetadata,
+        cordovaMetadata: JSON.parse(file.json_metadata),
         callback: (metadata) => {
           setPhoto(metadata);
         }
       });
+    } else {
+      const { file, fromCamera } = fileState;
+      loadPhoto({
+        fileOrFileName: file,
+        fromCamera,
+        gpsLocation,
+        callback: (meta) => setPhoto(meta)
+      });
     }
   });
 
-  return (
-    <CategoriseLitterPageWithFileInfo
-      fileName={fileName as string}
-      photo={photo}
-    />
-  );
+  return <CategoriseLitterPageWithFileInfo photo={photo} />;
 }
 
 export function CategoriseLitterPageWithFileInfo({
-  fileName,
   photo
 }: {
-  fileName: string;
   photo?: ImageMetadata;
 }) {
   const classes = useStyles();

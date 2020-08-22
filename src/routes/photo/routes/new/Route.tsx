@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import { Route, useHistory } from "react-router-dom";
 
 import { linkToTutorialPage } from "routes/tutorial/links";
-import { CordovaCameraImage } from "types/Photo";
+
 import AddPhotoDialog from "pages/photo/components/AddPhotoDialog";
+import { usePhotoPageDispatch, setFile, FileType } from "pages/photo/state";
 import { NewPhotoPage } from "pages/photo";
 
-import { linkToCategoriseWithState } from "../categorise/links";
+import { linkToCategorise } from "../categorise/links";
 import { linkToAddDialog, linkToNewPhoto } from "./links";
 
 const linkToTutorialWithRedirect = () => ({
@@ -18,10 +19,16 @@ const linkToTutorialWithRedirect = () => ({
 
 export default function NewPhotoRoute() {
   const history = useHistory();
-  const handlePhotoSelect = (
-    file: File | CordovaCameraImage,
-    fromCamera: boolean
-  ) => history.push(linkToCategoriseWithState(file, fromCamera));
+  const dispatch = usePhotoPageDispatch();
+  const handlePhotoSelect = (file: FileType, fromCamera: boolean) => {
+    dispatch(
+      setFile({
+        file,
+        fromCamera
+      })
+    );
+    history.push(linkToCategorise());
+  };
   const [inputRef, setInputRef] = useState<HTMLInputElement | null>(null);
 
   // @ts-ignore
@@ -51,7 +58,8 @@ export default function NewPhotoRoute() {
             // the lastModified date is < 30s ago
             const fileDate = file.lastModified;
             const ageInMinutes = (new Date().getTime() - fileDate) / 1000 / 60;
-            const imgFromCamera = isNaN(ageInMinutes) || ageInMinutes < 0.5;
+            const imgFromCamera =
+              true || isNaN(ageInMinutes) || ageInMinutes < 0.5;
             handlePhotoSelect(file, imgFromCamera);
           }
         }}

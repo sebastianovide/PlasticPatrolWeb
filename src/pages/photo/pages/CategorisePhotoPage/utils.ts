@@ -6,13 +6,12 @@ import config from "custom/config";
 import { device } from "utils";
 import { ImageMetadata } from "types/Photo";
 import { GPSLocation, LatLong } from "types/GPSLocation";
-import type { CordovaImageMetadata, FilePath } from "types/Photo";
 
 type Args = {
-  photoToLoad: File | FilePath;
+  fileOrFileName: File | string;
   fromCamera: boolean;
   gpsLocation?: GPSLocation;
-  cordovaMetadata?: CordovaImageMetadata;
+  cordovaMetadata?: any;
   callback: (result: ImageMetadata) => void;
 };
 
@@ -20,9 +19,9 @@ export default function loadPhoto(args: Args): void {
   //   https://github.com/blueimp/JavaScript-Load-Image#meta-data-parsing
   //@ts-ignore
   if (!window.cordova) {
-    const { photoToLoad } = args;
+    const { fileOrFileName } = args;
     loadImage.parseMetaData(
-      photoToLoad,
+      fileOrFileName,
       (data) => {
         //@ts-ignore
         const imgExif = data.exif ? data.exif.getAll() : null;
@@ -41,7 +40,7 @@ export default function loadPhoto(args: Args): void {
 }
 
 function doLoadPhoto({
-  photoToLoad,
+  fileOrFileName,
   fromCamera,
   gpsLocation,
   cordovaMetadata,
@@ -50,7 +49,7 @@ function doLoadPhoto({
   imgIptc
 }: Args & { imgExif?: any; imgIptc?: any }): void {
   loadImage(
-    photoToLoad,
+    fileOrFileName,
     (img) => {
       // @ts-ignore
       const imgSrc = img.toDataURL("image/jpeg");
@@ -81,7 +80,7 @@ function doLoadPhoto({
 
 function getLocationFromExifMetadata(
   imgExif: any,
-  cordovaMetadata?: CordovaImageMetadata
+  cordovaMetadata?: any
 ): LatLong | "unable to extract from file" {
   let latitude: number, longitude: number;
   try {
