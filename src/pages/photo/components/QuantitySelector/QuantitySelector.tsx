@@ -57,16 +57,11 @@ export default function QuantitySelector({
       <input
         className={styles.quantityWrapper}
         value={quantity}
+        type="number"
+        inputMode="numeric"
+        min="0"
         onChange={(e) => {
-          const value = e.currentTarget.value;
-          if (value === "") {
-            setQuantity(0);
-            return;
-          }
-          const valueInt = parseInt(value);
-          if (!isNaN(valueInt)) {
-            setQuantity(valueInt);
-          }
+          setQuantity(Number(e.currentTarget.value));
         }}
       />
       <IconButton
