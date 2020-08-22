@@ -6,9 +6,16 @@ import reducer from "./reducer";
 type Props = { children: React.ReactNode };
 
 const initialState = {
-  isCordovaImage: undefined,
-  fromCamera: undefined,
-  file: undefined
+  rawData: {
+    fromCamera: undefined,
+    file: undefined
+  },
+  processedData: {
+    imgSrc: undefined,
+    imgExif: undefined,
+    imgLocation: undefined,
+    imgIptc: undefined
+  }
 };
 
 const PhotoPageContext = React.createContext<{

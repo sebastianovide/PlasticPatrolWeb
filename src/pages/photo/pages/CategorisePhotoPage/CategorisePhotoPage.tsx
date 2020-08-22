@@ -54,16 +54,16 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function CategoriseLitterPage() {
-  const fileState = usePhotoPageState();
+  const { rawData } = usePhotoPageState();
   const history = useHistory();
   const gpsLocation = useGPSLocation();
 
   const [photo, setPhoto] = useState<ImageMetadata | undefined>();
   useEffectOnMount(() => {
-    if (isInitialState(fileState)) {
+    if (isInitialState(rawData)) {
       history.push(linkToNewPhoto());
-    } else if (isCordovaImageState(fileState)) {
-      const { file, fromCamera } = fileState;
+    } else if (isCordovaImageState(rawData)) {
+      const { file, fromCamera } = rawData;
       loadPhoto({
         fileOrFileName: file.filename,
         fromCamera,
@@ -74,7 +74,7 @@ export default function CategoriseLitterPage() {
         }
       });
     } else {
-      const { file, fromCamera } = fileState;
+      const { file, fromCamera } = rawData;
       loadPhoto({
         fileOrFileName: file,
         fromCamera,

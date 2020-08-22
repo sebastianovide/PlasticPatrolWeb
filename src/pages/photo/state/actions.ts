@@ -1,14 +1,14 @@
 import actionTypes from "./actionTypes";
 import { FileType } from "./types";
 
-type SetFile = {
+type SetRawData = {
   fromCamera: boolean;
   file: FileType;
 };
 
-export function setFile({ file, fromCamera }: SetFile) {
+export function setRawData({ file, fromCamera }: SetRawData) {
   return {
-    type: actionTypes.SET_FILE,
+    type: actionTypes.SET_RAW_DATA,
     payload: {
       file,
       fromCamera

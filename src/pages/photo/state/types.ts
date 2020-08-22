@@ -1,3 +1,5 @@
+import { LatLong } from "types/GPSLocation";
+
 export type CordovaCameraImage = {
   filename: string;
   json_metadata: string;
@@ -24,14 +26,26 @@ export type CordovaState = {
   file: CordovaCameraImage;
 };
 
-export type State = InitialState | BrowserState | CordovaState;
+type RawData = InitialState | BrowserState | CordovaState;
+
+export type ImageMetadata = {
+  imgSrc: any;
+  imgExif: any;
+  imgLocation?: LatLong;
+  imgIptc: any;
+};
+
+export type State = {
+  rawData: RawData;
+  processedData: ImageMetadata;
+};
 
 export type Action = { type: string; payload: any };
 
-export function isInitialState(state: State): state is InitialState {
-  return state.file === undefined;
+export function isInitialState(rawData: RawData): rawData is InitialState {
+  return rawData.file === undefined;
 }
 
-export function isCordovaImageState(state: State): state is CordovaState {
-  return isCordovaCameraImage(state.file);
+export function isCordovaImageState(rawData: RawData): rawData is CordovaState {
+  return isCordovaCameraImage(rawData.file);
 }
