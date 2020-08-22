@@ -11,6 +11,13 @@ export default function reducer(state: State, action: Action) {
     case actionTypes.SET_PROCESSED_DATA: {
       return { ...state, processedData: action.payload };
     }
+    case actionTypes.SET_LOCATION: {
+      const { ...newState } = state;
+
+      newState.processedData.imgLocation = action.payload;
+
+      return newState;
+    }
     default:
       return state;
   }

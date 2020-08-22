@@ -1,3 +1,5 @@
+import { LatLong } from "types/GPSLocation";
+
 import actionTypes from "./actionTypes";
 import { RawData, ImageMetadata } from "./types";
 
@@ -11,6 +13,13 @@ export function setRawData(payload: RawData) {
 export function setProcessedData(payload: ImageMetadata) {
   return {
     type: actionTypes.SET_PROCESSED_DATA,
+    payload
+  };
+}
+
+export function setLocation(payload: LatLong) {
+  return {
+    type: actionTypes.SET_LOCATION,
     payload
   };
 }

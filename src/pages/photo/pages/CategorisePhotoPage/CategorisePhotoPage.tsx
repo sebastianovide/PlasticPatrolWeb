@@ -56,14 +56,16 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function CategoriseLitterPage() {
-  const { rawData } = usePhotoPageState();
+  const { rawData, processedData } = usePhotoPageState();
   const dispatch = usePhotoPageDispatch();
 
   const history = useHistory();
   const gpsLocation = useGPSLocation();
 
   useEffectOnMount(() => {
-    if (isInitialState(rawData)) {
+    if (processedData.imgSrc) {
+      // do nothing - this should only be set when coming back from the geotag page
+    } else if (isInitialState(rawData)) {
       history.push(linkToNewPhoto());
     } else if (isCordovaImageState(rawData)) {
       const { file, fromCamera } = rawData;
