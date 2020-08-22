@@ -1,16 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Route, useHistory } from "react-router";
 
 import { makeStyles } from "@material-ui/core/styles";
 import { Button } from "@material-ui/core";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import Link from "@material-ui/core/Link";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
 
 import { linkToUploadPhotoDialog } from "routes/photo/routes/categorise/links";
 import { linkToNewPhoto } from "routes/photo/routes/new/links";
+import { linkToGeotag } from "routes/photo/routes/geotag/links";
 
 import { useGPSLocation } from "providers/LocationProvider";
 
@@ -96,8 +92,17 @@ export function CategoriseLitterPageWithFileInfo({
 }: {
   photo?: ImageMetadata;
 }) {
-  const classes = useStyles();
   const history = useHistory();
+
+  useEffect(() => {
+    if (
+      photo &&
+      (photo.imgLocation === "not online" ||
+        photo.imgLocation === "unable to extract from file")
+    ) {
+      history.replace(linkToGeotag());
+    }
+  }, [photo, history]);
 
   const styles = useStyles();
   const [addingNewItem, setAddingNewItem] = useState(false);
@@ -179,58 +184,7 @@ export function CategoriseLitterPageWithFileInfo({
           </Button>
         )}
       </div>
-      <Dialog
-        open={!!(photo && photo.imgLocation === "not online")}
-        onClose={() => history.push(linkToNewPhoto())}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            <span style={{ fontWeight: 500 }}>
-              We couldn't find your location so you won't be able to upload an
-              image right now. Enable GPS on your phone and retake the photo to
-              upload it.
-            </span>
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => history.push(linkToNewPhoto())}
-            color="primary"
-          >
-            Ok
-          </Button>
-        </DialogActions>
-      </Dialog>
-      <Dialog
-        open={!!(photo && photo.imgLocation === "unable to extract from file")}
-        onClose={() => history.push(linkToNewPhoto())}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            <span style={{ fontWeight: 500 }}>
-              Your photo isn't geo-tagged so it can't be uploaded. To fix this
-              manually, you can geo-tag it online with a tool like&nbsp;
-              <Link href={"https://tool.geoimgr.com/"} className={classes.link}>
-                Geoimgr
-              </Link>
-              . In the future, make sure GPS is enabled and your camera has
-              access to it.
-            </span>
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => history.push(linkToNewPhoto())}
-            color="primary"
-          >
-            Ok
-          </Button>
-        </DialogActions>
-      </Dialog>
+
       <Route path={linkToUploadPhotoDialog()}>
         <UploadPhotoDialog
           imgSrc={photo && photo.imgSrc}
