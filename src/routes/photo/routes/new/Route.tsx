@@ -58,8 +58,7 @@ export default function NewPhotoRoute() {
             // the lastModified date is < 30s ago
             const fileDate = file.lastModified;
             const ageInMinutes = (new Date().getTime() - fileDate) / 1000 / 60;
-            const imgFromCamera =
-              true || isNaN(ageInMinutes) || ageInMinutes < 0.5;
+            const imgFromCamera = isNaN(ageInMinutes) || ageInMinutes < 0.5;
             handlePhotoSelect(file, imgFromCamera);
           }
         }}
