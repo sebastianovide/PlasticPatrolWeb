@@ -6,6 +6,7 @@ import Button from "@material-ui/core/Button";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import CloseIcon from "@material-ui/icons/Close";
+import AddIcon from "@material-ui/icons/Add";
 import BackIcon from "@material-ui/icons/ArrowBack";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 
@@ -86,6 +87,7 @@ interface Props {
   label: string;
   navigationHandler: NavigationHandler;
   className?: string;
+  addAction?: () => void;
 }
 
 interface PhotoPageProps {
@@ -233,7 +235,8 @@ const PageWrapper: FunctionComponent<Props> = ({
   children,
   label,
   navigationHandler,
-  className
+  className,
+  addAction
 }) => {
   const classes = useStyles();
   const [confirmBack, setConfirmBack] = useState(false);
@@ -273,6 +276,9 @@ const PageWrapper: FunctionComponent<Props> = ({
           <Typography className={classes.grow} variant="h6" color="inherit">
             {label}
           </Typography>
+          {addAction !== undefined && (
+              <AddIcon onClick={addAction} />
+          )}
         </Toolbar>
       </AppBar>
       <div className={classnames(classes.main, className)}>{children}</div>

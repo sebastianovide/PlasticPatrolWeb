@@ -9,7 +9,7 @@ import Groups from "components/Groups/GroupMain";
 import GroupList from "components/Groups/GroupList";
 import GroupAdd from "components/Groups/GroupAdd";
 import ModeratorPage from "components/ModeratorPage";
-import LeaderboardPage from "components/Leaderboard";
+import {Leaderboard} from "components/Leaderboard";
 import WriteFeedbackPage from "components/WriteFeedbackPage";
 
 import DisplayPhoto from "components/MapPage/DisplayPhoto";
@@ -38,6 +38,9 @@ import { linkToTutorialPage } from "./tutorial/links";
 import AccountPageRoute from "./account/Route";
 import { linkToAccountPage } from "./account/links";
 import { useStats } from "providers/StatsProvider";
+import {linkToChallengesPage} from "./challenges/links";
+import ChallengesRoute from "./challenges/Route";
+import Challenge from "../types/Challenges";
 
 type Props = {
   user: User;
@@ -48,6 +51,7 @@ type Props = {
   handlePhotoClick: () => void;
   selectedFeature: any;
   sponsorImage?: string;
+  challenges: Challenge[];
 };
 
 export function Routes({
@@ -58,7 +62,8 @@ export function Routes({
   geojson,
   handlePhotoClick,
   selectedFeature,
-  sponsorImage
+  sponsorImage,
+  challenges
 }: Props) {
   const history = useHistory();
 
@@ -71,9 +76,11 @@ export function Routes({
           sponsorImage={sponsorImage}
         />
       </Route>
+
       <Route path={linkToLogin()}>
         <LoginRoute />
       </Route>
+
       <Route path={linkToAboutPage()}>
         <AboutPageRoute
           handleClose={history.goBack}
@@ -87,7 +94,7 @@ export function Routes({
       </Route>
 
       <Route path={config.PAGES.leaderboard.path}>
-        <LeaderboardPage
+        <Leaderboard
           label={config.PAGES.leaderboard.label}
           usersLeaderboard={stats.users}
           handleClose={history.goBack}
@@ -131,6 +138,11 @@ export function Routes({
           />
         )}
       />
+
+    <Route path={linkToChallengesPage()}>
+        <ChallengesRoute challenges={challenges}
+                         user={user}/>
+    </Route>
 
       <ModeratorRoute path={config.PAGES.moderator.path} user={user}>
         <ModeratorPage

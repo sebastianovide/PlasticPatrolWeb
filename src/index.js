@@ -27,6 +27,7 @@ import UserProvider, { useUser } from "./providers/UserProvider";
 import StatsProvider from "./providers/StatsProvider";
 import * as Sentry from "@sentry/browser";
 import { dbFirebase } from "features/firebase";
+import {useChallenges} from "./providers/ChallengesProvider";
 
 if (process.env.NODE_ENV !== "development") {
   Sentry.init({
@@ -78,6 +79,7 @@ const Wrapper = () => {
   const online = useOnline();
   const selectedFeature = useSelectedFeature();
   const { sponsorImage } = useConfig();
+  const challenges = useChallenges();
   const user = useUser();
 
   useEffect(() => {
@@ -101,6 +103,7 @@ const Wrapper = () => {
         sponsorImage={sponsorImage}
         selectedFeature={selectedFeature}
         user={user}
+        challenges={challenges}
       />
     </>
   );
