@@ -84,25 +84,17 @@ const Wrapper = () => {
     return () => dbFirebase.disconnect();
   }, []);
 
-  const [handledPendingRedirect, setHandledPendingRedirect] = useState(false);
   return (
-    <>
-      <LoginFirebase
-        open={!handledPendingRedirect && isPendingRedirect()}
-        handleClose={() => {}}
-        onSignIn={() => setHandledPendingRedirect(true)}
-      />
-      <App
-        config={config}
-        gpsLocation={gpsLocation}
-        geojson={geojson}
-        reloadPhotos={reloadPhotos}
-        online={online}
-        sponsorImage={sponsorImage}
-        selectedFeature={selectedFeature}
-        user={user}
-      />
-    </>
+    <App
+      config={config}
+      gpsLocation={gpsLocation}
+      geojson={geojson}
+      reloadPhotos={reloadPhotos}
+      online={online}
+      sponsorImage={sponsorImage}
+      selectedFeature={selectedFeature}
+      user={user}
+    />
   );
 };
 
