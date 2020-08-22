@@ -19,7 +19,6 @@ const PhotoPageContext = React.createContext<{
 export default function PhotoPageStateProvider({ children }: Props) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  console.log(state);
   return (
     <PhotoPageContext.Provider value={{ state, dispatch }}>
       {children}

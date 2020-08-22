@@ -33,6 +33,5 @@ export function isInitialState(state: State): state is InitialState {
 }
 
 export function isCordovaImageState(state: State): state is CordovaState {
-  const { file } = state;
-  return isCordovaCameraImage(file);
+  return isCordovaCameraImage(state.file);
 }
