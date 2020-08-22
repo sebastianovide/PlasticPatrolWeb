@@ -62,5 +62,9 @@
   "139": { "label": "Wood" },
   "2000": { "label": "Crisp packet" },
   "2001": { "label": "Chocolate wrapper" },
-  "2002": { "label": "Sweet wrapper" }
+  "2002": { "label": "Sweet wrapper" },
+  "2003": { "label": "Face mask" },
+  "2004": { "label": "Battery" },
+  "2005": { "label": "Disposable gloves" },
+  "2006": { "label": "Lollypop" }
 }
