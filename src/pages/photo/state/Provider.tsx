@@ -2,21 +2,9 @@ import React, { useContext, useReducer } from "react";
 
 import type { State, Action } from "./types";
 import reducer from "./reducer";
+import { initialState } from "./consts";
 
 type Props = { children: React.ReactNode };
-
-const initialState = {
-  rawData: {
-    fromCamera: undefined,
-    file: undefined
-  },
-  processedData: {
-    imgSrc: undefined,
-    imgExif: undefined,
-    imgLocation: undefined,
-    imgIptc: undefined
-  }
-};
 
 const PhotoPageContext = React.createContext<{
   state: State;

@@ -40,7 +40,7 @@ export type State = {
   processedData: ImageMetadata;
 };
 
-export type Action = { type: string; payload: any };
+export type Action = { type: string; payload?: any };
 
 export function isInitialState(rawData: RawData): rawData is InitialState {
   return rawData.file === undefined;

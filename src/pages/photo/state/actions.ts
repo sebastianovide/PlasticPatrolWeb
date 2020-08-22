@@ -23,3 +23,7 @@ export function setLocation(payload: LatLong) {
     payload
   };
 }
+
+export function resetState() {
+  return { type: actionTypes.RESET_STATE };
+}
