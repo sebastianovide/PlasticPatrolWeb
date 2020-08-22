@@ -11,12 +11,14 @@ import { linkToGeotag } from "routes/photo/routes/geotag/links";
 import { useGPSLocation } from "providers/LocationProvider";
 
 import UploadPhotoDialog from "pages/photo/components/UploadPhotoDialog";
-import { usePhotoPageState } from "pages/photo/state";
+import {
+  usePhotoPageState,
+  usePhotoPageDispatch,
+  setProcessedData
+} from "pages/photo/state";
 import { isCordovaImageState, isInitialState } from "pages/photo/state/types";
 
 import useEffectOnMount from "hooks/useEffectOnMount";
-
-import { ImageMetadata } from "types/Photo";
 
 import { Item } from "../../types";
 import AddNewItem from "../../components/AddNewItem/AddNewItem";
@@ -55,10 +57,11 @@ const useStyles = makeStyles((theme) => ({
 
 export default function CategoriseLitterPage() {
   const { rawData } = usePhotoPageState();
+  const dispatch = usePhotoPageDispatch();
+
   const history = useHistory();
   const gpsLocation = useGPSLocation();
 
-  const [photo, setPhoto] = useState<ImageMetadata | undefined>();
   useEffectOnMount(() => {
     if (isInitialState(rawData)) {
       history.push(linkToNewPhoto());
@@ -69,9 +72,7 @@ export default function CategoriseLitterPage() {
         fromCamera,
         gpsLocation,
         cordovaMetadata: JSON.parse(file.json_metadata),
-        callback: (metadata) => {
-          setPhoto(metadata);
-        }
+        callback: (metadata) => dispatch(setProcessedData(metadata))
       });
     } else {
       const { file, fromCamera } = rawData;
@@ -79,30 +80,23 @@ export default function CategoriseLitterPage() {
         fileOrFileName: file,
         fromCamera,
         gpsLocation,
-        callback: (meta) => setPhoto(meta)
+        callback: (metadata) => dispatch(setProcessedData(metadata))
       });
     }
   });
 
-  return <CategoriseLitterPageWithFileInfo photo={photo} />;
+  return <CategoriseLitterPageWithFileInfo />;
 }
 
-export function CategoriseLitterPageWithFileInfo({
-  photo
-}: {
-  photo?: ImageMetadata;
-}) {
+export function CategoriseLitterPageWithFileInfo() {
   const history = useHistory();
+  const { processedData } = usePhotoPageState();
 
   useEffect(() => {
-    if (
-      photo &&
-      (photo.imgLocation === "not online" ||
-        photo.imgLocation === "unable to extract from file")
-    ) {
+    if (processedData.imgSrc && !processedData.imgLocation) {
       history.replace(linkToGeotag());
     }
-  }, [photo, history]);
+  }, [processedData, history]);
 
   const styles = useStyles();
   const [addingNewItem, setAddingNewItem] = useState(false);
@@ -144,7 +138,7 @@ export function CategoriseLitterPageWithFileInfo({
     <>
       <div className={styles.wrapper}>
         <img
-          src={photo && photo.imgSrc}
+          src={processedData && processedData.imgSrc}
           className={styles.img}
           onClick={() => setAddingNewItem(true)}
           alt=""
@@ -187,10 +181,10 @@ export function CategoriseLitterPageWithFileInfo({
 
       <Route path={linkToUploadPhotoDialog()}>
         <UploadPhotoDialog
-          imgSrc={photo && photo.imgSrc}
+          imgSrc={processedData && processedData.imgSrc}
           online
           items={items}
-          imgLocation={photo && photo.imgLocation}
+          imgLocation={processedData && processedData.imgLocation}
           onCancelUpload={() =>
             history.push(history.location.pathname, history.location.state)
           }

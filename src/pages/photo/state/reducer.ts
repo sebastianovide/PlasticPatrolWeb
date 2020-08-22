@@ -8,6 +8,9 @@ export default function reducer(state: State, action: Action) {
         ...state,
         rawData: action.payload
       };
+    case actionTypes.SET_PROCESSED_DATA: {
+      return { ...state, processedData: action.payload };
+    }
     default:
       return state;
   }

@@ -4,8 +4,8 @@ import dms2dec from "dms2dec";
 import config from "custom/config";
 
 import { device } from "utils";
-import { ImageMetadata } from "types/Photo";
 import { GPSLocation, LatLong } from "types/GPSLocation";
+import { ImageMetadata } from "../../state/types";
 
 type Args = {
   fileOrFileName: File | string;
@@ -56,9 +56,6 @@ function doLoadPhoto({
       let imgLocation: any = null;
       if (fromCamera) {
         imgLocation = gpsLocation;
-        if (!gpsLocation || !gpsLocation.online) {
-          imgLocation = "not online";
-        }
       } else {
         imgLocation = getLocationFromExifMetadata(imgExif, cordovaMetadata);
       }
@@ -81,7 +78,7 @@ function doLoadPhoto({
 function getLocationFromExifMetadata(
   imgExif: any,
   cordovaMetadata?: any
-): LatLong | "unable to extract from file" {
+): LatLong | undefined {
   let latitude: number, longitude: number;
   try {
     //@ts-ignore
@@ -120,11 +117,11 @@ function getLocationFromExifMetadata(
           longitude
         };
       } else {
-        return "unable to extract from file";
+        return undefined;
       }
     }
   } catch (e) {
     console.error(`Error extracting GPS from file: ${e}`);
-    return "unable to extract from file";
+    return undefined;
   }
 }

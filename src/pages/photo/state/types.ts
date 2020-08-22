@@ -26,12 +26,12 @@ export type CordovaState = {
   file: CordovaCameraImage;
 };
 
-type RawData = InitialState | BrowserState | CordovaState;
+export type RawData = InitialState | BrowserState | CordovaState;
 
 export type ImageMetadata = {
-  imgSrc: any;
+  imgSrc: string | undefined;
   imgExif: any;
-  imgLocation?: LatLong;
+  imgLocation: LatLong | undefined;
   imgIptc: any;
 };
 

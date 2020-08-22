@@ -22,11 +22,4 @@ export type PhotosContainer = {
   featuresDict: Map<string, Feature>;
 };
 
-export type ImageMetadata = {
-  imgSrc: any;
-  imgExif: any;
-  imgLocation: LatLong | "not online" | "unable to extract from file";
-  imgIptc: any;
-};
-
 export default Photo;

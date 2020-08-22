@@ -1,17 +1,16 @@
 import actionTypes from "./actionTypes";
-import { FileType } from "./types";
+import { RawData, ImageMetadata } from "./types";
 
-type SetRawData = {
-  fromCamera: boolean;
-  file: FileType;
-};
-
-export function setRawData({ file, fromCamera }: SetRawData) {
+export function setRawData(payload: RawData) {
   return {
     type: actionTypes.SET_RAW_DATA,
-    payload: {
-      file,
-      fromCamera
-    }
+    payload
+  };
+}
+
+export function setProcessedData(payload: ImageMetadata) {
+  return {
+    type: actionTypes.SET_PROCESSED_DATA,
+    payload
   };
 }
