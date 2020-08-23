@@ -23,6 +23,9 @@ import UploadPhotoDialog from "pages/photo/components/UploadPhotoDialog";
 import { linkToNewPhoto } from "routes/photo/routes/new/links";
 import { useGPSLocation } from "providers/LocationProvider";
 import useEffectOnMount from "hooks/useEffectOnMount";
+import BarcodeScanner, {
+  isProductInfo
+} from "pages/photo/components/BarcodeScanner";
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -50,6 +53,14 @@ const useStyles = makeStyles((theme) => ({
   },
   link: {
     color: theme.palette.secondary.main
+  },
+  or: {
+    opacity: "50%",
+    textAlign: "center",
+    margin: 0
+  },
+  scanButton: {
+    alignSelf: "center"
   }
 }));
 
@@ -138,6 +149,8 @@ export function CategoriseLitterPageWithFileInfo({
     }
   };
 
+  const isCordova = !!window.cordova;
+
   return (
     <>
       <div className={styles.wrapper}>
@@ -163,6 +176,27 @@ export function CategoriseLitterPageWithFileInfo({
             <p className={styles.prompt}>
               Tap on a piece of litter in your photo and add details
             </p>
+            {isCordova && (
+              <>
+                <p className={styles.or}>or</p>
+                <BarcodeScanner
+                  className={styles.scanButton}
+                  onResult={(result) => {
+                    console.log(result);
+                    if (isProductInfo(result)) {
+                      addNewItem({
+                        quantity: 1,
+                        brand: result.brand,
+                        type: { label: result.productName, leafKey: null },
+                        barcode: result.barcode
+                      });
+                    } else {
+                      alert(result);
+                    }
+                  }}
+                />
+              </>
+            )}
             <ItemOverviewList
               items={items}
               handleRemoveItem={handleRemoveItem}

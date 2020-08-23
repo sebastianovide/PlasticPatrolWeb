@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, makeStyles } from "@material-ui/core";
+import { Button, makeStyles, IconButton } from "@material-ui/core";
 
 import { Item, SuggestionBasedText } from "../../types";
 import QuantitySelector from "../QuantitySelector";
@@ -21,6 +21,12 @@ const button = (theme: any) => ({
   marginTop: theme.spacing(1),
   "text-transform": "none"
 });
+
+declare global {
+  interface Window {
+    cordova?: any;
+  }
+}
 
 const useStyles = makeStyles((theme) => ({
   brandWrapper: {
@@ -88,7 +94,9 @@ export default function AddNewItem({
   initialItem
 }: Props) {
   const [quantity, setQuantity] = useState(initialItem?.quantity || 0);
-  const [type, setType] = useState<SuggestionBasedText>(initialItem?.type || {});
+  const [type, setType] = useState<SuggestionBasedText>(
+    initialItem?.type || { leafKey: null, label: null }
+  );
   const [brand, setBrand] = useState<string>(initialItem?.brand || "");
 
   const styles = useStyles();
@@ -100,15 +108,21 @@ export default function AddNewItem({
       <div>
         <SuggestionBasedInput
           sourceData={categories}
-          inputPrompt={"Search for the litter type e.g. \"plastic bottle\" or \"crisp packet\""}
+          inputPrompt={
+            'Search for the litter type e.g. "plastic bottle" or "crisp packet"'
+          }
           setType={setType}
           className={styles.type}
           initialLabel={initialItem?.type?.label || ""}
         />
         <SuggestionBasedInput
           sourceData={brands}
-          inputPrompt={"Search for the litter brand e.g. \"Coca Cola\" or \"Cadbury\""}
-          setType={(suggestion: SuggestionBasedText) => setBrand(suggestion?.label || "")}
+          inputPrompt={
+            'Search for the litter brand e.g. "Coca Cola" or "Cadbury"'
+          }
+          setType={(suggestion: SuggestionBasedText) =>
+            setBrand(suggestion?.label || "")
+          }
           className={styles.type}
           initialLabel={initialItem?.brand}
         />
@@ -119,7 +133,6 @@ export default function AddNewItem({
         setQuantity={setQuantity}
         className={styles.quantitySelector}
       />
-
       <Button
         onClick={onCancelClick}
         variant="outlined"

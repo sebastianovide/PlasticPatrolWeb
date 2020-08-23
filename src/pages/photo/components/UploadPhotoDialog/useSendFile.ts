@@ -73,10 +73,11 @@ async function sendFile({
   gtagEvent("Upload", "Photo");
 
   let totalCount: number = 0;
-  const transformedItems = items.map(({ quantity, type, brand }) => {
+  const transformedItems = items.map(({ quantity, type, brand, barcode }) => {
     totalCount = totalCount + quantity;
     return {
       brand,
+      barcode: barcode || null,
       number: quantity,
       leafkey: type && type.leafKey,
       label: type && type.label
