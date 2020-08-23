@@ -1,8 +1,8 @@
 import React from "react";
-import {ChallengesHome, ChallengePage, CreateChallenge, ApproveChallengers} from "pages/challenges";
+import {ApproveChallengers, ChallengePage, ChallengesHome, CreateChallenge} from "pages/challenges";
 import Challenge from "../../types/Challenges";
 import {linkToApproveChallengers, linkToChallenge, linkToChallengesPage, linkToCreateChallenge} from "./links";
-import {Switch, Route} from "react-router-dom";
+import {Route, Switch} from "react-router-dom";
 import {useHistory} from "react-router";
 
 type Props = {
@@ -21,16 +21,16 @@ export default function ChallengesRoute({user, challenges}: Props) {
             </Route>
 
             <Route path={linkToCreateChallenge()}>
-                <CreateChallenge />
+                <CreateChallenge/>
             </Route>
 
             <Route path={linkToChallenge()}>
-                <ChallengePage user={{id: "Ally"}}
+                <ChallengePage user={user}
                                challenges={challenges}/>
             </Route>
 
             <Route path={linkToApproveChallengers()}>
-                <ApproveChallengers />
+                <ApproveChallengers/>
             </Route>
         </Switch>
     );

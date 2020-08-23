@@ -4,31 +4,31 @@ import dms2dec from "dms2dec";
 import config from "custom/config";
 
 import { device } from "utils";
-import { ImageMetadata } from "types/Photo";
+import {FileState, ImageMetadata, isCordovaFileState} from "types/Photo";
 import { GPSLocation, LatLong } from "types/GPSLocation";
 import type { CordovaImageMetadata, FilePath } from "types/Photo";
 
 type Args = {
-  photoToLoad: File | FilePath;
+  fileState: FileState;
   fromCamera: boolean;
   gpsLocation?: GPSLocation;
-  cordovaMetadata?: CordovaImageMetadata;
   callback: (result: ImageMetadata) => void;
 };
 
 export default function loadPhoto(args: Args): void {
+  const {fileOrFilePathToLoad, cordovaMetadata} = parsePhotoMetadata(args.fileState);
+
   //   https://github.com/blueimp/JavaScript-Load-Image#meta-data-parsing
   //@ts-ignore
   if (!window.cordova) {
-    const { photoToLoad } = args;
     loadImage.parseMetaData(
-      photoToLoad,
+      fileOrFilePathToLoad,
       (data) => {
         //@ts-ignore
         const imgExif = data.exif ? data.exif.getAll() : null;
         //@ts-ignore
         const imgIptc = data.iptc ? data.iptc.getAll() : null;
-        doLoadPhoto({ imgExif, imgIptc, ...args });
+        doLoadPhoto({ photoToLoad: fileOrFilePathToLoad, imgExif, imgIptc, cordovaMetadata, ...args });
       },
       {
         maxMetaDataSize: 262144,
@@ -36,8 +36,20 @@ export default function loadPhoto(args: Args): void {
       }
     );
   } else {
-    doLoadPhoto(args);
+    doLoadPhoto({photoToLoad: fileOrFilePathToLoad, ...args});
   }
+}
+
+function parsePhotoMetadata(fileState: FileState) {
+  var fileOrFilePathToLoad, cordovaMetadata;
+  if (isCordovaFileState(fileState)) {
+    fileOrFilePathToLoad = fileState.filePath;
+    cordovaMetadata = fileState.cordovaMetadata;
+  } else {
+    fileOrFilePathToLoad = fileState.file;
+    cordovaMetadata = undefined;
+  }
+  return {fileOrFilePathToLoad, cordovaMetadata}
 }
 
 function doLoadPhoto({
@@ -47,8 +59,8 @@ function doLoadPhoto({
   cordovaMetadata,
   callback,
   imgExif,
-  imgIptc
-}: Args & { imgExif?: any; imgIptc?: any }): void {
+  imgIptc,
+}: Args & { photoToLoad: File | FilePath; imgExif?: any; imgIptc?: any; cordovaMetadata?: CordovaImageMetadata }): void {
   loadImage(
     photoToLoad,
     (img) => {

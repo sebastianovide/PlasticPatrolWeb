@@ -8,6 +8,10 @@ export function linkToCreateChallenge() {
   return `${linkToChallengesPage()}/create`;
 }
 
+export function linkToAddChallengeCoverPhotoDialog() {
+  return `${linkToCreateChallenge()}/addphoto`;
+}
+
 export function linkToChallenge(challengeId: string = ":challengeId") {
   return `${linkToChallengesPage()}/${challengeId}`;
 }

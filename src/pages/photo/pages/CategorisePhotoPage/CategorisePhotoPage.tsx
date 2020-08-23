@@ -64,19 +64,10 @@ export default function CategoriseLitterPage() {
     if (fileState === undefined) {
       history.push(linkToNewPhoto());
     } else {
-      var fileOrFilePath, cordovaMetadata;
-      if (isCordovaFileState(fileState)) {
-        fileOrFilePath = fileState.filePath;
-        cordovaMetadata = fileState.cordovaMetadata;
-      } else {
-        fileOrFilePath = fileState.file;
-        cordovaMetadata = undefined;
-      }
       loadPhoto({
-        photoToLoad: fileOrFilePath,
+        fileState,
         fromCamera: fileState.fromCamera,
         gpsLocation,
-        cordovaMetadata,
         callback: (metadata) => {
           setPhoto(metadata);
         }

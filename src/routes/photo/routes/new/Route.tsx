@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {createRef, useState} from "react";
 import { Route, useHistory } from "react-router-dom";
 
 import { linkToTutorialPage } from "routes/tutorial/links";
@@ -8,6 +8,7 @@ import { NewPhotoPage } from "pages/photo";
 
 import { linkToCategoriseWithState } from "../categorise/links";
 import { linkToAddDialog, linkToNewPhoto } from "./links";
+import { DesktopPhotoFallback } from "../../../../components/common/DesktopPhotoFallback";
 
 const linkToTutorialWithRedirect = () => ({
   pathname: linkToTutorialPage(),
@@ -22,7 +23,8 @@ export default function NewPhotoRoute() {
     file: File | CordovaCameraImage,
     fromCamera: boolean
   ) => history.push(linkToCategoriseWithState(file, fromCamera));
-  const [inputRef, setInputRef] = useState<HTMLInputElement | null>(null);
+
+  const desktopPhotoRef = createRef<HTMLInputElement>();
 
   // @ts-ignore
   const isCordova = !!window.cordova;
@@ -33,29 +35,12 @@ export default function NewPhotoRoute() {
         onPhotoClick={() => {
           isCordova
             ? history.push(linkToAddDialog())
-            : inputRef && inputRef.click();
+            : desktopPhotoRef.current && desktopPhotoRef.current.click();
         }}
         linkToTutorialPage={linkToTutorialWithRedirect}
       />
-      <input
-        className="hidden"
-        type="file"
-        accept="image/*"
-        id={"fileInput"}
-        ref={setInputRef}
-        onChange={(e) => {
-          const file = e.target && e.target.files && e.target.files[0];
-          if (file) {
-            // there's probably a more direct way to figure out if the image
-            // that we loaded is from the camera, but for now just check that
-            // the lastModified date is < 30s ago
-            const fileDate = file.lastModified;
-            const ageInMinutes = (new Date().getTime() - fileDate) / 1000 / 60;
-            const imgFromCamera = isNaN(ageInMinutes) || ageInMinutes < 0.5;
-            handlePhotoSelect(file, imgFromCamera);
-          }
-        }}
-      />
+      <DesktopPhotoFallback ref={desktopPhotoRef}
+                            handlePhotoSelect={handlePhotoSelect}/>
       <Route path={linkToAddDialog()} exact>
         <AddPhotoDialog
           onClose={() => history.goBack()}

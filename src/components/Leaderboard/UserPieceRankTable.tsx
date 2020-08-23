@@ -93,9 +93,15 @@ interface MuiVirtualizedTableProps extends WithStyles<typeof styles> {
   headerHeight?: number;
   onRowClick?: () => void;
   rowCount: number;
-  rowGetter: (row: Row) => StatsUser;
+  rowGetter: (row: Row) => UserLeaderboardData;
   rowHeight?: number;
   userId?: string;
+}
+
+interface UserLeaderboardData {
+    displayName: string;
+    pieces: number;
+    largeCollectionPieces?: number;
 }
 
 class MuiVirtualizedTable extends React.PureComponent<
@@ -217,7 +223,7 @@ class MuiVirtualizedTable extends React.PureComponent<
 const VirtualizedTable = withStyles(styles)(MuiVirtualizedTable);
 
 type Props = {
-  usersLeaderboard: StatsUser[];
+  usersLeaderboard: UserLeaderboardData[];
   user: { id?: string };
 };
 
