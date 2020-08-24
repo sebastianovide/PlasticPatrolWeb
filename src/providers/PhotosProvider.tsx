@@ -30,7 +30,19 @@ const toFeaturesDict = (photos: Photo[]): Map<string, Feature> => {
 
 const geojsonToPhotosContainer = (geojson: Geojson): PhotosContainer => {
   return {
-    featuresDict: toFeaturesDict(geojson.features.map((f) => f.properties)),
+    featuresDict: toFeaturesDict(
+      geojson.features.map((f, index) => {
+        if (!f.properties.location.longitude) {
+          const [longitude, latitude] = f.geometry.coordinates;
+          f.properties.location = {
+            latitude,
+            longitude
+          } as any;
+        }
+
+        return f.properties;
+      })
+    ),
     geojson
   };
 };
