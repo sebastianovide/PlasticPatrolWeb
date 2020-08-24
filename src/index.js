@@ -1,8 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import ReactDOM from "react-dom";
 import { HashRouter as Router } from "react-router-dom";
-import * as firebaseui from "firebaseui";
-import firebase from "firebase/app";
 
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 
@@ -11,7 +9,6 @@ import App from "./App";
 
 import firebaseApp from "features/firebase/firebaseInit";
 
-import LoginFirebase from "./components/LoginFirebase";
 import * as serviceWorker from "./serviceWorker";
 import config from "./custom/config";
 import { isIphoneAndCordova } from "./utils";
@@ -48,13 +45,6 @@ initialiseCypressVars();
 if (isIphoneAndCordova) {
   window.StatusBar.styleDefault();
 }
-
-const isPendingRedirect = () => {
-  const app =
-    firebaseui.auth.AuthUI.getInstance() ||
-    new firebaseui.auth.AuthUI(firebase.auth());
-  return app.isPendingRedirect();
-};
 
 if (
   process.env.NODE_ENV !== "development" &&
