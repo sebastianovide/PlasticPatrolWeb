@@ -1,6 +1,6 @@
 import React from "react";
 import {ApproveChallengers, ChallengePage, ChallengesHome, CreateChallenge} from "pages/challenges";
-import Challenge from "../../types/Challenges";
+import {Challenge} from "../../types/Challenges";
 import {linkToApproveChallengers, linkToChallenge, linkToChallengesPage, linkToCreateChallenge} from "./links";
 import {Route, Switch} from "react-router-dom";
 import {useHistory} from "react-router";

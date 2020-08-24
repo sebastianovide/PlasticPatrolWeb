@@ -2,12 +2,12 @@ import React from "react";
 import {makeStyles, useTheme} from "@material-ui/core/styles";
 
 import PageWrapper from "components/PageWrapper";
-import Challenge from "../../types/Challenges";
+import { Challenge } from "../../../types/Challenges";
 import 'react-circular-progressbar/dist/styles.css';
 import {useHistory, useParams} from "react-router-dom";
 
 import Button from "@material-ui/core/Button";
-import {UserPieceRankTable} from "../../components/Leaderboard";
+import {UserPieceRankTable} from "../../../components/Leaderboard";
 import {Line} from 'rc-progress';
 
 const useStyles = makeStyles((theme) => ({

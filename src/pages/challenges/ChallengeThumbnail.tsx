@@ -1,4 +1,4 @@
-import Challenge from "../../types/Challenges";
+import { Challenge } from "../../types/Challenges";
 import {makeStyles, useTheme} from "@material-ui/core/styles";
 import React, {useRef} from "react";
 import {useHistory} from "react-router";
@@ -6,7 +6,7 @@ import {buildStyles, CircularProgressbar} from "react-circular-progressbar";
 import {linkToChallenge} from "../../routes/challenges/links";
 
 const useStyles = makeStyles((theme) => ({
-    challengeTab: {
+    challengeThumbnail: {
         padding: "4%",
         display: "flex",
         height: "80px",
@@ -15,7 +15,6 @@ const useStyles = makeStyles((theme) => ({
         boxShadow: "1px 1px 2px 2px #ccc",
         borderRadius: "10px",
         marginBottom: "20px",
-
     },
 
     pictureWrapper: {
@@ -66,7 +65,7 @@ type Props = {
     challenge: Challenge;
 };
 
-export default function ChallengeTab({challenge}: Props) {
+export default function ChallengeThumbnail({challenge}: Props) {
     const classes = useStyles();
     const theme = useTheme();
     const history = useHistory();
@@ -74,7 +73,7 @@ export default function ChallengeTab({challenge}: Props) {
     const wrapperElement = useRef(null);
     const percentage = (challenge.currentPieces / challenge.targetPieces) * 100;
     return (
-        <div className={classes.challengeTab}
+        <div className={classes.challengeThumbnail}
              ref={wrapperElement}
              onClick={() => history.push(linkToChallenge(challenge.id.toString()))}>
             <div className={classes.pictureWrapper}>

@@ -4,19 +4,21 @@ import {makeStyles} from "@material-ui/core/styles";
 import PageWrapper from "components/PageWrapper";
 import 'react-circular-progressbar/dist/styles.css';
 import {useHistory} from "react-router";
-import styles from "../../standard.scss";
+import styles from "../../../standard.scss";
 import Button from "@material-ui/core/Button";
-import {Route} from "react-router-dom";
-import {linkToAddChallengeCoverPhotoDialog} from "../../routes/challenges/links";
-import AddPhotoDialog from "../photo/components/AddPhotoDialog/AddPhotoDialog";
-import {CordovaCameraImage, ImageMetadata, isCordovaCameraImage} from "../../types/Photo";
-import {DesktopPhotoFallback} from "../../components/common/DesktopPhotoFallback";
-import loadPhoto from "../photo/pages/CategorisePhotoPage/utils";
-import {useGPSLocation} from "../../providers/LocationProvider";
+import {Route, Switch} from "react-router-dom";
+import {linkToAddChallengeCoverPhotoDialog, linkToSubmitChallengeDialog} from "../../../routes/challenges/links";
+import AddPhotoDialog from "../../photo/components/AddPhotoDialog/AddPhotoDialog";
+import {CordovaCameraImage, ImageMetadata, isCordovaCameraImage} from "../../../types/Photo";
+import {DesktopPhotoFallback} from "../../../components/common/DesktopPhotoFallback";
+import loadPhoto from "../../photo/pages/CategorisePhotoPage/utils";
+import {useGPSLocation} from "../../../providers/LocationProvider";
+import {linkToUploadPhotoDialog} from "../../../routes/photo/routes/categorise/links";
+import UploadChallengeDialog from "./UploadChallengeDialog";
 
 const CHALLENGE_NAME_LIMIT = 100;
 const CHALLENGE_DESCRIPTION_LIMIT = 300;
-const CHALLENGE_PIECE_TARGET_LIMIT_LENGTH = 6;
+const CHALLENGE_PIECE_TARGET_LIMIT = 1000000;
 
 const useStyles = makeStyles((theme) => ({
     wrapper: {
@@ -32,7 +34,6 @@ const useStyles = makeStyles((theme) => ({
     inputLengthTracker: {
         width: "100%",
         textAlign: "right",
-        marginTop: "5px",
         marginBottom: "5px",
         color: styles.mediumGrey,
     },
@@ -86,15 +87,30 @@ const useStyles = makeStyles((theme) => ({
 
     coverPhotoWrapper: {
         width: "100%",
+        textAlign: "center",
     },
 
-    coverPhotoPreview: {},
+    coverPhotoPreview: {
+        maxWidth: "100%",
+        maxHeight: "200px",
+    },
 
     addPhotoButton: {
         marginBottom: "10px",
     },
 
-    dateWrapper: {},
+    datesWrapper: {
+        display: "flex",
+        marginBottom: "10px",
+    },
+
+    startDate: {
+        flex: 1,
+    },
+
+    endDate: {
+        flex: 1,
+    },
 
     dateLabel: {
         color: styles.mediumGrey,
@@ -104,19 +120,17 @@ const useStyles = makeStyles((theme) => ({
     dateSummary: {
         color: theme.palette.primary.main,
         fontSize: 14,
-        marginBottom: "10px",
     },
 
     inputWarning: {
         color: "#f00",
-        marginBottom: "10px",
+        margin: "5px 0",
     },
 
     dateInput: {
         border: "none",
         borderRadius: "5px",
         padding: "5px",
-        marginBottom: "10px",
         background: styles.lightGrey,
         fontSize: 16,
         boxSizing: "border-box",
@@ -127,7 +141,7 @@ const useStyles = makeStyles((theme) => ({
     },
 
     privateToggleWrapper: {
-        marginBottom: "10px",
+        margin: "10px 0",
     },
 
     submitButton: {
@@ -137,26 +151,29 @@ const useStyles = makeStyles((theme) => ({
 
 type Props = {};
 
-function validateInput(input: string, lengthLimit: number, setter: (newValue: string) => void,
-                       numberOnly: boolean = false) {
+function validateStringInput(input: string, lengthLimit: number, setter: (newValue: string) => void) {
     if (input.length > lengthLimit) {
-        return;
-    }
-
-    if (numberOnly && !/^[1-9]\d*$/.test(input)) {
         return;
     }
 
     setter(input);
 }
 
-function isChallengeReady(name: string, description: string, targetPieces: string,
+function validateNumberInput(input: string, limit: number, setter: (newValue: number) => void) {
+    if ( !/^[1-9]\d*$/.test(input) || parseInt(input) < limit) {
+        return;
+    }
+
+    setter(parseInt(input));
+}
+
+function isChallengeReady(name: string, description: string, targetPieces: number,
                           coverPhoto: ImageMetadata | undefined, startDate: Date | null,
                           endDate: Date | null) {
     // Check challenge has a name and description
     return name !== "" && description !== ""
         // Has a valid number of pieces to collect
-        && parseInt(targetPieces) != 0
+        && targetPieces > 0
         // Has selected a cover photo
         && coverPhoto !== undefined
         // Has a start date set from today onwards
@@ -176,7 +193,7 @@ export default function CreateChallenge({}: Props) {
 
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
-    const [targetPieces, setTargetPieces] = useState("0");
+    const [targetPieces, setTargetPieces] = useState(0);
     const [isPrivate, setIsPrivate] = useState(false);
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [endDate, setEndDate] = useState<Date | null>(null);
@@ -207,7 +224,7 @@ export default function CreateChallenge({}: Props) {
                     placeholder={"Enter a challenge name"}
                     className={classes.name}
                     value={name}
-                    onChange={(e) => validateInput(e.target.value, CHALLENGE_NAME_LIMIT, setName)}
+                    onChange={(e) => validateStringInput(e.target.value, CHALLENGE_NAME_LIMIT, setName)}
                 />
                 <div className={classes.inputLengthTracker}>{name.length}/{CHALLENGE_NAME_LIMIT}</div>
                 <textarea
@@ -215,7 +232,7 @@ export default function CreateChallenge({}: Props) {
                     className={classes.description}
                     value={description}
                     rows={3}
-                    onChange={(e) => validateInput(e.target.value, CHALLENGE_DESCRIPTION_LIMIT, setDescription)}
+                    onChange={(e) => validateStringInput(e.target.value, CHALLENGE_DESCRIPTION_LIMIT, setDescription)}
                 />
                 <div className={classes.inputLengthTracker}>{description.length}/{CHALLENGE_DESCRIPTION_LIMIT}</div>
 
@@ -224,12 +241,15 @@ export default function CreateChallenge({}: Props) {
                     className={classes.pieceTarget}
                     type="number"
                     value={targetPieces.toString()}
-                    onChange={(e) => validateInput(e.target.value, CHALLENGE_PIECE_TARGET_LIMIT_LENGTH, setTargetPieces, true)}
+                    onChange={(e) => validateNumberInput(e.target.value, CHALLENGE_PIECE_TARGET_LIMIT, setTargetPieces)}
                 />
-                <div className={classes.coverPhotoWrapper}>
-                    <img src={coverPhoto && coverPhoto.imgSrc}
-                         className={classes.coverPhotoPreview}/>
-                </div>
+
+                {coverPhoto &&
+                    <div className={classes.coverPhotoWrapper}>
+                        <img src={coverPhoto && coverPhoto.imgSrc}
+                             className={classes.coverPhotoPreview}/>
+                    </div>
+                }
 
                 <Button className={classes.addPhotoButton}
                     // @ts-ignore
@@ -247,29 +267,32 @@ export default function CreateChallenge({}: Props) {
                                     handlePhotoSelect={handlePhotoSelect}/>
                 </Route>
 
-                <div className={classes.dateWrapper}>
-                    <div className={classes.dateLabel}>Start date</div>
-                    <input className={classes.dateInput}
-                           type="date"
-                           onChange={(e) => setStartDate(new Date(e.currentTarget.value))}/>
-                    {(startDate !== null && startDate < today) &&
-                    <div className={classes.inputWarning}>
-                        Start date cannot be in the past
+                <div className={classes.datesWrapper}>
+                    <div className={classes.startDate}>
+                        <div className={classes.dateLabel}>Start date</div>
+                        <input className={classes.dateInput}
+                               type="date"
+                               onChange={(e) => setStartDate(new Date(e.currentTarget.value))}/>
                     </div>
-                    }
+                    <div className={classes.endDate}>
+                        <div className={classes.dateLabel}>End date</div>
+                        <input className={classes.dateInput}
+                               type="date"
+                               onChange={(e) => setEndDate(new Date(e.currentTarget.value))}/>
+                    </div>
                 </div>
 
-                <div className={classes.dateWrapper}>
-                    <div className={classes.dateLabel}>End date</div>
-                    <input className={classes.dateInput}
-                           type="date"
-                           onChange={(e) => setEndDate(new Date(e.currentTarget.value))}/>
-                    {(startDate !== null && endDate !== null && endDate < startDate) &&
-                    <div className={classes.inputWarning}>
-                        Start date cannot be in the past
-                    </div>
-                    }
+                {(startDate !== null && startDate < today) &&
+                <div className={classes.inputWarning}>
+                    Start date cannot be in the past
                 </div>
+                }
+
+                {(startDate !== null && endDate !== null && endDate < startDate) &&
+                <div className={classes.inputWarning}>
+                    End date cannot be before start date
+                </div>
+                }
 
                 {(startDate !== null && endDate !== null && today <= startDate && startDate < endDate) &&
                 <div className={classes.dateSummary}>
@@ -286,13 +309,24 @@ export default function CreateChallenge({}: Props) {
                 </div>
 
                 <Button className={classes.submitButton}
-                        onClick={() => history.push(linkToAddChallengeCoverPhotoDialog())}
+                        onClick={() => history.push(linkToSubmitChallengeDialog())}
                         color="primary"
                         variant="contained"
                         disabled={!challengeReady}>
                     Create challenge
                 </Button>
             </div>
+
+            <Route path={linkToSubmitChallengeDialog()}>
+                <UploadChallengeDialog
+                    name={name}
+                    description={description}
+                    targetPieces={targetPieces}
+                    picture={coverPhoto}
+                    startDate={startDate}
+                    endDate={endDate}
+                    onCancelUpload={()=>{}}/>
+            </Route>
         </PageWrapper>
     );
 }

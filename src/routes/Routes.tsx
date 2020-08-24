@@ -40,7 +40,7 @@ import { linkToAccountPage } from "./account/links";
 import { useStats } from "providers/StatsProvider";
 import {linkToChallengesPage} from "./challenges/links";
 import ChallengesRoute from "./challenges/Route";
-import Challenge from "../types/Challenges";
+import { Challenge } from "../types/Challenges";
 
 type Props = {
   user: User;

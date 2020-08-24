@@ -19,6 +19,8 @@ import {
   DialogContentText,
   DialogActions
 } from "@material-ui/core";
+import IconButton from "@material-ui/core/IconButton";
+import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 
 declare global {
   interface Window {

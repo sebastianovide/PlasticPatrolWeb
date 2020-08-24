@@ -1,16 +1,16 @@
 import {StatsUser} from "./Stats";
 
-type Challenge = {
+export type Challenge = {
     id: number,
     name: string;
     description: string;
     picture: string;
     startTime: number;
     endTime: number;
-    users: ChallengeUserData[];
-    targetPieces: number;
     currentPieces: number;
-};
+    targetPieces: number;
+    users: ChallengeUserData[];
+}
 
 type ChallengeUserData = {
     uid: string;
@@ -18,15 +18,3 @@ type ChallengeUserData = {
     pieces: number;
     isModerator: boolean;
 }
-
-type NewChallengeRequest = {
-    name: string;
-    description: string;
-    picture: string;
-    startTime: number;
-    endTime: number;
-    users: ChallengeUserData[];
-    targetPieces: number;
-}
-
-export default Challenge;

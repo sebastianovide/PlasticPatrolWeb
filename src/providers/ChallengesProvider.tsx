@@ -1,4 +1,4 @@
-import Challenge from "../types/Challenges";
+import { Challenge } from "../types/Challenges";
 import exampleImage from "assets/images/example.jpeg";
 
 const FakeChallenge: Challenge = {

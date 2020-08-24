@@ -3,13 +3,13 @@ import {makeStyles} from "@material-ui/core/styles";
 import {useHistory} from "react-router";
 
 import PageWrapper from "components/PageWrapper";
-import Challenge from "../../types/Challenges";
+import { Challenge } from "../../types/Challenges";
 
 import 'react-circular-progressbar/dist/styles.css';
 
 import styles from "standard.scss";
 import Search from "@material-ui/icons/Search";
-import ChallengeTab from "./ChallengeTab";
+import ChallengeThumbnail from "./ChallengeThumbnail";
 import {linkToCreateChallenge} from "../../routes/challenges/links";
 
 const useStyles = makeStyles((theme) => ({
@@ -67,8 +67,8 @@ function getFilteredChallenges(searchPrefix: string, challenges: Challenge[]): C
 export default function ChallengesHome({handleClose, challenges}: Props) {
     const history = useHistory();
     const classes = useStyles();
-    const [searchPrefix, setSearchPrefix] = useState("")
-    const filteredChallengeList = useMemo(() => getFilteredChallenges(searchPrefix, challenges), [searchPrefix, challenges]);
+    const [searchSubstring, setSearchSubstring] = useState("")
+    const filteredChallengeList = useMemo(() => getFilteredChallenges(searchSubstring, challenges), [searchSubstring, challenges]);
     return (
         <PageWrapper label={"Challenges"}
                      navigationHandler={{handleClose}}
@@ -79,12 +79,12 @@ export default function ChallengesHome({handleClose, challenges}: Props) {
                 <input
                     placeholder={"Search"}
                     className={classes.searchInput}
-                    value={searchPrefix}
-                    onChange={(e) => setSearchPrefix(e.target.value)}
+                    value={searchSubstring}
+                    onChange={(e) => setSearchSubstring(e.target.value)}
                 />
             </div>
             <div className={classes.challengeList}>
-                {(filteredChallengeList.map(challenge => <ChallengeTab challenge={challenge}/>))}
+                {(filteredChallengeList.map(challenge => <ChallengeThumbnail challenge={challenge}/>))}
             </div>
         </PageWrapper>
     );
