@@ -152,7 +152,8 @@ class App extends Component {
       geojson,
       online,
       sponsorImage,
-      selectedFeature
+      selectedFeature,
+      reloadPhotos
     } = this.props;
     const { leftDrawerOpen, mapLocation } = this.state;
     return (
@@ -186,7 +187,7 @@ class App extends Component {
             gpsLocation={gpsLocation}
             online={online}
             geojson={geojson}
-            reloadPhotos={this.reloadPhotos}
+            reloadPhotos={reloadPhotos}
             handlePhotoClick={this.handlePhotoClick}
             selectedFeature={selectedFeature}
             sponsorImage={sponsorImage}
