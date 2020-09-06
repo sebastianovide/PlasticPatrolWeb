@@ -1,7 +1,7 @@
 import { Challenge } from "../types/Challenges";
 import exampleImage from "assets/images/example.jpeg";
 
-const FakeChallenge: Challenge = {
+export const FakeChallenge: Challenge = {
     id: 123,
     name: "This is the CHALLENGE",
     description: "this is the description of the challenge omg I hate plastic",

@@ -53,7 +53,6 @@ const useStyles = makeStyles((theme) => ({
 
 type Props = {
     challenges: Challenge[];
-    handleClose: () => void;
 };
 
 function getFilteredChallenges(searchPrefix: string, challenges: Challenge[]): Challenge[] {
@@ -64,14 +63,16 @@ function getFilteredChallenges(searchPrefix: string, challenges: Challenge[]): C
     return challenges.filter(challenge => challenge.name.includes(searchPrefix));
 }
 
-export default function ChallengesHome({handleClose, challenges}: Props) {
+export default function ChallengesHome({challenges}: Props) {
     const history = useHistory();
+    const handleBack = () => history.goBack();
+
     const classes = useStyles();
     const [searchSubstring, setSearchSubstring] = useState("")
     const filteredChallengeList = useMemo(() => getFilteredChallenges(searchSubstring, challenges), [searchSubstring, challenges]);
     return (
         <PageWrapper label={"Challenges"}
-                     navigationHandler={{handleClose}}
+                     navigationHandler={{handleBack}}
                      className={classes.wrapper}
                      addAction={() => history.push(linkToCreateChallenge())}>
             <div className={classes.searchWrapper}>

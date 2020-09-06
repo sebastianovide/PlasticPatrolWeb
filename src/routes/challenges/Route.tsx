@@ -16,8 +16,7 @@ export default function ChallengesRoute({user, challenges}: Props) {
     return (
         <Switch>
             <Route exact path={linkToChallengesPage()}>
-                <ChallengesHome handleClose={handleClose}
-                                challenges={challenges}/>
+                <ChallengesHome challenges={challenges}/>
             </Route>
 
             <Route path={linkToCreateChallenge()}>
