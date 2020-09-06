@@ -160,7 +160,7 @@ function validateStringInput(input: string, lengthLimit: number, setter: (newVal
 }
 
 function validateNumberInput(input: string, limit: number, setter: (newValue: number) => void) {
-    if ( !/^[1-9]\d*$/.test(input) || parseInt(input) < limit) {
+    if ( !/^[1-9]\d*$/.test(input) || parseInt(input) > limit) {
         return;
     }
 
@@ -302,8 +302,9 @@ export default function CreateChallenge({}: Props) {
 
                 <div className={classes.privateToggleWrapper}>
                     <input type="radio"
-                           value={"Private challenge"}
                            checked={isPrivate}
+                           value={"Private challenge"}
+                           onChange={() => {}}
                            onClick={() => setIsPrivate(!isPrivate)}/>
                     Private challenge
                 </div>
