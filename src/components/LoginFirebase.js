@@ -21,7 +21,8 @@ const LoginFirebase = (props) => {
     credentialHelper: firebaseui.auth.CredentialHelper.NONE,
     signInOptions: [
       firebase.auth.FacebookAuthProvider.PROVIDER_ID,
-      firebase.auth.EmailAuthProvider.PROVIDER_ID
+      firebase.auth.EmailAuthProvider.PROVIDER_ID,
+      "apple.com"
     ],
     callbacks: {
       // Avoid redirects after sign-in.
