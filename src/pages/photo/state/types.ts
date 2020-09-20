@@ -3,6 +3,24 @@ export type CordovaCameraImage = {
   json_metadata: string;
 };
 
+export type AndroidCordovaMetaData = {
+  gpsLatitude: string;
+  gpsLatitudeRef: string;
+  gpsLongitude: string;
+  gpsLongitudeRef: string;
+};
+
+export type iosCordovaMetaData = {
+  GPS: {
+    LatitudeRef: string;
+    LongitudeRef: string;
+    Latitude: number;
+    Longitude: number;
+  };
+};
+
+export type CordovaMetaData = AndroidCordovaMetaData | iosCordovaMetaData;
+
 export function isCordovaCameraImage(file: any): file is CordovaCameraImage {
   return file && file.filename !== undefined;
 }
