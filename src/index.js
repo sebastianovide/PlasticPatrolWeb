@@ -25,15 +25,7 @@ import { useConfig } from "./providers/ConfigProvider";
 import { useOnline } from "./providers/OnlineProvider";
 import UserProvider, { useUser } from "./providers/UserProvider";
 import StatsProvider from "./providers/StatsProvider";
-import * as Sentry from "@sentry/browser";
 import { dbFirebase } from "features/firebase";
-
-if (process.env.NODE_ENV !== "development") {
-  Sentry.init({
-    dsn:
-      "https://41de3daa1d7542bd8c9204365283e1b2@o404007.ingest.sentry.io/5267230"
-  });
-}
 
 serviceWorker.register();
 
