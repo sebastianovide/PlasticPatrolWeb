@@ -4,6 +4,8 @@ import IconButton from "@material-ui/core/IconButton";
 import dbFirebase, {
   ProductInfo
 } from "../../../../features/firebase/dbFirebase";
+import { makeStyles } from "@material-ui/core";
+import { findLastIndex } from "lodash";
 
 declare global {
   interface Window {
@@ -25,6 +27,14 @@ export type BarcodeResult =
   | "not found"
   | "scan error"
   | "lookup error";
+
+const useStyles = makeStyles(() => ({
+  barcodeIcon: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center"
+  }
+}));
 
 interface Props {
   onResult: (result: BarcodeResult) => void;
@@ -58,29 +68,33 @@ function scan(): Promise<number> {
 }
 
 const BarcodeScanner = ({ onResult, className }: Props) => {
+  const classes = useStyles();
   return (
-    <IconButton
-      disableRipple
-      className={className}
-      onClick={async () => {
-        var id;
-        try {
-          id = await scan();
-        } catch {
-          onResult("scan error");
-          return;
-        }
+    <div className={classes.barcodeIcon}>
+      <p>Scan a barcode</p>
+      <IconButton
+        disableRipple
+        className={className}
+        onClick={async () => {
+          var id;
+          try {
+            id = await scan();
+          } catch {
+            onResult("scan error");
+            return;
+          }
 
-        try {
-          const result = await getBarcodeInfo(id);
-          onResult(result || "not found");
-        } catch {
-          onResult("lookup error");
-        }
-      }}
-    >
-      <CropFreeIcon />
-    </IconButton>
+          try {
+            const result = await getBarcodeInfo(id);
+            onResult(result || "not found");
+          } catch {
+            onResult("lookup error");
+          }
+        }}
+      >
+        <CropFreeIcon />
+      </IconButton>
+    </div>
   );
 };
 
