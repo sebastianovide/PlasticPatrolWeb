@@ -5,19 +5,19 @@ function checkStaticLinks() {
   cy.contains("Clean-ups").should(
     "have.attr",
     "href",
-    "https://plasticpatrol.co.uk/clean-ups/"
+    "https://planetpatrol.co/clean-ups/"
   );
 
   cy.contains("Terms and Conditions").should(
     "have.attr",
     "href",
-    "https://plasticpatrol.co.uk/terms-and-conditions/"
+    "https://planetpatrol.co/terms-and-conditions/"
   );
 
   cy.contains("Privacy Policy").should(
     "have.attr",
     "href",
-    "https://plasticpatrol.co.uk/privacy-policy/"
+    "https://planetpatrol.co/privacy-policy/"
   );
 }
 
