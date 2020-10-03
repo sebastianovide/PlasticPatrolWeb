@@ -18,8 +18,7 @@
     under the License.
 -->
 <html>
-
-<head>
+  <head>
     <script src="%PUBLIC_URL%/first-input-delay.min.js"></script>
     <!--
         Customize this policy to fit your own app's needs. For more guidance, see:
@@ -31,7 +30,9 @@
                 * Enable inline JS: add 'unsafe-inline' to default-src
         -->
 
-    <meta http-equiv="Content-Security-Policy" content="
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="
         default-src * blob: data: gap://ready https://ssl.gstatic.com 'unsafe-eval' 'unsafe-inline' file://* blob:;
         connect-src * blob: 'unsafe-inline';
         style-src * data: blob: 'self' 'unsafe-inline';
@@ -39,41 +40,64 @@
         media-src * blob: 'unsafe-inline';
         script-src * data: gap: blob: https://ssl.gstatic.com http://localhost 'self' 'unsafe-inline' 'unsafe-eval';
         frame-src * blob: gap://ready;
-        img-src * 'self' data: content: blob: 'unsafe-inline';">
+        img-src * 'self' data: content: blob: 'unsafe-inline';"
+    />
 
     <script>
-      const isCordovaApp = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
+      const isCordovaApp =
+        document.URL.indexOf("http://") === -1 &&
+        document.URL.indexOf("https://") === -1;
       if (isCordovaApp) {
-        let script = document.createElement('script');
-        script.type = 'text/javascript';
-        script.src = 'cordova.js';
+        let script = document.createElement("script");
+        script.type = "text/javascript";
+        script.src = "cordova.js";
         document.head.appendChild(script);
       }
+
+      document.addEventListener(
+        "deviceready",
+        function () {
+          var Sentry = cordova.require("sentry-cordova.Sentry");
+          Sentry.init({
+            dsn:
+              "https://41de3daa1d7542bd8c9204365283e1b2@o404007.ingest.sentry.io/5267230"
+          });
+        },
+        false
+      );
     </script>
 
-    <meta name="format-detection" content="telephone=no">
-    <meta name="msapplication-tap-highlight" content="no">
-    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, viewport-fit=cover">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta
+      name="viewport"
+      content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, viewport-fit=cover"
+    />
 
     <!-- PWA -->
-    <link rel="manifest" href="%PUBLIC_URL%/custom/manifest.json">
+    <link rel="manifest" href="%PUBLIC_URL%/custom/manifest.json" />
 
     <!-- Add to home screen for Safari on iOS -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-title" content="%REACT_APP_TITLE%">
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/custom/images/logo-152x152.png">
-    <meta name="msapplication-TileImage" content="%PUBLIC_URL%/custom/images/logo-144x144.png">
-    <meta name="msapplication-TileColor" content="#2F3BA2">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-title" content="%REACT_APP_TITLE%" />
+    <link
+      rel="apple-touch-icon"
+      href="%PUBLIC_URL%/custom/images/logo-152x152.png"
+    />
+    <meta
+      name="msapplication-TileImage"
+      content="%PUBLIC_URL%/custom/images/logo-144x144.png"
+    />
+    <meta name="msapplication-TileColor" content="#2F3BA2" />
 
-    <link rel="shortcut icon" href="%PUBLIC_URL%/custom/images/favicon.ico">
+    <link rel="shortcut icon" href="%PUBLIC_URL%/custom/images/favicon.ico" />
 
     <!-- Latest compiled and minified CSS -->
     <title>%REACT_APP_TITLE%</title>
-</head>
+  </head>
 
-<body>
+  <body>
     <div id="root"></div>
-</body>
-
+  </body>
 </html>

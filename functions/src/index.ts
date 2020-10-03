@@ -18,6 +18,7 @@ import { firestore } from "./firestore";
 import { STATS_TOPIC } from "./constants";
 import config from "./config.json";
 import { updateStats, computeStatsAdHoc } from "./stats";
+import { barcodeLookup } from "./barcodeLookup";
 
 const cors = corsModule({ origin: true });
 const gm = gmModule.subClass({ imageMagick: true });
@@ -346,9 +347,9 @@ async function hostMetadata(req, res) {
 }
 
 const wrap = (f) => {
-  const wrapped = async (_, res) => {
+  const wrapped = async (req, res) => {
     try {
-      const result = await f();
+      const result = await f(req);
       res.status(200).send(result);
     } catch (e) {
       res.status(500).send({ error: "" + e });
@@ -362,5 +363,6 @@ module.exports = {
   hostMetadata: functions.https.onRequest(hostMetadata),
   generateThumbnail,
   updateStats: functions.pubsub.topic(STATS_TOPIC).onPublish(updateStats),
-  computeStats: functions.https.onRequest(wrap(computeStatsAdHoc))
+  computeStats: functions.https.onRequest(wrap(computeStatsAdHoc)),
+  barcodeLookup: functions.https.onCall(barcodeLookup)
 };
