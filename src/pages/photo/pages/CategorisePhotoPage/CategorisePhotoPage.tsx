@@ -16,7 +16,10 @@ import { useGPSLocation } from "providers/LocationProvider";
 
 import UploadPhotoDialog from "pages/photo/components/UploadPhotoDialog";
 import { usePhotoPageState } from "pages/photo/state";
-import { isCordovaImageState, isInitialState } from "pages/photo/state/types";
+import {
+  isCordovaImageState,
+  isBrowserImageState
+} from "pages/photo/state/types";
 
 import useEffectOnMount from "hooks/useEffectOnMount";
 
@@ -64,9 +67,7 @@ export default function CategoriseLitterPage() {
 
   const [photo, setPhoto] = useState<ImageMetadata | undefined>();
   useEffectOnMount(() => {
-    if (isInitialState(fileState)) {
-      history.push(linkToNewPhoto());
-    } else if (isCordovaImageState(fileState)) {
+    if (isCordovaImageState(fileState)) {
       const { file, fromCamera } = fileState;
       loadPhoto({
         fileOrFileName: file.filename,
@@ -77,7 +78,7 @@ export default function CategoriseLitterPage() {
           setPhoto(metadata);
         }
       });
-    } else {
+    } else if (isBrowserImageState(fileState)) {
       const { file, fromCamera } = fileState;
       loadPhoto({
         fileOrFileName: file,
@@ -85,6 +86,8 @@ export default function CategoriseLitterPage() {
         gpsLocation,
         callback: (meta) => setPhoto(meta)
       });
+    } else {
+      history.push(linkToNewPhoto());
     }
   });
 

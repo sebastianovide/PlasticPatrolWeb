@@ -27,12 +27,6 @@ export function isCordovaCameraImage(file: any): file is CordovaCameraImage {
 
 export type FileType = File | CordovaCameraImage;
 
-export type InitialState = {
-  isCordovaImage: undefined;
-  fromCamera: undefined;
-  file: undefined;
-};
-
 export type BrowserState = {
   isCordovaImage: false;
   fromCamera: boolean;
@@ -45,14 +39,14 @@ export type CordovaState = {
   file: CordovaCameraImage;
 };
 
-export type State = InitialState | BrowserState | CordovaState;
+export type State = Partial<BrowserState | CordovaState>;
 
 export type Action = { type: string; payload: any };
 
-export function isInitialState(state: State): state is InitialState {
-  return state.file === undefined;
-}
-
 export function isCordovaImageState(state: State): state is CordovaState {
   return isCordovaCameraImage(state.file);
+}
+
+export function isBrowserImageState(state: State): state is BrowserState {
+  return state.isCordovaImage === true;
 }
