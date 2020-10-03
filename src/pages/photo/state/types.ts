@@ -48,5 +48,5 @@ export function isCordovaImageState(state: State): state is CordovaState {
 }
 
 export function isBrowserImageState(state: State): state is BrowserState {
-  return state.isCordovaImage === true;
+  return state.isCordovaImage === false;
 }
