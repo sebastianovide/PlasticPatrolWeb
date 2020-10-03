@@ -5,7 +5,7 @@ import reducer from "./reducer";
 
 type Props = { children: React.ReactNode };
 
-const initialState = {};
+const initialState: State = {};
 
 const PhotoPageContext = React.createContext<{
   state: State;
