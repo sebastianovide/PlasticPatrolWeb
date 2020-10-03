@@ -5,7 +5,7 @@ import "firebase/database";
 import "firebase/firestore";
 import "firebase/performance";
 // import 'firebase/messaging';
-// import 'firebase/functions';
+import "firebase/functions";
 import "firebase/storage";
 import "firebase/analytics";
 
@@ -34,7 +34,7 @@ function isInIframe() {
 // iFrames may break things for security policies. We found it happens at least in safari.
 // more info in https://firebase.google.com/docs/firestore/manage-data/enable-offline
 if (!isInIframe()) {
-  firestore.enablePersistence().catch(function(err) {
+  firestore.enablePersistence().catch(function (err) {
     if (err.code === "failed-precondition") {
       console.error(
         "Multiple tabs open, persistence can only be enabled in one tab at a a time."

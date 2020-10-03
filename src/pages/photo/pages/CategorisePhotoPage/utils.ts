@@ -5,13 +5,18 @@ import config from "custom/config";
 
 import { device } from "utils";
 import { GPSLocation, LatLong } from "types/GPSLocation";
-import { ImageMetadata } from "../../state/types";
+import {
+  AndroidCordovaMetaData,
+  CordovaMetaData,
+  ImageMetadata,
+  iosCordovaMetaData
+} from "pages/photo/state/types";
 
 type Args = {
   fileOrFileName: File | string;
   fromCamera: boolean;
   gpsLocation?: GPSLocation;
-  cordovaMetadata?: any;
+  cordovaMetadata?: CordovaMetaData;
   callback: (result: ImageMetadata) => void;
 };
 
@@ -77,12 +82,12 @@ function doLoadPhoto({
 
 function getLocationFromExifMetadata(
   imgExif: any,
-  cordovaMetadata?: any
-): LatLong | undefined {
+  cordovaMetadata?: CordovaMetaData
+): LatLong | "unable to extract from file" {
   let latitude: number, longitude: number;
   try {
     //@ts-ignore
-    if (!window.cordova) {
+    if (!window.cordova || !cordovaMetadata) {
       // https://www.npmjs.com/package/dms2dec
       const lat = imgExif.GPSLatitude.split(",").map(Number);
       const latRef = imgExif.GPSLatitudeRef;
@@ -95,7 +100,7 @@ function getLocationFromExifMetadata(
       return { latitude, longitude };
     } else {
       if (device() === "iOS") {
-        const iosGPSMetadata = cordovaMetadata.GPS;
+        const iosGPSMetadata = (cordovaMetadata as iosCordovaMetaData).GPS;
         const latRef = iosGPSMetadata.LatitudeRef;
         const lonRef = iosGPSMetadata.LongitudeRef;
         const Latitude = iosGPSMetadata.Latitude;
@@ -104,7 +109,7 @@ function getLocationFromExifMetadata(
         longitude = lonRef === "E" ? Longitude : -Longitude;
         return { latitude, longitude };
       } else if (device() === "Android") {
-        const androidMetadata = cordovaMetadata;
+        const androidMetadata = cordovaMetadata as AndroidCordovaMetaData;
         const lat = androidMetadata.gpsLatitude;
         const latRef = androidMetadata.gpsLatitudeRef;
         const lon = androidMetadata.gpsLongitude;

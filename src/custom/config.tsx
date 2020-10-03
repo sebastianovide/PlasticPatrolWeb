@@ -96,7 +96,7 @@ const PAGES: { [pageName: string]: Page } = {
     label: "photos"
   },
   cleanUps: {
-    path: "https://plasticpatrol.co.uk/clean-ups/",
+    path: "https://planetpatrol.co/clean-ups/",
     visible: (user: User | undefined, online: boolean) => true,
     icon: <EventIcon />,
     label: "Clean-ups"

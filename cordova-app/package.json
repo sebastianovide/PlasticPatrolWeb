@@ -30,6 +30,10 @@
         "ANDROID_SCHEME": " ",
         "ANDROID_HOST": " ",
         "ANDROID_PATHPREFIX": "/"
+      },
+      "phonegap-plugin-barcodescanner": {},
+      "sentry-cordova": {
+        "SENTRY_ANDROID_SDK_VERSION": "1+"
       }
     }
   },
@@ -52,7 +56,9 @@
     "cordova-plugin-whitelist": "^1.3.4",
     "cordova-support-android-plugin": "1.0.1",
     "cordova-support-google-services": "^1.3.2",
-    "cordova-universal-links-plugin": "^1.2.1"
+    "cordova-universal-links-plugin": "^1.2.1",
+    "phonegap-plugin-barcodescanner": "^8.1.0",
+    "sentry-cordova": "^0.17.0"
   },
   "devDependencies": {
     "http-server": "^0.11.1",
