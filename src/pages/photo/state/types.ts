@@ -23,48 +23,50 @@ export type iosCordovaMetaData = {
 
 export type CordovaMetaData = AndroidCordovaMetaData | iosCordovaMetaData;
 
-export function isCordovaCameraImage(file: any): file is CordovaCameraImage {
-  return file && file.filename !== undefined;
-}
-
 export type FileType = File | CordovaCameraImage;
 
-export type BrowserState = {
-  isCordovaImage: false;
+function isCordovaCameraImageFile(file: any): file is CordovaCameraImage {
+  return file.filename !== undefined;
+}
+
+function isBrowserImageFile(file: any): file is File {
+  return file.name !== undefined;
+}
+
+export type ImageMetadata = Partial<{
+  imgSrc: string;
+  imgExif: any;
+  imgLocation: LatLong;
+  imgIptc: any;
+}>;
+
+export type BrowserFileState = {
   fromCamera: boolean;
   file: File;
 };
 
-export type CordovaState = {
-  isCordovaImage: true;
+export type CordovaFileState = {
   fromCamera: boolean;
   file: CordovaCameraImage;
 };
 
-export type RawData = Partial<BrowserState | CordovaState>;
+export type FileState = BrowserFileState | CordovaFileState;
 
-export type ImageMetadata = {
-  imgSrc: string | undefined;
-  imgExif: any;
-  imgLocation: LatLong | undefined;
-  imgIptc: any;
-};
+type BrowserState = BrowserFileState & ImageMetadata;
+type CordovaState = CordovaFileState & ImageMetadata;
 
-export type State = {
-  rawData: RawData;
-  processedData: ImageMetadata;
-};
+export type State = Partial<BrowserState | CordovaState>;
 
 export type Action = { type: string; payload?: any };
 
-export function isInitialState(rawData: RawData) {
-  return rawData.file === undefined;
+export function isCordovaImageState(
+  state: State
+): state is CordovaState & ImageMetadata {
+  return !!state.file && isCordovaCameraImageFile(state.file);
 }
 
-export function isCordovaImageState(rawData: RawData): rawData is CordovaState {
-  return isCordovaCameraImage(rawData.file);
-}
-
-export function isBrowserImageState(state: State): state is BrowserState {
-  return state.isCordovaImage === true;
+export function isBrowserImageState(
+  state: State
+): state is BrowserState & ImageMetadata {
+  return !!state.file && isBrowserImageFile(state.file);
 }

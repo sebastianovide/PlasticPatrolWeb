@@ -1,18 +1,18 @@
 import { LatLong } from "types/GPSLocation";
 
 import actionTypes from "./actionTypes";
-import { RawData, ImageMetadata } from "./types";
+import { FileType, ImageMetadata } from "./types";
 
-export function setRawData(payload: RawData) {
+export function setFile(file: FileType, fromCamera: boolean) {
   return {
-    type: actionTypes.SET_RAW_DATA,
-    payload
+    type: actionTypes.SET_FILE_STATE,
+    payload: { file, fromCamera }
   };
 }
 
-export function setProcessedData(payload: ImageMetadata) {
+export function setMetaData(payload: ImageMetadata) {
   return {
-    type: actionTypes.SET_PROCESSED_DATA,
+    type: actionTypes.SET_META_DATA,
     payload
   };
 }

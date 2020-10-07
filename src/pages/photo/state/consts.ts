@@ -1,12 +1,3 @@
-export const initialState = {
-  rawData: {
-    fromCamera: undefined,
-    file: undefined
-  },
-  processedData: {
-    imgSrc: undefined,
-    imgExif: undefined,
-    imgLocation: undefined,
-    imgIptc: undefined
-  }
-};
+import { State } from "./types";
+
+export const initialState: State = {};

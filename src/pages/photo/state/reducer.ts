@@ -4,20 +4,16 @@ import { initialState } from "./consts";
 
 export default function reducer(state: State, action: Action) {
   switch (action.type) {
-    case actionTypes.SET_RAW_DATA:
+    case actionTypes.SET_FILE_STATE:
       return {
         ...state,
-        rawData: action.payload
+        ...action.payload
       };
-    case actionTypes.SET_PROCESSED_DATA: {
-      return { ...state, processedData: action.payload };
+    case actionTypes.SET_META_DATA: {
+      return { ...state, ...action.payload };
     }
     case actionTypes.SET_LOCATION: {
-      const { ...newState } = state;
-
-      newState.processedData.imgLocation = action.payload;
-
-      return newState;
+      return { ...state, ...action.payload };
     }
     case actionTypes.RESET_STATE: {
       return initialState;

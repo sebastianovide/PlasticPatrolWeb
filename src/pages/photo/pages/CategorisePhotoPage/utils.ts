@@ -122,11 +122,11 @@ function getLocationFromExifMetadata(
           longitude
         };
       } else {
-        return undefined;
+        return "unable to extract from file";
       }
     }
   } catch (e) {
     console.error(`Error extracting GPS from file: ${e}`);
-    return undefined;
+    return "unable to extract from file";
   }
 }

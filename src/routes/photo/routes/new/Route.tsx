@@ -4,7 +4,7 @@ import { Route, useHistory } from "react-router-dom";
 import { linkToTutorialPage } from "routes/tutorial/links";
 
 import AddPhotoDialog from "pages/photo/components/AddPhotoDialog";
-import { usePhotoPageDispatch, setRawData, FileType } from "pages/photo/state";
+import { usePhotoPageDispatch, setFile, FileType } from "pages/photo/state";
 import { NewPhotoPage } from "pages/photo";
 
 import { linkToCategorise } from "../categorise/links";
@@ -21,12 +21,7 @@ export default function NewPhotoRoute() {
   const history = useHistory();
   const dispatch = usePhotoPageDispatch();
   const handlePhotoSelect = (file: FileType, fromCamera: boolean) => {
-    dispatch(
-      setRawData({
-        file,
-        fromCamera
-      })
-    );
+    dispatch(setFile(file, fromCamera));
     history.push(linkToCategorise());
   };
   const [inputRef, setInputRef] = useState<HTMLInputElement | null>(null);

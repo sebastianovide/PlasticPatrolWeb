@@ -14,9 +14,12 @@ import UploadPhotoDialog from "pages/photo/components/UploadPhotoDialog";
 import {
   usePhotoPageState,
   usePhotoPageDispatch,
-  setProcessedData
+  setMetaData
 } from "pages/photo/state";
-import { isCordovaImageState, isInitialState } from "pages/photo/state/types";
+import {
+  isBrowserImageState,
+  isCordovaImageState
+} from "pages/photo/state/types";
 
 import useEffectOnMount from "hooks/useEffectOnMount";
 
@@ -68,34 +71,34 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function CategoriseLitterPage() {
-  const { rawData, processedData } = usePhotoPageState();
+  const state = usePhotoPageState();
   const dispatch = usePhotoPageDispatch();
 
   const history = useHistory();
   const gpsLocation = useGPSLocation();
 
   useEffectOnMount(() => {
-    if (processedData.imgSrc) {
+    if (state.imgSrc) {
       // do nothing - this should only be set when coming back from the geotag page
-    } else if (isInitialState(rawData)) {
-      history.push(linkToNewPhoto());
-    } else if (isCordovaImageState(rawData)) {
-      const { file, fromCamera } = rawData;
+    } else if (isCordovaImageState(state)) {
+      const { file, fromCamera } = state;
       loadPhoto({
         fileOrFileName: file.filename,
         fromCamera,
         gpsLocation,
         cordovaMetadata: JSON.parse(file.json_metadata),
-        callback: (metadata) => dispatch(setProcessedData(metadata))
+        callback: (metadata) => dispatch(setMetaData(metadata))
       });
-    } else {
-      const { file, fromCamera } = rawData;
+    } else if (isBrowserImageState(state)) {
+      const { file, fromCamera } = state;
       loadPhoto({
         fileOrFileName: file,
         fromCamera,
         gpsLocation,
-        callback: (metadata) => dispatch(setProcessedData(metadata))
+        callback: (metadata) => dispatch(setMetaData(metadata))
       });
+    } else {
+      history.push(linkToNewPhoto());
     }
   });
 
@@ -104,13 +107,13 @@ export default function CategoriseLitterPage() {
 
 export function CategoriseLitterPageWithFileInfo() {
   const history = useHistory();
-  const { processedData } = usePhotoPageState();
+  const state = usePhotoPageState();
 
   useEffect(() => {
-    if (processedData.imgSrc && !processedData.imgLocation) {
+    if (state.imgSrc && !state.imgLocation) {
       history.replace(linkToGeotag());
     }
-  }, [processedData, history]);
+  }, [state, history]);
 
   const styles = useStyles();
   const [addingNewItem, setAddingNewItem] = useState(false);
@@ -154,7 +157,7 @@ export function CategoriseLitterPageWithFileInfo() {
     <>
       <div className={styles.wrapper}>
         <img
-          src={processedData && processedData.imgSrc}
+          src={state && state.imgSrc}
           className={styles.img}
           onClick={() => setAddingNewItem(true)}
           alt=""
@@ -218,10 +221,10 @@ export function CategoriseLitterPageWithFileInfo() {
 
       <Route path={linkToUploadPhotoDialog()}>
         <UploadPhotoDialog
-          imgSrc={processedData && processedData.imgSrc}
+          imgSrc={state && state.imgSrc}
           online
           items={items}
-          imgLocation={processedData && processedData.imgLocation}
+          imgLocation={state && state.imgLocation}
           onCancelUpload={() =>
             history.push(history.location.pathname, history.location.state)
           }
