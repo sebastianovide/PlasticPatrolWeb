@@ -33,12 +33,12 @@ function isBrowserImageFile(file: any): file is File {
   return file.name !== undefined;
 }
 
-export type ImageMetadata = Partial<{
+export type ImageMetaData = {
   imgSrc: string;
   imgExif: any;
   imgLocation: LatLong;
   imgIptc: any;
-}>;
+};
 
 export type BrowserFileState = {
   fromCamera: boolean;
@@ -52,21 +52,28 @@ export type CordovaFileState = {
 
 export type FileState = BrowserFileState | CordovaFileState;
 
-type BrowserState = BrowserFileState & ImageMetadata;
-type CordovaState = CordovaFileState & ImageMetadata;
+type BrowserState = BrowserFileState;
+type CordovaState = CordovaFileState;
 
-export type State = Partial<BrowserState | CordovaState>;
+export type State = Partial<BrowserState | CordovaState> | ImageMetaData;
 
 export type Action = { type: string; payload?: any };
 
-export function isCordovaImageState(
-  state: State
-): state is CordovaState & ImageMetadata {
-  return !!state.file && isCordovaCameraImageFile(state.file);
+export function isImageMetaState(state: State): state is ImageMetaData {
+  // @ts-ignore
+  return !!state.imgSrc;
 }
 
-export function isBrowserImageState(
-  state: State
-): state is BrowserState & ImageMetadata {
-  return !!state.file && isBrowserImageFile(state.file);
+export function isCordovaImageState(state: State): state is CordovaState {
+  return (
+    !isImageMetaState(state) &&
+    !!state.file &&
+    isCordovaCameraImageFile(state.file)
+  );
+}
+
+export function isBrowserImageState(state: State): state is BrowserState {
+  return (
+    !isImageMetaState(state) && !!state.file && isBrowserImageFile(state.file)
+  );
 }

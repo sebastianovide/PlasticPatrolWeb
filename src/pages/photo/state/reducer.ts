@@ -5,12 +5,10 @@ import { initialState } from "./consts";
 export default function reducer(state: State, action: Action) {
   switch (action.type) {
     case actionTypes.SET_FILE_STATE:
-      return {
-        ...state,
-        ...action.payload
-      };
+      return action.payload;
+
     case actionTypes.SET_META_DATA: {
-      return { ...state, ...action.payload };
+      return action.payload;
     }
     case actionTypes.SET_LOCATION: {
       return { ...state, imgLocation: action.payload };

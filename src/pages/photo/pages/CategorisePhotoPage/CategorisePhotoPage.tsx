@@ -18,6 +18,7 @@ import {
 } from "pages/photo/state";
 import {
   isBrowserImageState,
+  isImageMetaState,
   isCordovaImageState
 } from "pages/photo/state/types";
 
@@ -78,7 +79,7 @@ export default function CategoriseLitterPage() {
   const gpsLocation = useGPSLocation();
 
   useEffectOnMount(() => {
-    if (state.imgSrc) {
+    if (isImageMetaState(state)) {
       // do nothing - this should only be set when coming back from the geotag page
     } else if (isCordovaImageState(state)) {
       const { file, fromCamera } = state;
@@ -110,7 +111,7 @@ export function CategoriseLitterPageWithFileInfo() {
   const state = usePhotoPageState();
 
   useEffect(() => {
-    if (state.imgSrc && !state.imgLocation) {
+    if (isImageMetaState(state) && !state.imgLocation) {
       history.replace(linkToGeotag());
     }
   }, [state, history]);
@@ -157,7 +158,7 @@ export function CategoriseLitterPageWithFileInfo() {
     <>
       <div className={styles.wrapper}>
         <img
-          src={state && state.imgSrc}
+          src={isImageMetaState(state) ? state.imgSrc : ""}
           className={styles.img}
           onClick={() => setAddingNewItem(true)}
           alt=""
@@ -221,10 +222,10 @@ export function CategoriseLitterPageWithFileInfo() {
 
       <Route path={linkToUploadPhotoDialog()}>
         <UploadPhotoDialog
-          imgSrc={state && state.imgSrc}
+          imgSrc={isImageMetaState(state) ? state.imgSrc : ""}
           online
           items={items}
-          imgLocation={state && state.imgLocation}
+          imgLocation={isImageMetaState(state) ? state.imgLocation : null}
           onCancelUpload={() =>
             history.push(history.location.pathname, history.location.state)
           }

@@ -1,7 +1,7 @@
 import { LatLong } from "types/GPSLocation";
 
 import actionTypes from "./actionTypes";
-import { FileType, ImageMetadata } from "./types";
+import { FileType, ImageMetaData } from "./types";
 
 export function setFile(file: FileType, fromCamera: boolean) {
   return {
@@ -10,7 +10,7 @@ export function setFile(file: FileType, fromCamera: boolean) {
   };
 }
 
-export function setMetaData(payload: ImageMetadata) {
+export function setMetaData(payload: ImageMetaData) {
   return {
     type: actionTypes.SET_META_DATA,
     payload

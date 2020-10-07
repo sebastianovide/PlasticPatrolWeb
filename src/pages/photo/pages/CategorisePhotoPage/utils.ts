@@ -8,7 +8,7 @@ import { GPSLocation, LatLong } from "types/GPSLocation";
 import {
   AndroidCordovaMetaData,
   CordovaMetaData,
-  ImageMetadata,
+  ImageMetaData,
   iosCordovaMetaData
 } from "pages/photo/state/types";
 
@@ -17,7 +17,7 @@ type Args = {
   fromCamera: boolean;
   gpsLocation?: GPSLocation;
   cordovaMetadata?: CordovaMetaData;
-  callback: (result: ImageMetadata) => void;
+  callback: (result: ImageMetaData) => void;
 };
 
 export default function loadPhoto(args: Args): void {
