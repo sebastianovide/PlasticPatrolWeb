@@ -13,7 +13,7 @@ export default function reducer(state: State, action: Action) {
       return { ...state, ...action.payload };
     }
     case actionTypes.SET_LOCATION: {
-      return { ...state, ...action.payload };
+      return { ...state, imgLocation: action.payload };
     }
     case actionTypes.RESET_STATE: {
       return initialState;

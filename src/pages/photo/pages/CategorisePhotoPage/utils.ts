@@ -83,7 +83,7 @@ function doLoadPhoto({
 function getLocationFromExifMetadata(
   imgExif: any,
   cordovaMetadata?: CordovaMetaData
-): LatLong | "unable to extract from file" {
+): LatLong | null {
   let latitude: number, longitude: number;
   try {
     //@ts-ignore
@@ -122,11 +122,11 @@ function getLocationFromExifMetadata(
           longitude
         };
       } else {
-        return "unable to extract from file";
+        return null;
       }
     }
   } catch (e) {
     console.error(`Error extracting GPS from file: ${e}`);
-    return "unable to extract from file";
+    return null;
   }
 }
