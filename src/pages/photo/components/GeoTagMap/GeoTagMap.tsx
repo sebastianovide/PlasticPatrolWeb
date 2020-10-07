@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 
 import mapboxgl from "mapbox-gl";
 import useEffectOnMount from "hooks/useEffectOnMount";
@@ -28,9 +28,6 @@ type Props = {
 export default function GeoTagMap({ onLocationUpdate }: Props) {
   const mapRef = useRef(null);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [map, setMap] = useState<any>(null);
-
   const initialLocation = useGPSLocation();
   const styles = useStyles();
 
@@ -52,10 +49,6 @@ export default function GeoTagMap({ onLocationUpdate }: Props) {
       zoom: config.ZOOM_FLYTO,
       style: "mapbox://styles/mapbox/streets-v11",
       center
-    });
-
-    map.on("load", () => {
-      setMap(map);
     });
 
     map.on("move", () => {
