@@ -27,7 +27,7 @@ export default function GeoTagPhotoPage() {
   return (
     <div className={styles.wrapper}>
       <Typography>
-        Please drag to the location where you collected your litter
+        Please drag the pin to the location you found the litter
       </Typography>
       <GeoTagMap onLocationUpdate={onLocationUpdate} />
       <Button
