@@ -12,13 +12,14 @@
   },
   "dependencies": {
     "@google-cloud/pubsub": "^1.1.5",
+    "axios": "^0.19.2",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "firebase-admin": "^8.12.1",
     "firebase-functions": "^3.3.0",
     "gm": "^1.23.1",
     "json2csv": "^4.5.4",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "mkdirp": "^0.5.1",
     "mkdirp-promise": "^5.0.1"
   },

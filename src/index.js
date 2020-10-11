@@ -25,16 +25,8 @@ import { useConfig } from "./providers/ConfigProvider";
 import { useOnline } from "./providers/OnlineProvider";
 import UserProvider, { useUser } from "./providers/UserProvider";
 import StatsProvider from "./providers/StatsProvider";
-import * as Sentry from "@sentry/browser";
 import { dbFirebase } from "features/firebase";
 import {useChallenges} from "./providers/ChallengesProvider";
-
-if (process.env.NODE_ENV !== "development") {
-  Sentry.init({
-    dsn:
-      "https://41de3daa1d7542bd8c9204365283e1b2@o404007.ingest.sentry.io/5267230"
-  });
-}
 
 serviceWorker.register();
 
@@ -86,26 +78,18 @@ const Wrapper = () => {
     return () => dbFirebase.disconnect();
   }, []);
 
-  const [handledPendingRedirect, setHandledPendingRedirect] = useState(false);
   return (
-    <>
-      <LoginFirebase
-        open={!handledPendingRedirect && isPendingRedirect()}
-        handleClose={() => {}}
-        onSignIn={() => setHandledPendingRedirect(true)}
-      />
-      <App
-        config={config}
-        gpsLocation={gpsLocation}
-        geojson={geojson}
-        reloadPhotos={reloadPhotos}
-        online={online}
-        sponsorImage={sponsorImage}
-        selectedFeature={selectedFeature}
-        user={user}
-        challenges={challenges}
-      />
-    </>
+    <App
+      config={config}
+      gpsLocation={gpsLocation}
+      geojson={geojson}
+      reloadPhotos={reloadPhotos}
+      online={online}
+      sponsorImage={sponsorImage}
+      selectedFeature={selectedFeature}
+      user={user}
+      challenges={challenges}
+    />
   );
 };
 

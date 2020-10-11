@@ -21,6 +21,18 @@ export const updateStatsWithPieces = (
   }
 };
 
+/*
+ * Use the display name on the user record itself if present,
+ * otherwise just use the UID
+ */
+const getDisplayName = (user: admin.auth.UserRecord): string => {
+  if (user.displayName) {
+    return user.displayName;
+  } else {
+    return user.uid;
+  }
+};
+
 /**
  * compute the stats from the given data about users, groups and photos
  */
@@ -33,7 +45,7 @@ export const computeStats = (
   const users: UserStats[] = rawUsers.map((user) => {
     const userShort = {
       uid: user.uid,
-      displayName: user.displayName || "",
+      displayName: getDisplayName(user),
       pieces: 0,
       totalUploaded: 0,
       uploaded: 0,
@@ -110,7 +122,6 @@ export const computeStats = (
 
         if (owner) {
           updateStatsWithPieces(owner, pieces);
-          owner.displayName = owner.displayName || "";
         }
       } else {
         stats.rejected++;

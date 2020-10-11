@@ -3,12 +3,20 @@ const yargs = require("yargs");
 const { PubSub } = require("@google-cloud/pubsub");
 const prompt = require("prompt-sync")();
 
-const COMPUTE_STATS_URL =
+const COMPUTE_STATS_URL_DEV =
   "https://us-central1-plastic-patrol-dev-722eb.cloudfunctions.net/computeStats";
-const FETCH_STATS_URL =
+const FETCH_STATS_URL_DEV =
   "https://us-central1-plastic-patrol-dev-722eb.cloudfunctions.net/api/stats";
+const COMPUTE_STATS_URL =
+  "https://us-central1-plastic-patrol-fd3b3.cloudfunctions.net/computeStats";
+const FETCH_STATS_URL =
+  "https://us-central1-plastic-patrol-fd3b3.cloudfunctions.net/api/stats";
 
 const argv = yargs
+  .option("prod", {
+    description: "Get data from production",
+    type: "boolean"
+  })
   .option("save", {
     description: "Save the stats to firebase",
     type: "boolean"
@@ -39,10 +47,17 @@ const argv = yargs
   }
 
   const result = await fetch(
-    argv.compute ? COMPUTE_STATS_URL : FETCH_STATS_URL
+    argv.compute
+      ? argv.prod
+        ? COMPUTE_STATS_URL
+        : COMPUTE_STATS_URL_DEV
+      : argv.prod
+      ? FETCH_STATS_URL
+      : FETCH_STATS_URL_DEV
   );
   const stats = await result.json();
-  console.log(stats);
+  console.log(JSON.stringify(stats));
+
   if (argv.save !== true) {
     return;
   }

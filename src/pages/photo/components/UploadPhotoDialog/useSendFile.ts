@@ -73,10 +73,11 @@ async function sendFile({
   gtagEvent("Upload", "Photo");
 
   let totalCount: number = 0;
-  const transformedItems = items.map(({ quantity, type, brand }) => {
+  const transformedItems = items.map(({ quantity, type, brand, barcode }) => {
     totalCount = totalCount + quantity;
     return {
       brand,
+      barcode: barcode || null,
       number: quantity,
       leafkey: type && type.leafKey,
       label: type && type.label
@@ -95,7 +96,6 @@ async function sendFile({
   } catch (error) {
     console.error(error);
 
-    // debugger
     const extraInfo =
       error.message === "storage/canceled"
         ? ""
@@ -108,8 +108,7 @@ async function sendFile({
 
   setUploadTask(uploadTask);
 
-  uploadTask.on(
-    "state_changed",
+  uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
     (snapshot) => {
       const sendingProgress = Math.ceil(
         (snapshot.bytesTransferred / snapshot.totalBytes) * 98 + 1
@@ -126,22 +125,24 @@ async function sendFile({
         default:
           console.log(snapshot.state);
       }
-    },
-    (error) => {
-      // @ts-ignore
-      if (error.code === "storage/canceled") {
-        onCancelUpload();
-      } else {
-        console.log(error);
-        const extraInfo =
-          error.message === "storage/canceled"
-            ? ""
-            : `Try again (${error.message})`;
-        throw Error(`Photo upload was canceled. ${extraInfo}`);
-      }
-    },
-    () => {
+    });
+
+  await uploadTask.then(() => {
       history.push(linkToUploadSuccess(totalCount as any));
     }
   );
+
+  await uploadTask.catch((error) => {
+    // @ts-ignore
+    if (error.code === "storage/canceled") {
+      onCancelUpload();
+    } else {
+      console.log(error);
+      const extraInfo =
+        error.message === "storage/canceled"
+          ? ""
+          : `Try again (${error.message})`;
+      throw Error(`Photo upload was canceled. ${extraInfo}`);
+    }
+  });
 }
