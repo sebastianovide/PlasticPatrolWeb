@@ -9,6 +9,7 @@ import HelpIcon from "@material-ui/icons/Help";
 import EventIcon from "@material-ui/icons/Event";
 import FeedbackIcon from "@material-ui/icons/Feedback";
 import LibraryBooksIcon from "@material-ui/icons/LibraryBooks";
+import StarOutlinedIcon from "@material-ui/icons/StarOutlined";
 
 import styles from "standard.scss";
 
@@ -116,6 +117,12 @@ const PAGES: { [pageName: string]: Page } = {
     path: "/groupadd",
     label: "Create a Group",
     visible: (user, online) => true
+  },
+  challenges: {
+    path: "/challenges",
+    label: "Challenges",
+    visible: (user, online) => true,
+    icon: <StarOutlinedIcon />
   }
 };
 
@@ -133,6 +140,7 @@ export interface Metadata {
 export interface Config {
   PAGES: { [pageName: string]: Page };
   ENABLE_GROUPS: boolean;
+  ENABLE_CHALLENGES: boolean;
   metadata: Metadata;
   MAX_IMAGE_SIZE: number;
   THEME: any;
@@ -192,6 +200,7 @@ const config: Config = {
   PAGES,
   ENABLE_GRAVATAR_PROFILES: true, //To update user-profile from Gravatar, value: true or false.
   ENABLE_GROUPS: false,
+  ENABLE_CHALLENGES: false,
   SECURITY: {
     UPLOAD_REQUIRES_LOGIN: true
   },
