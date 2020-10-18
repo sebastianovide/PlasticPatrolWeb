@@ -202,15 +202,17 @@ export default function CreateChallenge({}: Props) {
     const desktopPhotoRef = createRef<HTMLInputElement>();
     const gpsLocation = useGPSLocation();
     const handlePhotoSelect = (image: File | CordovaCameraImage, fromCamera: boolean) => {
-        const fileState = isCordovaCameraImage(image) ?
-            {
-                filePath: (image as CordovaCameraImage).filename,
-                cordovaMetadata: JSON.parse((image as CordovaCameraImage).json_metadata as string),
-                fromCamera: fromCamera
-            } :
-            {file: image, fromCamera: fromCamera};
+      const fileState = isCordovaCameraImage(image)
+      ? {
+          fileOrFileName: (image as CordovaCameraImage).filename,
+          cordovaMetadata: JSON.parse(
+            (image as CordovaCameraImage).json_metadata as string
+          ),
+          fromCamera: fromCamera
+        }
+      : { fileOrFileName: image, fromCamera: fromCamera };
 
-        loadPhoto({fileState, fromCamera, gpsLocation, callback: setCoverPhoto});
+        loadPhoto({...fileState, fromCamera, gpsLocation, callback: setCoverPhoto});
     };
 
     const challengeReady = isChallengeReady(name, description, targetPieces, coverPhoto, startDate, endDate);
