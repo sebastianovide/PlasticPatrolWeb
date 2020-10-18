@@ -25,11 +25,12 @@ const useStyles = makeStyles((theme) => ({
     memberName: {
         flex: 1,
         flexGrow: 1,
-        paddingTop: `${theme.spacing(1)}px`,
+        paddingTop: `${theme.spacing(0.5)}px`,
         overflow: "hidden",
     },
     approveButton: {
         flex: 0,
+        marginRight: `${theme.spacing(1)}px`,
     },
     rejectButton: {
         flex: 0,
@@ -55,7 +56,7 @@ export default function ManagePendingMembers({challenges}: Props) {
     const handleBack = () => history.goBack();
 
     return (
-        <PageWrapper label={"Approve challenge members"}
+        <PageWrapper label={"Manage members"}
                      navigationHandler={{handleBack}}
                      className={classes.wrapper}>
             {challenge.pendingUserIds.map(pendingUser =>
@@ -66,6 +67,7 @@ export default function ManagePendingMembers({challenges}: Props) {
                   <div className={classes.approveButton}>
                       <Button onClick={() => approveNewMember(pendingUser.uid, challenge.id)}
                               color="primary"
+                              size="small"
                               variant="contained">
                           Approve
                       </Button>
@@ -73,6 +75,7 @@ export default function ManagePendingMembers({challenges}: Props) {
                   <div className={classes.rejectButton}>
                       <Button onClick={() => rejectNewMember(pendingUser.uid, challenge.id)}
                               color="secondary"
+                              size="small"
                               variant="contained">
                           Reject
                       </Button>

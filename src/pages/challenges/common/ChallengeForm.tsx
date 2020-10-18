@@ -14,7 +14,7 @@ import {useHistory} from "react-router";
 
 const CHALLENGE_NAME_LIMIT = 100;
 const CHALLENGE_DESCRIPTION_LIMIT = 300;
-const CHALLENGE_PIECE_TARGET_LIMIT = 1000000;
+const CHALLENGE_PIECE_TARGET_LIMIT = 10000000;
 
 const useStyles = makeStyles((theme) => ({
   form: {
@@ -62,11 +62,14 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 
+  pieceTargetWrapper: {
+    padding: `${theme.spacing(0.5)}px 0px`,
+  },
+
   pieceTarget: {
     border: "none",
     borderRadius: "5px",
-    padding: "5px",
-    marginBottom: "10px",
+    padding: `${theme.spacing(0.5)}px 0px`,
     background: styles.lightGrey,
     fontSize: 16,
     boxSizing: "border-box",
@@ -80,6 +83,7 @@ const useStyles = makeStyles((theme) => ({
   coverPhotoWrapper: {
     width: "100%",
     textAlign: "center",
+    padding: `${theme.spacing(0.5)}px 0px`,
   },
 
   coverPhotoPreview: {
@@ -88,31 +92,21 @@ const useStyles = makeStyles((theme) => ({
   },
 
   addPhotoButton: {
-    marginBottom: "10px",
+    margin: `${theme.spacing(0.5)}px 0px`,
   },
 
-  datesWrapper: {
-    display: "flex",
-    marginBottom: "10px",
+  date: {
+    padding: `${theme.spacing(0.5)}px 0px`,
   },
 
-  startDate: {
-    flex: 1,
-  },
-
-  endDate: {
-    flex: 1,
-    marginLeft: 5,
-    marginRight: 5,
-  },
-
-  dateLabel: {
+  fieldLabel: {
     color: styles.mediumGrey,
     fontSize: 14,
   },
 
   dateSummary: {
     color: theme.palette.primary.main,
+    padding: `${theme.spacing(0.5)}px 0px`,
     fontSize: 14,
   },
 
@@ -135,7 +129,7 @@ const useStyles = makeStyles((theme) => ({
   },
 
   privateToggleWrapper: {
-    margin: "10px 0",
+    padding: `${theme.spacing(0.5)}px 0px`,
   },
 }));
 
@@ -149,7 +143,7 @@ function validateStringInput(input: string, lengthLimit: number, setter: (newVal
 }
 
 function validateNumberInput(input: string, limit: number, setter: (newValue: number) => void) {
-  if ( !/^[1-9]\d*$/.test(input) || parseInt(input) > limit) {
+  if (parseInt(input) > limit) {
     return;
   }
 
@@ -240,13 +234,16 @@ export default function ChallengeForm({initialData, refreshCounter, onChallengeD
       />
       <div className={classes.inputLengthTracker}>{description.length}/{CHALLENGE_DESCRIPTION_LIMIT}</div>
 
-      <div className={classes.dateLabel}>Target pieces to collect</div>
-      <input
-        className={classes.pieceTarget}
-        type="number"
-        value={targetPieces.toString()}
-        onChange={(e) => validateNumberInput(e.target.value, CHALLENGE_PIECE_TARGET_LIMIT, setTargetPieces)}
-      />
+      <div className={classes.pieceTargetWrapper}>
+        <div className={classes.fieldLabel}>Target pieces to collect</div>
+        <input
+          className={classes.pieceTarget}
+          type="number"
+          value={targetPieces.toString()}
+          onChange={(e) => validateNumberInput(e.target.value, CHALLENGE_PIECE_TARGET_LIMIT, setTargetPieces)}
+        />
+      </div>
+
 
       {coverPhoto &&
       <div className={classes.coverPhotoWrapper}>
@@ -271,28 +268,21 @@ export default function ChallengeForm({initialData, refreshCounter, onChallengeD
                         handlePhotoSelect={handlePhotoSelect}/>
       </Route>
 
-      <div className={classes.datesWrapper}>
-        <div className={classes.startDate}>
-          <div className={classes.dateLabel}>Start date</div>
-          <input className={classes.dateInput}
-                 type="date"
-                 value={startDate.toISOString().split('T')[0]}
-                 onChange={(e) => setStartDate(new Date(e.currentTarget.value))}/>
-        </div>
-        <div className={classes.endDate}>
-          <div className={classes.dateLabel}>End date</div>
-          <input className={classes.dateInput}
-                 type="date"
-                 value={endDate.toISOString().split('T')[0]}
-                 onChange={(e) => setEndDate(new Date(e.currentTarget.value))}/>
-        </div>
+      <div className={classes.date}>
+        <div className={classes.fieldLabel}>Start date</div>
+        <input className={classes.dateInput}
+               type="date"
+               value={startDate.toISOString().split('T')[0]}
+               onChange={(e) => setStartDate(new Date(e.currentTarget.value))}/>
       </div>
 
-      {!isSameDay(startDate, today) && startDate < today &&
-      <div className={classes.inputWarning}>
-        Start date cannot be in the past
+      <div className={classes.date}>
+        <div className={classes.fieldLabel}>End date</div>
+        <input className={classes.dateInput}
+               type="date"
+               value={endDate.toISOString().split('T')[0]}
+               onChange={(e) => setEndDate(new Date(e.currentTarget.value))}/>
       </div>
-      }
 
       {!isSameDay(startDate, today) && endDate < startDate &&
       <div className={classes.inputWarning}>

@@ -69,8 +69,6 @@ export function isChallengeReady(challengeConfigurableData: ChallengeConfigurabl
       && challengeConfigurableData.targetPieces > 0
       // Has selected a cover photo
       && challengeConfigurableData.coverPhoto !== undefined
-      // Has a start date set from today onwards
-      && challengeConfigurableData.startTime > today.getTime()
       // Has an end date set after the start date
       && challengeConfigurableData.endTime > challengeConfigurableData.startTime;
 }

@@ -39,22 +39,12 @@ export default function CreateChallenge({user}: Props) {
                      refreshCounter={0}
                      onChallengeDataUpdated={setChallengeFormData}/>
       <Button className={styles.submitButton}
-              // onClick={() => history.push(linkToSubmitChallengeDialog())}
               onClick={() => createChallenge(user.id, challengeFormData)}
               color="primary"
               variant="contained"
               disabled={!challengeReady}>
         Create challenge
       </Button>
-      {/*{challengeFormData && (*/}
-      {/*  <Route path={linkToSubmitChallengeDialog()}>*/}
-      {/*    <UploadChallengeDialog*/}
-      {/*      challengeCreateData={challengeFormData}*/}
-      {/*      onCancelUpload={() => {*/}
-      {/*      }}/>*/}
-      {/*  </Route>*/}
-      {/*)}*/}
-
     </PageWrapper>
   );
 }

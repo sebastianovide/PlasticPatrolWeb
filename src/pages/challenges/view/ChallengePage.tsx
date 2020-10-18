@@ -22,9 +22,10 @@ const useStyles = makeStyles((theme) => ({
 
     pictureWrapper: {
         flex: "0 0 auto",
-        height: "200px",
+        height: "150px",
         overflow: "hidden",
-        textAlign: "center"
+        textAlign: "center",
+        marginBottom: `${theme.spacing(0.5)}px`,
     },
 
     picture: {
@@ -40,12 +41,12 @@ const useStyles = makeStyles((theme) => ({
 
     description: {
         flex: "1 1 auto",
-        padding: `${theme.spacing(1)}px ${theme.spacing(1.5)}px`,
+        padding: `${theme.spacing(0.5)}px ${theme.spacing(1.5)}px`,
         fontSize: 13,
     },
 
     progressWrapper: {
-        padding: `${theme.spacing(1)}px ${theme.spacing(1.5)}px`,
+        padding: `${theme.spacing(0.5)}px ${theme.spacing(1.5)}px`,
     },
 
     progressText: {
@@ -57,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
     buttonsWrapper: {
         marginLeft: `${theme.spacing(1)}px`,
         marginRight: `${theme.spacing(1)}px`,
-        paddingBottom: `${theme.spacing(2)}px`,
+        marginBottom: `${theme.spacing(1)}px`,
         display: "flex",
         flexDirection: "row",
         justifyContent: "center",
@@ -102,6 +103,10 @@ export default function ChallengePage({user, challenges}: Props) {
 
     const usersLeaderboard: UserLeaderboardData[] = challenge.totalUserPieces;
 
+    const shareChallenge = () => {
+
+    };
+
     return (
         <PageWrapper label={challenge.name}
                      navigationHandler={{handleBack}}
@@ -125,6 +130,7 @@ export default function ChallengePage({user, challenges}: Props) {
                       <div className={classes.challengeButton}>
                           <Button onClick={() => joinChallenge(user.id, challenge.id)}
                                   color="primary"
+                                  size="small"
                                   variant="contained">
                               Join challenge
                           </Button>
@@ -132,9 +138,9 @@ export default function ChallengePage({user, challenges}: Props) {
                     )}
                     {userLoggedIn && userInChallenge && (
                       <div className={classes.challengeButton}>
-                          <Button onClick={() => {
-                          }}
+                          <Button onClick={shareChallenge}
                                   color="primary"
+                                  size="small"
                                   variant="contained">
                               Share challenge
                           </Button>
@@ -144,6 +150,7 @@ export default function ChallengePage({user, challenges}: Props) {
                       <div className={classes.challengeButton}>
                           <Button onClick={() => {history.push(likeToManagePendingMembers(challengeId))}}
                                   color="primary"
+                                  size="small"
                                   variant="contained">
                               Manage members
                           </Button>
@@ -153,6 +160,7 @@ export default function ChallengePage({user, challenges}: Props) {
                       <div className={classes.challengeButton}>
                           <Button onClick={() => {history.push(linkToEditChallenge(challengeId))}}
                                   color="primary"
+                                  size="small"
                                   variant="contained">
                               Edit challenge
                           </Button>

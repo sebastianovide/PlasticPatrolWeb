@@ -2,6 +2,7 @@ import { Challenge, ChallengeConfigurableData, ChallengeId } from "../types/Chal
 import exampleImage from "assets/images/example.jpeg";
 import { ImageMetadata } from "../types/Photo";
 import User from "../types/User";
+import { LatLong } from "../types/GPSLocation";
 
 export const FakeChallenge: Challenge = {
     id: "123",
@@ -10,7 +11,10 @@ export const FakeChallenge: Challenge = {
     coverPhoto: {
         imgSrc: exampleImage,
         imgExif: undefined,
-        imgLocation: "not online",
+        imgLocation: {
+            latitude: 51.504896,
+            longitude: -0.172558
+        },
         imgIptc: undefined
     } as ImageMetadata,
     startTime: 1602958418439,
