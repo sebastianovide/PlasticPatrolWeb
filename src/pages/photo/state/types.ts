@@ -25,7 +25,9 @@ export type CordovaMetaData = AndroidCordovaMetaData | iosCordovaMetaData;
 
 export type FileType = File | CordovaCameraImage;
 
-function isCordovaCameraImageFile(file: any): file is CordovaCameraImage {
+export function isCordovaCameraImageFile(
+  file: any
+): file is CordovaCameraImage {
   return file.filename !== undefined;
 }
 

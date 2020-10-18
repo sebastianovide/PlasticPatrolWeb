@@ -1,4 +1,3 @@
-import { LatLong } from "types/GPSLocation";
 import { Map } from "immutable";
 import Geojson from "./Geojson";
 import Feature from "./Feature";
@@ -23,3 +22,11 @@ export type PhotosContainer = {
 };
 
 export default Photo;
+
+// need to resolve
+
+export { isCordovaCameraImageFile as isCordovaCameraImage } from "pages/photo/state/types";
+export type {
+  CordovaCameraImage,
+  ImageMetaData as ImageMetadata
+} from "pages/photo/state/types";

@@ -32,7 +32,11 @@ export default function loadPhoto(args: Args): void {
         const imgExif = data.exif ? data.exif.getAll() : null;
         //@ts-ignore
         const imgIptc = data.iptc ? data.iptc.getAll() : null;
-        doLoadPhoto({ imgExif, imgIptc, ...args });
+        doLoadPhoto({
+          imgExif,
+          imgIptc,
+          ...args
+        });
       },
       {
         maxMetaDataSize: 262144,
@@ -52,7 +56,11 @@ function doLoadPhoto({
   callback,
   imgExif,
   imgIptc
-}: Args & { imgExif?: any; imgIptc?: any }): void {
+}: Args & {
+  imgExif?: any;
+  imgIptc?: any;
+  cordovaMetadata?: CordovaMetaData;
+}): void {
   loadImage(
     fileOrFileName,
     (img) => {

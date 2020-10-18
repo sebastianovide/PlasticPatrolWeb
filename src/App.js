@@ -152,7 +152,8 @@ class App extends Component {
       geojson,
       online,
       sponsorImage,
-      selectedFeature
+      selectedFeature,
+      challenges
     } = this.props;
     const { leftDrawerOpen, mapLocation } = this.state;
     return (
@@ -190,6 +191,7 @@ class App extends Component {
             handlePhotoClick={this.handlePhotoClick}
             selectedFeature={selectedFeature}
             sponsorImage={sponsorImage}
+            challenges={challenges}
           />
         </main>
 
