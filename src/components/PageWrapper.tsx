@@ -19,9 +19,6 @@ import {
   DialogContentText,
   DialogActions
 } from "@material-ui/core";
-import IconButton from "@material-ui/core/IconButton";
-import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
-import { MoreHoriz } from "@material-ui/icons";
 
 declare global {
   interface Window {
@@ -83,6 +80,7 @@ const useStyles = makeStyles((theme) => ({
 
 type CloseNavigationHandler = { handleClose: () => void };
 type BackNavigationHandler = { handleBack: () => void; confirm?: boolean };
+
 type NavigationHandler = CloseNavigationHandler | BackNavigationHandler;
 
 type AddAction = () => void
