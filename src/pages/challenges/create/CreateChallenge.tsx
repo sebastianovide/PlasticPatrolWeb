@@ -231,15 +231,20 @@ export default function CreateChallenge({}: Props) {
   ) => {
     const fileState = isCordovaCameraImage(image)
       ? {
-          filePath: (image as CordovaCameraImage).filename,
+          fileOrFileName: (image as CordovaCameraImage).filename,
           cordovaMetadata: JSON.parse(
             (image as CordovaCameraImage).json_metadata as string
           ),
           fromCamera: fromCamera
         }
-      : { file: image, fromCamera: fromCamera };
+      : { fileOrFileName: image, fromCamera: fromCamera };
 
-    loadPhoto({ fileState, fromCamera, gpsLocation, callback: setCoverPhoto });
+    loadPhoto({
+      ...fileState,
+      fromCamera,
+      gpsLocation,
+      callback: setCoverPhoto
+    });
   };
 
   const challengeReady = isChallengeReady(
