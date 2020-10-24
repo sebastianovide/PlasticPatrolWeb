@@ -116,6 +116,6 @@
     }
   },
   "lint-staged": {
-    "*.{ts,tsx,js,css,md}": "prettier --list-different --write --config .prettierrc.json"
+    "*.{ts,tsx,js,css,md,json}": "prettier --list-different --write --config .prettierrc.json"
   }
 }
