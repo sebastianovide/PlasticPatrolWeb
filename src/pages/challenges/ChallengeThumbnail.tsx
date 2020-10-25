@@ -70,7 +70,9 @@ export default function ChallengeThumbnail({ challenge }: Props) {
   const history = useHistory();
   const textDurationRemaining = "10 minutes remaining";
   const wrapperElement = useRef(null);
+
   const percentage = (challenge.totalPieces / challenge.targetPieces) * 100;
+
   return (
     <div
       className={classes.challengeThumbnail}
