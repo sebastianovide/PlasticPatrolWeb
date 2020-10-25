@@ -44,12 +44,12 @@ const useStyles = makeStyles((theme) => ({
 
   description: {
     flex: "1 1 auto",
-    padding: `${theme.spacing(1)}px ${theme.spacing(1.5)}px`,
+    padding: `${theme.spacing(0.5)}px ${theme.spacing(1.5)}px`,
     fontSize: 13
   },
 
   progressWrapper: {
-    padding: `${theme.spacing(1)}px ${theme.spacing(1.5)}px`
+    padding: `${theme.spacing(0.5)}px ${theme.spacing(1.5)}px`
   },
 
   progressText: {

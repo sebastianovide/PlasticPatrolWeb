@@ -22,12 +22,12 @@ const useStyles = makeStyles((theme) => ({
   searchWrapper: {
     flex: "0 0 auto",
     background: styles.lightGrey,
-    width: "94%",
-    margin: "0 3% 30px 3%",
+    width: "100%",
+    margin: "0 0 20px 0",
     borderRadius: "10px",
     display: "flex",
     alignItems: "center",
-    padding: `${theme.spacing(0.5)}px ${theme.spacing(1)}px`,
+    padding: `${theme.spacing(1)}px ${theme.spacing(1)}px`,
     boxSizing: "border-box",
     color: styles.darkgray,
     fontSize: 20
