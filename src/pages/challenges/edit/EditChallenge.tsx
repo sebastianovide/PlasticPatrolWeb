@@ -21,10 +21,10 @@ const useStyles = makeStyles((theme) => ({
   },
   buttons: {
     display: "flex",
+    marginTop: `${theme.spacing(1)}px`,
     flexDirection: "row"
   },
   button: {
-    flex: 1,
     marginLeft: 5,
     marginRight: 5
   }
@@ -103,14 +103,6 @@ export default function EditChallenge({ challenges }: Props) {
           Discard changes
         </Button>
       </div>
-      {/*{challengeFormData && (*/}
-      {/*  <Route path={linkToSubmitChallengeDialog()}>*/}
-      {/*    <UploadChallengeDialog*/}
-      {/*      challengeCreateData={challengeFormData}*/}
-      {/*      onCancelUpload={() => {*/}
-      {/*      }}/>*/}
-      {/*  </Route>*/}
-      {/*)}*/}
     </PageWrapper>
   );
 }

@@ -95,9 +95,18 @@ export default function ChallengesHome({ challenges }: Props) {
         />
       </div>
       <div className={classes.challengeList}>
-        {filteredChallengeList.map((challenge) => (
-          <ChallengeThumbnail challenge={challenge} />
-        ))}
+        {filteredChallengeList.length === 0 ? (
+          <div>
+            Unfortunately, there are no matches for your search. <br />
+            <br />
+            If you’d like to create your own challenge, please tap on the create
+            challenge button at the top of the screen.
+          </div>
+        ) : (
+          filteredChallengeList.map((challenge: Challenge) => (
+            <ChallengeThumbnail challenge={challenge} />
+          ))
+        )}
       </div>
     </PageWrapper>
   );
