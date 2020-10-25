@@ -83,7 +83,7 @@ type BackNavigationHandler = { handleBack: () => void; confirm?: boolean };
 
 type NavigationHandler = CloseNavigationHandler | BackNavigationHandler;
 
-type AddAction = () => void
+type AddAction = () => void;
 
 interface Props {
   label: string;
@@ -278,9 +278,7 @@ const PageWrapper: FunctionComponent<Props> = ({
           <Typography className={classes.grow} variant="h6" color="inherit">
             {label}
           </Typography>
-          {(addAction !== undefined) &&
-            <AddIcon onClick={addAction} />
-          }
+          {addAction !== undefined && <AddIcon onClick={addAction} />}
         </Toolbar>
       </AppBar>
       <div className={classnames(classes.main, className)}>{children}</div>
