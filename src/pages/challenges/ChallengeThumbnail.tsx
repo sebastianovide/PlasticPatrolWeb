@@ -70,7 +70,9 @@ export default function ChallengeThumbnail({ challenge }: Props) {
   const history = useHistory();
   const textDurationRemaining = "10 minutes remaining";
   const wrapperElement = useRef(null);
-  const percentage = (challenge.currentPieces / challenge.targetPieces) * 100;
+
+  const percentage = (challenge.totalPieces / challenge.targetPieces) * 100;
+
   return (
     <div
       className={classes.challengeThumbnail}
@@ -78,12 +80,12 @@ export default function ChallengeThumbnail({ challenge }: Props) {
       onClick={() => history.push(linkToChallenge(challenge.id.toString()))}
     >
       <div className={classes.pictureWrapper}>
-        <img src={challenge.picture} className={classes.picture} />
+        <img src={challenge.coverPhoto?.imgSrc} className={classes.picture} />
       </div>
       <div className={classes.textSection}>
         <div className={classes.name}>{challenge.name}</div>
         <div className={classes.participantCount}>
-          {challenge.users.length} participants
+          {challenge.totalUserPieces.length} participants
         </div>
         <div className={classes.durationRemaining}>{textDurationRemaining}</div>
       </div>

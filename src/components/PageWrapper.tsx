@@ -19,8 +19,6 @@ import {
   DialogContentText,
   DialogActions
 } from "@material-ui/core";
-import IconButton from "@material-ui/core/IconButton";
-import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 
 declare global {
   interface Window {
@@ -85,11 +83,13 @@ type BackNavigationHandler = { handleBack: () => void; confirm?: boolean };
 
 type NavigationHandler = CloseNavigationHandler | BackNavigationHandler;
 
+type AddAction = () => void;
+
 interface Props {
   label: string;
-  navigationHandler: NavigationHandler;
   className?: string;
-  addAction?: () => void;
+  navigationHandler: NavigationHandler;
+  addAction?: AddAction;
 }
 
 interface PhotoPageProps {

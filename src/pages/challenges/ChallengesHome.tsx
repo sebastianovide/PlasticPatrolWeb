@@ -22,12 +22,12 @@ const useStyles = makeStyles((theme) => ({
   searchWrapper: {
     flex: "0 0 auto",
     background: styles.lightGrey,
-    width: "94%",
-    margin: "0 3% 30px 3%",
+    width: "100%",
+    margin: "0 0 20px 0",
     borderRadius: "10px",
     display: "flex",
     alignItems: "center",
-    padding: `${theme.spacing(0.5)}px ${theme.spacing(1)}px`,
+    padding: `${theme.spacing(1)}px ${theme.spacing(1)}px`,
     boxSizing: "border-box",
     color: styles.darkgray,
     fontSize: 20
@@ -64,7 +64,7 @@ function getFilteredChallenges(
   }
 
   return challenges.filter((challenge) =>
-    challenge.name.includes(searchPrefix)
+    challenge.name.toLowerCase().includes(searchPrefix.toLowerCase())
   );
 }
 
@@ -95,9 +95,18 @@ export default function ChallengesHome({ challenges }: Props) {
         />
       </div>
       <div className={classes.challengeList}>
-        {filteredChallengeList.map((challenge) => (
-          <ChallengeThumbnail challenge={challenge} />
-        ))}
+        {filteredChallengeList.length === 0 ? (
+          <div>
+            Unfortunately, there are no matches for your search. <br />
+            <br />
+            If you’d like to create your own challenge, please tap on the create
+            challenge button at the top of the screen.
+          </div>
+        ) : (
+          filteredChallengeList.map((challenge: Challenge) => (
+            <ChallengeThumbnail challenge={challenge} />
+          ))
+        )}
       </div>
     </PageWrapper>
   );
