@@ -20,6 +20,8 @@ import config from "./config.json";
 import { updateStats, computeStatsAdHoc } from "./stats";
 import { barcodeLookup } from "./barcodeLookup";
 
+import * as missions from "./missions";
+
 const cors = corsModule({ origin: true });
 const gm = gmModule.subClass({ imageMagick: true });
 
@@ -363,5 +365,13 @@ module.exports = {
   generateThumbnail,
   updateStats: functions.pubsub.topic(STATS_TOPIC).onPublish(updateStats),
   computeStats: functions.https.onRequest(wrap(computeStatsAdHoc)),
-  barcodeLookup: functions.https.onCall(barcodeLookup)
+  barcodeLookup: functions.https.onCall(barcodeLookup),
+  createMission: missions.create,
+  joinMission: missions.join,
+  leaveMission: missions.leave,
+  rejectNewMemberMission: missions.rejectNewMember,
+  approveNewMemberMission: missions.approveNewMember,
+  fetchMission: missions.fetch,
+  updateMissionOnPhotoEdit: missions.updateMissionOnPhotoEdit,
+  updateMissionOnPhotoUpload: missions.updateMissionOnPhotoUpload
 };

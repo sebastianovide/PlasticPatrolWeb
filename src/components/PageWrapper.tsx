@@ -80,7 +80,6 @@ const useStyles = makeStyles((theme) => ({
 
 type CloseNavigationHandler = { handleClose: () => void };
 type BackNavigationHandler = { handleBack: () => void; confirm?: boolean };
-
 type NavigationHandler = CloseNavigationHandler | BackNavigationHandler;
 
 type AddAction = () => void;
