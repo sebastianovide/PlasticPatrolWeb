@@ -67,13 +67,6 @@ function getFilteredMissions(
   missions: MissionFirestoreData[],
   user?: User
 ): MissionFirestoreData[] {
-  console.log(searchString);
-  console.log(missions);
-
-  const userLoggedIn = user !== undefined;
-  const userId = user?.id || "invalid_id";
-  searchString = searchString.trim();
-
   // Put missions that users are in at the top.
   if (user !== undefined) {
     missions.sort((a: MissionFirestoreData, b: MissionFirestoreData) => {
@@ -82,10 +75,6 @@ function getFilteredMissions(
   }
 
   const missionNameIncludesSubstring = (name: string, substring: string) => {
-    console.log("missionNameIncludesSubstring");
-    console.log(name);
-    console.log(substring);
-    console.log(name.toLowerCase().includes(substring.trim().toLowerCase()));
     return name.toLowerCase().includes(substring.trim().toLowerCase());
   };
 
@@ -151,7 +140,7 @@ export default function MissionsHome({}: Props) {
           placeholder={"Search"}
           className={classes.searchInput}
           value={searchString}
-          onChange={(e) => setSearchString(e.target.value)}
+          onChange={(e) => setSearchString(e.target.value.trim())}
         />
       </div>
       <div className={classes.missionList}>
