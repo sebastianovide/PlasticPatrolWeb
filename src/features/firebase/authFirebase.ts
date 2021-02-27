@@ -22,10 +22,13 @@ type Args = {
 export const onAuthStateChanged = ({ onSignOut, setUser }: Args) => {
   let userRef;
   const firebaseStatusChange = async (user: firebase.User) => {
-    if (userRef && !user) {
-      userRef = undefined;
-      onSignOut();
-      setUser(undefined);
+    if (!user) {
+      // if the user is signed it, then signe it out
+      if (userRef) {
+        userRef = undefined;
+        onSignOut();
+        setUser(undefined);
+      }
       return;
     }
 
