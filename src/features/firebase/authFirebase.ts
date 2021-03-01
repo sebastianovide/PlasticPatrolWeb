@@ -23,7 +23,7 @@ export const onAuthStateChanged = ({ onSignOut, setUser }: Args) => {
   let userRef;
   const firebaseStatusChange = async (user: firebase.User) => {
     if (!user) {
-      // if the user is signed it, then signe it out
+      // if the user is signed in, then sign out
       if (userRef) {
         userRef = undefined;
         onSignOut();
