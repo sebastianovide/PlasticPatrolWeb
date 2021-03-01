@@ -140,7 +140,7 @@ export default function MissionsHome({}: Props) {
           placeholder={"Search"}
           className={classes.searchInput}
           value={searchString}
-          onChange={(e) => setSearchString(e.target.value.trim())}
+          onChange={(e) => setSearchString(e.target.value))}
         />
       </div>
       <div className={classes.missionList}>
