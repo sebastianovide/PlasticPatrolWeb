@@ -1,0 +1,41 @@
+name: Deploy to testflight
+
+on:
+  push:
+    branches:
+      - "master"
+
+
+jobs:
+  ios:
+    runs-on: macos-latest
+    # fetch the code
+    steps:
+      - uses: actions/checkout@v2
+
+# TODO: auto bump version: need to make it happen only once (It is happening also in deploy-to-dev.yml) 
+
+    # TODO: build react
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Cache node_modules
+        id: cache-modules
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ runner.OS }}-node_modules-${{ hashFiles('yarn.lock') }}
+
+      - name: yarn
+        if: steps.cache-modules.outputs.cache-hit != 'true'
+        run: yarn
+
+      # - run: npm install -g yarn
+      # - run: yarn install 
+      - run: yarn test
+      - run: yarn run build
+
+# TODO: decrypt files
+# TODO: build ios and sign
+# TODO: testflight
