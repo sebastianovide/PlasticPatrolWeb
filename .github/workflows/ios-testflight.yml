@@ -33,14 +33,13 @@ jobs:
       - run: yarn test
       - run: yarn build
 
-      - uses: actions/download-artifact@v2
+# it will contain the ios image too 
+      - run: mkdir -p artifacts/react-build
+      - run: cp -a build/ artifacts/react-build
+      - uses: actions/upload-artifact@v2
         with:
           name: react-build
-          path: build
-          
-      - name: Display structure of downloaded files
-        run: ls -R
-        working-directory: build
+          path: artifacts/react-build
 
 # TODO: decrypt files
 # TODO: build ios and sign
