@@ -34,7 +34,7 @@ jobs:
       - run: yarn build
 
 # decrypt files
-      - run: openssl enc -d -aes-256-cbc -in cordova-app/secrets.tar.encrypted -out cordova-app/secrets.tar -k ${{ secrets.ENC_PASSWORD }} 
+      - run: openssl enc -d -aes-256-cbc -in cordova-app/secrets.tar.encrypted -out cordova-app/secrets.tar -k ${{ secrets.ENC_PASSWORD }} -md md5
       - run: pushd cordova-app && tar xvf secrets.tar && popd
           
 # build ios and sign
