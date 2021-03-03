@@ -30,11 +30,17 @@ jobs:
       - name: yarn
         if: steps.cache-modules.outputs.cache-hit != 'true'
         run: yarn
-
-      # - run: npm install -g yarn
-      # - run: yarn install 
       - run: yarn test
-      - run: yarn run build
+      - run: yarn build
+
+      - uses: actions/download-artifact@v2
+        with:
+          name: react-build
+          path: build
+          
+      - name: Display structure of downloaded files
+        run: ls -R
+        working-directory: build
 
 # TODO: decrypt files
 # TODO: build ios and sign
