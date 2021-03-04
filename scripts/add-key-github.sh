@@ -14,5 +14,6 @@ security import ./cordova-app/apple.p12 -t agg -k ~/Library/Keychains/build.keyc
 security list-keychains -s ~/Library/Keychains/build.keychain
 security default-keychain -s ~/Library/Keychains/build.keychain
 security unlock-keychain -p github ~/Library/Keychains/build.keychain
+security set-keychain-settings ~/Library/Keychains/build.keychain # Set no auto-lock timeout
 
 security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k github ~/Library/Keychains/build.keychain
