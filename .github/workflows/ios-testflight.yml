@@ -15,7 +15,11 @@ jobs:
 
 # TODO: auto bump version: need to make it happen only once (It is happening also in deploy-to-dev.yml) 
 
-    # TODO: build react
+# decrypt files
+      - run: openssl enc -d -aes-256-cbc -in cordova-app/secrets.tar.encrypted -out cordova-app/secrets.tar -k ${{ secrets.ENC_PASSWORD }} -md sha512
+      - run: pushd cordova-app && tar xvf secrets.tar && popd
+
+# build react
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
@@ -32,10 +36,6 @@ jobs:
         run: yarn
       - run: yarn test
       - run: yarn build
-
-# decrypt files
-      - run: openssl enc -d -aes-256-cbc -in cordova-app/secrets.tar.encrypted -out cordova-app/secrets.tar -k ${{ secrets.ENC_PASSWORD }} -md sha512
-      - run: pushd cordova-app && tar xvf secrets.tar && popd
           
 # build ios and sign
       - run: ./scripts/add-key-github.sh
