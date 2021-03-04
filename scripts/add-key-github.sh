@@ -9,6 +9,7 @@ cp "./cordova-app/Geovation.mobileprovision" ~/Library/MobileDevice/Provisioning
 
 security create-keychain -p "" build.keychain
 security import ./cordova-app/dist.cer -t agg -k ~/Library/Keychains/build.keychain -P "" -A
+security import ./cordova-app/apple.p12 -t agg -k ~/Library/Keychains/build.keychain -P "" -A
 
 security list-keychains -s ~/Library/Keychains/build.keychain
 security default-keychain -s ~/Library/Keychains/build.keychain
