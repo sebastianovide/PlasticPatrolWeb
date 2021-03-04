@@ -15,9 +15,10 @@ jobs:
 
 # TODO: auto bump version: need to make it happen only once (It is happening also in deploy-to-dev.yml) 
 
-# decrypt files
+# decrypt files and import keys
       - run: openssl enc -d -aes-256-cbc -in cordova-app/secrets.tar.encrypted -out cordova-app/secrets.tar -k ${{ secrets.ENC_PASSWORD }} -md sha512
       - run: pushd cordova-app && tar xvf secrets.tar && popd
+      - run: ./scripts/add-key-github.sh
 
 # build react
       - uses: actions/setup-node@v2
@@ -38,7 +39,6 @@ jobs:
       - run: yarn build
           
 # build ios and sign
-      - run: ./scripts/add-key-github.sh
       - run: yarn build:ios
         
 # it will contain the ios image too 
