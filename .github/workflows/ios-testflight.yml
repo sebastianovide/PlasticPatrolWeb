@@ -42,11 +42,21 @@ jobs:
     # fetch the code
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
 
 # decrypt files and import keys
       - run: openssl enc -d -aes-256-cbc -in cordova-app/secrets.tar.encrypted -out cordova-app/secrets.tar -k ${{ secrets.ENC_PASSWORD }} -md sha512
       - run: pushd cordova-app && tar xvf secrets.tar && popd
       - run: ./scripts/add-key-github.sh
+
+      - name: Cache cocoapods
+        id: cache-cocoapods
+        uses: actions/cache@v2
+        with:
+          path: ~/.cocoapods
+          key: ${{ runner.OS }}-cocoapods-${{ hashFiles('corodva-app/package-lock.json') }}
 
 # get react build
       - name: Download a react build
@@ -74,7 +84,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+                
       - run: mkdir -p cordova-app/platforms/ios/build/ 
       - name: Download a cordova build
         uses: actions/download-artifact@v2
