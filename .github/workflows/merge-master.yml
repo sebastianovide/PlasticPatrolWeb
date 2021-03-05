@@ -1,4 +1,4 @@
-name: Deploy to testflight
+name: "Merged to master: build all and deploy all tests"
 
 on:
   push:
