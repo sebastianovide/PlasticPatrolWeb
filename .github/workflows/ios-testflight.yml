@@ -7,19 +7,11 @@ on:
 
 
 jobs:
-  ios:
-    runs-on: macos-latest
-    # fetch the code
+  web:
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-
-# TODO: auto bump version: need to make it happen only once (It is happening also in deploy-to-dev.yml) 
-
-# decrypt files and import keys
-      - run: openssl enc -d -aes-256-cbc -in cordova-app/secrets.tar.encrypted -out cordova-app/secrets.tar -k ${{ secrets.ENC_PASSWORD }} -md sha512
-      - run: pushd cordova-app && tar xvf secrets.tar && popd
-      - run: ./scripts/add-key-github.sh
-
+      - uses: actions/checkout@v2    
+        
 # build react
       - uses: actions/setup-node@v2
         with:
@@ -37,24 +29,59 @@ jobs:
         run: yarn
       - run: yarn test
       - run: yarn build
+        
+# upload react build
+      - uses: actions/upload-artifact@v2
+        with:
+          name: react-build
+          path: build
+
+  ios:
+    needs: web
+    runs-on: macos-latest
+    # fetch the code
+    steps:
+      - uses: actions/checkout@v2
+
+# decrypt files and import keys
+      - run: openssl enc -d -aes-256-cbc -in cordova-app/secrets.tar.encrypted -out cordova-app/secrets.tar -k ${{ secrets.ENC_PASSWORD }} -md sha512
+      - run: pushd cordova-app && tar xvf secrets.tar && popd
+      - run: ./scripts/add-key-github.sh
+
+# get react build
+      - name: Download a react build
+        uses: actions/download-artifact@v2
+        with:
+          name: react-build
+          path: build
           
 # build ios and sign
       - run: yarn build:ios
         
 # it will contain the ios image too 
-      - run: mkdir -p artifacts/react-build
-      - run: mkdir -p artifacts/ios-build
-      - run: cp -a build/ artifacts/react-build
-      - run: cp -a cordova-app/platforms/ios/build/ artifacts/ios-build
-      - uses: actions/upload-artifact@v2
-        with:
-          name: react-build
-          path: artifacts/react-build
-
       - uses: actions/upload-artifact@v2
         with:
           name: ios-build
-          path: artifacts/ios-build
+          path: cordova-app/platforms/ios/build
+      
+#       - uses: maierj/fastlane-action@v2.0.1
+#         with:
+#           lane: 'ios beta'
+#           subdirectory: 'cordova-app'
+
+  ios-testflight:
+    needs: ios
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - run: mkdir -p cordova-app/platforms/ios/build/ 
+      - name: Download a cordova build
+        uses: actions/download-artifact@v2
+        with:
+          name: ios-build
+          path: cordova-app/platforms/ios/build
+
 # TODO: testflight
       - uses: actions/setup-ruby@v1
         with:
@@ -64,10 +91,4 @@ jobs:
       - run: yarn beta:ios
         env:
           FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
-          SPACESHIP_SKIP_2FA_UPGRADE: 1
-      
-#       - uses: maierj/fastlane-action@v2.0.1
-#         with:
-#           lane: 'ios beta'
-#           subdirectory: 'cordova-app'
-
+          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
