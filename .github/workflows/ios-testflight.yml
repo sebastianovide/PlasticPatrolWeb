@@ -43,11 +43,16 @@ jobs:
         
 # it will contain the ios image too 
       - run: mkdir -p artifacts/react-build
+      - run: mkdir -p artifacts/ios-build
       - run: cp -a build/ artifacts/react-build
-      - run: cp -a cordova-app/platforms/ios/build/device/ artifacts/ios-build
+      - run: cp -a cordova-app/platforms/ios/build/ artifacts/ios-build
       - uses: actions/upload-artifact@v2
         with:
           name: react-build
           path: artifacts/react-build
 
+      - uses: actions/upload-artifact@v2
+        with:
+          name: ios-build
+          path: artifacts/ios-build
 # TODO: testflight
