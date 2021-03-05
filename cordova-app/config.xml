@@ -95,6 +95,6 @@
         </edit-config>
     </platform>
     <hook src="scripts/changeVersion.js" type="before_prepare"/>
-    <hook src="scripts/sentryFrameworkPatch.sh" type="after_prepare"/>
+    <hook src="scripts/sentryFrameworkPatch.js" type="after_prepare"/>
 
 </widget>
