@@ -9,7 +9,7 @@ on:
 jobs:
   web:
     runs-on: ubuntu-latest
-    steps:
+    steps:   
       - uses: actions/checkout@v2    
         
 # build react
@@ -117,6 +117,8 @@ jobs:
         with:
           name: ios-build
           path: cordova-app/platforms/ios/build
+      - run: ls -la cordova-app/platforms/ios/build
+      - run: ls -la cordova-app/platforms/ios/build/device
 
 # TODO: testflight
       - uses: actions/setup-ruby@v1
