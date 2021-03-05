@@ -94,7 +94,7 @@ jobs:
 
   ios-testflight:
     needs: ios
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
