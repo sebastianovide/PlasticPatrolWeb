@@ -86,11 +86,6 @@ jobs:
         with:
           name: ios-build
           path: cordova-app/platforms/ios/build
-      
-#       - uses: maierj/fastlane-action@v2.0.1
-#         with:
-#           lane: 'ios beta'
-#           subdirectory: 'cordova-app'
 
   ios-testflight:
     needs: ios
@@ -117,13 +112,11 @@ jobs:
         with:
           name: ios-build
           path: cordova-app/platforms/ios/build
-      - run: ls -la cordova-app/platforms/ios/build
-      - run: ls -la cordova-app/platforms/ios/build/device
 
 # TODO: testflight
-      - uses: actions/setup-ruby@v1
+      - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '2.7'
+          ruby-version: 2.7
           bundler-cache: true
           
       - run: gem install fastlane -NV
