@@ -45,7 +45,17 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
+      - name: Cache node_modules
+        id: cache-modules
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ runner.OS }}-node_modules-${{ hashFiles('yarn.lock') }}
 
+      - name: yarn
+        if: steps.cache-modules.outputs.cache-hit != 'true'
+        run: yarn
+        
 # decrypt files and import keys
       - run: openssl enc -d -aes-256-cbc -in cordova-app/secrets.tar.encrypted -out cordova-app/secrets.tar -k ${{ secrets.ENC_PASSWORD }} -md sha512
       - run: pushd cordova-app && tar xvf secrets.tar && popd
@@ -87,7 +97,17 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
-                
+      - name: Cache node_modules
+        id: cache-modules
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ runner.OS }}-node_modules-${{ hashFiles('yarn.lock') }}
+
+      - name: yarn
+        if: steps.cache-modules.outputs.cache-hit != 'true'
+        run: yarn
+
       - run: mkdir -p cordova-app/platforms/ios/build/ 
       - name: Download a cordova build
         uses: actions/download-artifact@v2
