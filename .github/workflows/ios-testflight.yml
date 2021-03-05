@@ -64,6 +64,7 @@ jobs:
       - run: yarn beta:ios
         env:
           FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+          SPACESHIP_SKIP_2FA_UPGRADE: 1
       
 #       - uses: maierj/fastlane-action@v2.0.1
 #         with:
