@@ -73,6 +73,10 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v2
 
+      # decrypt secrets
+      - run: openssl enc -d -aes-256-cbc -in cordova-app/secrets.tar.encrypted -out cordova-app/secrets.tar -k ${{ secrets.ENC_PASSWORD }} -md sha512
+      - run: pushd cordova-app && tar xvf secrets.tar && popd
+
       - name: yarn
         if: steps.cache-modules.outputs.cache-hit != 'true'
         run: yarn
