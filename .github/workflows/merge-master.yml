@@ -9,10 +9,10 @@ on:
 jobs:
   web:
     runs-on: ubuntu-latest
-    steps:   
-      - uses: actions/checkout@v2    
-        
-# build react
+    steps:
+      - uses: actions/checkout@v2
+
+      # build react
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
@@ -30,8 +30,8 @@ jobs:
         run: yarn
       - run: yarn test
       - run: yarn build
-        
-# upload react build
+
+      # upload react build
       - uses: actions/upload-artifact@v2
         with:
           name: react-build
@@ -57,7 +57,7 @@ jobs:
         if: steps.cache-modules.outputs.cache-hit != 'true'
         run: yarn
 
-# decrypt files and import keys
+      # decrypt files and import keys
       - run: openssl enc -d -aes-256-cbc -in cordova-app/secrets.tar.encrypted -out cordova-app/secrets.tar -k ${{ secrets.ENC_PASSWORD }} -md sha512
       - run: pushd cordova-app && tar xvf secrets.tar && popd
       - run: ./scripts/add-key-github.sh
@@ -71,17 +71,17 @@ jobs:
           restore-keys: |
             ${{ runner.OS }}-cocoapods-
 
-# get react build
+      # get react build
       - name: Download a react build
         uses: actions/download-artifact@v2
         with:
           name: react-build
           path: build
-          
-# build ios and sign
+
+      # build ios and sign
       - run: yarn build:ios
-        
-# it will contain the ios image too 
+
+      # it will contain the ios image too
       - uses: actions/upload-artifact@v2
         with:
           name: ios-build
@@ -106,22 +106,55 @@ jobs:
         if: steps.cache-modules.outputs.cache-hit != 'true'
         run: yarn
 
-      - run: mkdir -p cordova-app/platforms/ios/build/ 
+      - run: mkdir -p cordova-app/platforms/ios/build/
       - name: Download a cordova build
         uses: actions/download-artifact@v2
         with:
           name: ios-build
           path: cordova-app/platforms/ios/build
 
-# TODO: testflight
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: 2.7
           bundler-cache: true
-          
+
       - run: gem install fastlane -NV
       - run: yarn beta:ios
         env:
           FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
           FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
           FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
+
+  web-firebase-test:
+    needs: web
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      # - uses: actions/setup-node@v2
+      #   with:
+      #     node-version: '14'
+      # - name: Cache node_modules
+      #   id: cache-modules
+      #   uses: actions/cache@v2
+      #   with:
+      #     path: node_modules
+      #     key: ${{ runner.OS }}-node_modules-${{ hashFiles('yarn.lock') }}
+
+      # - name: yarn
+      #   if: steps.cache-modules.outputs.cache-hit != 'true'
+      #   run: yarn
+
+      # get react build
+      - name: Download a react build
+        uses: actions/download-artifact@v2
+        with:
+          name: react-build
+          path: build
+
+      - name: Deploy to Firebase
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only hosting -m "V${{ steps.package-version.outputs.version }}"
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          PROJECT_ID: plastic-patrol-dev-722eb
