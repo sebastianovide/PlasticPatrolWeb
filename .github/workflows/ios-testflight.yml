@@ -23,7 +23,8 @@ jobs:
         with:
           path: node_modules
           key: ${{ runner.OS }}-node_modules-${{ hashFiles('yarn.lock') }}
-
+          restore-keys: |
+            ${{ runner.OS }}-node_modules-
       - name: yarn
         if: steps.cache-modules.outputs.cache-hit != 'true'
         run: yarn
@@ -55,7 +56,7 @@ jobs:
       - name: yarn
         if: steps.cache-modules.outputs.cache-hit != 'true'
         run: yarn
-        
+
 # decrypt files and import keys
       - run: openssl enc -d -aes-256-cbc -in cordova-app/secrets.tar.encrypted -out cordova-app/secrets.tar -k ${{ secrets.ENC_PASSWORD }} -md sha512
       - run: pushd cordova-app && tar xvf secrets.tar && popd
@@ -67,6 +68,8 @@ jobs:
         with:
           path: ~/.cocoapods
           key: ${{ runner.OS }}-cocoapods-${{ hashFiles('corodva-app/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-cocoapods-
 
 # get react build
       - name: Download a react build
@@ -118,10 +121,12 @@ jobs:
 # TODO: testflight
       - uses: actions/setup-ruby@v1
         with:
-          ruby-version: '2.7.2'
+          ruby-version: '2.7'
+          bundler-cache: true
           
       - run: gem install fastlane -NV
       - run: yarn beta:ios
         env:
           FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
           FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
+          FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
