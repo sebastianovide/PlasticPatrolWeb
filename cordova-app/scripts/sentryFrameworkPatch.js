@@ -34,36 +34,40 @@ done
 `;
 
 module.exports = (context) => {
-  const projectDir = path.resolve(context.opts.projectRoot, "platforms/ios");
-  const dirContent = fs.readdirSync(projectDir);
-  const matchingProjectFiles = dirContent.filter((filePath) =>
-    /.*\.xcodeproj/gi.test(filePath)
-  );
-  const projectPath = path.join(
-    projectDir,
-    matchingProjectFiles[0],
-    "project.pbxproj"
-  );
-
-  const project = xcode.project(projectPath);
-
-  project.parse((error) => {
-    if (error) {
-      console.error("Failed to parse project", error);
-      process.exit(1);
-    }
-    const options = {
-      shellPath: "/bin/sh",
-      shellScript,
-      inputPaths: ['"$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)"']
-    };
-    project.addBuildPhase(
-      [],
-      "PBXShellScriptBuildPhase",
-      "Remove Unused Architectures",
-      project.getFirstTarget().uuid,
-      options
+  try {
+    const projectDir = path.resolve(context.opts.projectRoot, "platforms/ios");
+    const dirContent = fs.readdirSync(projectDir);
+    const matchingProjectFiles = dirContent.filter((filePath) =>
+      /.*\.xcodeproj/gi.test(filePath)
     );
-    fs.writeFileSync(projectPath, project.writeSync());
-  });
+    const projectPath = path.join(
+      projectDir,
+      matchingProjectFiles[0],
+      "project.pbxproj"
+    );
+
+    const project = xcode.project(projectPath);
+
+    project.parse((error) => {
+      if (error) {
+        console.error("Failed to parse project", error);
+        process.exit(1);
+      }
+      const options = {
+        shellPath: "/bin/sh",
+        shellScript,
+        inputPaths: ['"$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)"']
+      };
+      project.addBuildPhase(
+        [],
+        "PBXShellScriptBuildPhase",
+        "Remove Unused Architectures",
+        project.getFirstTarget().uuid,
+        options
+      );
+      fs.writeFileSync(projectPath, project.writeSync());
+    });
+  } catch (error) {
+    console.log(error);
+  }
 };
