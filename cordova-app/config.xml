@@ -37,6 +37,12 @@
         <splash density="port-xhdpi" src="res/screen/android/Android-XHDPI-portrait.png"/>
         <splash density="port-xxhdpi" src="res/screen/android/Android-XXHDPI-portrait.png"/>
         <splash density="port-xxxhdpi" src="res/screen/android/Android-XXXHDPI-portrait.png"/>
+        <splash density="hdpi" src="res/screen/android/Android-HDPI-portrait.png"/>
+        <splash density="ldpi" src="res/screen/android/Android-LDPI-portrait.png"/>
+        <splash density="mdpi" src="res/screen/android/Android-MDPI-portrait.png"/>
+        <splash density="xhdpi" src="res/screen/android/Android-XHDPI-portrait.png"/>
+        <splash density="xxhdpi" src="res/screen/android/Android-XXHDPI-portrait.png"/>
+        <splash density="xxxhdpi" src="res/screen/android/Android-XXXHDPI-portrait.png"/>
         <resource-file src="google-services.json" target="app/google-services.json"/>
         <preference name="android-minSdkVersion" value="22"/>
     </platform>
