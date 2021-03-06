@@ -68,6 +68,7 @@ module.exports = (context) => {
       fs.writeFileSync(projectPath, project.writeSync());
     });
   } catch (error) {
-    console.log(error);
+    // console.debug(error);
+    console.log("sentry hook didn't work :( ");
   }
 };
