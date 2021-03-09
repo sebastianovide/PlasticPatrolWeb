@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { Button, makeStyles } from "@material-ui/core";
 import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
 
-import styles from "standard.scss";
+import styles from "standard.module.scss";
 import { usePhotoPageDispatch, resetState } from "pages/photo/state";
 import useEffectOnMount from "hooks/useEffectOnMount";
 

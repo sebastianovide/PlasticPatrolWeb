@@ -5,7 +5,7 @@ import { Route } from "react-router-dom";
 import AddPhotoDialog from "../../photo/components/AddPhotoDialog/AddPhotoDialog";
 import React, { ChangeEvent, createRef, useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import styles from "../../../standard.scss";
+import styles from "../../../standard.module.scss";
 import {
   Mission,
   MissionFirestoreData,

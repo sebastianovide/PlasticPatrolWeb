@@ -53,7 +53,7 @@ export default function FeedbackDetailsPage({
   handleToggleResolvedClick,
   fetchFeedbackById
 }: Props) {
-  const { feedbackId } = useParams();
+  const { feedbackId } = useParams<{ feedbackId: string }>();
   const feedback = feedbacks.find(({ id }) => id === feedbackId);
   const fetchedAll = useRef(false);
   const fetchedSingle = useRef(false);
