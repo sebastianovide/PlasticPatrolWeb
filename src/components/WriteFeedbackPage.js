@@ -102,7 +102,7 @@ class WriteFeedbackPage extends React.Component {
     data.email = this.state.email ? this.state.email : "anonymous";
     data.device = device();
     data.userAgent = navigator.userAgent;
-    data.created = firebase.firestore.FieldValue.serverTimestamp();
+    data.created = firebase.default.firestore.FieldValue.serverTimestamp();
     data.updated = data.created;
     if (location) {
       data.latitude = location.latitude;

@@ -25,7 +25,7 @@ function extractPhoto(data, id): Photo {
 
   // some data from Firebase cannot be stringified into json, so we need to convert it into other format first.
   const photo = _.mapValues(data, (fieldValue, fieldKey, doc) => {
-    if (fieldValue instanceof firebase.firestore.DocumentReference) {
+    if (fieldValue instanceof firebase.default.firestore.DocumentReference) {
       return fieldValue.path;
     } else {
       return fieldValue;
@@ -37,19 +37,19 @@ function extractPhoto(data, id): Photo {
   photo.id = id;
 
   photo.updated =
-    photo.updated instanceof firebase.firestore.Timestamp
+    photo.updated instanceof firebase.default.firestore.Timestamp
       ? photo.updated.toDate()
       : new Date(photo.updated);
   photo.moderated =
-    photo.moderated instanceof firebase.firestore.Timestamp
+    photo.moderated instanceof firebase.default.firestore.Timestamp
       ? photo.moderated.toDate()
       : photo.moderated === null
       ? undefined
       : new Date(photo.moderated);
 
   // when comming from json, it looses the type
-  if (!(photo.location instanceof firebase.firestore.GeoPoint)) {
-    photo.location = new firebase.firestore.GeoPoint(
+  if (!(photo.location instanceof firebase.default.firestore.GeoPoint)) {
+    photo.location = new firebase.default.firestore.GeoPoint(
       Number(photo.location._latitude) || 0,
       Number(photo.location._longitude) || 0
     );
@@ -176,7 +176,7 @@ async function fetchFeedbacks(): Promise<Array<Feedback>> {
 }
 
 function saveMetadata(data) {
-  data.location = new firebase.firestore.GeoPoint(
+  data.location = new firebase.default.firestore.GeoPoint(
     Number(data.latitude) || 0,
     Number(data.longitude) || 0
   );
@@ -186,7 +186,7 @@ function saveMetadata(data) {
   if (firebase.auth().currentUser) {
     data.owner_id = firebase.auth().currentUser.uid;
   }
-  data.updated = firebase.firestore.FieldValue.serverTimestamp();
+  data.updated = firebase.default.firestore.FieldValue.serverTimestamp();
   data.moderated = null;
 
   let fieldsToSave = [
@@ -289,7 +289,7 @@ async function writeModeration(
   await updateMissionOnPhotoModerated(photoDocData.data() as Photo, published);
 
   return photoDocRef.update({
-    moderated: firebase.firestore.FieldValue.serverTimestamp(),
+    moderated: firebase.default.firestore.FieldValue.serverTimestamp(),
     published: published,
     moderator_id: userId
   });
@@ -315,9 +315,9 @@ async function writeFeedback(data) {
   if (firebase.auth().currentUser) {
     data.owner_id = firebase.auth().currentUser.uid;
   }
-  data.updated = firebase.firestore.FieldValue.serverTimestamp();
+  data.updated = firebase.default.firestore.FieldValue.serverTimestamp();
   if (data.latitude && data.longitude) {
-    data.location = new firebase.firestore.GeoPoint(
+    data.location = new firebase.default.firestore.GeoPoint(
       Number(data.latitude) || 0,
       Number(data.longitude) || 0
     );
@@ -333,7 +333,7 @@ async function toggleUnreadFeedback(id, resolved, userId) {
   return await firestore.collection("feedbacks").doc(id).update({
     resolved: !resolved,
     customerSupport_id: userId,
-    updated: firebase.firestore.FieldValue.serverTimestamp()
+    updated: firebase.default.firestore.FieldValue.serverTimestamp()
   });
 }
 

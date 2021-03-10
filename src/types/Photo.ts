@@ -12,7 +12,7 @@ type Photo = {
   moderated?: Date;
   owner_id: string;
   pieces: number;
-  location: firebase.firestore.GeoPoint;
+  location: firebase.default.firestore.GeoPoint;
   published: boolean;
   categories: Category[];
   missions: MissionId[];
