@@ -32,6 +32,7 @@ export default function GeoTagMap({ onLocationUpdate }: Props) {
   const styles = useStyles();
 
   useEffectOnMount(() => {
+    // mapboxgl.workerClass = MapboxWorker;
     mapboxgl.accessToken = config.MAPBOX_TOKEN;
 
     const center = initialLocation
