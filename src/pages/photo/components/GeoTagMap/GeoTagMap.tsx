@@ -5,7 +5,6 @@ import mapboxgl from 'mapbox-gl/dist/mapbox-gl-csp';
 import MapboxWorker from 'worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker'; // Load worker code separately with worker-loader
 import "mapbox-gl/dist/mapbox-gl.css";
 
-// import mapboxgl from "mapbox-gl";
 import useEffectOnMount from "hooks/useEffectOnMount";
 import config from "custom/config";
 import { useGPSLocation } from "providers/LocationProvider";
@@ -53,7 +52,7 @@ export default function GeoTagMap({ onLocationUpdate }: Props) {
       //@ts-ignore
       container: mapRef.current,
       zoom: config.ZOOM_FLYTO,
-      style: "mapbox://styles/mapbox/streets-v11",
+      style: config.MAP_SOURCE,
       center
     });
 

@@ -80,10 +80,10 @@ class Map extends Component {
 
     this.map = new mapboxgl.Map({
       container: "map", // container id
-      style:  "mapbox://styles/mapbox/streets-v11",
-      // center: center, // starting position [lng, lat]
-      // zoom: zoom, // starting zoom
-      // attributionControl: false
+      style:  this.props.config.MAP_SOURCE,
+      center: center, // starting position [lng, lat]
+      zoom: zoom, // starting zoom
+      attributionControl: false
     });
 
     this.navControl = new mapboxgl.NavigationControl({
