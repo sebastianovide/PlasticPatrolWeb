@@ -52,15 +52,11 @@ describe("sidedrawer ui (checks correct values exist)", () => {
 
   it("standard user side drawer ui", () => {
     cy.login(user.email, user.password);
-    // bit gross - waits for fetches to finish
-    //TODO: find the right request
-    cy.wait(2000);
-
     cy.getTestElement(selectors.burger).click();
 
     checkStaticLinks();
 
-    cy.contains("Account").should("have.attr", "href", routes.account);
+    cy.contains("Account",{ timeout: 20000 }).should("have.attr", "href", routes.account);
 
     cy.contains("Photo Approval").should("not.exist");
     cy.contains("Feedback Reports").should("not.exist");
