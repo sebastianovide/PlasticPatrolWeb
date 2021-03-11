@@ -73,7 +73,7 @@ describe("sidedrawer ui (checks correct values exist)", () => {
     cy.getTestElement("SponsorLogo");
   });
 
-  it("moderator side drawer ui", () => {
+  it.skip("moderator side drawer ui", () => {
     cy.login(moderator.email, moderator.password);
     cy.wait(5000);
     cy.getTestElement(selectors.burger).click();
