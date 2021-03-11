@@ -50,7 +50,7 @@ describe("sidedrawer ui (checks correct values exist)", () => {
     cy.getTestElement("SponsorLogo");
   });
 
-  it("standard user side drawer ui", () => {
+  it.skip("standard user side drawer ui", () => {
     cy.login(user.email, user.password);
     cy.wait(5000);
 
