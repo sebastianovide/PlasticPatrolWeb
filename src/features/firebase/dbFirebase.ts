@@ -21,7 +21,7 @@ const MAX_NUMBER_OF_FEEDBACKS_TO_FETCH = 50;
 // TODO: add caching
 
 function extractPhoto(data, id): Photo {
-  const prefix = `https://storage.googleapis.com/${storageRef.location.bucket}/photos/${id}`;
+  const prefix = `https://storage.googleapis.com/${storageRef.bucket}/photos/${id}`;
 
   // some data from Firebase cannot be stringified into json, so we need to convert it into other format first.
   const photo = _.mapValues(data, (fieldValue, fieldKey, doc) => {
