@@ -52,6 +52,8 @@ describe("sidedrawer ui (checks correct values exist)", () => {
 
   it("standard user side drawer ui", () => {
     cy.login(user.email, user.password);
+    cy.wait(5000);
+
     cy.getTestElement(selectors.burger).click();
 
     checkStaticLinks();
@@ -73,19 +75,19 @@ describe("sidedrawer ui (checks correct values exist)", () => {
 
   it("moderator side drawer ui", () => {
     cy.login(moderator.email, moderator.password);
-
+    cy.wait(5000);
     cy.getTestElement(selectors.burger).click();
     cy.contains("Account", { timeout: 20000 }).should("have.attr", "href", routes.account);
-    // cy.contains("Photo Approval", { timeout: 20000 }).should(
-    //   "have.attr",
-    //   "href",
-    //   routes.photoApproval
-    // );
-    // cy.contains("Feedback Reports").should(
-    //   "have.attr",
-    //   "href",
-    //   routes.feedbackReports
-    // );
+    cy.contains("Photo Approval", { timeout: 20000 }).should(
+      "have.attr",
+      "href",
+      routes.photoApproval
+    );
+    cy.contains("Feedback Reports").should(
+      "have.attr",
+      "href",
+      routes.feedbackReports
+    );
 
     cy.contains("Leaderboard").should("have.attr", "href", routes.leaderboard);
 
@@ -95,6 +97,6 @@ describe("sidedrawer ui (checks correct values exist)", () => {
 
     cy.contains("Logout");
 
-    // cy.getTestElement("SponsorLogo");
+    cy.getTestElement("SponsorLogo");
   });
 });

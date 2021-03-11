@@ -4,6 +4,7 @@ import { routes, selectors } from "../fixtures/common";
 describe("routing", () => {
   it("if a user goes to the tutorial page from the new photo page they are redirected back to the new photo page", () => {
     cy.login(user.email, user.password);
+    cy.wait(5000);
 
     cy.visit(routes.newPhoto);
 
