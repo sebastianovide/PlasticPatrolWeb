@@ -4,4 +4,6 @@ const config =
     ? require("./config.test.json")
     : require("./config.json");
 
+console.log(config)
+
 export default config;
