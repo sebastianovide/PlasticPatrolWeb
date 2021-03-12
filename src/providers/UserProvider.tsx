@@ -54,7 +54,7 @@ export default function UserProvider({ children }: Props) {
 
           // Hack to avoid continuous re-renders.
           if (
-            _.isEqual(user.missions, userFirebaseData.missions) &&
+            (!userFirebaseData.missions || _.isEqual(user.missions, userFirebaseData.missions)) &&
             user.isModerator == !!userFirebaseData.isModerator
           ) {
             return;
