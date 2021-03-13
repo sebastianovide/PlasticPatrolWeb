@@ -16,7 +16,10 @@ export type Category = {
 export const fetchCategories = async () => {
   const snap = await firestore.collection(categoriesPath()).get();
 
-  return snap.docs.map((val) => ({ ...val.data(), id: val.id })) as Category[];
+  return snap.docs.map((val) => ({
+    ...val.data(),
+    id: val.id
+  })) as Category[];
 };
 
 export async function addCategory(category: ServerCategory) {
