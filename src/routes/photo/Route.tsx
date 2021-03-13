@@ -5,6 +5,7 @@ import PageWrapper from "components/PageWrapper";
 import PhotoPageStateProvider from "pages/photo/state";
 import PhotoPageSubRouter from "./routes/SubRouter";
 import { linkToNewPhoto } from "./routes/new/links";
+import CategoriesProvider from "features/firebase/categories/CategoriesProvider";
 
 export default function PhotoRoute() {
   const history = useHistory();
@@ -17,12 +18,14 @@ export default function PhotoRoute() {
 
   return (
     <PhotoPageStateProvider>
-      <PageWrapper
-        label={"Record your litter"}
-        navigationHandler={navigationHandler}
-      >
-        <PhotoPageSubRouter />
-      </PageWrapper>
+      <CategoriesProvider>
+        <PageWrapper
+          label={"Record your litter"}
+          navigationHandler={navigationHandler}
+        >
+          <PhotoPageSubRouter />
+        </PageWrapper>
+      </CategoriesProvider>
     </PhotoPageStateProvider>
   );
 }
