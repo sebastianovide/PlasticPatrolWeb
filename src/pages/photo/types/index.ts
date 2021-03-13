@@ -1,11 +1,11 @@
 export type SuggestionBasedText = {
-  leafKey: string | null;
   label: string | null;
+  id: string | null;
 };
 
 export type Item = {
   quantity: number;
-  type: SuggestionBasedText;
+  category: SuggestionBasedText;
   brand: string;
   barcode?: number;
 };

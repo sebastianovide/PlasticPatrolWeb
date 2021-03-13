@@ -4,10 +4,11 @@ import { Button, makeStyles } from "@material-ui/core";
 import { Item, SuggestionBasedText } from "../../types";
 import QuantitySelector from "../QuantitySelector";
 import SuggestionBasedInput from "../SuggestionBasedInput";
-import categories from "custom/categories.json";
+
 import brands from "custom/brands.json";
 
 import styles from "standard.scss";
+import { useCategoriesJson } from "features/firebase/categories/CategoriesProvider";
 
 type Props = {
   onCancelClick: () => void;
@@ -43,22 +44,10 @@ const useStyles = makeStyles((theme) => ({
       outline: "none"
     }
   },
-  brand: {
-    border: "none",
-    background: styles.lightGrey,
-    color: "black",
-    fontWeight: "bold",
-    marginLeft: theme.spacing(1),
-    fontSize: 11,
-    width: "100%",
-    "&:focus": {
-      outline: "none"
-    }
-  },
   wrapper: {
     display: "grid",
     gridTemplateAreas: `
-    "type type"
+    "category category"
     "brand brand"
     "quantityText quantitySelector"
     "cancel add"
@@ -68,8 +57,11 @@ const useStyles = makeStyles((theme) => ({
     gridTemplateRows: "1fr min-content min-content min-content",
     maxWidth: window.outerWidth - theme.spacing(2)
   },
-  type: {
-    gridArea: "type"
+  category: {
+    gridArea: "category"
+  },
+  brand: {
+    gridArea: "brand"
   },
   quantityText: {
     gridArea: "quantityText",
@@ -94,14 +86,16 @@ export default function AddNewItem({
   initialItem
 }: Props) {
   const [quantity, setQuantity] = useState(initialItem?.quantity || 0);
-  const [type, setType] = useState<SuggestionBasedText>(
-    initialItem?.type || { leafKey: null, label: null }
+  const [category, setCategory] = useState<SuggestionBasedText>(
+    initialItem?.category || { label: null, id: null }
   );
   const [brand, setBrand] = useState<string>(initialItem?.brand || "");
 
   const styles = useStyles();
 
-  const itemButtonIsDisabled = !(quantity && type && type.label);
+  const itemButtonIsDisabled = !(quantity && category && category.label);
+
+  const categories = useCategoriesJson();
 
   return (
     <div className={styles.wrapper}>
@@ -111,20 +105,20 @@ export default function AddNewItem({
           inputPrompt={
             'Search for the litter type e.g. "plastic bottle" or "crisp packet"'
           }
-          setType={setType}
-          className={styles.type}
-          initialLabel={initialItem?.type?.label || ""}
+          callback={setCategory}
+          initialLabel={initialItem?.category?.label || ""}
+          className={styles.category}
         />
         <SuggestionBasedInput
           sourceData={brands}
           inputPrompt={
             'Search for the litter brand e.g. "Coca Cola" or "Cadbury"'
           }
-          setType={(suggestion: SuggestionBasedText) =>
+          callback={(suggestion: SuggestionBasedText) =>
             setBrand(suggestion?.label || "")
           }
-          className={styles.type}
           initialLabel={initialItem?.brand}
+          className={styles.brand}
         />
       </div>
       <p className={styles.quantityText}>Quantity</p>
@@ -146,7 +140,7 @@ export default function AddNewItem({
         onClick={() =>
           onConfirmClick({
             quantity,
-            type,
+            category,
             brand
           })
         }

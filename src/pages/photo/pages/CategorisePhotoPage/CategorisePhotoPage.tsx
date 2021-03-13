@@ -34,6 +34,8 @@ import BarcodeScanner, {
   isProductInfo
 } from "pages/photo/components/BarcodeScanner";
 
+const FROM_BARCODE_ID = "from-barcode-scanner";
+
 const useStyles = makeStyles((theme) => ({
   wrapper: {
     display: "flex",
@@ -189,7 +191,10 @@ export function CategoriseLitterPageWithFileInfo() {
                       addNewItem({
                         quantity: 1,
                         brand: result.brand,
-                        type: { label: result.productName, leafKey: null },
+                        category: {
+                          id: FROM_BARCODE_ID,
+                          label: result.productName
+                        },
                         barcode: result.barcode
                       });
                     } else {

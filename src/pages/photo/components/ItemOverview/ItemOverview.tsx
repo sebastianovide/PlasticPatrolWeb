@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
 export default function ItemOverview({
   quantity,
   brand,
-  type: { label },
+  category: { label },
   handleRemove,
   handleClick
 }: Props) {

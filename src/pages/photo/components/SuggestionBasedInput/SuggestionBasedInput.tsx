@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useCallback,
-  useEffect,
-  useRef,
-  useMemo
-} from "react";
+import React, { useState, useCallback, useEffect, useMemo } from "react";
 
 import Search from "@material-ui/icons/Search";
 import VisibilityIcon from "@material-ui/icons/Visibility";
@@ -15,8 +9,9 @@ import useOnOutsideClick from "hooks/useOnOutsideClick";
 import { SuggestionBasedText } from "../../types";
 import {
   getSuggestionsMatchingInput,
-  getLeafKey,
-  getSortedSuggestions
+  getSuggestionId,
+  getSortedSuggestions,
+  SuggestionT
 } from "./utils";
 
 import styles from "standard.scss";
@@ -107,8 +102,8 @@ const useStyles = makeStyles((theme) => ({
 type Props = {
   sourceData: Object;
   inputPrompt: string;
-  setType: (type: SuggestionBasedText) => void;
-  className: string;
+  callback: (type: SuggestionBasedText) => void;
+  className?: string;
   initialLabel?: string;
 };
 
@@ -117,10 +112,12 @@ export default function SuggestionBasedInput({
   inputPrompt,
   initialLabel,
   className,
-  setType
+  callback
 }: Props) {
   const styles = useStyles();
-  const [label, setLabel] = useState(initialLabel || "");
+
+  const [userInput, setUserInput] = useState(initialLabel || "");
+
   const [focused, setFocused] = useState(false);
   const [showSuggestionList, setShowSuggestionList] = useState(false);
   const outsideClickRef = useOnOutsideClick(() => setFocused(false));
@@ -128,67 +125,57 @@ export default function SuggestionBasedInput({
   const allSuggestions = useMemo(() => getSortedSuggestions(sourceData), [
     sourceData
   ]);
-  const suggestionsMatchingLabel = useMemo(
-    () => getSuggestionsMatchingInput(allSuggestions, label),
-    [allSuggestions, label]
-  );
-  const leafKey = useMemo(() => getLeafKey(allSuggestions, label), [
-    allSuggestions,
-    label
-  ]);
 
-  const onSuggestionClick = useCallback((suggestion: string) => {
-    setLabel(suggestion);
+  const onSuggestionClick = useCallback((userInput: string) => {
+    setUserInput(userInput);
     setShowSuggestionList(false);
     setFocused(false);
   }, []);
 
-  const setTypeRef = useRef(setType);
-  const labelRef = useRef(label);
+  const [suggestionsMatchingLabel, setMatchingSuggestions] = useState<
+    SuggestionT[]
+  >([]);
   useEffect(() => {
-    labelRef.current = label;
-  }, [label]);
-  useEffect(() => {
-    setTypeRef.current = setType;
-  }, [setType]);
+    const matches = getSuggestionsMatchingInput(allSuggestions, userInput);
+    setMatchingSuggestions(matches);
+  }, [allSuggestions, userInput]);
 
   useEffect(() => {
-    setTypeRef.current({ leafKey, label: labelRef.current });
-  }, [leafKey, label]);
-
-  const showViewListIcon = !focused && !leafKey;
+    callback({
+      label: userInput,
+      id: getSuggestionId(sourceData, userInput)
+    });
+  }, [userInput]);
 
   return (
-    //@ts-ignore
     <div ref={outsideClickRef} className={className}>
       <div className={styles.inputWrapper}>
         <Search />
         <input
           placeholder={inputPrompt}
           className={styles.input}
-          value={label}
-          onChange={(e) => setLabel(e.target.value)}
+          value={userInput}
+          onChange={(e) => setUserInput(e.target.value)}
           onFocus={() => setFocused(true)}
         />
-        {showViewListIcon && (
-          <div
-            className={styles.viewListIcon}
-            onClick={() => setShowSuggestionList(true)}
-          >
-            <VisibilityIcon />
-          </div>
-        )}
+
+        <div
+          className={styles.viewListIcon}
+          onClick={() => setShowSuggestionList(true)}
+        >
+          <VisibilityIcon />
+        </div>
       </div>
       <div className={styles.suggestionWrapper}>
         {focused &&
-          suggestionsMatchingLabel.map(({ label, key }) => (
-            <Suggestion
-              label={label}
-              Key={key}
-              key={`${label}-${key}`}
+          suggestionsMatchingLabel.map(({ label }) => (
+            <Button
               className={styles.suggestion}
-              onClick={onSuggestionClick}
-            />
+              onClick={() => onSuggestionClick(label)}
+              color="primary"
+            >
+              {label}
+            </Button>
           ))}
       </div>
       <Dialog
@@ -212,7 +199,7 @@ export default function SuggestionBasedInput({
         </DialogContent>
         <DialogActions>
           <Button
-            onClick={(e) => {
+            onClick={() => {
               setShowSuggestionList(false);
             }}
             color="primary"
@@ -222,24 +209,5 @@ export default function SuggestionBasedInput({
         </DialogActions>
       </Dialog>
     </div>
-  );
-}
-
-type SuggestionProps = {
-  label: string;
-  Key: string;
-  className: string;
-  onClick: (suggestion: string) => void;
-};
-
-function Suggestion({ label, className, onClick }: SuggestionProps) {
-  return (
-    <Button
-      className={className}
-      onClick={() => onClick(label)}
-      color="primary"
-    >
-      {label}
-    </Button>
   );
 }

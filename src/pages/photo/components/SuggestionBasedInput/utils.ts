@@ -1,29 +1,36 @@
 import _ from "lodash";
 
-type Suggestion = { key: string; label: string; synonyms?: string[] };
-type SuggestionArr = Array<Suggestion>;
+export type SuggestionT = {
+  label: string;
+  synonyms: string[];
+  id: string;
+};
+type SuggestionArr = Array<SuggestionT>;
 
 export function getSortedSuggestions(sourceData: Object): SuggestionArr {
   return _.sortBy(
-    Object.keys(sourceData).map((key) => {
+    Object.keys(sourceData).map((id) => {
+      // @ts-ignore
+      const { label, synonyms = [] } = sourceData[id];
+
       return {
-        key,
-        //@ts-ignore
-        label: sourceData[key].label,
-        //@ts-ignore
-        synonyms: sourceData[key].synonyms
+        label,
+        synonyms,
+        id
       };
-    }),
-    ({ label }) => label
+    })
   );
 }
 
-export function getSuggestionsMatchingInput(sortedSuggestions: SuggestionArr, input: string): SuggestionArr {
+export function getSuggestionsMatchingInput(
+  sortedSuggestions: SuggestionArr,
+  input: string
+): SuggestionArr {
   return sortedSuggestions.filter(filterCat(input));
 }
 
-function filterCat(input: string): (category: Suggestion) => boolean {
-  return function (category: Suggestion) {
+function filterCat(input: string): (category: SuggestionT) => boolean {
+  return function (category: SuggestionT) {
     if (input.length === 0) {
       return false;
     }
@@ -33,13 +40,16 @@ function filterCat(input: string): (category: Suggestion) => boolean {
       .concat(synonyms || [])
       .map((x) => x.toLowerCase());
 
-    return normalisedCategories
-      .map(category => category.includes(normalisedInput))
-      .includes(true);
+    return normalisedCategories.some((category) =>
+      category.includes(normalisedInput)
+    );
   };
 }
 
-export function getLeafKey(sourceData: object, input: string): string | null {
+export function getSuggestionId(
+  sourceData: object,
+  input: string
+): string | null {
   if (input.length === 0) {
     return "none";
   }
@@ -50,7 +60,7 @@ export function getLeafKey(sourceData: object, input: string): string | null {
   );
 
   if (category) {
-    return category.key;
+    return category.id;
   }
 
   return null;
