@@ -3,9 +3,12 @@ import { useHistory, useLocation } from "react-router";
 
 import PageWrapper from "components/PageWrapper";
 import PhotoPageStateProvider from "pages/photo/state";
+
+import CategoriesProvider from "features/firebase/categories/CategoriesProvider";
+import BrandsProvider from "features/firebase/brands/BrandsProvider";
+
 import PhotoPageSubRouter from "./routes/SubRouter";
 import { linkToNewPhoto } from "./routes/new/links";
-import CategoriesProvider from "features/firebase/categories/CategoriesProvider";
 
 export default function PhotoRoute() {
   const history = useHistory();
@@ -19,12 +22,14 @@ export default function PhotoRoute() {
   return (
     <PhotoPageStateProvider>
       <CategoriesProvider>
-        <PageWrapper
-          label={"Record your litter"}
-          navigationHandler={navigationHandler}
-        >
-          <PhotoPageSubRouter />
-        </PageWrapper>
+        <BrandsProvider>
+          <PageWrapper
+            label={"Record your litter"}
+            navigationHandler={navigationHandler}
+          >
+            <PhotoPageSubRouter />
+          </PageWrapper>
+        </BrandsProvider>
       </CategoriesProvider>
     </PhotoPageStateProvider>
   );

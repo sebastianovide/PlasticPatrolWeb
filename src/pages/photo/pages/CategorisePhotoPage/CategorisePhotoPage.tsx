@@ -190,7 +190,7 @@ export function CategoriseLitterPageWithFileInfo() {
                     if (isProductInfo(result)) {
                       addNewItem({
                         quantity: 1,
-                        brand: result.brand,
+                        brand: { label: result.brand, id: FROM_BARCODE_ID },
                         category: {
                           id: FROM_BARCODE_ID,
                           label: result.productName

@@ -96,7 +96,8 @@ async function sendFile({
     ({ quantity, category, brand, barcode }) => {
       totalCount = totalCount + quantity;
       return {
-        brand,
+        brand: brand.label,
+        brandId: brand.id,
         barcode: barcode || null,
         number: quantity,
         label: category.label,

@@ -5,10 +5,9 @@ import { Item, SuggestionBasedText } from "../../types";
 import QuantitySelector from "../QuantitySelector";
 import SuggestionBasedInput from "../SuggestionBasedInput";
 
-import brands from "custom/brands.json";
-
 import styles from "standard.scss";
 import { useCategoriesJson } from "features/firebase/categories/CategoriesProvider";
+import { useBrands } from "features/firebase/brands/BrandsProvider";
 
 type Props = {
   onCancelClick: () => void;
@@ -89,13 +88,16 @@ export default function AddNewItem({
   const [category, setCategory] = useState<SuggestionBasedText>(
     initialItem?.category || { label: null, id: null }
   );
-  const [brand, setBrand] = useState<string>(initialItem?.brand || "");
+  const [brand, setBrand] = useState<SuggestionBasedText>(
+    initialItem?.brand || { label: null, id: null }
+  );
 
   const styles = useStyles();
 
   const itemButtonIsDisabled = !(quantity && category && category.label);
 
   const categories = useCategoriesJson();
+  const brands = useBrands();
 
   return (
     <div className={styles.wrapper}>
@@ -114,10 +116,8 @@ export default function AddNewItem({
           inputPrompt={
             'Search for the litter brand e.g. "Coca Cola" or "Cadbury"'
           }
-          callback={(suggestion: SuggestionBasedText) =>
-            setBrand(suggestion?.label || "")
-          }
-          initialLabel={initialItem?.brand}
+          callback={setBrand}
+          initialLabel={initialItem?.brand?.label || ""}
           className={styles.brand}
         />
       </div>

@@ -6,6 +6,6 @@ export type SuggestionBasedText = {
 export type Item = {
   quantity: number;
   category: SuggestionBasedText;
-  brand: string;
+  brand: SuggestionBasedText;
   barcode?: number;
 };
