@@ -154,9 +154,9 @@ export function Routes({
         <FeedbackRoute user={user} />
       </ModeratorRoute>
 
-      <ModeratorRoute path={linkToAdminPages()} user={user}>
+      <Route path={linkToAdminPages()}>
         <AdminRouter />
-      </ModeratorRoute>
+      </Route>
 
       <Route path={linkToPhotoPage()}>
         <PhotoRoute />
