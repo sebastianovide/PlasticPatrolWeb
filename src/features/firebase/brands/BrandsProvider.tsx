@@ -1,10 +1,12 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
+import orginal from "custom/brands.json";
+
 import { fetchBrands, ServerBrand } from ".";
 
 type BrandJson = { [key: string]: ServerBrand };
 
 export default function BrandsProvider({ children }: any) {
-  const [brands, setBrands] = useState({});
+  const [brands, setBrands] = useState<BrandJson>(orginal);
 
   useEffect(() => {
     async function fetchAndReduce() {
