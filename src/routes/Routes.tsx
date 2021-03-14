@@ -40,6 +40,8 @@ import { linkToAccountPage } from "./account/links";
 import { useStats } from "providers/StatsProvider";
 import { linkToMissionsPage } from "./missions/links";
 import MissionsRoute from "./missions/Route";
+import linkToAdminPages from "./admin/links";
+import AdminRouter from "./admin/Router";
 
 type Props = {
   user: User;
@@ -151,6 +153,10 @@ export function Routes({
       <ModeratorRoute path={linkToFeedbackReports()} user={user}>
         <FeedbackRoute user={user} />
       </ModeratorRoute>
+
+      <Route path={linkToAdminPages()}>
+        <AdminRouter />
+      </Route>
 
       <Route path={linkToPhotoPage()}>
         <PhotoRoute />

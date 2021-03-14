@@ -22,7 +22,7 @@ export default function ItemOverviewList({
             {...item}
             handleRemove={() => handleRemoveItem(index)}
             handleClick={() => handleItemClick(index)}
-            key={`${item.type.label}-${item.quantity}`}
+            key={`${item.category.label}-${item.quantity}`}
           />
         );
       })}

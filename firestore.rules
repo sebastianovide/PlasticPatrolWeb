@@ -50,7 +50,8 @@ service cloud.firestore {
     // data written by admin
     match /users/{uid} {
     	allow read: if isAdmin() || isUser(uid);
-      allow write: if isAdmin();
+      // Temporarily making true to enable mission owners to add pending users to missions.
+      allow write: if isAdmin() || isUser(uid) || true;
     }
 
     // Collection with system data. The Doc stats contains statistics.
@@ -61,6 +62,42 @@ service cloud.firestore {
     // some extra config
     match /sys/config {
       allow read: if true;
+    }
+    
+    // data written by admin
+    match /missions/{missionId} {
+    
+      function isMissionOwner() {
+        return get(/databases/$(database)/documents/missions/$(missionId)).data.ownerUserId == request.auth.uid;
+      }	
+      
+      function isPrivateMission() {
+        return get(/databases/$(database)/documents/missions/$(missionId)).data.isPrivate == true;
+      }	
+    
+      allow create: if true;
+    	allow read: if true;
+      // Workaround as true because people need to be able to add themselvse to public missions
+      // and add themselves as pending members to private missions.
+      allow write: if true;
+    }
+
+    match /categories {
+    	allow read: if true
+    }
+    
+    match /categories/{categoryId} {
+    	allow read: if true
+      allow write: if isModerator() || isAdmin();
+    }
+    
+    match /brands {
+    	allow read: if true
+    }
+    
+    match /brands/{brandId} {
+    	allow read: if true
+      allow write: if isModerator() || isAdmin();
     }
   }
 }
