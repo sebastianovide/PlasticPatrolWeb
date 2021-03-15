@@ -19,9 +19,10 @@ platform :ios do
   desc "deploy ios to test flight"
   lane :beta do
     upload_to_testflight(
-        ipa: "platforms/ios/build/device/Planet Patrol.ipa",
-        distribute_external: false,
-        skip_waiting_for_build_processing: true
+      api_key_path: "AppStoreConnectAPIKey.json",
+      ipa: "platforms/ios/build/device/Planet Patrol.ipa",
+      distribute_external: false,
+      skip_waiting_for_build_processing: true
     )
     end
 end
