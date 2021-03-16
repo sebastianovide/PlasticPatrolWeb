@@ -1,3 +1,5 @@
+// import isMissionEnabled from "custom/featuresFlags";
+import isMissionEnabled from "custom/featuresFlags";
 import React, { useContext, useEffect, useState } from "react";
 import {
   fetchAllMissions,
@@ -67,6 +69,8 @@ export const MissionsProvider = ({ children }: Props) => {
   });
 
   useEffect(() => {
+    if (!isMissionEnabled()) return;
+
     updateMissions();
   }, []);
 

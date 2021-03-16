@@ -19,8 +19,7 @@ import Page from "types/Page";
 import { linkToFeedbackReports } from "routes/feedback-reports/links";
 import { linkToTutorialPage } from "routes/tutorial/links";
 import { linkToAboutPage } from "routes/about/links";
-
-import { remoteConfig } from "../features/firebase/firebaseInit";
+import isMissionEnabled from "./featuresFlags";
 
 const primaryMain = styles.primaryMain;
 const primaryContrastText = styles.primaryContrastText;
@@ -123,15 +122,7 @@ const PAGES: { [pageName: string]: Page } = {
   missions: {
     path: "/missions",
     label: "Missions",
-    visible: (user, online) =>
-      !!(
-        remoteConfig.getBoolean("enable_missions") ||
-        user?.email.endsWith("@geovation.uk") ||
-        user?.email.endsWith("@plasticpatrol.co.uk") ||
-        user?.email.endsWith("sebastian.ovide@gmail.com") ||
-        user?.email.endsWith("munfro@gmail.com") ||
-        localStorage.getItem("enable_missions")
-      ),
+    visible: (user, online) => isMissionEnabled(),
     icon: (
       <img
         src={MissionIconImage}

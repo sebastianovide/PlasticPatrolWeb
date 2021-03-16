@@ -86,7 +86,6 @@ const Wrapper = () => {
 
 const startApp = () => {
   gtagInit();
-
   ReactDOM.render(
     <Router>
       <MuiThemeProvider theme={theme}>
