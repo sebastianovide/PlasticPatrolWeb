@@ -4,6 +4,7 @@ class User {
   id: string;
   displayName: string;
   isModerator: boolean;
+  isTester: boolean;
   email: string;
   isAnonymous: boolean;
   phoneNumber: string;
@@ -17,6 +18,7 @@ class User {
     id: string,
     displayName: string,
     isModerator: boolean,
+    isTester: boolean,
     email: string,
     isAnonymous: boolean,
     phoneNumber: string,
@@ -29,6 +31,7 @@ class User {
     this.id = id;
     this.displayName = displayName;
     this.isModerator = isModerator;
+    this.isTester = isTester;
     this.email = email;
     this.isAnonymous = isAnonymous;
     this.phoneNumber = phoneNumber;

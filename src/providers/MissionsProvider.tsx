@@ -1,5 +1,4 @@
-// import isMissionEnabled from "custom/featuresFlags";
-import isMissionEnabled from "custom/featuresFlags";
+import { isMissionEnabled } from "custom/featuresFlags";
 import React, { useContext, useEffect, useState } from "react";
 import {
   fetchAllMissions,

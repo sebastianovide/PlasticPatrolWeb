@@ -19,7 +19,7 @@ import Page from "types/Page";
 import { linkToFeedbackReports } from "routes/feedback-reports/links";
 import { linkToTutorialPage } from "routes/tutorial/links";
 import { linkToAboutPage } from "routes/about/links";
-import isMissionEnabled from "./featuresFlags";
+import { isMissionEnabled } from "./featuresFlags";
 
 const primaryMain = styles.primaryMain;
 const primaryContrastText = styles.primaryContrastText;

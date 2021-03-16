@@ -35,6 +35,7 @@ const user: User = {
   id: "user-1",
   displayName: "Alfred Test",
   isModerator: false,
+  isTester: false,
   email: "test@test.com",
   isAnonymous: true,
   phoneNumber: "19175551919",
