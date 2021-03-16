@@ -104,3 +104,5 @@ cypress/support/commands.js
 
 .runtimeconfig.json
 .vscode
+
+firestore-coverage.html
