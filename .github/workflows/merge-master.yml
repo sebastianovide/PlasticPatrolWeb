@@ -4,11 +4,11 @@ on:
   push:
     branches:
       - "master"
+  pull_request:
 
 
 jobs:
-  # COUPLED jobs from "test-commit"... Any better way ?
-  unit-test-web:
+  e2e-test-web:
     runs-on: ubuntu-16.04
     steps:
       - uses: actions/checkout@v2
@@ -21,6 +21,25 @@ jobs:
           start: yarn start
           wait-on: "http://localhost:3000"
           wait-on-timeout: 180
+        
+  unit-test-web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - name: Cache node_modules
+        id: cache-modules
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ runner.OS }}-node_modules-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            ${{ runner.OS }}-node_modules-
+      - name: yarn
+        if: steps.cache-modules.outputs.cache-hit != 'true'
+        run: yarn      
       - run: yarn app:test
 
   unit-test-functions:
@@ -49,8 +68,10 @@ jobs:
             firestore-coverage.html
             firestore-debug.log
 
+
   build_web:
-    needs: [unit-test-web, unit-test-functions, unit-test-firebase]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    needs: [unit-test-web, unit-test-functions, unit-test-firebase, e2e-test-web]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
