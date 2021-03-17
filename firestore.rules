@@ -50,8 +50,7 @@ service cloud.firestore {
     // data written by admin
     match /users/{uid} {
     	allow read: if isAdmin() || isUser(uid);
-      // Temporarily making true to enable mission owners to add pending users to missions.
-      allow write: if isAdmin() || isUser(uid) || true;
+      allow write: if isAdmin();
     }
 
     // Collection with system data. The Doc stats contains statistics.
