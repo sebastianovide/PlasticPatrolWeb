@@ -6,7 +6,7 @@ import PageWrapper from "components/PageWrapper";
 
 import "react-circular-progressbar/dist/styles.css";
 
-import styles from "standard.scss";
+import styles from "standard.module.scss";
 import Search from "@material-ui/icons/Search";
 import Clear from "@material-ui/icons/Clear";
 import MissionThumbnail from "./MissionThumbnail";

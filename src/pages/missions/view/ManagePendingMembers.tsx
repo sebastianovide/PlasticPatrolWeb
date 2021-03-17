@@ -59,7 +59,7 @@ export default function ManagePendingMembers({}: Props) {
   const missionData = useMissions();
   const missions = missionData?.missions || [];
 
-  const { missionId } = useParams();
+  const { missionId } = useParams<{ missionId: string }>();
   const mission = missions.find((ch) => ch.id.toString() === missionId);
   if (mission === undefined) {
     const errorMessage = `Trying to manage pending mission members but couldn't find mission ${missionId} data in list.`;

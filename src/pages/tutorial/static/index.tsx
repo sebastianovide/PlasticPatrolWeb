@@ -12,7 +12,7 @@ import exampleImage from "assets/images/example.jpeg";
 import useLocationOnMount from "hooks/useLocationOnMount";
 
 import { linkToMap } from "custom/config";
-import styles from "standard.scss";
+import styles from "standard.module.scss";
 
 export type TutorialStep = {
   img?: string;

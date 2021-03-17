@@ -11,7 +11,7 @@ import FeedbackIcon from "@material-ui/icons/Feedback";
 import LibraryBooksIcon from "@material-ui/icons/LibraryBooks";
 import MissionIconImage from "assets/images/mission.png";
 
-import styles from "standard.scss";
+import styles from "standard.module.scss";
 
 import User from "types/User";
 import Page from "types/Page";
@@ -190,7 +190,7 @@ const config: Config = {
     },
     spacing: 10
   },
-  MAP_SOURCE: "mapbox://styles/mapbox/streets-v10",
+  MAP_SOURCE: "mapbox://styles/mapbox/streets-v11",
   // MAP_SOURCE: "https://s3-eu-west-1.amazonaws.com/tiles.os.uk/styles/open-zoomstack-outdoor/style.json",
   // MAP_ATTRIBUTION: "Contains OS data &copy; Crown copyright and database rights 2018",
   MAPBOX_TOKEN:

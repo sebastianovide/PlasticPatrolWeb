@@ -5,7 +5,7 @@ import { Item, SuggestionBasedText } from "../../types";
 import QuantitySelector from "../QuantitySelector";
 import SuggestionBasedInput from "../SuggestionBasedInput";
 
-import styles from "standard.scss";
+import styles from "standard.module.scss";
 import { useCategoriesJson } from "features/firebase/categories/CategoriesProvider";
 import { useBrands } from "features/firebase/brands/BrandsProvider";
 

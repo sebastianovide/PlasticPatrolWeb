@@ -4,10 +4,15 @@
     "sourceMap": true,
     "strictNullChecks": true,
     "module": "esnext",
-    "jsx": "react",
+    "jsx": "react-jsx",
     "target": "es5",
     "allowJs": true,
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "es6",
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
@@ -17,8 +22,17 @@
     "resolveJsonModule": true,
     "noEmit": true,
     "baseUrl": "src",
-    "typeRoots": ["./types", "./node_modules/@types"],
-    "isolatedModules": true
+    "typeRoots": [
+      "./types",
+      "./node_modules/@types"
+    ],
+    "isolatedModules": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true
   },
-  "include": ["src", ".storybook/*"]
+  "include": [
+    "src",
+    ".storybook/*"
+  ]
 }

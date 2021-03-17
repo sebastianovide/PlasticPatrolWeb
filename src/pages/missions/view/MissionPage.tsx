@@ -136,7 +136,7 @@ export default function MissionPage({}: Props) {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
 
-  const { missionId } = useParams();
+  const { missionId } = useParams<{ missionId: string }>();
   const mission = missions.find((ch) => ch.id.toString() === missionId);
   if (mission === undefined) {
     return <div>Could not find mission</div>;
@@ -340,7 +340,7 @@ export default function MissionPage({}: Props) {
             )}`}
           </DialogContentText>
           <DialogContentText>
-            {`Other Planet Patrol users can request to join your mission by copying this into the search bar in the 
+            {`Other Planet Patrol users can request to join your mission by copying this into the search bar in the
             Missions home page.`}
           </DialogContentText>
         </DialogContent>

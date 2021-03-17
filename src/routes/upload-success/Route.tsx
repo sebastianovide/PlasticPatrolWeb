@@ -9,7 +9,7 @@ export default function UploadSuccessRoute({
   totalNumberOfPieces,
   sponsorImage
 }: Props) {
-  const { number } = useParams();
+  const { number } = useParams<{ number: string }>();
   const history = useHistory();
 
   const navigateToHomeScreen = () => history.push("/");

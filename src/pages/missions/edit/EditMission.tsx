@@ -53,7 +53,7 @@ export default function EditMission({}: Props) {
   const missionData = useMissions();
   const missions = missionData?.missions || [];
 
-  const { missionId } = useParams();
+  const { missionId } = useParams<{ missionId: string }>();
   const originalMission = missions.find((ch) => ch.id.toString() === missionId);
   if (originalMission === undefined) {
     console.warn(

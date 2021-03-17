@@ -22,7 +22,7 @@ import {
 import MissionThumbnail from "../missions/MissionThumbnail";
 import { linkToMissionsPage } from "../../routes/missions/links";
 
-import styles from "standard.scss";
+import styles from "standard.module.scss";
 import {
   MissionFirestoreData,
   userOnMissionLeaderboard

@@ -4,7 +4,7 @@ import { makeStyles } from "@material-ui/core";
 
 import handPrint from "assets/images/intro/handPrint.png";
 
-import styles from "standard.scss";
+import styles from "standard.module.scss";
 
 import SlideLayout from "../SlideLayout";
 

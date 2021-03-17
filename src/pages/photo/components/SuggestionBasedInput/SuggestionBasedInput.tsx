@@ -14,7 +14,7 @@ import {
   SuggestionT
 } from "./utils";
 
-import styles from "standard.scss";
+import styles from "standard.module.scss";
 import {
   Dialog,
   DialogContent,

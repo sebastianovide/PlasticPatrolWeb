@@ -10,7 +10,7 @@ import AddIcon from "@material-ui/icons/Add";
 import BackIcon from "@material-ui/icons/ArrowBack";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 
-import standardStyles from "standard.scss";
+import standardStyles from "standard.module.scss";
 
 import { isIphoneWithNotchAndCordova, isIphoneAndCordova } from "../utils";
 import {

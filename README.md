@@ -1,6 +1,6 @@
 # plastic-patrol
 
-_NOTE_ I highly recommend running "echo REACT_ENV_USE_PROD_DATA=false >> .env" before running the app.
+_NOTE_ I highly recommend running "echo REACT_APP_USE_PROD_DATA=false >> .env" before running the app.
 
 To start the webapp, just `npm start`
 
@@ -42,7 +42,7 @@ node scripts/firebase.js
 ```
 
 This is an example script demonstrating how to interact with firebase via node. It pulls in config.json from the main app so will respect
-`REACT_ENV_USE_PROD_DATA` as well.
+`REACT_APP_USE_PROD_DATA` as well.
 
 ## stats.js
 
