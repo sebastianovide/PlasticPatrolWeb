@@ -182,11 +182,8 @@ const config: Config = {
   MAX_IMAGE_SIZE: 2048,
   THEME: {
     palette: {
-      primary: {
-        main: primaryMain,
-        contrastText: primaryContrastText
-      },
-      // secondary: { main: secondaryMain, contrastText: secondaryContrastText }
+      primary: { main: primaryMain, contrastText: primaryContrastText },
+      secondary: { main: secondaryMain, contrastText: secondaryContrastText }
     },
     typography: {
       fontFamily: ["BrownSTD"]
