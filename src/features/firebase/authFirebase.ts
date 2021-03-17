@@ -34,6 +34,7 @@ export const onAuthStateChanged = ({ onSignOut, setUser }: Args) => {
     }
 
     gtagSetId(user.uid);
+    cordova?.plugins?.firebase?.crashlytics?.setUserId(user.uid);
     gtagEvent("Logged in", "User", user.uid);
 
     const gravatarURL = "https://www.gravatar.com/" + md5(user.email) + ".json";
