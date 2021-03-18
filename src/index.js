@@ -39,7 +39,7 @@ function initialiseCypressVars() {
 initialiseCypressVars();
 
 if (isIphoneAndCordova) {
-  window.StatusBar.styleDefault();
+  window?.StatusBar?.styleDefault();
 }
 
 if (

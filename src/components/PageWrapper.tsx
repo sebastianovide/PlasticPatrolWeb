@@ -107,14 +107,14 @@ const useStatusBarHighlighting = () => {
   useEffect(() => {
     const palette = theme.palette;
     if (isIphoneAndCordova && palette.primary.main === palette.common.black) {
-      window.StatusBar.styleDefault();
+      window?.StatusBar?.styleDefault();
     }
 
     // on unmount, set to styleLightContent
     return () => {
       const palette = theme.palette;
       if (isIphoneAndCordova && palette.primary.main === palette.common.black) {
-        window.StatusBar.styleLightContent();
+        window?.StatusBar?.styleLightContent();
       }
     };
   });
