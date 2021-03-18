@@ -86,7 +86,7 @@ export default function CategoriseLitterPage() {
     } else if (isCordovaImageState(state)) {
       const { file, fromCamera } = state;
       loadPhoto({
-        fileOrFileName: file.filename,
+        fileOrFileName: (window as any).Ionic.WebView.convertFileSrc(file.filename),
         fromCamera,
         gpsLocation,
         cordovaMetadata: JSON.parse(file.json_metadata),
