@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import _ from "lodash";
-import mapboxgl from 'mapbox-gl/dist/mapbox-gl-csp';
+import mapboxgl from 'mapbox-gl/dist/mapbox-gl';
 // eslint-disable-next-line import/no-webpack-loader-syntax
-import MapboxWorker from 'worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker'; // Load worker code separately with worker-loader
 import "mapbox-gl/dist/mapbox-gl.css";
 
 import Fab from "@material-ui/core/Fab";
@@ -71,7 +70,6 @@ class Map extends Component {
   }
 
   async componentDidMount() {
-    mapboxgl.workerClass = MapboxWorker;
     mapboxgl.accessToken = this.props.config.MAPBOX_TOKEN;
 
     const mapLocation = this.props.mapLocation;
