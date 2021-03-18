@@ -1,8 +1,7 @@
 import React, { useRef } from "react";
 
-import mapboxgl from 'mapbox-gl/dist/mapbox-gl-csp';
+import mapboxgl from 'mapbox-gl/dist/mapbox-gl';
 // eslint-disable-next-line import/no-webpack-loader-syntax
-import MapboxWorker from 'worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker'; // Load worker code separately with worker-loader
 import "mapbox-gl/dist/mapbox-gl.css";
 
 import useEffectOnMount from "hooks/useEffectOnMount";
@@ -36,7 +35,6 @@ export default function GeoTagMap({ onLocationUpdate }: Props) {
   const styles = useStyles();
 
   useEffectOnMount(() => {
-    mapboxgl.workerClass = MapboxWorker;
     mapboxgl.accessToken = config.MAPBOX_TOKEN;
 
     const center = initialLocation
