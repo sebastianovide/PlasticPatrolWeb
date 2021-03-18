@@ -60,6 +60,7 @@ travis encrypt-file secrets.tar secrets.tar.enc -p -r Geovation/plastic-patrol
 ```
 
 # Releases
+TODO
 
 CI manages the release of dev versions of the app to https://plastic-patrol-dev-722eb.web.app/#/
 When creating a PR there's no need to bump package.json as that happens during the build process where we'll then tag the new version we deploy to dev.
