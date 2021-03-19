@@ -83,7 +83,8 @@ function doLoadPhoto({
     {
       orientation: true,
       maxWidth: config.MAX_IMAGE_SIZE,
-      maxHeight: config.MAX_IMAGE_SIZE
+      maxHeight: config.MAX_IMAGE_SIZE,
+      canvas: true
     }
   );
 }

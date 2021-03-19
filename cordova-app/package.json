@@ -5,7 +5,8 @@
   "homepage": "./",
   "cordova": {
     "platforms": [
-      "android"
+      "android",
+      "ios"
     ],
     "plugins": {
       "cordova-plugin-whitelist": {},
@@ -41,9 +42,11 @@
       "cordova-support-android-plugin": {},
       "cordova-plugin-firebase-crash": {
         "FIREBASE_CRASHLYTICS_COLLECTION_ENABLED": "true",
-        "ANDROID_FIREBASE_CRASHLYTICS_VERSION": "17.3.+"
+        "ANDROID_FIREBASE_CRASHLYTICS_VERSION": "17.3.+",
+        "IOS_FIREBASE_CRASHLYTICS_VERSION": "~> 7.0.0"
       },
-      "cordova-plugin-splashscreen": {}
+      "cordova-plugin-splashscreen": {},
+      "cordova-plugin-ionic-webview": {}
     }
   },
   "dependencies": {
@@ -67,6 +70,7 @@
     "cordova-plugin-firebase-crash": "^3.0.0",
     "cordova-plugin-geolocation": "^4.1.0",
     "cordova-plugin-inappbrowser": "^5.0.0",
+    "cordova-plugin-ionic-webview": "^5.0.0",
     "cordova-support-android-plugin": "^1.0.2",
     "cordova-support-google-services": "^1.4.1",
     "http-server": "^0.12.3",
