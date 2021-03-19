@@ -26,6 +26,7 @@
     "lodash": "^4.17.15",
     "mapbox-gl": "1",
     "md5": "^2.2.1",
+    "phonegap-plugin-barcodescanner": "^8.1.0",
     "rc-progress": "^3.0.0",
     "react": "^17.0.1",
     "react-circular-progressbar": "^2.0.3",

@@ -6,6 +6,10 @@
     <param name="ios-package" value="CDVCamera"/>
   </feature>
 
+  <feature name="BarcodeScanner">
+    <param name="ios-package" value="CDVBarcodeScanner"/>
+  </feature>
+
   
   <preference name="webviewbounce" value="false" />
   <preference name="UIWebViewBounce" value="false" />
