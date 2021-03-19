@@ -16,5 +16,11 @@
       "CameraUsesGeolocation": "true",
       "Orientation": "portrait"
     }
+  },
+  "ios": {
+    "minVersion": "12.0"
+  },
+  "android": {
+    
   }
 }

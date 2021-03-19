@@ -4,6 +4,8 @@ import { HashRouter as Router } from "react-router-dom";
 import * as firebaseui from "firebaseui";
 import firebase from "firebase/app";
 
+// import { defineCustomElements } from '@ionic/pwa-elements/loader';
+
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 
 import "./index.scss";

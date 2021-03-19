@@ -10,12 +10,19 @@ import Dialog from "@material-ui/core/Dialog";
 import CameraIcon from "@material-ui/icons/PhotoCamera";
 import PhotoLibraryIcon from "@material-ui/icons/PhotoLibrary";
 import CancelIcon from "@material-ui/icons/Close";
+
+// import { Plugins, CameraResultType, CameraPhoto } from '@capacitor/core';
+// import { CameraSource } from "@capacitor/camera";
+
 import { CordovaCameraImage } from "../../state/types";
 
 type Props = {
   onClose: () => void;
   handlePhotoSelect: (image: CordovaCameraImage, fromCamera: boolean) => void;
 };
+
+// It is broken: https://github.com/ionic-team/capacitor-plugins/issues/45
+// const { Camera } = Plugins;
 
 export default function AddPhotoDialog({ onClose, handlePhotoSelect }: Props) {
   return (
@@ -62,6 +69,15 @@ function handlePhotoDialogItemClick(
   value: string,
   callback: (file: CordovaCameraImage) => void
 ) {
+  // if (!Camera?.getPhoto) return handlePhotoDialogItemClickCordova(value, callback);
+  // else return handlePhotoDialogItemClickCapacitor(value, callback);
+  return handlePhotoDialogItemClickCordova(value, callback);
+}
+
+function handlePhotoDialogItemClickCordova(
+  value: string,
+  callback: (file: CordovaCameraImage) => void
+) {
   // @ts-ignore
   const Camera = navigator.camera;
   const srcType =
@@ -89,3 +105,26 @@ function handlePhotoDialogItemClick(
     }
   );
 }
+
+// async function handlePhotoDialogItemClickCapacitor(
+//   value: string,
+//   callback: (file: CordovaCameraImage) => void
+// ) {
+//   const source: CameraSource =
+//     value === "CAMERA"
+//       ? CameraSource.Camera
+//       : CameraSource.Photos;
+    
+//   try {
+//     const foto: CameraPhoto = await Camera.getPhoto({
+//       quality: 50,
+//       resultType: CameraResultType.Uri,
+//       source
+//     });
+
+//     debugger
+//     callback({ filename: foto.dataUrl, json_metadata: foto.exif });
+//   } catch (e) {
+//     console.log("Failed because: ", e);
+//   }
+// }
