@@ -1,0 +1,20 @@
+{
+  "appId": "uk.co.plasticpatrol",
+  "appName": "Planet Patrol",
+  "bundledWebRuntime": false,
+  "npmClient": "yarn",
+  "webDir": "build",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    }
+  },
+  "cordova": {
+    "preferences": {
+      "webviewbounce": "false",
+      "UIWebViewBounce": "false",
+      "CameraUsesGeolocation": "true",
+      "Orientation": "portrait"
+    }
+  }
+}
