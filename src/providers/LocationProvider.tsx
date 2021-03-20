@@ -14,11 +14,17 @@ const LocationProvider: React.FC<{}> = ({ children }) => {
     updated: undefined
   });
 
+  console.log("LOCATION PROVIDER")
+
+
   useEffect(() => {
+    console.log("LOCATION PROVIDER useEffect")
+
     // TODO: remove with cordova
     if (!Geolocation.watchPosition) {
-      if (!navigator?.geolocation?.watchPosition) { return }
       console.log("CORDOVA VERSION")
+
+      if (!navigator?.geolocation?.watchPosition) { return }
       const subscription = navigator.geolocation.watchPosition(
         (position) => {
           setLocation({
