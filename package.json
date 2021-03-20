@@ -72,8 +72,8 @@
     "test:initandtest-firebase": "firebase setup:emulators:firestore && yarn test:firebase",
     "run:cypress": "cypress run",
     "verifyUser": "ts-node ./scripts/verifyUser",
-    "capacitor:build:android": "npx jetify && npx cap sync android && cd android && ./gradlew build && cd .. ",
-    "capacitor:build:ios": "npx jetify && npx cap sync ios && cd ios && xcodebuild -workspace App/App.xcworkspace -scheme App -sdk iphonesimulator -configuration Debug -archivePath build/build archive -UseModernBuildSystem=YES && cd .. "
+    "capacitor:build:android": "cross-env ./scripts/runWithVars.sh 'npx jetify && npx cap sync android && node scripts/changeVersion.js && cd android && ./gradlew build && cd .. '",
+    "capacitor:build:ios": "cross-env ./scripts/runWithVars.sh 'npx jetify && npx cap sync ios && node scripts/changeVersion.js && cd ios && xcodebuild -workspace App/App.xcworkspace -scheme App -sdk iphonesimulator -configuration Debug -archivePath build/build archive -UseModernBuildSystem=YES && cd .. '"
   },
   "devDependencies": {
     "@firebase/rules-unit-testing": "^1.2.4",
@@ -111,6 +111,7 @@
     "mocha": "^8.3.0",
     "ncp": "^2.0.0",
     "node-sass": "^5.0.0",
+    "plist": "^3.0.1",
     "prettier": "^2.0.5",
     "prompt-sync": "^4.2.0",
     "random-location": "^1.1.2",

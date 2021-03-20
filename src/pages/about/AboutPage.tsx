@@ -104,8 +104,7 @@ export default function AboutPage({
           </Button>
         </span>
         <br />
-        Version {process.env.REACT_APP_VERSION}, build{" "}
-        {process.env.REACT_APP_BUILD_NUMBER}
+        Version {process.env.REACT_APP_VERSION}
       </Typography>
     </PageWrapper>
   );
