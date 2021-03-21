@@ -7054,11 +7054,6 @@ cordova-serve@^4.0.0:
     open "^7.0.3"
     which "^2.0.2"
 
-cordova-support-android-plugin@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/cordova-support-android-plugin/-/cordova-support-android-plugin-1.0.2.tgz#db5c8c34190d656d7fa116f702f103d692f492a4"
-  integrity sha512-bgvSG5/A2Z/OerfNHN7AHMV3jt+9bH6J4vw9T8R5OJRkkK+ENRBhL8qx7m6mLmBPvtQoIhCMOCRMM9fd4P/p9w==
-
 cordova@^10.0.0:
   version "10.0.0"
   resolved "https://registry.yarnpkg.com/cordova/-/cordova-10.0.0.tgz#8563934f5207896efb7ea517f43065a3d0a4eaf1"
