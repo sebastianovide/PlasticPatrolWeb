@@ -73,7 +73,8 @@
     "run:cypress": "cypress run",
     "verifyUser": "ts-node ./scripts/verifyUser",
     "capacitor:build:android": "cross-env ./scripts/runWithVars.sh 'npx jetify && npx cap sync android && node scripts/changeVersion.js && cd android && ./gradlew build && cd .. '",
-    "capacitor:build:ios": "cross-env ./scripts/runWithVars.sh 'npx jetify && npx cap sync ios && node scripts/changeVersion.js && cd ios && xcodebuild -workspace App/App.xcworkspace -scheme App -sdk iphonesimulator -configuration Debug -archivePath build/build archive -UseModernBuildSystem=YES && cd .. '"
+    "capacitor:build:ios": "cross-env ./scripts/runWithVars.sh 'npx cap sync ios && node scripts/changeVersion.js && cd ios && xcodebuild -workspace App/App.xcworkspace -scheme App -sdk iphonesimulator -configuration Debug -archivePath build/build archive -UseModernBuildSystem=YES && cd .. '",
+    "capacitor:resources": "cordova-res --skip-config --copy"
   },
   "devDependencies": {
     "@firebase/rules-unit-testing": "^1.2.4",
@@ -96,6 +97,7 @@
     "@types/react-virtualized-auto-sizer": "^1.0.0",
     "@types/react-window": "^1.8.2",
     "@types/uuid": "^8.0.0",
+    "cordova-res": "^0.15.3",
     "coveralls": "^3.0.7",
     "cross-env": "^7.0.2",
     "cypress": "^6.6.0",
