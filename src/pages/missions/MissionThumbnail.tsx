@@ -49,11 +49,6 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: "bold"
   },
 
-  participantCount: {
-    paddingBottom: "7px",
-    color: "#aaa"
-  },
-
   durationRemaining: {
     color: "#aaa"
   },
@@ -98,7 +93,7 @@ export default function MissionThumbnail({ mission }: Props) {
       onClick={() => history.push(linkToMission(mission.id.toString()))}
     >
       <div className={classes.pictureWrapper}>
-        <img src={imgSrc} className={classes.picture} />
+        <img src={imgSrc} className={classes.picture} alt="" />
       </div>
       <div className={classes.textSection}>
         <div className={classes.name}>
@@ -106,9 +101,6 @@ export default function MissionThumbnail({ mission }: Props) {
             <LockOpenIcon fontSize={"small"} className={classes.privateIcon} />
           )}{" "}
           {mission.name}
-        </div>
-        <div className={classes.participantCount}>
-          {mission.totalUserPieces?.length || 0} participants
         </div>
         <div className={classes.durationRemaining}>{textDurationRemaining}</div>
       </div>
