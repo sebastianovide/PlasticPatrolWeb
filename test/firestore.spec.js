@@ -1,4 +1,5 @@
 // this comes from https://github.com/firebase/quickstart-testing/tree/master/unit-test-security-rules
+// you can see some info hete: http://localhost:8080/emulator/v1/projects/firestore-emulator-example:ruleCoverage.html
 
 const firebase = require("@firebase/rules-unit-testing");
 const fs = require("fs");
@@ -7,7 +8,7 @@ const http = require("http");
 /**
  * The emulator will accept any project ID for testing.
  */
-const PROJECT_ID = "firestore-emulator-example";
+const PROJECT_ID = "plastic-patrol-dev-test";
 
 const APP_OPTIONS = {
   projectId: PROJECT_ID
@@ -34,8 +35,31 @@ const ADMIN_USER = {
   }
 };
 
-const USERS = [NORMAL_USER, ANOTHER_USER, ADMIN_USER];
+const MODERATOR_USER = {
+  uid: "moderator",
+  data: {
+    isModerator: true
+  }
+};
 
+const UNMODERATED_PHOTO = {
+  uid: "unmoderated",
+  data: {
+    moderated: null,
+    owner_id: NORMAL_USER.uid
+  }
+};
+
+const UNMODERATED_PHOTO_OTHER_USER = {
+  uid: "unmoderated_otheruser",
+  data: {
+    moderated: null,
+    owner_id: ANOTHER_USER.uid
+  }
+};
+
+const USERS = [NORMAL_USER, ANOTHER_USER, MODERATOR_USER, ADMIN_USER];
+const PHOTOS = [UNMODERATED_PHOTO, UNMODERATED_PHOTO_OTHER_USER];
 /**
  * The FIRESTORE_EMULATOR_HOST environment variable is set automatically
  * by "firebase emulators:exec"
@@ -62,6 +86,10 @@ beforeEach(async () => {
 
   USERS.forEach(async (user) => {
     await db.collection("users").doc(user.uid).set(user.data);
+  });
+
+  PHOTOS.forEach(async (photo) => {
+    await db.collection("photos").doc(photo.uid).set(photo.data);
   });
 });
 
@@ -92,7 +120,15 @@ after(async () => {
 });
 
 describe("Moderator Users", () => {
-  // TODO cannot update existing user
+  it("can see unmoderated photos", async () => {
+    const db = getAuthedFirestore(MODERATOR_USER);
+
+    // I have not a clue why this command line fixes the test
+    console.log(await db.collection("photos").get());
+
+    const unmoderated = db.collection("photos").doc(UNMODERATED_PHOTO.uid);
+    await firebase.assertSucceeds(unmoderated.get());
+  });
 });
 
 describe("Admin Users", () => {
@@ -100,50 +136,63 @@ describe("Admin Users", () => {
 });
 
 describe("Loggedin Users", () => {
-  let db;
+  describe("users", () => {
+    const db = getAuthedFirestore(NORMAL_USER);
+    it("should be able to read own data", async () => {
+      const user = db.collection("users").doc(NORMAL_USER.uid);
+      await firebase.assertSucceeds(user.get());
+    });
 
-  before(async () => {
-    db = getAuthedFirestore(NORMAL_USER);
+    it("cannot read others data", async () => {
+      const db = getAuthedFirestore(NORMAL_USER);
+      const user = db.collection("users").doc(ANOTHER_USER.uid);
+      await firebase.assertFails(user.get());
+    });
+
+    it("cannot change the field isAdmin", async () => {
+      const db = getAuthedFirestore(NORMAL_USER);
+      const user = db.collection("users").doc(NORMAL_USER.uid);
+      await firebase.assertFails(user.set({ isAdmin: true }));
+    });
+
+    it("cannot change the field isModerator", async () => {
+      const db = getAuthedFirestore(NORMAL_USER);
+      const user = db.collection("users").doc(NORMAL_USER.uid);
+      await firebase.assertFails(user.set({ isModerator: true }));
+    });
+
+    it("cannot change the field isTester", async () => {
+      const db = getAuthedFirestore(NORMAL_USER);
+      const user = db.collection("users").doc(NORMAL_USER.uid);
+      await firebase.assertFails(user.set({ isTester: true }));
+    });
   });
 
-  it("should be able to read own data", async () => {
-    const user = db.collection("users").doc(NORMAL_USER.uid);
-    await firebase.assertSucceeds(user.get());
-  });
+  describe("photos", () => {
+    it("cannot read other people unmoderated photos", async () => {
+      const db = getAuthedFirestore(NORMAL_USER);
+      const photo = db
+        .collection("photos")
+        .doc(UNMODERATED_PHOTO_OTHER_USER.uid);
+      await firebase.assertFails(photo.get());
+    });
 
-  it("cannot read others data", async () => {
-    const user = db.collection("users").doc(ANOTHER_USER.uid);
-    await firebase.assertFails(user.get());
-  });
-
-  it("cannot change the field isAdmin", async () => {
-    const user = db.collection("users").doc(NORMAL_USER.uid);
-    await firebase.assertFails(user.set({ isAdmin: true }));
-  });
-
-  it("cannot change the field isModerator", async () => {
-    const user = db.collection("users").doc(NORMAL_USER.uid);
-    await firebase.assertFails(user.set({ isModerator: true }));
-  });
-
-  it("cannot change the field isTester", async () => {
-    const user = db.collection("users").doc(NORMAL_USER.uid);
-    await firebase.assertFails(user.set({ isTester: true }));
+    it("can read own unmoderated photos", async () => {
+      const db = getAuthedFirestore(NORMAL_USER);
+      const photo = db.collection("photos").doc(UNMODERATED_PHOTO.uid);
+      await firebase.assertSucceeds(photo.get());
+    });
   });
 });
 
 describe("Anonymous Users", () => {
-  let db;
-
-  before(async () => {
-    db = getAuthedFirestore(null);
-  });
-
   it("should be able to write feedbacks", async () => {
+    const db = getAuthedFirestore(null);
     const feedbacks = db.collection("feedbacks");
     await firebase.assertSucceeds(feedbacks.add({ someField: "some value" }));
   });
   it("should not be able to read feedbacks", async () => {
+    const db = getAuthedFirestore(null);
     const feedbacks = db.collection("feedbacks");
     await firebase.assertFails(feedbacks.get());
   });
