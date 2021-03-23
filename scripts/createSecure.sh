@@ -1,6 +1,6 @@
 #!/bin/sh
 
-pushd cordova-app
+# pushd cordova-app
 
 # this is used for travis and will eventually be removed
 
