@@ -3,6 +3,8 @@ import ReactDOM from "react-dom";
 import { HashRouter as Router } from "react-router-dom";
 import * as firebaseui from "firebaseui";
 import firebase from "firebase/app";
+import { FirebaseCrashlytics } from '@ionic-native/firebase-crashlytics/ngx';
+
 
 // import { defineCustomElements } from '@ionic/pwa-elements/loader';
 
@@ -88,6 +90,7 @@ const Wrapper = () => {
 
 const startApp = () => {
   gtagInit();
+  // TODO: crashslytics
   ReactDOM.render(
     <Router>
       <MuiThemeProvider theme={theme}>

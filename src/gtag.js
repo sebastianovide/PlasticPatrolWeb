@@ -1,8 +1,15 @@
 import firebase from "firebase/app";
+import { FirebaseCrashlytics } from '@ionic-native/firebase-crashlytics/ngx';
 
 let analytics;
+let crashlytics;
 
 export const gtagInit = () => {
+
+  debugger
+  crashlytics = FirebaseCrashlytics.initialise();
+
+
   if (
     window.cordova &&
     window.cordova.plugins &&
