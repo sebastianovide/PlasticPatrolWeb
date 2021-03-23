@@ -1,15 +1,13 @@
-import firebase from "firebase/app";
-import { FirebaseCrashlytics } from '@ionic-native/firebase-crashlytics/ngx';
+// TODO: convert it to typescript. Where should we put this file ?
 
+import firebase from "firebase/app";
+import { Plugins } from "@capacitor/core";
+
+// https://github.com/capacitor-community/firebase-crashlytics
+const { FirebaseCrashlytics } = Plugins;
 let analytics;
-let crashlytics;
 
 export const gtagInit = () => {
-
-  debugger
-  crashlytics = FirebaseCrashlytics.initialise();
-
-
   if (
     window.cordova &&
     window.cordova.plugins &&
@@ -43,10 +41,22 @@ export const gtagInit = () => {
     event_label: String(process.env.REACT_APP_BUILD_NUMBER),
     non_interaction: true
   });
+
+  // needed ???
+  FirebaseCrashlytics.setEnabled({
+    enabled: false,
+  }).catch(console.info);
+
+  FirebaseCrashlytics.addLogMessage({
+    message: "started",
+  }).catch(console.info);
 };
 
 export const gtagPageView = (pathname) => {
   analytics.setCurrentScreen("/#" + pathname);
+  FirebaseCrashlytics.addLogMessage({
+    message: `Current screen: "/# ${pathname}"`,
+  }).catch(console.info)
 };
 
 export const gtagEvent = (
@@ -64,4 +74,7 @@ export const gtagEvent = (
 
 export const gtagSetId = (id) => {
   analytics.setUserId(String(id));
+  FirebaseCrashlytics.setUserId({
+    userId: String(id)
+  }).catch(console.info)
 };

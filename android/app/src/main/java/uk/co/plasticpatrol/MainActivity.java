@@ -8,6 +8,8 @@ import com.getcapacitor.Plugin;
 import java.util.ArrayList;
 import com.baumblatt.capacitor.firebase.auth.CapacitorFirebaseAuth;
 
+// see https://github.com/capacitor-community/firebase-crashlytics
+import com.getcapacitor.community.firebasecrashlytics.FirebaseCrashlytics;
 public class MainActivity extends BridgeActivity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -18,6 +20,9 @@ public class MainActivity extends BridgeActivity {
       // Additional plugins you've installed go here
       // Ex: add(TotallyAwesomePlugin.class);
       add(CapacitorFirebaseAuth.class);
+
+      // see https://github.com/capacitor-community/firebase-crashlytics
+      add(FirebaseCrashlytics.class);
     }});
   }
 }
