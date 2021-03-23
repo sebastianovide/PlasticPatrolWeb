@@ -81,10 +81,10 @@ scripts/config.json
 **/*.p12
 **/*.mobileprovision
 **/report.xml
-cordova-app/google-services.json
-cordova-app/GoogleService-Info.plist
-cordova-app/GooglePlayAndroidDeveloper.json
-cordova-app/AppStoreConnectAPIKey.json
+**/google-services.json
+**/GoogleService-Info.plist
+**/GooglePlayAndroidDeveloper.json
+**/AppStoreConnectAPIKey.json
 
 functions/config.json
 public/first-input-delay.min.js

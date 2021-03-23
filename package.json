@@ -71,8 +71,12 @@
     "test:initandtest-firebase": "firebase setup:emulators:firestore && yarn test:firebase",
     "run:cypress": "cypress run",
     "verifyUser": "ts-node ./scripts/verifyUser",
-    "capacitor:build:android": "cross-env ./scripts/runWithVars.sh 'npx jetify && npx cap sync android && node scripts/changeVersion.js && cd android && ./gradlew build && cd .. '",
-    "capacitor:build:ios": "cross-env ./scripts/runWithVars.sh 'npx cap sync ios && node scripts/changeVersion.js && cd ios && xcodebuild -workspace App/App.xcworkspace -scheme App -sdk iphonesimulator -configuration Debug -archivePath build/build archive -UseModernBuildSystem=YES && cd .. '",
+    "capacitor:build:android:dev": "cross-env ./scripts/runWithVars.sh 'npx jetify && npx cap sync android && node scripts/changeVersion.js && cd android && ./gradlew build && cd ..'",
+    "capacitor:build:android": "cross-env ./scripts/runWithVars.sh 'npx jetify && npx cap sync android && node scripts/changeVersion.js && fastlane android sign'",
+    "capacitor:build:ios:dev": "cross-env ./scripts/runWithVars.sh 'npx cap sync ios && node scripts/changeVersion.js && cd ios && xcodebuild -workspace App/App.xcworkspace -scheme App -sdk iphonesimulator -configuration Debug -archivePath build/App archive -UseModernBuildSystem=YES && cd ..'",
+    "capacitor:build:ios": "cross-env ./scripts/runWithVars.sh 'npx cap sync ios && node scripts/changeVersion.js && fastlane ios sign'",
+    "capacitor:beta:ios": "fastlane ios beta --verbose",
+    "capacitor:beta:android": "fastlane android beta --verbose",
     "capacitor:resources": "cordova-res --skip-config --copy"
   },
   "devDependencies": {
