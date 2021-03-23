@@ -5,11 +5,11 @@ set -eo pipefail
 
 # Put the provisioning profile in place
 mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-cp "./cordova-app/Geovation.mobileprovision" ~/Library/MobileDevice/Provisioning\ Profiles/
+cp "./Geovation.mobileprovision" ~/Library/MobileDevice/Provisioning\ Profiles/
 
 security create-keychain -p github build.keychain
-security import ./cordova-app/dist.cer -t agg -k ~/Library/Keychains/build.keychain -P "" -A
-security import ./cordova-app/apple.p12 -t agg -k ~/Library/Keychains/build.keychain -P "" -A
+security import ./dist.cer -t agg -k ~/Library/Keychains/build.keychain -P "" -A
+security import ./apple.p12 -t agg -k ~/Library/Keychains/build.keychain -P "" -A
 
 security list-keychains -s ~/Library/Keychains/build.keychain
 security default-keychain -s ~/Library/Keychains/build.keychain
