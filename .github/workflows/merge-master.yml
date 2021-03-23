@@ -72,7 +72,7 @@ jobs:
 
 
   build_web:
-    # Let build it anyway so we can still play with the build... it will not deplou
+    # Let build it anyway so we can still play with the build... it will not deploy
     # needs: [unit-test-web, unit-test-functions, unit-test-firebase, e2e-test-web]
     runs-on: ubuntu-latest
     steps:
