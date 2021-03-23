@@ -77,7 +77,7 @@ export const EmptyMissionData: ConfigurableMissionData = {
   coverPhoto: undefined
 };
 
-export const isMissionFinished = (mission: MissionFirestoreData): boolean => {
+export const missionHasEnded = (mission: MissionFirestoreData): boolean => {
   const today: Date = new Date();
   today.setHours(0, 0, 0, 0);
   return mission.endTime < today.getTime();

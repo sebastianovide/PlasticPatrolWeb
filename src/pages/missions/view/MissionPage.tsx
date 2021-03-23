@@ -16,7 +16,6 @@ import {
 import { UserLeaderboardData } from "../../../components/Leaderboard/UserPieceRankTable";
 import {
   joinMission,
-  missionHasEnded,
   leaveMission,
   deleteMission
 } from "../../../features/firebase/missions";
@@ -30,7 +29,7 @@ import {
   DialogContentText
 } from "@material-ui/core";
 import {
-  isMissionFinished,
+  missionHasEnded,
   userOnMissionLeaderboard,
   userIsInPendingMissionMembers,
   userIsInMission,
@@ -155,6 +154,7 @@ export default function MissionPage({}: Props) {
     mission,
     userId
   );
+  const missionEnded = missionHasEnded(mission);
 
   const usersLeaderboard: UserLeaderboardData[] = Object.values(
     mission.totalUserPieces || []
@@ -175,7 +175,7 @@ export default function MissionPage({}: Props) {
   };
 
   const pieceTotal = `${mission.totalPieces}/${mission.targetPieces}`;
-  const progressText = isMissionFinished(mission)
+  const progressText = missionEnded
     ? `This missions has finished, it managed to collect ${pieceTotal} pieces of litter!`
     : `${pieceTotal} pieces of litter collected so far!`;
 
@@ -205,7 +205,7 @@ export default function MissionPage({}: Props) {
           />
         </div>
         <div className={classes.buttonsWrapper}>
-          {!userLoggedIn && !missionHasEnded(mission) && (
+          {!userLoggedIn && !missionEnded && (
             <div className={classes.notLoggedInMessage}>
               Before you can join a mission, you’ll have to create a Planet
               Patrol account, or login to an existing account.
@@ -213,7 +213,7 @@ export default function MissionPage({}: Props) {
           )}
           {userLoggedIn &&
             !userInMission &&
-            !missionHasEnded(mission) &&
+            !missionEnded &&
             (userIsPendingMember ? (
               <div className={classes.pendingRequestLabel}>
                 Your request to join this mission needs to be approved by a
@@ -236,7 +236,7 @@ export default function MissionPage({}: Props) {
                 </Button>
               </div>
             ))}
-          {userLoggedIn && userInMission && (
+          {userLoggedIn && userInMission && !missionEnded && (
             <div className={classes.missionButton}>
               <Button
                 onClick={() => setShowShareModal(true)}
@@ -250,7 +250,8 @@ export default function MissionPage({}: Props) {
           )}
           {userLoggedIn &&
             userCanManageMission &&
-            mission.pendingUsers.length > 0 && (
+            mission.pendingUsers.length > 0 &&
+            !missionEnded && (
               <div className={classes.missionButton}>
                 <Button
                   onClick={() => {
@@ -264,7 +265,7 @@ export default function MissionPage({}: Props) {
                 </Button>
               </div>
             )}
-          {userCanManageMission && (
+          {userCanManageMission && !missionEnded && (
             <div className={classes.missionButton}>
               <Button
                 onClick={() => {
@@ -280,7 +281,7 @@ export default function MissionPage({}: Props) {
           )}
           {userLoggedIn &&
             userInMission &&
-            !missionHasEnded(mission) &&
+            !missionEnded &&
             !userIsMissionOwner && (
               <div className={classes.missionButton}>
                 <Button
@@ -294,9 +295,8 @@ export default function MissionPage({}: Props) {
               </div>
             )}
           {userLoggedIn &&
-            userInMission &&
-            !missionHasEnded(mission) &&
-            userIsMissionOwner && (
+            !missionEnded &&
+            userCanManageMission && (
               <div className={classes.missionButton}>
                 <Button
                   onClick={() => setShowDeleteModal(true)}

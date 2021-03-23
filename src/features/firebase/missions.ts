@@ -7,7 +7,7 @@ import {
   coverPhotoIsMetaData,
   userOnMissionLeaderboard,
   PendingUser,
-  userCollectedPiecesForMission
+  userCollectedPiecesForMission, missionHasEnded
 } from "../../types/Missions";
 import Photo from "../../types/Photo";
 import User from "../../types/User";
@@ -392,13 +392,6 @@ const getMissionIfExists = async (
   }
 
   return { ...snapshot.data(), id: missionId } as MissionFirestoreData;
-};
-
-export const missionHasEnded = (mission: Mission) => {
-  const { endTime } = mission;
-  const currentTime = Date.now();
-
-  return endTime < currentTime;
 };
 
 export const updateMissionOnPhotoUploaded = async (
