@@ -1,10 +1,6 @@
-import React, { useState, useEffect } from "react";
+import { useEffect } from "react";
 import ReactDOM from "react-dom";
 import { HashRouter as Router } from "react-router-dom";
-import * as firebaseui from "firebaseui";
-import firebase from "firebase/app";
-
-// import { defineCustomElements } from '@ionic/pwa-elements/loader';
 
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 
@@ -13,7 +9,6 @@ import App from "./App";
 
 import { firebaseApp } from "features/firebase/firebaseInit";
 
-import LoginFirebase from "./components/LoginFirebase";
 import * as serviceWorker from "./serviceWorker";
 import config from "./custom/config";
 import { isIphoneAndCordova } from "./utils";
@@ -86,9 +81,8 @@ const Wrapper = () => {
   );
 };
 
-const startApp = () => {
-  gtagInit();
-  // TODO: crashslytics
+const startApp = async () => {
+  await gtagInit();
   ReactDOM.render(
     <Router>
       <MuiThemeProvider theme={theme}>
@@ -109,8 +103,4 @@ const startApp = () => {
   );
 };
 
-if (!window.cordova) {
-  startApp();
-} else {
-  document.addEventListener("deviceready", startApp, false);
-}
+startApp();

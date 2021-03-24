@@ -3,30 +3,22 @@
 import firebase from "firebase/app";
 import { Plugins } from "@capacitor/core";
 
+
 // https://github.com/capacitor-community/firebase-crashlytics
 const { FirebaseCrashlytics } = Plugins;
 let analytics;
+const { Device } = Plugins;
 
-export const gtagInit = () => {
-  if (
-    window.cordova &&
-    window.cordova.plugins &&
-    window.cordova.plugins.firebase
-  ) {
-    analytics = window.cordova.plugins.firebase.analytics;
-    analytics.logEvent("type", {
-      event_category: "Tech",
-      event_label: "mobile",
-      non_interaction: true
-    });
-  } else {
-    analytics = firebase.analytics();
-    analytics.logEvent("type", {
-      event_category: "Tech",
-      event_label: "web",
-      non_interaction: true
-    });
-  }
+// replace with https://capacitorjs.com/docs/apis/device
+export const gtagInit = async () => {
+  const info = await Device.getInfo();
+  console.info(info)
+  analytics = firebase.analytics();
+  analytics.logEvent("type", {
+    event_category: "platform",
+    event_label: info.platform,
+    non_interaction: true
+  });
 
   analytics.setCurrentScreen("/#");
 
