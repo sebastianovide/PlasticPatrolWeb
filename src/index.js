@@ -7,6 +7,7 @@ import "./index.scss";
 import App from "./App";
 
 import { firebaseApp } from "features/firebase/firebaseInit";
+
 import * as serviceWorker from "./serviceWorker";
 import config from "./custom/config";
 import { isIphoneAndCordova } from "./utils";
@@ -88,9 +89,8 @@ const Wrapper = () => {
   );
 };
 
-const startApp = () => {
-  gtagInit();
-  // TODO: crashslytics
+const startApp = async () => {
+  await gtagInit();
   ReactDOM.render(
     <Router>
       <MuiThemeProvider theme={theme}>
@@ -113,8 +113,4 @@ const startApp = () => {
   );
 };
 
-if (!window.cordova) {
-  startApp();
-} else {
-  document.addEventListener("deviceready", startApp, false);
-}
+startApp();
