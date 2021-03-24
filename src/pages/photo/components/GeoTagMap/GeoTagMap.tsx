@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 
-import mapboxgl from 'mapbox-gl/dist/mapbox-gl';
+import mapboxgl from 'mapbox-gl/dist/mapbox-gl-csp';
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import "mapbox-gl/dist/mapbox-gl.css";
 
@@ -11,6 +11,11 @@ import { useGPSLocation } from "providers/LocationProvider";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
 import { makeStyles } from "@material-ui/core";
 import { LatLong } from "types/GPSLocation";
+
+// see https://github.com/alex3165/react-mapbox-gl/issues/931
+// @ts-ignore
+// eslint-disable-next-line import/no-webpack-loader-syntax
+mapboxgl.workerClass = require("worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker").default;
 
 const useStyles = makeStyles(() => ({
   mapContainer: {

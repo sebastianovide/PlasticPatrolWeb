@@ -7,4 +7,4 @@ declare module "*.scss" {
 declare module "*.png";
 
 declare module 'mapbox-gl/dist/mapbox-gl';
-
+declare module 'mapbox-gl/dist/mapbox-gl-csp';

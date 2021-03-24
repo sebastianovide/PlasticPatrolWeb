@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import _ from "lodash";
-import mapboxgl from 'mapbox-gl/dist/mapbox-gl';
+import mapboxgl from 'mapbox-gl/dist/mapbox-gl-csp';
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import "mapbox-gl/dist/mapbox-gl.css";
 
@@ -16,6 +16,11 @@ import { gtagEvent } from "../../gtag.js";
 import { isIphoneWithNotchAndCordova } from "../../utils";
 import "./Map.scss";
 import MapLocation from "../../types/MapLocation";
+
+// see https://github.com/alex3165/react-mapbox-gl/issues/931
+// @ts-ignore
+// eslint-disable-next-line import/no-webpack-loader-syntax
+mapboxgl.workerClass = require("worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker").default;
 
 const placeholderImage = process.env.PUBLIC_URL + "/custom/images/logo.svg";
 
