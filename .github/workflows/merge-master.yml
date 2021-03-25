@@ -11,19 +11,54 @@ on:
 
 jobs:
   e2e-test-web:
+    # TODO: it should test the build
+    # needs: build_web
     runs-on: ubuntu-16.04
     steps:
       - uses: actions/checkout@v2
       - name: Setup kernel for react, increase watchers
         # https://stackoverflow.com/questions/59522374/how-to-increase-the-file-limit-of-github-actions
         run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+      - name: Cache node_modules
+        id: cache-modules
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ runner.OS }}-node_modules-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            ${{ runner.OS }}-node_modules-
+      - name: yarn
+        if: steps.cache-modules.outputs.cache-hit != 'true'
+        run: yarn
+      # TODO: it should test the build
+      # - name: Download a react build
+      #   uses: actions/download-artifact@v2
+      #   with:
+      #     name: react-build
+      #     path: build
       - name: Cypress run
         uses: cypress-io/github-action@v2
+        env:
+          NODE_TLS_REJECT_UNAUTHORIZED: 0
+          BROWSER: none
         with:
+          # TODO: it should test the build
+          # start: yarn serve-prod
           start: yarn start
-          wait-on: "http://localhost:3000"
+          wait-on: "https://localhost:3000"
           wait-on-timeout: 180
-        
+      - uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots
+      # Test run video was always captured, so this action uses "always()" condition
+      - uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: cypress-videos
+          path: cypress/videos
+
   unit-test-web:
     runs-on: ubuntu-latest
     steps:
@@ -41,7 +76,7 @@ jobs:
             ${{ runner.OS }}-node_modules-
       - name: yarn
         if: steps.cache-modules.outputs.cache-hit != 'true'
-        run: yarn      
+        run: yarn
       - run: yarn app:test
 
   unit-test-functions:
