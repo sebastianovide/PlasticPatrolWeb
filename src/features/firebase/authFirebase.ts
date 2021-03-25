@@ -36,9 +36,9 @@ export const onAuthStateChanged = ({ onSignOut, setUser }: Args) => {
     gtagSetId(user.uid);
     gtagEvent("Logged in", "User", user.uid);
 
-    const gravatarURL = "https://www.gravatar.com/" + md5(user.email) + ".json";
+    const gravatarURL = "https://www.gravatar.com/" + md5(user.email || "") + ".json";
     const photoURL =
-      user.photoURL || "https://www.gravatar.com/avatar/" + md5(user.email);
+      user.photoURL || "https://www.gravatar.com/avatar/" + md5(user.email || "");
     let currentUser = new User(
       user.uid,
       user.displayName || "",
