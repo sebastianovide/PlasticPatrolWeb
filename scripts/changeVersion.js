@@ -9,7 +9,7 @@ const version = process.env.REACT_APP_VERSION || "1.1.1";
 
 // Android
 const versionSplit = version.split(".");
-const newAndroidVersionCode = versionSplit[0] * 10000000 + versionSplit[1] * 10000 + versionSplit[2];
+const newAndroidVersionCode = versionSplit[0] * 10000000 + versionSplit[1] * 10000 + parseInt(versionSplit[2]);
 console.log("android-versionCode:", newAndroidVersionCode);
 console.log("android-versionName:", version);
 const gradleContent = readFileSync(gradleFilePath, 'utf8');
