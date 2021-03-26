@@ -1,4 +1,3 @@
-// import User from "types/User";
 import User from "types/User";
 import { remoteConfig } from "../features/firebase/firebaseInit";
 // import { useUser } from "../providers/UserProvider";
@@ -18,13 +17,17 @@ export function isMissionEnabled(): boolean {
   );
 }
 
+export function isMissionLaunchDay(): boolean {
+  return remoteConfig.getBoolean("is_mission_launch_day");
+}
+
 /**
- * When a tester logs in, it will set the localstorage. Then the tester can log out and see the feature enabled even as an anonymnous user
- * It is needed as it is not possiblel to know if the app has been installed via testflight or google beta.
+ * When a tester logs in, it will set the localstorage. Then the tester can log out and see the feature enabled even as an anonymous user
+ * It is needed as it is not possible to know if the app has been installed via testflight or google beta.
  *
  * @param {User} user
  */
-export function enableOrDissableFeatures(user: User) {
+export function enableOrDisableFeatures(user: User) {
   if (user.isTester) {
     localStorage.setItem("enable_missions", "true");
   } else {

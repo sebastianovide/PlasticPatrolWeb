@@ -6,7 +6,7 @@ import User from "types/User";
 import { gtagEvent, gtagSetId } from "gtag.js";
 
 import dbFirebase from "./dbFirebase";
-import { enableOrDissableFeatures } from "custom/featuresFlags";
+import { enableOrDisableFeatures } from "custom/featuresFlags";
 
 const getProvider = (user) => {
   if (user.providerData.length > 0) {
@@ -80,7 +80,7 @@ export const onAuthStateChanged = ({ onSignOut, setUser }: Args) => {
         ...userFirebaseData
       };
 
-      enableOrDissableFeatures(currentUser);
+      enableOrDisableFeatures(currentUser);
     } catch {}
 
     // creates a new object ref so react updates

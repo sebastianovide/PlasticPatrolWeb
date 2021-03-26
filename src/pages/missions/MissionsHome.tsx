@@ -12,15 +12,12 @@ import Clear from "@material-ui/icons/Clear";
 import MissionThumbnail from "./MissionThumbnail";
 import { linkToCreateMission } from "../../routes/missions/links";
 import { useMissions } from "../../providers/MissionsProvider";
-import {
-  Mission,
-  MissionFirestoreData,
-  PRIVATE_MISSION_ID_SEARCH_LENGTH,
-  userIsInMission
-} from "../../types/Missions";
+import { Mission, MissionFirestoreData, PRIVATE_MISSION_ID_SEARCH_LENGTH, userIsInMission } from "../../types/Missions";
 import { useUser } from "../../providers/UserProvider";
 import User from "../../types/User";
-import { linkToMap } from "../../custom/config";
+import config, { linkToMap } from "../../custom/config";
+import { missionHasEnded } from "../../features/firebase/missions";
+import { isMissionLaunchDay } from "../../custom/featuresFlags";
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -133,8 +130,9 @@ export default function MissionsHome({}: Props) {
       label={"Missions"}
       navigationHandler={{ handleClose: handleClose }}
       className={classes.wrapper}
-      addAction={() => history.push(linkToCreateMission())}
+      addAction={isMissionLaunchDay() ? undefined : () => history.push(linkToCreateMission())}
     >
+      {!isMissionLaunchDay() &&
       <div className={classes.searchWrapper}>
         <Search style={{ color: styles.darkgrey }} />
         <input
@@ -150,6 +148,7 @@ export default function MissionsHome({}: Props) {
           />
         )}
       </div>
+      }
       <div className={classes.missionList}>
         {missionData?.missions === undefined ? (
           <div>Loading...</div>

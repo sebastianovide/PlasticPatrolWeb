@@ -23,7 +23,8 @@ const firestore = firebase.firestore();
 const remoteConfig = firebase.remoteConfig();
 // remoteConfig.settings.minimumFetchIntervalMillis = 3600000;
 remoteConfig.defaultConfig = {
-  enable_missions: false
+  enable_missions: true,
+  is_mission_launch_day: true
 };
 
 // need to refetch for next time.
