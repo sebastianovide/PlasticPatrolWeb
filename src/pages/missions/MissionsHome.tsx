@@ -15,8 +15,7 @@ import { useMissions } from "../../providers/MissionsProvider";
 import { Mission, MissionFirestoreData, PRIVATE_MISSION_ID_SEARCH_LENGTH, userIsInMission } from "../../types/Missions";
 import { useUser } from "../../providers/UserProvider";
 import User from "../../types/User";
-import config, { linkToMap } from "../../custom/config";
-import { missionHasEnded } from "../../features/firebase/missions";
+import { linkToMap } from "../../custom/config";
 import { isMissionLaunchDay } from "../../custom/featuresFlags";
 
 const useStyles = makeStyles((theme) => ({
