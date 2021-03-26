@@ -6,8 +6,8 @@ android {
         applicationId "uk.co.plasticpatrol"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 20270000
-        versionName "2.27.0"
+        versionCode 1
+        versionName "20270000123"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
