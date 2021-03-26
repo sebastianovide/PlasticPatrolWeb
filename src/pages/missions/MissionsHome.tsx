@@ -129,7 +129,7 @@ export default function MissionsHome({}: Props) {
       label={"Missions"}
       navigationHandler={{ handleClose: handleClose }}
       className={classes.wrapper}
-      addAction={isMissionLaunchDay() ? undefined : () => history.push(linkToCreateMission())}
+      addAction={(isMissionLaunchDay() && !user?.isModerator) ? undefined : () => history.push(linkToCreateMission())}
     >
       {!isMissionLaunchDay() &&
       <div className={classes.searchWrapper}>
