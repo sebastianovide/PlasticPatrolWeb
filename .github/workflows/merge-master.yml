@@ -241,7 +241,7 @@ jobs:
 
   capacitor_android_build_release:
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-    needs: [build_web, unit-test-web, unit-test-functions, unit-test-firebase, e2e-test-web]
+    needs: build_web
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -297,7 +297,7 @@ jobs:
 
   capacitor_ios_testflight:
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-    needs: [capacitor_ios_build_release, unit-test-web, unit-test-functions, unit-test-firebase, e2e-test-web]
+    needs: [capacitor_ios_build_release, unit-test-web, unit-test-functions, unit-test-firebase]
 
     runs-on: macos-latest
     steps:
@@ -327,7 +327,7 @@ jobs:
           FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
 
   capacitor_android_beta:
-    needs: [capacitor_android_build_release, unit-test-web, unit-test-functions, unit-test-firebase, e2e-test-web]
+    needs: [capacitor_android_build_release, unit-test-web, unit-test-functions, unit-test-firebase]
 
     runs-on: ubuntu-latest
     steps:
