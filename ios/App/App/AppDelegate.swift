@@ -65,18 +65,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       NotificationCenter.default.post(CAPBridge.statusBarTappedNotification)
     }
   }
-
-  #if USE_PUSH
-
-  func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-    NotificationCenter.default.post(name: Notification.Name(CAPNotifications.DidRegisterForRemoteNotificationsWithDeviceToken.name()), object: deviceToken)
-  }
-
-  func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
-    NotificationCenter.default.post(name: Notification.Name(CAPNotifications.DidFailToRegisterForRemoteNotificationsWithError.name()), object: error)
-  }
-
-#endif
-
 }
 
