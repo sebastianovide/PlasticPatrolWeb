@@ -22,6 +22,7 @@ type Args = {
 
 export const onAuthStateChanged = ({ onSignOut, setUser }: Args) => {
   let userRef;
+
   const firebaseStatusChange = async (user: firebase.User) => {
     if (!user) {
       // if the user is signed in, then sign out
@@ -33,12 +34,15 @@ export const onAuthStateChanged = ({ onSignOut, setUser }: Args) => {
       return;
     }
 
-    gtagSetId(user.uid);
-    gtagEvent("Logged in", "User", user.uid);
+    gtagSetId(user?.uid);
+    gtagEvent("Logged in", "User", user?.uid);
 
-    const gravatarURL = "https://www.gravatar.com/" + md5(user.email || "") + ".json";
+
+    const gravatarURL =
+      "https://www.gravatar.com/" + md5(user?.email) + ".json";
     const photoURL =
-      user.photoURL || "https://www.gravatar.com/avatar/" + md5(user.email || "");
+      user.photoURL || "https://www.gravatar.com/avatar/" + md5(user?.email);
+
     let currentUser = new User(
       user.uid,
       user.displayName || "",

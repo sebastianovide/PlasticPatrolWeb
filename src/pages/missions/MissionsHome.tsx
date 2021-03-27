@@ -124,6 +124,7 @@ export default function MissionsHome({}: Props) {
     () => getFilteredMissions(searchString, missionData?.missions || [], user),
     [searchString, missionData]
   );
+
   return (
     <PageWrapper
       label={"Missions"}
