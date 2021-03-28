@@ -12,7 +12,13 @@ import Clear from "@material-ui/icons/Clear";
 import MissionThumbnail from "./MissionThumbnail";
 import { linkToCreateMission } from "../../routes/missions/links";
 import { useMissions } from "../../providers/MissionsProvider";
-import { Mission, MissionFirestoreData, PRIVATE_MISSION_ID_SEARCH_LENGTH, userIsInMission } from "../../types/Missions";
+import {
+  Mission,
+  MissionFirestoreData,
+  missionHasEnded,
+  PRIVATE_MISSION_ID_SEARCH_LENGTH,
+  userIsInMission
+} from "../../types/Missions";
 import { useUser } from "../../providers/UserProvider";
 import User from "../../types/User";
 import { linkToMap } from "../../custom/config";
@@ -64,12 +70,22 @@ function getFilteredMissions(
   missions: MissionFirestoreData[],
   user?: User
 ): MissionFirestoreData[] {
-  // Put missions that users are in at the top.
-  if (user !== undefined) {
-    missions.sort((a: MissionFirestoreData, b: MissionFirestoreData) => {
-      return userIsInMission(user, a.id) ? -1 : 1;
-    });
-  }
+  const userLoggedIn = user !== undefined;
+  const userId = user?.id || "invalid_id";
+
+  // Sort by completed mission first, then what missions the user is in.
+  missions.sort((a: MissionFirestoreData, b: MissionFirestoreData) => {
+    if (user !== undefined) {
+      if (userIsInMission(user, a.id) && !missionHasEnded(a)) return -1;
+      if (userIsInMission(user, b.id) && !missionHasEnded(b)) return 1;
+    }
+    if (!missionHasEnded(a)) return -1;
+    if (!missionHasEnded(b)) return 1;
+    if (user !== undefined) {
+      if (userIsInMission(user, a.id)) return -1;
+    }
+    return 1;
+  });
 
   const missionNameIncludesSubstring = (name: string, substring: string) => {
     return name.toLowerCase().includes(substring.trim().toLowerCase());

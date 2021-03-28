@@ -4,11 +4,12 @@ import { useHistory } from "react-router";
 import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
 import { linkToMission } from "../../routes/missions/links";
 import {
-  getDaysBetweenTimes,
   getTextDurationBetweenTimes,
-  Mission
+  Mission, missionHasEnded
 } from "../../types/Missions";
+
 import LockOpenIcon from "@material-ui/icons/LockOpen";
+import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 
 import thumbnailBackup from "assets/images/mission-thumbnail-backup.png";
 
@@ -22,6 +23,10 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: "1px 1px 2px 2px #ccc",
     borderRadius: "10px",
     marginBottom: "20px"
+  },
+
+  completedMissionThumbnail: {
+    opacity: "50%"
   },
 
   pictureWrapper: {
@@ -64,6 +69,11 @@ const useStyles = makeStyles((theme) => ({
 
   privateIcon: {
     fontSize: "12px"
+  },
+
+  finishedIcon: {
+    fontSize: "12px",
+    color: "green"
   }
 }));
 
@@ -80,6 +90,8 @@ export default function MissionThumbnail({ mission }: Props) {
     mission.endTime
   );
 
+  const missionFinished = missionHasEnded(mission);
+
   const wrapperElement = useRef(null);
 
   const percentage = (mission.totalPieces / mission.targetPieces) * 100;
@@ -88,7 +100,12 @@ export default function MissionThumbnail({ mission }: Props) {
 
   return (
     <div
-      className={classes.missionThumbnail}
+      className={
+        `${classes.missionThumbnail}` +
+        (missionFinished
+          ? ` ${classes.completedMissionThumbnail}`
+          : ``)
+      }
       ref={wrapperElement}
       onClick={() => history.push(linkToMission(mission.id.toString()))}
     >
@@ -97,6 +114,12 @@ export default function MissionThumbnail({ mission }: Props) {
       </div>
       <div className={classes.textSection}>
         <div className={classes.name}>
+          {missionFinished && (
+            <CheckCircleIcon
+              fontSize={"small"}
+              className={classes.finishedIcon}
+            />
+          )}{" "}
           {mission.isPrivate && (
             <LockOpenIcon fontSize={"small"} className={classes.privateIcon} />
           )}{" "}

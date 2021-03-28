@@ -109,7 +109,7 @@ export default function CreateMission({}: Props) {
     setCreatingMission(true);
     await createMission(user, missionFormData);
     await missionData?.refresh();
-    history.push(linkToMissionsPage());
+    history.goBack();
   };
 
   return (
