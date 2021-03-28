@@ -29,9 +29,9 @@ describe("gravatar", () => {
 
     it("photo url is ignore if already present", () => {
         currentUser.email = "fake@fake.com"
-        currentUser.profileURL = "some url"
+        currentUser.photoURL = "some url"
         addGravatarInfo(currentUser);
-        expect(currentUser.profileURL).toEqual("some url");
+        expect(currentUser.photoURL).toEqual("some url");
     })
 
     it("photo url populated if empty", () => {
@@ -46,7 +46,7 @@ describe("gravatar", () => {
         })
 
         currentUser.email = "fake@fake.com"
-        currentUser.profileURL = ""
+        currentUser.photoURL = ""
         addGravatarInfo(currentUser);
         const expectedUrl = "https://www.gravatar.com/avatar/" + md5(currentUser.email)
         expect(currentUser.photoURL).toEqual(expectedUrl);
