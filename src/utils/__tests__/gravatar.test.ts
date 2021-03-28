@@ -1,3 +1,4 @@
+import md5 from "md5";
 import User from "types/User"
 import { addGravatarInfo } from "utils/gravatar";
 
@@ -47,7 +48,8 @@ describe("gravatar", () => {
         currentUser.email = "fake@fake.com"
         currentUser.profileURL = ""
         addGravatarInfo(currentUser);
-        expect(currentUser.profileURL.length).toBeGreaterThan(1);
+        const expectedUrl = "https://www.gravatar.com/avatar/" + md5(currentUser.email)
+        expect(currentUser.photoURL).toEqual(expectedUrl);
 
         appendSpy.mockRestore()
     })
