@@ -22,7 +22,7 @@ describe("gravatar", () => {
         );
     });
 
-    it("gravatar are ingnored for users without emails", () => {
+    it("gravatar are ignored for users without emails", () => {
         addGravatarInfo(currentUser);
         expect(currentUser.profileURL).toEqual("");
     })
