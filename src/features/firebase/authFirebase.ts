@@ -1,4 +1,3 @@
-// @ts-nocheck
 import firebase from "firebase/app";
 
 import User from "types/User";
@@ -8,7 +7,7 @@ import dbFirebase from "./dbFirebase";
 import { enableOrDisableFeatures } from "custom/featuresFlags";
 import { addGravatarInfo } from "utils/gravatar";
 
-const getProvider = (user) => {
+const getProvider = (user: any) => {
   if (user.providerData.length > 0) {
     return user.providerData[0].providerId;
   }
@@ -21,9 +20,9 @@ type Args = {
 };
 
 export const onAuthStateChanged = ({ onSignOut, setUser }: Args) => {
-  let userRef;
+  let userRef: any;
 
-  const firebaseStatusChange = async (user: firebase.User) => {
+  const firebaseStatusChange = async (user: firebase.User | null) => {
     if (!user) {
       // if the user is signed in, then sign out
       if (userRef) {
