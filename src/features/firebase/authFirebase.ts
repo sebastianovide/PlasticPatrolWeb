@@ -1,14 +1,13 @@
-// @ts-nocheck
 import firebase from "firebase/app";
-import md5 from "md5";
 
 import User from "types/User";
 import { gtagEvent, gtagSetId } from "gtag.js";
 
 import dbFirebase from "./dbFirebase";
 import { enableOrDisableFeatures } from "custom/featuresFlags";
+import { addGravatarInfo } from "utils/gravatar";
 
-const getProvider = (user) => {
+const getProvider = (user: any) => {
   if (user.providerData.length > 0) {
     return user.providerData[0].providerId;
   }
@@ -21,9 +20,9 @@ type Args = {
 };
 
 export const onAuthStateChanged = ({ onSignOut, setUser }: Args) => {
-  let userRef;
+  let userRef: any;
 
-  const firebaseStatusChange = async (user: firebase.User) => {
+  const firebaseStatusChange = async (user: firebase.User | null) => {
     if (!user) {
       // if the user is signed in, then sign out
       if (userRef) {
@@ -37,12 +36,6 @@ export const onAuthStateChanged = ({ onSignOut, setUser }: Args) => {
     gtagSetId(user?.uid);
     gtagEvent("Logged in", "User", user?.uid);
 
-
-    const gravatarURL =
-      "https://www.gravatar.com/" + md5(user?.email) + ".json";
-    const photoURL =
-      user.photoURL || "https://www.gravatar.com/avatar/" + md5(user?.email);
-
     let currentUser = new User(
       user.uid,
       user.displayName || "",
@@ -51,28 +44,14 @@ export const onAuthStateChanged = ({ onSignOut, setUser }: Args) => {
       user.email || "",
       user.isAnonymous,
       user.phoneNumber || "",
-      photoURL,
+      user.photoURL || "",
       "",
       null,
       "",
       getProvider(user)
     );
 
-    // this has to be global to be found by the jsonp
-    window.userFromGravatar = (profile) => {
-      const info = profile.entry[0];
-      currentUser.description = info.aboutMe;
-      currentUser.location = info.currentLocation;
-      currentUser.profileURL = info.profileUrl;
-      currentUser.displayName = info.name
-        ? info.name.formatted
-        : currentUser.displayName;
-    };
-
-    // add a script node to the dom. The browser will run it but we don't know when.
-    const script = document.createElement("script");
-    script.src = `${gravatarURL}?callback=userFromGravatar`;
-    document.head.append(script);
+    addGravatarInfo(currentUser)
 
     setUser(currentUser);
     userRef = currentUser;
