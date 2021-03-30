@@ -21,6 +21,7 @@ import { updateStats, computeStatsAdHoc } from "./stats";
 import { barcodeLookup } from "./barcodeLookup";
 
 import * as missions from "./missions";
+import { BACKUP_CRONTAB, backupProject } from "./firestoreBackup";
 
 const cors = corsModule({ origin: true });
 const gm = gmModule.subClass({ imageMagick: true });
@@ -373,5 +374,6 @@ module.exports = {
   approveNewMemberMission: missions.approveNewMember,
   fetchMission: missions.fetch,
   updateMissionOnPhotoEdit: missions.updateMissionOnPhotoEdit,
-  updateMissionOnPhotoUpload: missions.updateMissionOnPhotoUpload
+  updateMissionOnPhotoUpload: missions.updateMissionOnPhotoUpload,
+  backupFirestore: functions.pubsub.schedule(BACKUP_CRONTAB).onRun(backupProject)
 };
