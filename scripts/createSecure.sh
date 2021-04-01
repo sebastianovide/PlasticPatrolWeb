@@ -9,7 +9,7 @@ pushd cordova-app
 
 # this is used for github
 # make sure that $ENC_PASSWORD is in github
-tar cvf secrets.tar build.json *.cer *.p12 *.mobileprovision *.jks GoogleService-Info.plist google-services.json GooglePlayAndroidDeveloper.json AppStoreConnectAPIKey.json
+tar cvf secrets.tar build.json *.cer *.p12 *.mobileprovision *.jks GooglePlayAndroidDeveloper.json AppStoreConnectAPIKey.json
 openssl enc -aes-256-cbc -in secrets.tar -out secrets.tar.encrypted -k $ENC_PASSWORD -md sha512
 
 # echo you should run this command
