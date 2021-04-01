@@ -88,6 +88,7 @@ const Wrapper = () => {
 
 const startApp = () => {
   gtagInit();
+  // TODO: crashslytics
   ReactDOM.render(
     <Router>
       <MuiThemeProvider theme={theme}>
