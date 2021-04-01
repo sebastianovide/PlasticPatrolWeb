@@ -36,7 +36,7 @@ export const gtagInit = async () => {
 
   // needed ???
   FirebaseCrashlytics.setEnabled({
-    enabled: false,
+    enabled: true,
   }).catch(console.info);
 
   FirebaseCrashlytics.addLogMessage({
