@@ -554,7 +554,7 @@ jobs:
   #       env:
   #         FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
 
-  deploy_web_firebase:
+  deploy_test_web_firebase:
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     needs: build_web
     runs-on: ubuntu-latest
@@ -574,3 +574,11 @@ jobs:
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           PROJECT_ID: plastic-patrol-dev-722eb
+
+  release_firebase:
+    if: github.event_name == 'release' && github.event.action == 'created'
+    name: "it releases the PWA, functions and security rules"
+    needs: [build_web, unit-test-web, unit-test-functions, unit-test-firebase]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "TODO"
