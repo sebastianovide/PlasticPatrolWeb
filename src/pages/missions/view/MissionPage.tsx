@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import { useState } from "react";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 
 import PageWrapper from "components/PageWrapper";
@@ -11,7 +11,8 @@ import { Line } from "rc-progress";
 import {
   linkToManagePendingMembers,
   linkToEditMission,
-  linkToMissionsPage, linkToCreateMission
+  linkToMissionsPage,
+  linkToMission
 } from "../../../routes/missions/links";
 import { UserLeaderboardData } from "../../../components/Leaderboard/UserPieceRankTable";
 import {
@@ -35,7 +36,7 @@ import {
   userIsInMission,
   PRIVATE_MISSION_ID_SEARCH_LENGTH
 } from "../../../types/Missions";
-import { linkToLogin, linkToLoginWithRedirectOnSuccess } from "../../../routes/login/links";
+import { linkToLoginWithRedirectOnSuccess } from "../../../routes/login/links";
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -125,9 +126,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-type Props = {};
-
-export default function MissionPage({}: Props) {
+export default function MissionPage() {
   const classes = useStyles();
   const themes = useTheme();
   const user = useUser();
@@ -219,9 +218,11 @@ export default function MissionPage({}: Props) {
                 color="default"
                 variant="contained"
                 className={classes.loginButton}
-                onClick={() => history.push(
-                  linkToLoginWithRedirectOnSuccess(linkToCreateMission())
-                )}
+                onClick={() =>
+                  history.push(
+                    linkToLoginWithRedirectOnSuccess(linkToMission(missionId))
+                  )
+                }
               >
                 Login
               </Button>
@@ -310,20 +311,18 @@ export default function MissionPage({}: Props) {
                 </Button>
               </div>
             )}
-          {userLoggedIn &&
-            !missionEnded &&
-            userCanManageMission && (
-              <div className={classes.missionButton}>
-                <Button
-                  onClick={() => setShowDeleteModal(true)}
-                  color="secondary"
-                  size="small"
-                  variant="outlined"
-                >
-                  Delete mission
-                </Button>
-              </div>
-            )}
+          {userLoggedIn && !missionEnded && userCanManageMission && (
+            <div className={classes.missionButton}>
+              <Button
+                onClick={() => setShowDeleteModal(true)}
+                color="secondary"
+                size="small"
+                variant="outlined"
+              >
+                Delete mission
+              </Button>
+            </div>
+          )}
         </div>
       </div>
       <div className={classes.tableWrapper}>
