@@ -5,7 +5,7 @@ set -eo pipefail
 
 # Put the provisioning profile in place
 mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-cp "./Geovation.mobileprovision" ~/Library/MobileDevice/Provisioning\ Profiles/
+cp "./Geovation_CI.mobileprovision" ~/Library/MobileDevice/Provisioning\ Profiles/
 
 security create-keychain -p github build.keychain
 security import ./dist.cer -t agg -k ~/Library/Keychains/build.keychain -P "" -A
