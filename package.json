@@ -56,7 +56,7 @@
     "app:test:watch": "react-scripts test --watchAll --env=jsdom --verbose ",
     "eject": "react-scripts eject",
     "backup": "cross-env ./scripts/backup.sh",
-    "serve-prod": "npm run build:react && http-server build",
+    "serve-prod": "http-server build -p 3000",
     "build:ios": "cross-env ./scripts/runWithVars.sh 'mkdir -p ./cordova-app/www/ && cp -a ./build/* ./cordova-app/www/ && cd cordova-app && cordova platforms add ios ; cordova build ios --prod --release --device --buildFlag=\"-UseModernBuildSystem=0\" --buildConfig build.json && cd ..'",
     "build:ios:dev": "cross-env ./scripts/runWithVars.sh 'mkdir -p ./cordova-app/www/ && cp -a ./build/* ./cordova-app/www/ && cd cordova-app && cordova platforms add ios ; cordova build ios --debug --buildFlag=\"-UseModernBuildSystem=0\" && cd ..'",
     "build:android": "cross-env ./scripts/runWithVars.sh 'mkdir -p ./cordova-app/www/ && cp -a ./build/* ./cordova-app/www/ && cd cordova-app && cordova platforms add android ; cordova build android --prod --release --buildConfig build.json && cd ..'",
