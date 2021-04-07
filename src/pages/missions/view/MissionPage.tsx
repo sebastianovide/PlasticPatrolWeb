@@ -37,6 +37,7 @@ import {
   PRIVATE_MISSION_ID_SEARCH_LENGTH
 } from "../../../types/Missions";
 import { linkToLoginWithRedirectOnSuccess } from "../../../routes/login/links";
+import { isMissionLaunchDay } from "../../../custom/featuresFlags";
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -256,7 +257,7 @@ export default function MissionPage() {
                 </Button>
               </div>
             ))}
-          {userLoggedIn && userInMission && !missionEnded && (
+          {!isMissionLaunchDay() && userLoggedIn && userInMission && !missionEnded && (
             <div className={classes.missionButton}>
               <Button
                 onClick={() => setShowShareModal(true)}
