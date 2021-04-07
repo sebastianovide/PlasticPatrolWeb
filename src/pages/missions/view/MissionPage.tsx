@@ -103,6 +103,7 @@ const useStyles = makeStyles((theme) => ({
   loginButton: {
     width: `100%`,
     color: `white`,
+    marginTop: `5px`,
     backgroundColor: theme.palette.primary.main
   },
 
@@ -140,6 +141,7 @@ export default function MissionPage() {
   const [showLeaveModal, setShowLeaveModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
+  const [showPostJoinModal, setShowPostJoinModal] = useState(false);
 
   const { missionId } = useParams<{ missionId: string }>();
   const mission = missions.find((ch) => ch.id.toString() === missionId);
@@ -242,6 +244,7 @@ export default function MissionPage() {
                   onClick={async () => {
                     await joinMission(mission.id, user);
                     await missionData?.refresh();
+                    setShowPostJoinModal(true);
                   }}
                   color="primary"
                   size="small"
@@ -365,6 +368,33 @@ export default function MissionPage() {
           </Button>
         </DialogActions>
       </Dialog>
+
+      {/* Modal shown after the user joins a public mission */}
+      <Dialog
+        open={showPostJoinModal}
+        onClose={() => setShowPostJoinModal(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            {`You have successfully joined this mission!`}
+          </DialogContentText>
+          <DialogContentText>
+            {`Now, when a photo you upload is approved, the pieces of litter will be added to the mission total (and other missions you are part of).`}
+          </DialogContentText>
+          <DialogContentText>
+            {`This will continue until either the mission finishes, or you leave the mission.`}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setShowPostJoinModal(false)} color="default">
+            Ok
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+
       <ConfirmationModal
         isOpen={showLeaveModal}
         text={
