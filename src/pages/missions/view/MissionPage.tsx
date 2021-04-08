@@ -38,6 +38,7 @@ import {
 } from "../../../types/Missions";
 import { linkToLoginWithRedirectOnSuccess } from "../../../routes/login/links";
 import { isMissionLaunchDay } from "../../../custom/featuresFlags";
+import { linkToNewPhoto } from "../../../routes/photo/routes/new/links";
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -257,6 +258,18 @@ export default function MissionPage() {
                 </Button>
               </div>
             ))}
+          {userLoggedIn && userInMission && !missionEnded && (
+            <div className={classes.missionButton}>
+              <Button
+                onClick={() => history.push(linkToNewPhoto())}
+                color="primary"
+                size="small"
+                variant="contained"
+              >
+                Upload pieces
+              </Button>
+            </div>
+          )}
           {!isMissionLaunchDay() && userLoggedIn && userInMission && !missionEnded && (
             <div className={classes.missionButton}>
               <Button
@@ -269,6 +282,23 @@ export default function MissionPage() {
               </Button>
             </div>
           )}
+          {userLoggedIn &&
+            userInMission &&
+            !missionEnded &&
+            !userIsMissionOwner && (
+              <div className={classes.missionButton}>
+                <Button
+                  onClick={() => setShowLeaveModal(true)}
+                  color="secondary"
+                  size="small"
+                  variant="outlined"
+                >
+                  Leave mission
+                </Button>
+              </div>
+            )}
+        </div>
+        <div className={classes.buttonsWrapper}>
           {userLoggedIn &&
             userCanManageMission &&
             mission.pendingUsers.length > 0 &&
@@ -300,21 +330,6 @@ export default function MissionPage() {
               </Button>
             </div>
           )}
-          {userLoggedIn &&
-            userInMission &&
-            !missionEnded &&
-            !userIsMissionOwner && (
-              <div className={classes.missionButton}>
-                <Button
-                  onClick={() => setShowLeaveModal(true)}
-                  color="secondary"
-                  size="small"
-                  variant="outlined"
-                >
-                  Leave mission
-                </Button>
-              </div>
-            )}
           {userLoggedIn && !missionEnded && userCanManageMission && (
             <div className={classes.missionButton}>
               <Button
