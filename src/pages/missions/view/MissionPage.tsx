@@ -33,10 +33,10 @@ import {
   missionHasEnded,
   userOnMissionLeaderboard,
   userIsInPendingMissionMembers,
-  userIsInMission,
-  PRIVATE_MISSION_ID_SEARCH_LENGTH
+  userIsInMission
 } from "../../../types/Missions";
 import { linkToLoginWithRedirectOnSuccess } from "../../../routes/login/links";
+import MissionShareDialog from "./MissionShareDialog";
 import { isMissionLaunchDay } from "../../../custom/featuresFlags";
 import { linkToNewPhoto } from "../../../routes/photo/routes/new/links";
 
@@ -270,18 +270,21 @@ export default function MissionPage() {
               </Button>
             </div>
           )}
-          {!isMissionLaunchDay() && userLoggedIn && userInMission && !missionEnded && (
-            <div className={classes.missionButton}>
-              <Button
-                onClick={() => setShowShareModal(true)}
-                color="primary"
-                size="small"
-                variant="contained"
-              >
-                Share link
-              </Button>
-            </div>
-          )}
+          {!isMissionLaunchDay() &&
+            userLoggedIn &&
+            userInMission &&
+            !missionEnded && (
+              <div className={classes.missionButton}>
+                <Button
+                  onClick={() => setShowShareModal(true)}
+                  color="primary"
+                  size="small"
+                  variant="contained"
+                >
+                  Share link
+                </Button>
+              </div>
+            )}
           {userLoggedIn &&
             userInMission &&
             !missionEnded &&
@@ -360,30 +363,12 @@ export default function MissionPage() {
           </div>
         )}
       </div>
-      <Dialog
+      <MissionShareDialog
         open={showShareModal}
-        onClose={() => setShowLeaveModal(false)}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            {`The private ID for this mission is: ${mission.id.substr(
-              0,
-              PRIVATE_MISSION_ID_SEARCH_LENGTH
-            )}`}
-          </DialogContentText>
-          <DialogContentText>
-            {`Other Planet Patrol users can request to join your mission by copying this into the search bar in the
-            Missions home page.`}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setShowShareModal(false)} color="default">
-            Ok
-          </Button>
-        </DialogActions>
-      </Dialog>
+        onClose={() => setShowShareModal(false)}
+        missionId={missionId}
+        isPrivate={mission.isPrivate}
+      />
 
       {/* Modal shown after the user joins a public mission */}
       <Dialog
@@ -409,7 +394,6 @@ export default function MissionPage() {
           </Button>
         </DialogActions>
       </Dialog>
-
 
       <ConfirmationModal
         isOpen={showLeaveModal}
