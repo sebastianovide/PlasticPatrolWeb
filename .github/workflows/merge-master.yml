@@ -554,7 +554,7 @@ jobs:
   #       env:
   #         FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
 
-  deploy_web_firebase:
+  deploy_web_beta:
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     needs: build_web
     runs-on: ubuntu-latest
@@ -574,3 +574,27 @@ jobs:
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           PROJECT_ID: plastic-patrol-dev-722eb
+
+  deploy_web:
+    if: github.event_name == 'release' && github.event.action == 'created'
+    # TODO: release every thing
+    # name: "it releases the PWA, functions and security rules"
+    name: "it releases the PWA hosting only"
+    needs: [build_web, unit-test-web, unit-test-functions, unit-test-firebase]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      # get react build
+      - name: Download a react build
+        uses: actions/download-artifact@v2
+        with:
+          name: react-build
+          path: build
+
+      - name: Deploy to Firebase
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only hosting -m "V${{ steps.package-version.outputs.version }}"
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          PROJECT_ID: plastic-patrol-fd3b3
