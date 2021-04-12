@@ -7,6 +7,9 @@ on:
     paths-ignore:
       - "**.md"
   pull_request:
+  release:
+    types:
+      - created
 
 
 jobs:
