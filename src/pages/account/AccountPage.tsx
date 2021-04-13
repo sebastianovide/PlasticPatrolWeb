@@ -15,6 +15,7 @@ import Geojson from "types/Geojson";
 import Tooltip from "components/common/Tooltip";
 import User from "types/User";
 import { Config } from "custom/config";
+import { isMissionEnabled } from "custom/featuresFlags";
 import {
   MissionsContext,
   MissionsProviderData
@@ -163,7 +164,7 @@ export default function AccountPage({
 
       <br />
 
-      {myLastPhotos.length && (
+      {myLastPhotos.length > 0 && (
         <>
           <Typography variant="h6">
             Last {myLastPhotos.length} approved
@@ -187,7 +188,7 @@ export default function AccountPage({
         </>
       )}
 
-      {config.ENABLE_MISSIONS && (
+      {isMissionEnabled() && (
         <div className={classes.missionsWrapper}>
           <Typography variant="h6" className={classes.missionsTitle}>
             My missions

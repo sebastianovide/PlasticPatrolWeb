@@ -19,7 +19,6 @@ import Page from "types/Page";
 import { linkToFeedbackReports } from "routes/feedback-reports/links";
 import { linkToTutorialPage } from "routes/tutorial/links";
 import { linkToAboutPage } from "routes/about/links";
-import { isMissionEnabled } from "./featuresFlags";
 
 const primaryMain = styles.primaryMain;
 const primaryContrastText = styles.primaryContrastText;
@@ -122,7 +121,7 @@ const PAGES: { [pageName: string]: Page } = {
   missions: {
     path: "/missions",
     label: "Missions",
-    visible: (user, online) => isMissionEnabled(),
+    visible: (user, online) => true,
     icon: (
       <img
         src={MissionIconImage}
@@ -147,7 +146,6 @@ export interface Metadata {
 export interface Config {
   PAGES: { [pageName: string]: Page };
   ENABLE_GROUPS: boolean;
-  ENABLE_MISSIONS: boolean;
   metadata: Metadata;
   MAX_IMAGE_SIZE: number;
   THEME: any;
@@ -207,7 +205,6 @@ const config: Config = {
   PAGES,
   ENABLE_GRAVATAR_PROFILES: true, //To update user-profile from Gravatar, value: true or false.
   ENABLE_GROUPS: false,
-  ENABLE_MISSIONS: true,
   SECURITY: {
     UPLOAD_REQUIRES_LOGIN: true
   },

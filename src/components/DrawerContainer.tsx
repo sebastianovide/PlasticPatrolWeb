@@ -16,6 +16,7 @@ import { isIphoneWithNotchAndCordova, isIphoneAndCordova } from "utils";
 import User from "types/User";
 import Page from "types/Page";
 import config from "custom/config";
+import { isMissionEnabled } from "custom/featuresFlags";
 import { useStats } from "providers/StatsProvider";
 
 const drawerWidth = "80%";
@@ -85,7 +86,7 @@ export default function DrawerContainer({
     PAGES.cleanUps
   ]
     .concat(config.ENABLE_GROUPS ? [PAGES.groups] : [])
-    .concat(config.ENABLE_MISSIONS ? [PAGES.missions] : []);
+    .concat(isMissionEnabled() ? [PAGES.missions] : []);
   const listItemsBottom: Page[] = [
     PAGES.tutorial,
     PAGES.about,
