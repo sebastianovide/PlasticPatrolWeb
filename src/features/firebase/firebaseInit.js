@@ -21,7 +21,7 @@ const firestore = firebase.firestore();
 
 // remote config: https://firebase.google.com/docs/remote-config/get-started?platform=web
 const remoteConfig = firebase.remoteConfig();
-remoteConfig.settings.minimumFetchIntervalMillis = 0;
+remoteConfig.settings.minimumFetchIntervalMillis = process.env.NODE_ENV !== "development" ? 3600000 : 0;
 remoteConfig.defaultConfig = {
   enable_missions: true,
   is_mission_launch_day: true
