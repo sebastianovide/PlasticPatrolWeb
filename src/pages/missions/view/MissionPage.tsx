@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
+import styles from "standard.module.scss";
 
 import PageWrapper from "components/PageWrapper";
 import "react-circular-progressbar/dist/styles.css";
@@ -33,7 +34,9 @@ import {
   missionHasEnded,
   userOnMissionLeaderboard,
   userIsInPendingMissionMembers,
-  userIsInMission
+  userIsInMission,
+  missionIsCompleted,
+  getTextDurationBetweenTimes
 } from "../../../types/Missions";
 import { linkToLoginWithRedirectOnSuccess } from "../../../routes/login/links";
 import MissionShareDialog from "./MissionShareDialog";
@@ -67,23 +70,35 @@ const useStyles = makeStyles((theme) => ({
 
   datesLabel: {
     flex: "1 1 auto",
+    fontWeight: `bold`,
     fontSize: 13,
     padding: `0px ${theme.spacing(1.5)}px`
   },
 
   description: {
     flex: "1 1 auto",
-    padding: `${theme.spacing(0.5)}px ${theme.spacing(1.5)}px`,
+    padding: `${theme.spacing(1)}px ${theme.spacing(1.5)}px`,
     fontSize: 12
   },
 
   progressWrapper: {
-    padding: `${theme.spacing(0.5)}px ${theme.spacing(1.5)}px`
+    padding: `${theme.spacing(1)}px ${theme.spacing(1.5)}px`
   },
 
   progressText: {
     color: "black",
     fontSize: 13,
+    fontWeight: "bold",
+    whiteSpace: "pre-wrap",
+  },
+
+  completedText: {
+    color: "white",
+    background: `${styles.green}`,
+    padding: `5px`,
+    borderRadius: "10px",
+    fontSize: 13,
+    whiteSpace: "pre-wrap",
     fontWeight: "bold"
   },
 
@@ -185,9 +200,17 @@ export default function MissionPage() {
   };
 
   const pieceTotal = `${mission.totalPieces}/${mission.targetPieces}`;
-  const progressText = missionEnded
-    ? `This missions has finished, it managed to collect ${pieceTotal} pieces of litter!`
-    : `${pieceTotal} pieces of litter collected so far!`;
+
+  let progressText = `${pieceTotal} pieces of litter collected so far!`;
+
+  if (missionIsCompleted(mission)) {
+    progressText = `Awesome!\nThis mission has ${mission.totalPieces} total pieces (original goal was ${mission.targetPieces}).`;
+    if (!missionEnded) {
+      progressText += `\n\nAdditional pieces can still be added until the mission duration has ended.`;
+    }
+  } else if (missionEnded) {
+    progressText = `This mission has finished!\n${pieceTotal} pieces of litter were collected!`;
+  }
 
   return (
     <PageWrapper
@@ -198,22 +221,25 @@ export default function MissionPage() {
       <div className={classes.pictureWrapper}>
         <img src={imgSrc} alt={"Mission cover"} className={classes.picture} />
       </div>
+      <div className={classes.progressWrapper}>
+        <div className={missionIsCompleted(mission) ? classes.completedText : classes.progressText}>{progressText}</div>
+        {!missionIsCompleted(mission) &&
+        <Line
+          percent={missionProgress}
+          strokeWidth={2}
+          trailWidth={2}
+          strokeColor={themes.palette.secondary.main}
+          style={{maxHeight: "10px"}}
+        />
+        }
+      </div>
       <div className={classes.detailWrapper}>
         <div className={classes.datesLabel}>
-          {`${new Date(mission.startTime).toLocaleDateString()} - ${new Date(
+          {getTextDurationBetweenTimes(Date.now(),mission.endTime)} (end date: {new Date(
             mission.endTime
-          ).toLocaleDateString()}`}
+          ).toLocaleDateString()})
         </div>
         <div className={classes.description}>{mission.description}</div>
-        <div className={classes.progressWrapper}>
-          <div className={classes.progressText}>{progressText}</div>
-          <Line
-            percent={missionProgress}
-            strokeWidth={2}
-            trailWidth={2}
-            strokeColor={themes.palette.secondary.main}
-          />
-        </div>
         <div className={classes.buttonsWrapper}>
           {!userLoggedIn && !missionEnded && (
             <div className={classes.notLoggedInMessage}>

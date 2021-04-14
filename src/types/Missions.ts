@@ -83,6 +83,10 @@ export const missionHasEnded = (mission: MissionFirestoreData): boolean => {
   return mission.endTime < today.getTime();
 };
 
+export const missionIsCompleted = (mission: MissionFirestoreData): boolean => {
+  return mission.totalPieces >= mission.targetPieces;
+};
+
 export const isSameDay = (date: Date, other: Date) => {
   return date.toDateString() === other.toDateString();
 };
@@ -176,7 +180,7 @@ export const getTextDurationBetweenTimes = (
     duration = `${Math.abs(weeks)} ${weeks > 1 ? `weeks` : `week`}`;
   } else {
     duration = `${Math.abs(daysRemaining)} ${
-      daysRemaining > 1 ? `days` : `day`
+      Math.abs(daysRemaining) > 1 ? `days` : `day`
     }`;
   }
 
