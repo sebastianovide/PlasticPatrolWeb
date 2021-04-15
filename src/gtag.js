@@ -42,9 +42,8 @@ export const gtagInit = () => {
     non_interaction: true
   });
 
-  // needed ???
   FirebaseCrashlytics.setEnabled({
-    enabled: false,
+    enabled: true,
   }).catch(console.info);
 
   FirebaseCrashlytics.addLogMessage({
