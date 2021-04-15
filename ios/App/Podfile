@@ -24,4 +24,9 @@ target 'App' do
   pod 'Firebase/Auth'
   pod 'FBSDKCoreKit'
   pod 'FBSDKLoginKit'
+
+  # https://firebase.google.com/docs/crashlytics/get-started?platform=ios&authuser=0#add-sdk
+  pod 'Firebase/Crashlytics'
+  pod 'Firebase/Analytics'
+
 end
