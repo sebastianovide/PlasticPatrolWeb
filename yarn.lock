@@ -1268,10 +1268,10 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@capacitor-community/firebase-crashlytics@^0.3.0":
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/@capacitor-community/firebase-crashlytics/-/firebase-crashlytics-0.3.0.tgz#84ccb8423fec4ab42b47ccfb596c935b6c6dffc3"
-  integrity sha512-zIGryvHBCgT/tHqPem6Etfk6IQq7IjL9IcNQEd+J0PbNpZnsabsVqazexN3jiJuKeF8RcuOuYiTVfEOcmgET/w==
+"@capacitor-community/firebase-crashlytics@^0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@capacitor-community/firebase-crashlytics/-/firebase-crashlytics-0.4.0.tgz#a8486bad10b7f230bc4a73d5199a61c97dfffb5f"
+  integrity sha512-OCZkwUNIQazGgaZI36tRraACFbT+vqHDIq4TYKp91uIVDx71a3Do/JDOFHsi3N0PJJatZxqzF+AmmSDfiQtPdg==
   dependencies:
     "@capacitor/core" latest
 
