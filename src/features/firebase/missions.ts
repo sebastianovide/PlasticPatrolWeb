@@ -74,7 +74,6 @@ export const createMission = async (
         displayName: user.displayName
       }
     },
-    pendingPieces: 0,
     pendingUsers: [],
     hidden: false
   };
@@ -396,16 +395,17 @@ const getMissionIfExists = async (
 };
 
 export const updateMissionOnPhotoUploaded = async (
+  uploaderId: string,
   pieces: number,
   missionIds: string[]
 ) => {
   console.log(
-    `User uploaded photo with ${pieces} for ${missionIds.length} missions`
+    `User ${uploaderId} uploaded photo with ${pieces} for ${missionIds.length} missions`
   );
   console.log(missionIds);
 
   await Promise.all(
-    (missionIds || []).map(async (missionId: string) => {
+    missionIds.map(async (missionId: string) => {
       try {
         const mission = await getMissionIfExists(missionId);
 
@@ -414,7 +414,7 @@ export const updateMissionOnPhotoUploaded = async (
         // n.b. This means people can't upload late for things like World Cleanup Day
         if (missionHasEnded(mission)) {
           console.log(
-            `Mission wasn't updated with new pieces because it had ended when photo was uploaded.`
+            `Mission ${missionId} wasn't updated with new pieces because it had ended when photo was uploaded.`
           );
           return;
         }
@@ -425,7 +425,8 @@ export const updateMissionOnPhotoUploaded = async (
 
         const missionRef = getMissionRefFromId(missionId);
         await missionRef.update({
-          pendingPieces: firebase.firestore.FieldValue.increment(pieces)
+          totalPieces: firebase.firestore.FieldValue.increment(pieces),
+          [`totalUserPieces.${uploaderId}.pieces`]: firebase.firestore.FieldValue.increment(pieces)
         });
       } catch (err) {
         console.info(
@@ -448,53 +449,23 @@ export const updateMissionOnPhotoModerated = async (
   await Promise.all(
     photo.missions.map(async (missionId: string) => {
       try {
-        const mission = await getMissionIfExists(missionId);
+        if (!photoWasApproved) {
+          console.log(`Moderator rejected photo ${photo.id} which was part of mission ${missionId}.`);
 
-        if (photoWasApproved) {
-          // If the user is NOT still part of mission, we:
-          // - won't add to the mission total,
-          // - still need to decrement the pending pieces that was incremented it in `onPhotoUpload`.
-          if (!userOnMissionLeaderboard(mission, photo.owner_id)) {
-            console.log(
-              `Photo ${photo.id} was uploaded within mission ${missionId} but uploading user ${photo.owner_id} was no longer in mission.`
-            );
-            await decrementPendingPieces(missionId, photo.pieces);
-            return;
-          }
-
-          console.log(
-            `Moderator approved ${photo.pieces} pieces for mission ${missionId}`
-          );
-
+          // If a photo that was part of a mission is rejected, we decrement:
+          //  - the total mission pieces,
+          //  - the piece count for the individual user.
           const missionRef = getMissionRefFromId(missionId);
           await missionRef.update({
-            totalPieces: firebase.firestore.FieldValue.increment(photo.pieces),
-            pendingPieces: firebase.firestore.FieldValue.increment(
-              -photo.pieces
-            ),
+            totalPieces: firebase.firestore.FieldValue.increment(-photo.pieces),
             [`totalUserPieces.${photo.owner_id}.pieces`]: firebase.firestore.FieldValue.increment(
-              photo.pieces
+              -photo.pieces
             )
           });
-        } else {
-          await decrementPendingPieces(missionId, photo.pieces);
         }
       } catch (err) {
         console.error(err);
       }
     })
   );
-};
-
-const decrementPendingPieces = async (
-  missionId: string,
-  numberToDecrement: number
-) => {
-  console.log(
-    `Decrement ${numberToDecrement} pending pieces for mission ${missionId}`
-  );
-  const missionRef = getMissionRefFromId(missionId);
-  return await missionRef.update({
-    pendingPieces: firebase.firestore.FieldValue.increment(-numberToDecrement)
-  });
 };

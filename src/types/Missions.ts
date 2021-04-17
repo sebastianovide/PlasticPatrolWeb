@@ -28,7 +28,6 @@ export type MissionFirestoreData = Omit<
   targetPieces: number;
   totalPieces: number;
   totalUserPieces: TotalUserPieces;
-  pendingPieces: number;
   pendingUsers: PendingUsers;
   hidden: boolean;
 };

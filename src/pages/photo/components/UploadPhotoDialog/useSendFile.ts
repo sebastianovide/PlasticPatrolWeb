@@ -23,6 +23,7 @@ type HookArgs = {
 };
 
 type Args = {
+  uploaderId: string
   setSendingProgress: (progress: number) => void;
   setUploadTask: (task: any) => void;
   history: any;
@@ -33,17 +34,19 @@ export default function useSendFile(args: HookArgs) {
   const [uploadTask, setUploadTask] = useState<any>();
   const [sendingProgress, setSendingProgress] = useState(0);
   const [errorMessage, setErrorMessage] = useState<string>();
-  const history = useHistory();
-  const missionIds = useUser()?.missions || [];
-  const missionData = useMissions();
 
-  console.log("useSendFile");
-  console.log(missionIds);
+  const history = useHistory();
+  const missionData = useMissions();
+  const user = useUser();
+
+  const missionIds = user?.missions || [];
+  const uploaderId = user?.id || "";
 
   const sendFileFunc = async () => {
     try {
       await sendFile({
         ...args,
+        uploaderId,
         setUploadTask,
         setSendingProgress,
         history,
@@ -74,6 +77,7 @@ export default function useSendFile(args: HookArgs) {
 }
 
 async function sendFile({
+  uploaderId,
   imgSrc,
   online,
   imgLocation,
@@ -118,7 +122,7 @@ async function sendFile({
   let photoRef = await dbFirebase.saveMetadata(dataToSend);
 
   try {
-    await updateMissionOnPhotoUploaded(totalCount, missionIds);
+    await updateMissionOnPhotoUploaded(uploaderId, totalCount, missionIds);
   } catch (error) {
     console.error(error);
   }
