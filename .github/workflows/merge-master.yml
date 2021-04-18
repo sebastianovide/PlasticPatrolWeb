@@ -158,8 +158,10 @@ jobs:
         id: cache-gradle
         uses: actions/cache@v2
         with:
-          path: ~/.gradle
-          key: ${{ runner.OS }}-gradle-${{ hashFiles('corodva-app/package-lock.json') }}
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.OS }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.OS }}-gradle-
 
@@ -297,8 +299,10 @@ jobs:
         id: cache-gradle
         uses: actions/cache@v2
         with:
-          path: ~/.gradle
-          key: ${{ runner.OS }}-gradle-${{ hashFiles('corodva-app/package-lock.json') }}
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.OS }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.OS }}-gradle-
 
