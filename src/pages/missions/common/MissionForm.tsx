@@ -1,7 +1,5 @@
 import Button from "@material-ui/core/Button";
-import { linkToAddMissionCoverPhotoDialog } from "../../../routes/missions/links";
 import { DesktopPhotoFallback } from "../../../components/common/DesktopPhotoFallback";
-import { Route } from "react-router-dom";
 import AddPhotoDialog from "../../photo/components/AddPhotoDialog/AddPhotoDialog";
 import React, { ChangeEvent, createRef, useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
@@ -21,12 +19,12 @@ import {
 } from "../../../types/Photo";
 import { useGPSLocation } from "../../../providers/LocationProvider";
 import loadPhoto from "../../photo/pages/CategorisePhotoPage/utils";
-import { useHistory } from "react-router";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogActions from "@material-ui/core/DialogActions";
 import thumbnailBackup from "../../../assets/images/mission-thumbnail-backup.png";
+import { Capacitor } from "@capacitor/core";
 
 const MISSION_NAME_LIMIT = 100;
 const MISSION_DESCRIPTION_LIMIT = 200;
@@ -193,7 +191,6 @@ export default function MissionForm({
   onMissionDataUpdated
 }: Props) {
   const classes = useStyles();
-  const history = useHistory();
   const gpsLocation = useGPSLocation();
 
   // Magic for handling photo uploads.
@@ -204,20 +201,21 @@ export default function MissionForm({
   ) => {
     const fileState = isCordovaCameraImage(image)
       ? {
-          fileOrFileName: (image as CordovaCameraImage).filename,
-          cordovaMetadata: JSON.parse(
-            (image as CordovaCameraImage).json_metadata as string
-          ),
+          fileOrFileName: Capacitor.convertFileSrc(image.filename),
+          cordovaMetadata: JSON.parse(image.json_metadata),
           fromCamera: fromCamera
         }
       : { fileOrFileName: image, fromCamera: fromCamera };
-
     loadPhoto({
       ...fileState,
       fromCamera,
       gpsLocation,
       callback: setCoverPhoto
     });
+
+    if (Capacitor.platform !== "web") {
+      setOpenPhotoDialog(false);
+    }
   };
 
   const today = new Date();
@@ -233,6 +231,7 @@ export default function MissionForm({
   const [coverPhoto, setCoverPhoto] = useState<
     ImageMetadata | string | undefined
   >();
+  const [openPhotoDialog, setOpenPhotoDialog] = useState(false);
 
   // If we're editing an existing mission, the parent component passes an initialMission
   // prop. We should allow users to discard changes, easy way to do this is have this form
@@ -354,6 +353,7 @@ export default function MissionForm({
                 : coverPhoto)
             }
             className={classes.coverPhotoPreview}
+            alt={""}
           />
         </div>
       )}
@@ -363,7 +363,7 @@ export default function MissionForm({
         // @ts-ignore
         onClick={() =>
           !!window.cordova
-            ? history.push(linkToAddMissionCoverPhotoDialog())
+            ? setOpenPhotoDialog(true)
             : desktopPhotoRef.current && desktopPhotoRef.current.click()
         }
         color="default"
@@ -375,12 +375,12 @@ export default function MissionForm({
         ref={desktopPhotoRef}
         handlePhotoSelect={handlePhotoSelect}
       />
-      <Route path={linkToAddMissionCoverPhotoDialog()}>
+      {openPhotoDialog && (
         <AddPhotoDialog
-          onClose={() => history.goBack()}
+          onClose={() => setOpenPhotoDialog(false)}
           handlePhotoSelect={handlePhotoSelect}
         />
-      </Route>
+      )}
 
       <div className={classes.date}>
         <div className={classes.fieldLabel}>Start date</div>

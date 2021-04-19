@@ -29,6 +29,7 @@ import AddNewItem from "../../components/AddNewItem/AddNewItem";
 import ItemOverviewList from "../../components/ItemOverviewList/ItemOverviewList";
 
 import loadPhoto from "./utils";
+import { Capacitor } from "@capacitor/core";
 
 import BarcodeScanner, {
   isProductInfo
@@ -86,7 +87,7 @@ export default function CategoriseLitterPage() {
     } else if (isCordovaImageState(state)) {
       const { file, fromCamera } = state;
       loadPhoto({
-        fileOrFileName: (window as any).Ionic.WebView.convertFileSrc(file.filename),
+        fileOrFileName: Capacitor.convertFileSrc(file.filename),
         fromCamera,
         gpsLocation,
         cordovaMetadata: JSON.parse(file.json_metadata),

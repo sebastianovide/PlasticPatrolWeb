@@ -84,6 +84,7 @@ export default function EditMission({}: Props) {
   const missionChanged: boolean =
     originalMission === undefined ||
     missionFormData === undefined ||
+    originalMission.coverPhotoUrl !== missionFormData.coverPhoto ||
     !equal(originalMission, missionFormData);
 
   const applyEdits = async () => {
