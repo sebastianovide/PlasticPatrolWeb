@@ -18,6 +18,7 @@ describe("gravatar", () => {
             "",
             null,
             "",
+            null,
             []
         );
     });

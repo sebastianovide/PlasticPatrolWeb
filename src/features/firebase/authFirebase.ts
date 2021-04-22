@@ -48,7 +48,8 @@ export const onAuthStateChanged = ({ onSignOut, setUser }: Args) => {
       "",
       null,
       "",
-      getProvider(user)
+      getProvider(user),
+      []
     );
 
     addGravatarInfo(currentUser)

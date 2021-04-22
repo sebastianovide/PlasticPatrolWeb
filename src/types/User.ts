@@ -12,6 +12,7 @@ class User {
   description: string;
   location: any;
   profileURL: string;
+  authProvider: any;
   missions: MissionId[];
 
   constructor(
@@ -26,6 +27,7 @@ class User {
     description: string,
     location: any,
     profileURL: string,
+    authProvider: any,
     missions: MissionId[]
   ) {
     this.id = id;
@@ -39,6 +41,7 @@ class User {
     this.description = description;
     this.location = location;
     this.profileURL = profileURL;
+    this.authProvider = authProvider;
     this.missions = missions;
   }
 }

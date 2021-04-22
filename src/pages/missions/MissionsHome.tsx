@@ -169,12 +169,7 @@ export default function MissionsHome({}: Props) {
         {missionData?.missions === undefined ? (
           <div>Loading...</div>
         ) : filteredMissionList.length === 0 ? (
-          <div>
-            Unfortunately, there are no matches for your search. <br />
-            <br />
-            If you’d like to create your own mission, please tap on the create
-            mission button at the top of the screen.
-          </div>
+          <div>Missions coming soon</div>
         ) : (
           filteredMissionList.map((mission: MissionFirestoreData) => (
             <MissionThumbnail key={mission.id} mission={mission} />
