@@ -4,6 +4,8 @@ import linkToBrands from "./brands/link";
 import BrandsRoute from "./brands/Route";
 import linkToCategories from "./categories/link";
 import CategoriesRoute from "./categories/Route";
+import linkToMissionControl from "./mission-control/link";
+import MissionControlRoute from "./mission-control/Route";
 
 export default function AdminRouter() {
   return (
@@ -13,6 +15,9 @@ export default function AdminRouter() {
       </Route>
       <Route path={linkToBrands()}>
         <BrandsRoute />
+      </Route>
+      <Route path={linkToMissionControl()}>
+        <MissionControlRoute />
       </Route>
 
       <Redirect to={"/"} />
