@@ -103,7 +103,7 @@ function MissionBreakdown({
       <button
         onClick={() => {
           const { data, headers } = flattenPhotosForCsv(photos);
-          getCsv(data, headers, `${missionName}-photos.csv`);
+          getCsv(data, headers, `${name}-photos.csv`);
         }}
       >
         Download photo data
