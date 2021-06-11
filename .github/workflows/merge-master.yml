@@ -595,6 +595,8 @@ jobs:
         with:
           name: react-build
           path: build
+          
+      - run: cd functions && npm install -ci
 
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
