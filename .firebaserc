@@ -17,6 +17,19 @@
           "plastic-patrol-fd3b3-md"
         ]
       }
+    },
+    "plastic-patrol-dev-722eb": {
+      "hosting": {
+        "api": [
+          "plastic-patrol-dev-722eb-api"
+        ],
+        "app": [
+          "plastic-patrol-dev-722eb"
+        ],
+        "md": [
+          "plastic-patrol-dev-722eb-md"
+        ]
+      }
     }
   }
 }
