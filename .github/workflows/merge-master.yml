@@ -141,6 +141,7 @@ jobs:
           path: build
 
   capacitor_android_build_dev:
+    if: github.event_name != 'release'
     needs: build_web
     runs-on: ubuntu-latest
     steps:
@@ -185,6 +186,7 @@ jobs:
           path: android/app/build/outputs/apk
 
   capacitor_ios_build_dev:
+    if: github.event_name != 'release'
     needs: build_web
     runs-on: macos-latest
     # fetch the code
