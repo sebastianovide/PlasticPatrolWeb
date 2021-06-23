@@ -13,6 +13,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // Override point for customization after application launch.
 
     FirebaseApp.configure()
+    ApplicationDelegate.shared.application(application, didFinishLaunchingWithOptions: launchOptions)
 
     // Crash the app after 5 seconds
 //    DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
