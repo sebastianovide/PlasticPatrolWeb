@@ -7,13 +7,6 @@ import dbFirebase from "./dbFirebase";
 import { enableOrDisableFeatures } from "custom/featuresFlags";
 import { addGravatarInfo } from "utils/gravatar";
 
-const getProvider = (user: any) => {
-  if (user.providerData.length > 0) {
-    return user.providerData[0].providerId;
-  }
-  return null;
-};
-
 type Args = {
   onSignOut: () => void;
   setUser: (user?: User) => void;
@@ -36,9 +29,12 @@ export const onAuthStateChanged = ({ onSignOut, setUser }: Args) => {
     gtagSetId(user?.uid);
     gtagEvent("Logged in", "User", user?.uid);
 
+    const displayName = localStorage.getItem("displayName"); // apple login the first time missing names workaround
+    const idTokenResult = await user.getIdTokenResult();
+
     let currentUser = new User(
       user.uid,
-      user.displayName || "",
+      displayName ? displayName : user.displayName || "",
       false,
       false,
       user.email || "",
@@ -48,7 +44,7 @@ export const onAuthStateChanged = ({ onSignOut, setUser }: Args) => {
       "",
       null,
       "",
-      getProvider(user),
+      idTokenResult.signInProvider,
       []
     );
 
@@ -65,7 +61,7 @@ export const onAuthStateChanged = ({ onSignOut, setUser }: Args) => {
       };
 
       enableOrDisableFeatures(currentUser);
-    } catch {}
+    } catch { }
 
     // creates a new object ref so react updates
     console.log(
