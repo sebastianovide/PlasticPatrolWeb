@@ -15,7 +15,9 @@ const useStyles = makeStyles((theme) => ({
   },
   sponsorImage: {
     alignSelf: "center",
-    marginBottom: theme.spacing(1)
+    marginBottom: theme.spacing(1),
+    height: "50px",
+    width: "auto"
   },
   reCache: {
     display: "block",
@@ -89,11 +91,13 @@ export default function AboutPage({
         using the Planet Patrol app to help shape a litter-free future together.
         <br />
         <br />
-        <img
-          src={sponsorImage}
-          className={classes.sponsorImage}
-          alt="sponsor logo"
-        />
+        {sponsorImage && (
+          <img
+            src={sponsorImage}
+            className={classes.sponsorImage}
+            alt="sponsor logo"
+          />
+        )}
         <span className={classes.reCache}>
           <Button
             onClick={reloadPhotos}

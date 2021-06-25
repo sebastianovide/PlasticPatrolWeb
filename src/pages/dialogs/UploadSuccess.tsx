@@ -68,14 +68,16 @@ export default function UploadSuccessDialog({
         To see how many items you've contributed in total and your global
         position, open the leaderboard from the menu.
       </p>
-
-      <p className={styles.sponsoredBy}>Sponsored by</p>
-      <img
-        className={styles.sponsorImage}
-        src={sponsorImage}
-        alt="sponsor logo"
-      />
-
+      {sponsorImage && (
+        <>
+          <p className={styles.sponsoredBy}>Sponsored by</p>
+          <img
+            className={styles.sponsorImage}
+            src={sponsorImage}
+            alt="sponsor logo"
+          />
+        </>
+      )}
       <Button
         onClick={onClose}
         color="primary"
