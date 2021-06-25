@@ -2,23 +2,22 @@ import React from "react";
 import { useParams, useHistory } from "react-router-dom";
 
 import UploadSuccessDialog from "pages/dialogs/UploadSuccess";
+import { linkToNewPhoto } from "routes/photo/routes/new/links";
 
-type Props = { totalNumberOfPieces: number; sponsorImage?: string };
+type Props = { sponsorImage?: string };
 
-export default function UploadSuccessRoute({
-  totalNumberOfPieces,
-  sponsorImage
-}: Props) {
-  const { number } = useParams<{ number: string }>();
+export default function UploadSuccessRoute({ sponsorImage }: Props) {
+  const { isInMission } = useParams<{ isInMission: string }>();
   const history = useHistory();
 
   const navigateToHomeScreen = () => history.push("/");
+  const navigateToAddPhoto = () => history.push(linkToNewPhoto());
 
   return (
     <UploadSuccessDialog
-      numberOfPiecesSubmitted={Number(number)}
-      totalNumberOfPieces={totalNumberOfPieces}
+      onUploadAnotherPhoto={navigateToAddPhoto}
       onClose={navigateToHomeScreen}
+      isInMission={JSON.parse(isInMission)}
       sponsorImage={sponsorImage}
     />
   );

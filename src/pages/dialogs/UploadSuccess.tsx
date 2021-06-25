@@ -1,12 +1,10 @@
-import React from "react";
-
 import Dialog from "@material-ui/core/Dialog";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core";
 
 type Props = {
-  numberOfPiecesSubmitted: number;
-  totalNumberOfPieces: number;
+  isInMission: boolean;
+  onUploadAnotherPhoto: () => void;
   onClose: () => void;
   sponsorImage?: string;
 };
@@ -40,8 +38,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function UploadSuccessDialog({
-  totalNumberOfPieces,
-  numberOfPiecesSubmitted,
+  isInMission,
+  onUploadAnotherPhoto,
   onClose,
   sponsorImage
 }: Props) {
@@ -52,22 +50,18 @@ export default function UploadSuccessDialog({
         <span className={styles.bold}>Thank you.</span>
         <br />
         <br />
-        Your upload is now being moderated and will appear on the global map
-        within 48 hours.
-        <br />
-        <br />
-        We analyse all the data you collect to understand the trends and
-        patterns of pollution to develop evidence-based solutions.
-        <br />
-        <br />
-        Together we've recorded {totalNumberOfPieces} pieces of litter so far,
-        and you just added {numberOfPiecesSubmitted}{" "}
-        {numberOfPiecesSubmitted === 1 ? "piece" : "pieces"} to this!
-        <br />
-        <br />
-        To see how many items you've contributed in total and your global
-        position, open the leaderboard from the menu.
+        Your photo is now being moderated and will appear on the global map
+        within 48 hours 🙌
+        {isInMission && (
+          <>
+            <br />
+            <br />
+            The pieces you've uploaded have been added to the Mission(s) you are
+            part of 🚀
+          </>
+        )}
       </p>
+
       {sponsorImage && (
         <>
           <p className={styles.sponsoredBy}>Sponsored by</p>
@@ -78,13 +72,25 @@ export default function UploadSuccessDialog({
           />
         </>
       )}
+
       <Button
-        onClick={onClose}
+        onClick={onUploadAnotherPhoto}
         color="primary"
         variant="contained"
         className={styles.button}
       >
-        OK
+        Upload another photo
+      </Button>
+
+      <br />
+
+      <Button
+        onClick={onClose}
+        color="primary"
+        variant="outlined"
+        className={styles.button}
+      >
+        Back to the map
       </Button>
     </Dialog>
   );

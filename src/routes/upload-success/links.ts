@@ -1,4 +1,6 @@
-export function linkToUploadSuccess(number: string = ":number") {
+export function linkToUploadSuccess(
+  isInMission: boolean | string = ":isInMission"
+) {
   // `/` is needed so that embedabble path isn't added to slug
-  return `/upload-success/${number}/`;
+  return `/upload-success/${isInMission}`;
 }

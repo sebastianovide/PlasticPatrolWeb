@@ -70,10 +70,7 @@ export function Routes({
   return (
     <Switch>
       <Route path={linkToUploadSuccess()}>
-        <UploadPhotoRoute
-          totalNumberOfPieces={stats.pieces}
-          sponsorImage={sponsorImage}
-        />
+        <UploadPhotoRoute sponsorImage={sponsorImage} />
       </Route>
 
       <Route path={linkToLogin()}>

@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { useHistory } from "react-router-dom";
 
 import firebase from "firebase/app";
@@ -9,8 +9,8 @@ import { Item } from "pages/photo/types";
 
 import { linkToUploadSuccess } from "routes/upload-success/links";
 import useEffectOnMount from "hooks/useEffectOnMount";
-import User from "../../../../types/User";
-import UserProvider, { useUser } from "../../../../providers/UserProvider";
+
+import { useUser } from "../../../../providers/UserProvider";
 import { updateMissionOnPhotoUploaded } from "../../../../features/firebase/missions";
 import { useMissions } from "../../../../providers/MissionsProvider";
 
@@ -23,7 +23,7 @@ type HookArgs = {
 };
 
 type Args = {
-  uploaderId: string
+  uploaderId: string;
   setSendingProgress: (progress: number) => void;
   setUploadTask: (task: any) => void;
   history: any;
@@ -151,6 +151,6 @@ async function sendFile({
   });
 
   await uploadTask.then(() => {
-    history.push(linkToUploadSuccess(totalCount as any));
+    history.push(linkToUploadSuccess(missionIds.length > 0));
   });
 }
