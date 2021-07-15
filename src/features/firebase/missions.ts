@@ -67,13 +67,7 @@ export const createMission = async (
     ..._.omit(mission, "coverPhoto"),
     ownerUserId,
     totalPieces: 0,
-    totalUserPieces: {
-      [ownerUserId]: {
-        uid: ownerUserId,
-        pieces: 0,
-        displayName: user.displayName
-      }
-    },
+    totalUserPieces: {},
     pendingUsers: [],
     hidden: false
   };
@@ -82,8 +76,6 @@ export const createMission = async (
     .firestore()
     .collection(MISSION_FIRESTORE_COLLECTION)
     .add(missionToPersist);
-
-  await addMissionToUser(ownerUserId, id);
 
   if (
     mission.coverPhoto === undefined ||

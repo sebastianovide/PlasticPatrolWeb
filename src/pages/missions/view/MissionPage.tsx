@@ -89,7 +89,7 @@ const useStyles = makeStyles((theme) => ({
     color: "black",
     fontSize: 13,
     fontWeight: "bold",
-    whiteSpace: "pre-wrap",
+    whiteSpace: "pre-wrap"
   },
 
   completedText: {
@@ -222,22 +222,29 @@ export default function MissionPage() {
         <img src={imgSrc} alt={"Mission cover"} className={classes.picture} />
       </div>
       <div className={classes.progressWrapper}>
-        <div className={missionIsCompleted(mission) ? classes.completedText : classes.progressText}>{progressText}</div>
-        {!missionIsCompleted(mission) &&
-        <Line
-          percent={missionProgress}
-          strokeWidth={2}
-          trailWidth={2}
-          strokeColor={themes.palette.secondary.main}
-          style={{maxHeight: "10px"}}
-        />
-        }
+        <div
+          className={
+            missionIsCompleted(mission)
+              ? classes.completedText
+              : classes.progressText
+          }
+        >
+          {progressText}
+        </div>
+        {!missionIsCompleted(mission) && (
+          <Line
+            percent={missionProgress}
+            strokeWidth={2}
+            trailWidth={2}
+            strokeColor={themes.palette.secondary.main}
+            style={{ maxHeight: "10px" }}
+          />
+        )}
       </div>
       <div className={classes.detailWrapper}>
         <div className={classes.datesLabel}>
-          {getTextDurationBetweenTimes(Date.now(),mission.endTime)} (end date: {new Date(
-            mission.endTime
-          ).toLocaleDateString()})
+          {getTextDurationBetweenTimes(Date.now(), mission.endTime)} (end date:{" "}
+          {new Date(mission.endTime).toLocaleDateString()})
         </div>
         <div className={classes.description}>{mission.description}</div>
         <div className={classes.buttonsWrapper}>
@@ -311,21 +318,18 @@ export default function MissionPage() {
                 </Button>
               </div>
             )}
-          {userLoggedIn &&
-            userInMission &&
-            !missionEnded &&
-            !userIsMissionOwner && (
-              <div className={classes.missionButton}>
-                <Button
-                  onClick={() => setShowLeaveModal(true)}
-                  color="secondary"
-                  size="small"
-                  variant="outlined"
-                >
-                  Leave mission
-                </Button>
-              </div>
-            )}
+          {userLoggedIn && userInMission && !missionEnded && (
+            <div className={classes.missionButton}>
+              <Button
+                onClick={() => setShowLeaveModal(true)}
+                color="secondary"
+                size="small"
+                variant="outlined"
+              >
+                Leave mission
+              </Button>
+            </div>
+          )}
         </div>
         <div className={classes.buttonsWrapper}>
           {userLoggedIn &&

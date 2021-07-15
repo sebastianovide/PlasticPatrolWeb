@@ -5,7 +5,6 @@ import admin from "firebase-admin";
 import { firestore } from "../firestore";
 import { getDisplayName } from "../stats";
 import { MissionFromServer, ConfigurableMissionData } from "./models";
-import addMissionToUser from "./utils/addMissionToUser";
 
 type MissionToPersist = Omit<MissionFromServer, "id">;
 
@@ -28,16 +27,12 @@ export default functions.https.onCall(
       ...restOfMission,
       ownerUserId,
       totalPieces: 0,
-      totalUserPieces: {
-        [ownerUserId]: { uid: ownerUserId, pieces: 0, displayName }
-      },
+      totalUserPieces: {},
       pendingPieces: 0,
       pendingUsers: []
     };
 
     const { id } = await firestore.collection("missions").add(missionToPersist);
-
-    await addMissionToUser(ownerUserId, id);
 
     return { id, ...missionToPersist };
   }
