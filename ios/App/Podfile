@@ -30,4 +30,5 @@ target 'App' do
   pod 'Firebase/Crashlytics'
   pod 'Firebase/Analytics'
 
+  pod 'GoogleSignIn', '~> 5.0.2'
 end
