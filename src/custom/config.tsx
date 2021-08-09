@@ -203,7 +203,7 @@ const config: Config = {
   ZOOM_FLYTO: 15,
   CENTER: [-2, 55],
   PAGES,
-  ENABLE_GRAVATAR_PROFILES: true, //To update user-profile from Gravatar, value: true or false.
+  ENABLE_GRAVATAR_PROFILES: false, // To update user-profile from Gravatar, value: true or false.
   ENABLE_GROUPS: false,
   SECURITY: {
     UPLOAD_REQUIRES_LOGIN: true

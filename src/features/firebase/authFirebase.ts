@@ -6,6 +6,7 @@ import { gtagEvent, gtagSetId } from "gtag.js";
 import dbFirebase from "./dbFirebase";
 import { enableOrDisableFeatures } from "custom/featuresFlags";
 import { addGravatarInfo } from "utils/gravatar";
+import config from "custom/config";
 
 type Args = {
   onSignOut: () => void;
@@ -48,7 +49,7 @@ export const onAuthStateChanged = ({ onSignOut, setUser }: Args) => {
       []
     );
 
-    addGravatarInfo(currentUser)
+    config.ENABLE_GRAVATAR_PROFILES && addGravatarInfo(currentUser);
 
     setUser(currentUser);
     userRef = currentUser;
