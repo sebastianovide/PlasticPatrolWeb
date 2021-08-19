@@ -9,21 +9,29 @@ import {
 } from "@material-ui/core";
 
 import CloseIcon from "@material-ui/icons/Close";
-
+import LinkIcon from "@material-ui/icons/Link";
+import { Plugins } from "@capacitor/core";
 import { Twitter, WhatsApp } from "features/sharing";
+import config from "custom/config";
 
+const { Clipboard } = Plugins;
 const useStyles = makeStyles((theme) => ({
   closeButton: {
     position: "absolute",
     right: theme.spacing(0.5),
     top: theme.spacing(0.5),
-    color: theme.palette.grey[500]
+    color: theme.palette.grey[500],
+    zIndex: 1
+  },
+  linkButton: {
+    margin: -theme.spacing(1)
   }
 }));
 
 export default function MissionShareModal({
   open,
   onClose,
+  missionId,
   isPrivate
 }: {
   open: boolean;
@@ -33,7 +41,12 @@ export default function MissionShareModal({
 }) {
   const styles = useStyles();
 
-  const shareMessage = singleMissionShareMessage;
+  const shareMessage =
+    "Join me in a litter picking Mission, Download the free Planet Patrol app and log any litter you see. See it 👀 Snap it 📸 Map it 🗺️";
+  const url =
+    process.env.NODE_ENV !== "development"
+      ? `${config.metadata.serverUrl}/#/missions/${missionId}`
+      : `https://${window.location.host}/#/missions/${missionId}`;
 
   return (
     <Dialog
@@ -66,10 +79,23 @@ export default function MissionShareModal({
         <DialogContentText>
           <Grid spacing={2} container justify="center">
             <Grid item>
-              <Twitter message={shareMessage} />
+              <IconButton
+                aria-label="link"
+                className={styles.linkButton}
+                onClick={() =>
+                  Clipboard.write({
+                    string: url
+                  })
+                }
+              >
+                <LinkIcon />
+              </IconButton>
             </Grid>
             <Grid item>
-              <WhatsApp message={shareMessage} />
+              <Twitter message={shareMessage} url={url} />
+            </Grid>
+            <Grid item>
+              <WhatsApp message={shareMessage} url={url} />
             </Grid>
           </Grid>
         </DialogContentText>
@@ -77,6 +103,3 @@ export default function MissionShareModal({
     </Dialog>
   );
 }
-
-const singleMissionShareMessage =
-  "Planet Patrol has a new feature, Missions!\nDownload the Planet Patrol app, click on Missions in the menu bar, join the mission and then document any litter you see.";

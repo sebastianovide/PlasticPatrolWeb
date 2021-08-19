@@ -40,7 +40,6 @@ import {
 } from "../../../types/Missions";
 import { linkToLoginWithRedirectOnSuccess } from "../../../routes/login/links";
 import MissionShareDialog from "./MissionShareDialog";
-import { isMissionLaunchDay } from "../../../custom/featuresFlags";
 import { linkToNewPhoto } from "../../../routes/photo/routes/new/links";
 
 const useStyles = makeStyles((theme) => ({
@@ -303,21 +302,20 @@ export default function MissionPage() {
               </Button>
             </div>
           )}
-          {!isMissionLaunchDay() &&
-            userLoggedIn &&
-            userInMission &&
-            !missionEnded && (
-              <div className={classes.missionButton}>
-                <Button
-                  onClick={() => setShowShareModal(true)}
-                  color="primary"
-                  size="small"
-                  variant="contained"
-                >
-                  Share link
-                </Button>
-              </div>
-            )}
+
+          {userLoggedIn && userInMission && !missionEnded && (
+            <div className={classes.missionButton}>
+              <Button
+                onClick={() => setShowShareModal(true)}
+                color="primary"
+                size="small"
+                variant="contained"
+              >
+                Share link
+              </Button>
+            </div>
+          )}
+
           {userLoggedIn && userInMission && !missionEnded && (
             <div className={classes.missionButton}>
               <Button

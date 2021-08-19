@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "uk.co.plasticpatrol",
+      "sha256_cert_fingerprints": [
+        "81:77:47:97:D9:E2:AB:48:A0:4B:E4:1D:07:A1:5B:11:A8:26:52:54:61:80:7F:29:81:B2:8E:B9:85:0A:09:F0"
+      ]
+    }
+  }
+]

@@ -26,6 +26,8 @@ import { gtagEvent } from "./gtag.js";
 import "./App.scss";
 import { signOut } from "./features/firebase/authFirebase";
 
+import AppUrlListener from "./pages/AppUrlListener";
+
 const styles = (theme) => ({
   rootDialog: {
     padding: theme.spacing(2),
@@ -182,6 +184,7 @@ class App extends Component {
             gpsOffline={!(gpsLocation && gpsLocation.online)}
             gpsDisabled={!(gpsLocation && gpsLocation.updated)}
           />
+          <AppUrlListener />
           <Routes
             user={user}
             gpsLocation={gpsLocation}
