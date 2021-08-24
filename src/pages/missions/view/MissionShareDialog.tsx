@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -10,6 +11,7 @@ import {
 
 import CloseIcon from "@material-ui/icons/Close";
 import LinkIcon from "@material-ui/icons/Link";
+import Snackbar from "@material-ui/core/Snackbar";
 import { Plugins } from "@capacitor/core";
 import { Twitter, WhatsApp } from "features/sharing";
 import config from "custom/config";
@@ -40,6 +42,7 @@ export default function MissionShareModal({
   isPrivate: boolean;
 }) {
   const styles = useStyles();
+  const [openSnackbar, setOpenSnackbar] = useState(false);
 
   const shareMessage =
     "Join me in a litter picking Mission, Download the free Planet Patrol app and log any litter you see. See it 👀 Snap it 📸 Map it 🗺️";
@@ -82,11 +85,12 @@ export default function MissionShareModal({
               <IconButton
                 aria-label="link"
                 className={styles.linkButton}
-                onClick={() =>
+                onClick={() => {
                   Clipboard.write({
                     string: url
-                  })
-                }
+                  });
+                  setOpenSnackbar(true);
+                }}
               >
                 <LinkIcon />
               </IconButton>
@@ -100,6 +104,16 @@ export default function MissionShareModal({
           </Grid>
         </DialogContentText>
       </DialogContent>
+      <Snackbar
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left"
+        }}
+        open={openSnackbar}
+        autoHideDuration={3000}
+        message="Link copied to clipboard"
+        onClose={() => setOpenSnackbar(false)}
+      />
     </Dialog>
   );
 }

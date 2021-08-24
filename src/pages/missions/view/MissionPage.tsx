@@ -303,7 +303,7 @@ export default function MissionPage() {
             </div>
           )}
 
-          {userLoggedIn && userInMission && !missionEnded && (
+          {!missionEnded && (
             <div className={classes.missionButton}>
               <Button
                 onClick={() => setShowShareModal(true)}
