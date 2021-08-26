@@ -169,13 +169,13 @@ const config: Config = {
   metadata: {
     metadataServerUrl: "https://md.plasticpatrol.co.uk",
     serverUrl: "https://app.plasticpatrol.co.uk",
-    twSite: "@Plastic_Patrol",
+    twSite: "@onplanetpatrol",
     twCreator: "@LizzieOutside",
-    twDomain: "www.plasticpatrol.co.uk",
+    twDomain: "planetpatrol.co",
     _twDescriptionField: "pieces",
     twDescription:
       "The global movement that is crowdsource cleaning the planet. Download the Planet Patrol app to join the movement!",
-    twTitle: "Plastic Patrol"
+    twTitle: "Planet Patrol"
   },
   MAX_IMAGE_SIZE: 2048,
   THEME: {

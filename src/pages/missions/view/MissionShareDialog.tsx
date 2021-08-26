@@ -48,8 +48,8 @@ export default function MissionShareModal({
     "Join me in a litter picking Mission, Download the free Planet Patrol app and log any litter you see. See it 👀 Snap it 📸 Map it 🗺️";
   const url =
     process.env.NODE_ENV !== "development"
-      ? `${config.metadata.serverUrl}/#/missions/${missionId}`
-      : `https://${window.location.host}/#/missions/${missionId}`;
+      ? `${config.metadata.serverUrl}/#/missions/${missionId}?utm_source=app_share`
+      : `https://${window.location.host}/#/missions/${missionId}?utm_source=app_share`;
 
   return (
     <Dialog

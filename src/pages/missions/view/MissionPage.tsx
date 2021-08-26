@@ -6,7 +6,10 @@ import PageWrapper from "components/PageWrapper";
 import "react-circular-progressbar/dist/styles.css";
 import { useHistory, useParams } from "react-router-dom";
 
+import { Capacitor } from "@capacitor/core";
 import Button from "@material-ui/core/Button";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import Snackbar from "@material-ui/core/Snackbar";
 import { UserPieceRankTable } from "../../../components/Leaderboard";
 import { Line } from "rc-progress";
 import {
@@ -140,6 +143,12 @@ const useStyles = makeStyles((theme) => ({
     padding: "20px",
     textAlign: "center",
     color: "grey"
+  },
+
+  circularProgress: {
+    position: "absolute",
+    top: "40%",
+    left: "40%"
   }
 }));
 
@@ -149,11 +158,12 @@ export default function MissionPage() {
   const user = useUser();
 
   const history = useHistory();
-  const handleBack = () => history.goBack();
+  const handleBack = () => history.push(linkToMissionsPage());
 
   const missionData = useMissions();
   const missions = missionData?.missions || [];
 
+  const [openWebAppMissionDialog, setOpenWebAppMissionDialog] = useState(true);
   const [showLeaveModal, setShowLeaveModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
@@ -161,6 +171,16 @@ export default function MissionPage() {
 
   const { missionId } = useParams<{ missionId: string }>();
   const mission = missions.find((ch) => ch.id.toString() === missionId);
+
+  if (missionData?.missions === undefined) {
+    return (
+      <div className={classes.circularProgress}>
+        <CircularProgress size={100} />
+        <Snackbar open={true} message="Loading mission..." />
+      </div>
+    );
+  }
+
   if (mission === undefined) {
     return <div>Could not find mission</div>;
   }
@@ -397,6 +417,33 @@ export default function MissionPage() {
         missionId={missionId}
         isPrivate={mission.isPrivate}
       />
+
+      {/* Modal shown if the user opens a mission share link on the web */}
+      <Dialog
+        open={
+          window.location.hash.includes("app_share") &&
+          Capacitor.platform === "web" &&
+          openWebAppMissionDialog
+        }
+        onClose={() => setOpenWebAppMissionDialog(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Download the free Planet Patrol app from the App or Google Play
+            Store, then follow the link to join the Mission
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => setOpenWebAppMissionDialog(false)}
+            color="default"
+          >
+            Ok
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       {/* Modal shown after the user joins a public mission */}
       <Dialog
