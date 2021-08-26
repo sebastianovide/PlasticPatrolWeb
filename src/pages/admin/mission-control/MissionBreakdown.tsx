@@ -1,58 +1,39 @@
-import { useEffect, useState } from "react";
-
 import {
-  Button,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow
 } from "@material-ui/core";
-import { useMissions } from "providers/MissionsProvider";
-import { Mission } from "types/Missions";
-import { getCsv, flattenPhotosForCsv } from "./utils";
 import { dbFirebase } from "features/firebase";
+import { useMissions } from "providers/MissionsProvider";
+import { useEffect, useState } from "react";
+import { Mission } from "types/Missions";
 import Photo from "types/Photo";
 
-export default function MissionControlPage() {
-  const [searchString, setSearchString] = useState("");
+import { flattenPhotosForCsv, getCsv } from "./utils";
 
+export default function MissionBreakdown({ missionId }: { missionId: string }) {
   const missions = useMissions();
 
-  const [filteredMissions, setFilteredMissions] = useState<Mission[]>([]);
+  const [mission, setMission] = useState<Mission>();
 
   useEffect(() => {
     const missionList = missions?.missions || [];
 
-    const filtered = missionList.filter(({ name, id, ...rest }) => {
-      return id.includes(searchString) || name.includes(searchString);
-    });
+    const mission = missionList.find(({ id }) => id === missionId);
 
-    setFilteredMissions(filtered);
-  }, [searchString, missions?.missions]);
+    setMission(mission);
+  }, [missions?.missions]);
 
-  return (
-    <>
-      <input
-        value={searchString}
-        onChange={(e) => setSearchString(e.target.value)}
-        placeholder={"Search for a mission by name or id"}
-      />
-      {filteredMissions.length > 1 &&
-        filteredMissions.map(({ name, id }) => (
-          <Button key={id} onClick={() => setSearchString(id)} color="primary">
-            {name}
-          </Button>
-        ))}
+  if (mission) {
+    return <_MissionBreakdown {...mission} />;
+  }
 
-      {filteredMissions.length === 1 && (
-        <MissionBreakdown {...filteredMissions[0]} />
-      )}
-    </>
-  );
+  return <div>No mission matches given id (may be loading...)</div>;
 }
 
-function MissionBreakdown({
+function _MissionBreakdown({
   name,
   startTime,
   endTime,

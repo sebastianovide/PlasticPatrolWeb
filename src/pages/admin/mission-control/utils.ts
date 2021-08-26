@@ -1,6 +1,12 @@
 import { saveAs } from "file-saver";
 import Photo from "types/Photo";
 
+import {
+  Mission,
+  missionHasEnded,
+  missionHasStarted
+} from "../../../types/Missions";
+
 export function getCsv(
   arrayOfData: Array<Array<any>>,
   headers: string[],
@@ -83,5 +89,38 @@ export function flattenPhotosForCsv(photos: Photo[]) {
       "type",
       "numberFromType"
     ]
+  };
+}
+
+export function filterMissions({
+  idOrName,
+  showActive,
+  showUpcoming,
+  showFinished
+}: {
+  idOrName: string;
+  showActive: boolean;
+  showUpcoming: boolean;
+  showFinished: boolean;
+}) {
+  return function ({ id, name, startTime, endTime }: Mission) {
+    const meetsIdOrNameCondition =
+      idOrName.length > 0
+        ? id.includes(idOrName) || name.includes(idOrName)
+        : true;
+
+    const started = missionHasStarted({ startTime });
+    const ended = missionHasEnded({ endTime });
+
+    const meetsActiveCondition = started && !ended ? showActive : true;
+    const meetsUpcomingCondition = !started ? showUpcoming : true;
+    const meetsFinishedCondition = ended ? showFinished : true;
+
+    return (
+      meetsIdOrNameCondition &&
+      meetsActiveCondition &&
+      meetsUpcomingCondition &&
+      meetsFinishedCondition
+    );
   };
 }

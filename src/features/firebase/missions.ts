@@ -1,20 +1,19 @@
 import firebase from "firebase/app";
+import _ from "lodash";
+
+import { ImageMetaData } from "../../pages/photo/state/types";
 import {
-  Mission,
-  MissionFirestoreData,
-  MissionId,
   ConfigurableMissionData,
   coverPhotoIsMetaData,
-  userOnMissionLeaderboard,
+  MissionFirestoreData,
+  missionHasEnded,
+  MissionId,
   PendingUser,
-  userCollectedPiecesForMission, missionHasEnded
+  userCollectedPiecesForMission,
+  userOnMissionLeaderboard
 } from "../../types/Missions";
 import Photo from "../../types/Photo";
 import User from "../../types/User";
-import _ from "lodash";
-import { ImageMetaData } from "../../pages/photo/state/types";
-import { firestore } from "../../../functions/src/firestore";
-import { user } from "../../../cypress/fixtures/users";
 
 const MISSION_FIRESTORE_COLLECTION = "missions";
 const MISSION_PHOTO_STORAGE = "missions";
@@ -105,7 +104,7 @@ export async function fetchAllMissions(): Promise<MissionFirestoreData[]> {
     id: doc.id
   })) as MissionFirestoreData[];
 
-  return missions;
+  return missions.map(defaultPrecedence);
 }
 
 // Edit mission with pending user
@@ -289,8 +288,6 @@ export const editMission = async (
   mission: ConfigurableMissionData
 ) => {
   const missionRef = getMissionRefFromId(missionId);
-  const currentMissionSnapshot = await missionRef.get();
-  const missionData = currentMissionSnapshot.data() as MissionFirestoreData;
 
   console.log(`Editing mission ${missionId}`);
   console.log(mission);
@@ -311,6 +308,15 @@ export const editMission = async (
 
   await uploadMissionCoverPhoto(missionId, mission.coverPhoto);
 };
+
+export async function setMissionPrecendence(
+  missionId: string,
+  precedence: number
+) {
+  const missionRef = getMissionRefFromId(missionId);
+
+  return await missionRef.set({ precedence }, { merge: true });
+}
 
 const uploadMissionCoverPhoto = async (
   missionId: MissionId,
@@ -418,7 +424,9 @@ export const updateMissionOnPhotoUploaded = async (
         const missionRef = getMissionRefFromId(missionId);
         await missionRef.update({
           totalPieces: firebase.firestore.FieldValue.increment(pieces),
-          [`totalUserPieces.${uploaderId}.pieces`]: firebase.firestore.FieldValue.increment(pieces)
+          [`totalUserPieces.${uploaderId}.pieces`]: firebase.firestore.FieldValue.increment(
+            pieces
+          )
         });
       } catch (err) {
         console.info(
@@ -442,7 +450,9 @@ export const updateMissionOnPhotoModerated = async (
     photo.missions.map(async (missionId: string) => {
       try {
         if (!photoWasApproved) {
-          console.log(`Moderator rejected photo ${photo.id} which was part of mission ${missionId}.`);
+          console.log(
+            `Moderator rejected photo ${photo.id} which was part of mission ${missionId}.`
+          );
 
           // If a photo that was part of a mission is rejected, we decrement:
           //  - the total mission pieces,
@@ -461,3 +471,14 @@ export const updateMissionOnPhotoModerated = async (
     })
   );
 };
+
+function defaultPrecedence(mission: MissionFirestoreData) {
+  if (mission.precedence === undefined) {
+    return {
+      ...mission,
+      precedence: 0
+    };
+  }
+
+  return mission;
+}

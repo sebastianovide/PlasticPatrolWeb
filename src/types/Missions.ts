@@ -19,13 +19,7 @@ export type MissionFirestoreData = Omit<
   "coverPhoto"
 > & {
   id: string;
-  name: string;
   ownerUserId: string;
-  description: string;
-  isPrivate: boolean;
-  startTime: number;
-  endTime: number;
-  targetPieces: number;
   totalPieces: number;
   totalUserPieces: TotalUserPieces;
   pendingUsers: PendingUsers;
@@ -44,6 +38,7 @@ export type ConfigurableMissionData = {
   endTime: number;
   targetPieces: number;
   coverPhoto?: ImageMetaData | string;
+  precedence?: number;
 };
 
 export const coverPhotoIsMetaData = (
@@ -76,13 +71,26 @@ export const EmptyMissionData: ConfigurableMissionData = {
   coverPhoto: undefined
 };
 
-export const missionHasEnded = (mission: MissionFirestoreData): boolean => {
+export const missionHasEnded = (mission: {
+  endTime: MissionFirestoreData["endTime"];
+}): boolean => {
   const today: Date = new Date();
   today.setHours(0, 0, 0, 0);
   return mission.endTime < today.getTime();
 };
 
-export const missionIsCompleted = (mission: MissionFirestoreData): boolean => {
+export const missionHasStarted = (mission: {
+  startTime: MissionFirestoreData["startTime"];
+}): boolean => {
+  const today: Date = new Date();
+  today.setHours(0, 0, 0, 0);
+  return mission.startTime < today.getTime();
+};
+
+export const missionIsCompleted = (mission: {
+  totalPieces: MissionFirestoreData["totalPieces"];
+  targetPieces: MissionFirestoreData["targetPieces"];
+}): boolean => {
   return mission.totalPieces >= mission.targetPieces;
 };
 
@@ -178,9 +186,8 @@ export const getTextDurationBetweenTimes = (
     const weeks = Math.floor(daysRemaining / 7);
     duration = `${Math.abs(weeks)} ${weeks > 1 ? `weeks` : `week`}`;
   } else {
-    duration = `${Math.abs(daysRemaining)} ${
-      Math.abs(daysRemaining) > 1 ? `days` : `day`
-    }`;
+    duration = `${Math.abs(daysRemaining)} ${Math.abs(daysRemaining) > 1 ? `days` : `day`
+      }`;
   }
 
   if (daysRemaining < 0) {
