@@ -45,7 +45,7 @@ export default function MissionShareModal({
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
   const shareMessage =
-    "Join me in a litter picking Mission, Download the free Planet Patrol app and log any litter you see. See it 👀 Snap it 📸 Map it 🗺️";
+    "Join me in a litter picking Mission. Download the free Planet Patrol app and log any litter you see. See it 👀 Snap it 📸 Map it 🗺️";
   const url =
     process.env.NODE_ENV !== "development"
       ? `${config.metadata.serverUrl}/#/missions/${missionId}?utm_source=app_share`

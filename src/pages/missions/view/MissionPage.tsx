@@ -42,6 +42,7 @@ import {
   getTextDurationBetweenTimes
 } from "../../../types/Missions";
 import { linkToLoginWithRedirectOnSuccess } from "../../../routes/login/links";
+import WebAppMissionDialog from "./WebAppMissionDialog";
 import MissionShareDialog from "./MissionShareDialog";
 import { linkToNewPhoto } from "../../../routes/photo/routes/new/links";
 
@@ -163,7 +164,7 @@ export default function MissionPage() {
   const missionData = useMissions();
   const missions = missionData?.missions || [];
 
-  const [openWebAppMissionDialog, setOpenWebAppMissionDialog] = useState(true);
+  const [showWebAppMissionModal, setShowWebAppMissionModal] = useState(true);
   const [showLeaveModal, setShowLeaveModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
@@ -419,31 +420,14 @@ export default function MissionPage() {
       />
 
       {/* Modal shown if the user opens a mission share link on the web */}
-      <Dialog
+      <WebAppMissionDialog
         open={
           window.location.hash.includes("app_share") &&
           Capacitor.platform === "web" &&
-          openWebAppMissionDialog
+          showWebAppMissionModal
         }
-        onClose={() => setOpenWebAppMissionDialog(false)}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Download the free Planet Patrol app from the App or Google Play
-            Store, then follow the link to join the Mission
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => setOpenWebAppMissionDialog(false)}
-            color="default"
-          >
-            Ok
-          </Button>
-        </DialogActions>
-      </Dialog>
+        onClose={() => setShowWebAppMissionModal(false)}
+      />
 
       {/* Modal shown after the user joins a public mission */}
       <Dialog
