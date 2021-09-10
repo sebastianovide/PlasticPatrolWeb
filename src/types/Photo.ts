@@ -1,13 +1,15 @@
 import { Map } from "immutable";
-import Geojson from "./Geojson";
-import Feature from "./Feature";
+
 import { Category } from "./Category";
+import Feature from "./Feature";
+import Geojson from "./Geojson";
 import { MissionId } from "./Missions";
 
 type Photo = {
   id: any;
   main: any;
   thumbnail: any;
+  created?: Date;
   updated: Date;
   moderated?: Date;
   owner_id: string;

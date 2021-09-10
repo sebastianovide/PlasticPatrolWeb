@@ -1,18 +1,17 @@
 // @ts-nocheck
 import firebase from "firebase/app";
-import _ from "lodash";
-
 import * as localforage from "localforage";
-
-import { firebaseApp } from "./firebaseInit.js";
-import firebaseConfig from "./config";
-import Stats from "types/Stats";
+import _ from "lodash";
+import Config from "types/Config";
 import Feature from "types/Feature";
 import { Feedback } from "types/Feedback";
 import Photo from "types/Photo";
-import Config from "types/Config";
-import { updateMissionOnPhotoModerated } from "./missions";
+import Stats from "types/Stats";
+
 import User from "../../types/User";
+import firebaseConfig from "./config";
+import { firebaseApp } from "./firebaseInit.js";
+import { updateMissionOnPhotoModerated } from "./missions";
 
 const firestore = firebase.firestore();
 export const storageRef = firebase.storage().ref();
@@ -36,6 +35,12 @@ function extractPhoto(data, id): Photo {
   photo.main = `${prefix}/1024.jpg`;
   photo.id = id;
 
+  photo.created =
+    photo.created instanceof firebase.default.firestore.Timestamp
+      ? photo.created.toDate()
+      : photo.created === null
+        ? undefined
+        : new Date(photo.created);
   photo.updated =
     photo.updated instanceof firebase.default.firestore.Timestamp
       ? photo.updated.toDate()
@@ -187,6 +192,7 @@ function saveMetadata(data) {
     data.owner_id = firebase.auth().currentUser.uid;
   }
   data.updated = firebase.default.firestore.FieldValue.serverTimestamp();
+  data.created = firebase.default.firestore.FieldValue.serverTimestamp();
   data.moderated = null;
 
   let fieldsToSave = [
@@ -196,7 +202,8 @@ function saveMetadata(data) {
     "owner_id",
     "pieces",
     "categories",
-    "missions"
+    "missions",
+    "created"
   ];
 
   return firestore.collection("photos").add(_.pick(data, fieldsToSave));

@@ -37,7 +37,9 @@ export function flattenPhotosForCsv(photos: Photo[]) {
       pieces: totalPieces,
       location: { latitude, longitude },
       owner_id,
-      published
+      published,
+      created,
+      updated
     }) => {
       const fields = {
         id,
@@ -46,6 +48,7 @@ export function flattenPhotosForCsv(photos: Photo[]) {
         longitude,
         uploaderId: owner_id,
         published,
+        dateUploaded: created || updated,
         brand: undefined,
         type: undefined,
         numberFromType: undefined
@@ -85,6 +88,7 @@ export function flattenPhotosForCsv(photos: Photo[]) {
       "longitude",
       "uploaderId",
       "published",
+      "dateUploaded",
       "brand",
       "type",
       "numberFromType"
