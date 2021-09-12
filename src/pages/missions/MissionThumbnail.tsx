@@ -5,7 +5,8 @@ import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
 import { linkToMission } from "../../routes/missions/links";
 import {
   getTextDurationBetweenTimes,
-  Mission, missionHasEnded
+  Mission,
+  missionHasEnded
 } from "../../types/Missions";
 
 import LockOpenIcon from "@material-ui/icons/LockOpen";
@@ -102,9 +103,7 @@ export default function MissionThumbnail({ mission }: Props) {
     <div
       className={
         `${classes.missionThumbnail}` +
-        (missionFinished
-          ? ` ${classes.completedMissionThumbnail}`
-          : ``)
+        (missionFinished ? ` ${classes.completedMissionThumbnail}` : ``)
       }
       ref={wrapperElement}
       onClick={() => history.push(linkToMission(mission.id.toString()))}
@@ -128,19 +127,21 @@ export default function MissionThumbnail({ mission }: Props) {
         <div className={classes.durationRemaining}>{textDurationRemaining}</div>
       </div>
       <div className={classes.progressWrapper}>
-        <CircularProgressbar
-          value={percentage}
-          text={`${Math.floor(percentage)}%`}
-          className={classes.progress}
-          styles={buildStyles({
-            strokeLinecap: "round", // Whether to use rounded or flat corners on the ends - can use 'butt' or 'round'
-            pathTransitionDuration: 0.5, // How long animation takes to go from one percentage to another, in seconds
-            pathColor: theme.palette.primary.main,
-            textColor: theme.palette.primary.main,
-            trailColor: "#eee",
-            textSize: "28px"
-          })}
-        />
+        {percentage >= 1 && (
+          <CircularProgressbar
+            value={percentage}
+            text={`${Math.floor(percentage)}%`}
+            className={classes.progress}
+            styles={buildStyles({
+              strokeLinecap: "round", // Whether to use rounded or flat corners on the ends - can use 'butt' or 'round'
+              pathTransitionDuration: 0.5, // How long animation takes to go from one percentage to another, in seconds
+              pathColor: theme.palette.primary.main,
+              textColor: theme.palette.primary.main,
+              trailColor: "#eee",
+              textSize: "28px"
+            })}
+          />
+        )}
       </div>
     </div>
   );
