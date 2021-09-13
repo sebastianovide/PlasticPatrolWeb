@@ -38,7 +38,7 @@ function extractPhoto(data, id): Photo {
   photo.created =
     photo.created instanceof firebase.default.firestore.Timestamp
       ? photo.created.toDate()
-      : photo.created === null
+      : photo.created === undefined
         ? undefined
         : new Date(photo.created);
   photo.updated =
