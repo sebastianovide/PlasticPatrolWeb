@@ -17,10 +17,6 @@ export function isMissionEnabled(): boolean {
   );
 }
 
-export function isMissionLaunchDay(): boolean {
-  return remoteConfig.getBoolean("is_mission_launch_day");
-}
-
 /**
  * When a tester logs in, it will set the localstorage. Then the tester can log out and see the feature enabled even as an anonymous user
  * It is needed as it is not possible to know if the app has been installed via testflight or google beta.

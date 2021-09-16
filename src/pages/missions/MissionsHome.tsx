@@ -8,7 +8,6 @@ import { useHistory } from "react-router";
 import styles from "standard.module.scss";
 
 import { linkToMap } from "../../custom/config";
-import { isMissionLaunchDay } from "../../custom/featuresFlags";
 import { useMissions } from "../../providers/MissionsProvider";
 import { useUser } from "../../providers/UserProvider";
 import { linkToCreateMission } from "../../routes/missions/links";
@@ -127,28 +126,27 @@ export default function MissionsHome({}: Props) {
       navigationHandler={{ handleClose: handleClose }}
       className={classes.wrapper}
       addAction={
-        isMissionLaunchDay() && !user?.isModerator
+        !user?.isModerator
           ? undefined
           : () => history.push(linkToCreateMission())
       }
     >
-      {!isMissionLaunchDay() && (
-        <div className={classes.searchWrapper}>
-          <Search style={{ color: styles.darkgrey }} />
-          <input
-            placeholder={"Search"}
-            className={classes.searchInput}
-            value={searchString}
-            onChange={(e) => setSearchString(e.target.value)}
+      <div className={classes.searchWrapper}>
+        <Search style={{ color: styles.darkgrey }} />
+        <input
+          placeholder={"Search"}
+          className={classes.searchInput}
+          value={searchString}
+          onChange={(e) => setSearchString(e.target.value)}
+        />
+        {searchString.length > 0 && (
+          <Clear
+            style={{ color: styles.darkgrey }}
+            onClick={() => setSearchString("")}
           />
-          {searchString.length > 0 && (
-            <Clear
-              style={{ color: styles.darkgrey }}
-              onClick={() => setSearchString("")}
-            />
-          )}
-        </div>
-      )}
+        )}
+      </div>
+
       <div className={classes.missionList}>
         {missionData?.missions === undefined ? (
           <div>Loading...</div>

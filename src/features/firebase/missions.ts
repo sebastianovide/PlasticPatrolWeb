@@ -126,10 +126,11 @@ export const joinMission = async (missionId: MissionId, user?: User) => {
     return;
   }
 
-  if (mission.isPrivate) {
-    await addToPendingMissionUsers(missionId, user);
-    return;
-  }
+  // Uncomment if need to approve user for private mission
+  // if (mission.isPrivate) {
+  //   await addToPendingMissionUsers(missionId, user);
+  //   return;
+  // }
 
   await addUserToMission(mission, user);
 };
