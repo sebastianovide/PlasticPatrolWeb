@@ -67,18 +67,13 @@ export default function MissionShareModal({
       </IconButton>
       <DialogContent>
         <DialogTitle id="alert-dialog-description">
-          Share this mission with your friends
+          Share this Mission
         </DialogTitle>
-        <DialogContentText>DM friends to join the mission!</DialogContentText>
-        {isPrivate && (
-          <DialogContentText>
-            This mission is private, by sharing it other users will be able to
-            discover it. They will be able to see information about the mission
-            such as its name, target and how long it is going on for, but you
-            will have to manually approve new members before they can see who
-            else is part of this mission
-          </DialogContentText>
-        )}
+        <DialogContentText>
+          {!isPrivate
+            ? "DM friends to join the mission!"
+            : "This Mission is private, by sharing it other users will be able to discover it."}
+        </DialogContentText>
         <DialogContentText>
           <Grid spacing={2} container justify="center">
             <Grid item>

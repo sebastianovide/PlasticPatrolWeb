@@ -407,8 +407,7 @@ export default function MissionPage() {
           />
         ) : (
           <div className={classes.hiddenTableLabel}>
-            You need to join and be accepted into the mission to view the
-            leaderboard.
+            Join this Mission to view the leaderboard.
           </div>
         )}
       </div>
