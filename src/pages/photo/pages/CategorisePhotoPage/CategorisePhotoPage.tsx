@@ -35,6 +35,8 @@ import BarcodeScanner, {
   isProductInfo
 } from "pages/photo/components/BarcodeScanner";
 
+import config from "custom/config";
+
 const FROM_BARCODE_ID = "from-barcode-scanner";
 
 const useStyles = makeStyles((theme) => ({
@@ -90,7 +92,9 @@ export default function CategoriseLitterPage() {
         fileOrFileName: Capacitor.convertFileSrc(file.filename),
         fromCamera,
         gpsLocation,
-        cordovaMetadata: JSON.parse(file.json_metadata),
+        cordovaMetadata: file.json_metadata
+          ? JSON.parse(file.json_metadata)
+          : null,
         callback: (metadata) => dispatch(setMetaData(metadata))
       });
     } else if (isBrowserImageState(state)) {
@@ -114,7 +118,12 @@ export function CategoriseLitterPageWithFileInfo() {
   const state = usePhotoPageState();
 
   useEffect(() => {
-    if (isImageMetaState(state) && !state.imgLocation) {
+    if (
+      isImageMetaState(state) &&
+      (!state.imgLocation ||
+        (state.imgLocation.latitude === config.CENTER[1] &&
+          state.imgLocation.longitude === config.CENTER[0]))
+    ) {
       history.replace(linkToGeotag());
     }
   }, [state, history]);
