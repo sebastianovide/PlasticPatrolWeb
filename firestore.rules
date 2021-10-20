@@ -1,17 +1,13 @@
-rules_version = '2';
+// TODO: go through and fix rules
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    function isAuthenticated() {
-      return request.auth.uid != null;
-    }
-
     function isAdmin() {
-    	return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
     }
 
     function isModerator() {
-    	return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isModerator == true;
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isModerator == true;
     }
 
     function isUser(uid) {
@@ -22,49 +18,27 @@ service cloud.firestore {
     	return resource.data.published == true;
     }
 
-    function isPrivateMission(missionId) {
-      return get(/databases/$(database)/documents/missions/$(missionId)).data.isPrivate == true;
-    }
-
-    function isMissionOwner(missionId) {
-      return get(/databases/$(database)/documents/missions/$(missionId)).data.ownerUserId == request.auth.uid;
-    }
-
+    // anybody can read the photos but only admin can write
     match /photos/{photoId} {
-      // Litter uploads can only be made by authenticated users.
-      allow create: if isAuthenticated();
-      // Litter uploads can only be seen by non-moderators once it's published.
       allow read: if isPublished() || isModerator();
+			allow create: if true;
       allow update: if isModerator();
+      allow write: if isAdmin();
     }
 
-    // Anybody can create a feedback
-    // Only login user can update a feedback
-    // Only moderator or admin can read and update the feedback
+    // anybody can create a feedback but only login user can update
+    // only moderator or admin can read and update the feedback
     match /feedbacks/{feedback} {
       allow create: if true;
       allow read: if isModerator() || isAdmin();
       allow update: if isModerator() || isAdmin();
     }
 
+    // data written by admin
     match /users/{uid} {
-      function isUpdatingMissionsField() {
-        return request.resource.data.diff(resource.data).affectedKeys().hasOnly(['missions']);
-      }
-
-      function isJoiningPublicMission() {
-        let addedMission = request.resource.data.missions.removeAll(resource.data.missions);
-        return isUpdatingMissionsField() && !isPrivateMission(joinedMission);
-      }
-
-      function isBeingAcceptedIntoPrivateMission() {
-        let addedMission = request.resource.data.missions.removeAll(resource.data.missions);
-        return isPrivateMission(joinedMission) && (isModerator() && isMissionOwner());
-      }
-
-      allow create: if isAdmin();
       allow read: if isAdmin() || isUser(uid);
-      allow update: if isAdmin() || isJoiningPublicMission() || isBeingAcceptedIntoPrivateMission();
+      allow create: if isAdmin() || (isUser(uid) && request.resource.data.keys().hasOnly(['missions']));
+      allow write: if isAdmin() || (isUser(uid) && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['missions']));
     }
 
     // Collection with system data. The Doc stats contains statistics.
@@ -80,27 +54,19 @@ service cloud.firestore {
     // data written by admin
     match /missions/{missionId} {
 
-      // Return true iff user trying to add themselves to a private mission's pending user list.
-      function isRequestingToJoinPrivateMission(missionId) {
-        return isAuthenticatedUser() && isPrivateMission(missionId)
-          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['pendingUsers'])
-          && request.resource.data.pendingUsers.removeAll(resource.data.pendingUsers).hasOnly(request.auth.uid);
+      function isMissionOwner() {
+        return get(/databases/$(database)/documents/missions/$(missionId)).data.ownerUserId == request.auth.uid;
       }
 
-      // Return true iff user trying to add themselves to a public missions user list.
-      function isJoiningPublicMission(missionId) {
-        return isAuthenticatedUser() && !isPrivateMission(missionId)
-         && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['totalUserPieces'])
-          && request.resource.data.totalUserPieces.removeAll(resource.data.totalUserPieces).hasOnly(request.auth.uid);
+      function isPrivateMission() {
+        return get(/databases/$(database)/documents/missions/$(missionId)).data.isPrivate == true;
       }
 
-      allow create: if isAuthenticated();
-      allow read: if isAuthenticated();
+      allow create: if true;
+      allow read: if true;
       // Workaround as true because people need to be able to add themselvse to public missions
       // and add themselves as pending members to private missions.
-      allow update: if isModerator() || isMissionOwner()
-        || isRequestingToJoinPrivateMission(missionId)
-        || isJoiningPublicMission(missionId);
+      allow write: if true;
     }
 
     match /categories {
@@ -110,6 +76,10 @@ service cloud.firestore {
     match /categories/{categoryId} {
       allow read: if true;
       allow write: if isModerator() || isAdmin();
+    }
+
+    match /brands {
+      allow read: if true;
     }
 
     match /brands/{brandId} {
