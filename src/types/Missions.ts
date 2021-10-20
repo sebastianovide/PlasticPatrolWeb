@@ -184,7 +184,8 @@ export const getTextDurationBetweenTimes = (
     duration = `${Math.abs(months)} ${months > 1 ? `months` : `month`}`;
   } else if (daysRemaining >= 7) {
     const weeks = Math.floor(daysRemaining / 7);
-    duration = `${Math.abs(weeks)} ${weeks > 1 ? `weeks` : `week`}`;
+    const days = daysRemaining % 7;
+    duration = `${Math.abs(weeks)} ${weeks > 1 ? `weeks` : `week`}${days > 0 ? ` and ${days} ${days > 1 ? `days` : `day`}` : ``}`;
   } else {
     duration = `${Math.abs(daysRemaining)} ${Math.abs(daysRemaining) > 1 ? `days` : `day`
       }`;

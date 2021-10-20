@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
   textSection: {
     flex: "6",
     fontSize: "12px",
-    padding: "5px 10px 0 10px"
+    paddingLeft: "8px"
   },
 
   name: {
