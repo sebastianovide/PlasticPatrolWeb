@@ -1,6 +1,6 @@
-import React, { useContext } from "react";
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-
+import { useTranslation } from "react-i18next";
 import PageWrapper from "components/PageWrapper";
 import "react-circular-progressbar/dist/styles.css";
 import { useHistory } from "react-router";
@@ -14,7 +14,6 @@ import {
 } from "../../../features/firebase/missions";
 import { useMissions } from "../../../providers/MissionsProvider";
 import { PendingUser } from "../../../types/Missions";
-import { useUser } from "../../../providers/UserProvider";
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -54,7 +53,7 @@ type Props = {};
 export default function ManagePendingMembers({}: Props) {
   const classes = useStyles();
   const history = useHistory();
-  const user = useUser();
+  const { t } = useTranslation();
 
   const missionData = useMissions();
   const missions = missionData?.missions || [];
@@ -71,13 +70,13 @@ export default function ManagePendingMembers({}: Props) {
 
   return (
     <PageWrapper
-      label={"Manage members"}
+      label={t("missions_manage_members")}
       navigationHandler={{ handleBack }}
       className={classes.wrapper}
     >
       {mission.pendingUsers.length === 0 ? (
         <div>
-          There are currently no users who have requested to join this mission.
+          {t("missions_private_no_pending_members")}
         </div>
       ) : (
         mission.pendingUsers.map((pendingUser: PendingUser) => (
@@ -99,7 +98,7 @@ export default function ManagePendingMembers({}: Props) {
                 size="small"
                 variant="outlined"
               >
-                Approve
+                {t("approve_button_text")}
                 <CheckIcon fontSize={"small"} style={{ color: "green" }} />
               </Button>
             </div>
@@ -114,7 +113,7 @@ export default function ManagePendingMembers({}: Props) {
                 size="small"
                 variant="outlined"
               >
-                Reject <CloseIcon fontSize={"small"} style={{ color: "red" }} />
+                {t("reject_button_text")} <CloseIcon fontSize={"small"} style={{ color: "red" }} />
               </Button>
             </div>
           </div>

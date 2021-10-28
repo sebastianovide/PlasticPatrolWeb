@@ -1,7 +1,7 @@
 // Custom Dialog to choose camera and photo library to interact with cordova-plugin-camera
 
 import React from "react";
-
+import { useTranslation } from "react-i18next";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import IconButton from "@material-ui/core/IconButton";
@@ -24,7 +24,8 @@ type Props = {
 // It is broken: https://github.com/ionic-team/capacitor-plugins/issues/45
 // const { Camera } = Plugins;
 
-export default function AddPhotoDialog({ onClose, handlePhotoSelect }: Props) {
+const AddPhotoDialog = ({ onClose, handlePhotoSelect }: Props): JSX.Element => {
+  const { t } = useTranslation();
   return (
     <Dialog onClose={onClose} open>
       <List>
@@ -39,7 +40,7 @@ export default function AddPhotoDialog({ onClose, handlePhotoSelect }: Props) {
           <IconButton color="primary" edge={false}>
             <CameraIcon />
           </IconButton>
-          <ListItemText primary={"Camera"} />
+          <ListItemText primary={t("record_litter_dialog_camera_text")} />
         </ListItem>
         <ListItem
           button
@@ -52,18 +53,19 @@ export default function AddPhotoDialog({ onClose, handlePhotoSelect }: Props) {
           <IconButton color="primary" edge={false}>
             <PhotoLibraryIcon />
           </IconButton>
-          <ListItemText primary={"Photo Library"} />
+          <ListItemText primary={t("record_litter_dialog_photo_library_text")} />
         </ListItem>
         <ListItem button onClick={onClose}>
           <IconButton edge={false}>
             <CancelIcon />
           </IconButton>
-          <ListItemText primary="Cancel" />
+          <ListItemText primary={t("cancel_button_text")} />
         </ListItem>
       </List>
     </Dialog>
   );
 }
+export default AddPhotoDialog;
 
 function handlePhotoDialogItemClick(
   value: string,

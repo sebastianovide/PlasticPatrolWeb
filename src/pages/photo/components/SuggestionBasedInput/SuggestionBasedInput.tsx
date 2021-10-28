@@ -145,7 +145,7 @@ export default function SuggestionBasedInput({
       label: userInput,
       id: getSuggestionId(sourceData, userInput)
     });
-  }, [userInput]);
+  }, [callback, sourceData, userInput]);
 
   return (
     <div ref={outsideClickRef} className={className}>
@@ -170,6 +170,7 @@ export default function SuggestionBasedInput({
         {focused &&
           suggestionsMatchingLabel.map(({ label }) => (
             <Button
+              key={label}
               className={styles.suggestion}
               onClick={() => onSuggestionClick(label)}
               color="primary"

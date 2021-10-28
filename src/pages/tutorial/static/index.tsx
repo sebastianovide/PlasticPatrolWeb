@@ -6,6 +6,7 @@ import CameraAlt from "@material-ui/icons/CameraAlt";
 import CloudUpload from "@material-ui/icons/CloudUpload";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core";
+import { Trans } from "react-i18next";
 
 import exampleImage from "assets/images/example.jpeg";
 
@@ -16,8 +17,8 @@ import styles from "standard.module.scss";
 
 export type TutorialStep = {
   img?: string;
-  text: string;
-  title?: string;
+  text: React.ReactElement;
+  title?: React.ReactElement;
   Icon?: React.FC<{ className: string }>;
   Button?: React.FC<{ className?: string }>;
 };
@@ -38,26 +39,57 @@ const useStyles = makeStyles(() => ({
 export const tutorialSteps: Array<TutorialStep> = [
   {
     Icon: ({ className }) => <CameraAlt className={className} />,
-    title: "Photograph litter you find",
+    title: (
+      <Trans i18nKey="tutorial_step_1_title">Photograph litter you find</Trans>
+    ),
     img: exampleImage,
-    text:
-      "Get outside, find a piece of litter and take a photo by clicking on the camera icon. If there are multiple pieces of litter in the photo please make sure each item is clear like in the example image below."
+    text: (
+      <Trans i18nKey="tutorial_step_1_content">
+        Get outside, find a piece of litter and take a photo by clicking on the
+        camera icon. If there are multiple pieces of litter in the photo please
+        make sure each item is clear like in the example image below.
+      </Trans>
+    )
   },
   {
     Icon: ({ className }) => <CloudUpload className={className} />,
-    title: "Add data about the pieces of litter in your photo",
-    text:
-      "Add the photo to the app and tag the brand name and type for each piece of litter. Your location will be automatically registered."
+    title: (
+      <Trans i18nKey="tutorial_step_2_title">
+        Add data about the pieces of litter in your photo
+      </Trans>
+    ),
+    text: (
+      <Trans i18nKey="tutorial_step_2_content">
+        Add the photo to the app and tag the brand name and type for each piece
+        of litter. Your location will be automatically registered.
+      </Trans>
+    )
   },
   {
     Icon: ({ className }) => <LocationOn className={className} />,
-    title: "View your images on the interactive map and inspire others",
-    text:
-      "Your photos and data will be approved by our team and will appear in our global litter map within 48 hours. Discard of the litter you’ve collected properly and invite others to join the app so you join forces (or compete!) with litter picking."
+    title: (
+      <Trans i18nKey="tutorial_step_3_title">
+        View your images on the interactive map and inspire others
+      </Trans>
+    ),
+    text: (
+      <Trans i18nKey="tutorial_step_3_content">
+        Your photos and data will be approved by our team and will appear in our
+        global litter map within 48 hours. Discard of the litter you’ve
+        collected properly and invite others to join the app so you join forces
+        (or compete!) with litter picking.
+      </Trans>
+    )
   },
   {
-    text:
-      "By litter picking and recording your findings you are helping build the largest and most powerful dataset on litter. We analyse everything you collect to drive impactful and evidence-based changes by government and brands to protect the environment.",
+    text: (
+      <Trans i18nKey="tutorial_step_4_content">
+        By litter picking and recording your findings you are helping build the
+        largest and most powerful dataset on litter. We analyse everything you
+        collect to drive impactful and evidence-based changes by government and
+        brands to protect the environment.
+      </Trans>
+    ),
     Button: () => {
       const history = useHistory();
       const styles = useStyles();
@@ -77,7 +109,7 @@ export const tutorialSteps: Array<TutorialStep> = [
             )
           }
         >
-          Get started
+          <Trans i18nKey="get_started_button_text">Get started</Trans>
         </Button>
       );
     }

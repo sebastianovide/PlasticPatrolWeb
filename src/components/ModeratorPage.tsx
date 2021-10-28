@@ -25,6 +25,7 @@ import usePhotosToModerate from "hooks/usePhotosToModerate";
 import { dbFirebase } from "features/firebase";
 import ConfirmationDialog, { Confirmation } from "./common/ConfirmationDialog";
 import { useMissions } from "../providers/MissionsProvider";
+import { useTranslation } from "react-i18next";
 
 const placeholderImage = process.env.PUBLIC_URL + "/custom/images/logo.svg";
 
@@ -47,6 +48,7 @@ interface Props {
 
 const ModeratorPage = ({ user, label, handleClose }: Props) => {
   const styles = useStyles();
+  const { t } = useTranslation();
   const [zoomDialogOpen, setZoomDialogOpen] = useState(false);
   const [photoSelected, setPhotoSelected] = useState<Photo | undefined>();
   const [confirmation, setConfirmation] = useState<Confirmation | undefined>();
@@ -61,7 +63,7 @@ const ModeratorPage = ({ user, label, handleClose }: Props) => {
 
   if (photos.length === 0) {
     return (
-      <PageWrapper label={label} navigationHandler={{ handleClose }}>
+      <PageWrapper label={t(label)} navigationHandler={{ handleClose }}>
         <div className={styles.noPhotos}>No photos to moderate!</div>
       </PageWrapper>
     );
@@ -77,7 +79,7 @@ const ModeratorPage = ({ user, label, handleClose }: Props) => {
   };
 
   return (
-    <PageWrapper label={label} navigationHandler={{ handleClose }}>
+    <PageWrapper label={t(label)} navigationHandler={{ handleClose }}>
       <List dense={false}>
         {_.map(photos, (photo) => (
           <ListItem
@@ -105,7 +107,7 @@ const ModeratorPage = ({ user, label, handleClose }: Props) => {
                 edge={false}
                 onClick={() => {
                   setConfirmation({
-                    message: `Are you sure you want to unpublish the photo ?`,
+                    message: t("photo_approval_unpublish_photo_message"),
                     onConfirmation: () => reject(photo)
                   });
                 }}
@@ -117,7 +119,7 @@ const ModeratorPage = ({ user, label, handleClose }: Props) => {
                 edge={false}
                 onClick={() => {
                   setConfirmation({
-                    message: `Are you sure you want to publish the photo ?`,
+                    message: t("photo_approval_publish_photo_message"),
                     onConfirmation: () => approve(photo)
                   });
                 }}
@@ -153,13 +155,13 @@ const ModeratorPage = ({ user, label, handleClose }: Props) => {
                 photoSelected={photoSelected}
                 handleReject={() =>
                   setConfirmation({
-                    message: `Are you sure you want to unpublish the photo ?`,
+                    message: t("photo_approval_unpublish_photo_message"),
                     onConfirmation: () => reject(photoSelected)
                   })
                 }
                 handleApprove={() =>
                   setConfirmation({
-                    message: `Are you sure you want to publish the photo ?`,
+                    message: t("photo_approval_publish_photo_message"),
                     onConfirmation: () => approve(photoSelected)
                   })
                 }

@@ -16,13 +16,15 @@ import { Route, Switch } from "react-router-dom";
 
 import ManagePendingMembers from "../../pages/missions/view/ManagePendingMembers";
 
-type Props = {};
+type Props = {
+  label: string;
+};
 
-export default function MissionsRoute({}: Props) {
+export default function MissionsRoute(props: Props) {
   return (
     <Switch>
       <Route exact path={linkToMissionsPage()}>
-        <MissionsHome />
+        <MissionsHome {...props} />
       </Route>
       <Route path={linkToCreateMission()}>
         <CreateMission />

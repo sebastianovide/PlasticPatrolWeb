@@ -1,5 +1,6 @@
 import React from "react";
 import { useHistory, useLocation } from "react-router";
+import { useTranslation } from "react-i18next";
 
 import PageWrapper from "components/PageWrapper";
 import PhotoPageStateProvider from "pages/photo/state";
@@ -9,10 +10,12 @@ import BrandsProvider from "features/firebase/brands/BrandsProvider";
 
 import PhotoPageSubRouter from "./routes/SubRouter";
 import { linkToNewPhoto } from "./routes/new/links";
+import config from "../../custom/config";
 
 export default function PhotoRoute() {
   const history = useHistory();
   const location = useLocation();
+  const { t } = useTranslation();
 
   const navigationHandler =
     location.pathname === linkToNewPhoto()
@@ -24,7 +27,7 @@ export default function PhotoRoute() {
       <CategoriesProvider>
         <BrandsProvider>
           <PageWrapper
-            label={"Record your litter"}
+            label={t(config.PAGES.photo.label)}
             navigationHandler={navigationHandler}
           >
             <PhotoPageSubRouter />

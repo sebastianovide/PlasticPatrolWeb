@@ -5,6 +5,7 @@ import { usePhotoPageDispatch, setLocation } from "pages/photo/state";
 import { LatLong } from "types/GPSLocation";
 import { useHistory } from "react-router-dom";
 import { linkToCategorise } from "routes/photo/routes/categorise/links";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -23,19 +24,18 @@ export default function GeoTagPhotoPage() {
     dispatch(setLocation(location));
 
   const history = useHistory();
+  const { t } = useTranslation();
 
   return (
     <div className={styles.wrapper}>
-      <Typography>
-        Please drag the pin to the location you found the litter
-      </Typography>
+      <Typography>{t("record_litter_geotag_hint")}</Typography>
       <GeoTagMap onLocationUpdate={onLocationUpdate} />
       <Button
         onClick={() => history.push(linkToCategorise())}
         color="primary"
         variant="contained"
       >
-        Next
+        {t("next_button_text")}
       </Button>
     </div>
   );

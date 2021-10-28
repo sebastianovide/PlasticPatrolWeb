@@ -1,3 +1,5 @@
+import config from "../../custom/config";
+
 export function linkToPhotoPage() {
-  return "/photo";
+  return config.PAGES.photo.path;
 }

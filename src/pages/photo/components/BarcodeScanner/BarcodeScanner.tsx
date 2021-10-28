@@ -5,7 +5,6 @@ import dbFirebase, {
   ProductInfo
 } from "../../../../features/firebase/dbFirebase";
 import { makeStyles } from "@material-ui/core";
-import { findLastIndex } from "lodash";
 
 declare global {
   interface Window {

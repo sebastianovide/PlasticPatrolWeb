@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import Avatar from "@material-ui/core/Avatar";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
+import { useTranslation, Trans } from "react-i18next";
 
 import PageWrapper from "../../components/PageWrapper";
 import MapLocation from "../../types/MapLocation";
@@ -85,6 +86,7 @@ export default function AccountPage({
   config
 }: Props) {
   const classes = useStyles();
+  const { t } = useTranslation();
 
   const calcUrl = useCallback(
     (feature: Feature): string => {
@@ -121,7 +123,7 @@ export default function AccountPage({
 
   return (
     <PageWrapper
-      label="Account"
+      label={t(config.PAGES.account.label)}
       navigationHandler={{ handleClose }}
       className={classes.wrapper}
     >
@@ -141,22 +143,23 @@ export default function AccountPage({
 
       {myPhotos && (
         <Typography variant="body1">
-          Num. of uploads <strong>{myPhotos.length}</strong>
+          {t("account_num_of_uploads")} <strong>{myPhotos.length}</strong>
         </Typography>
       )}
       {!isNaN(numPieces) && (
         <Typography variant="body1">
-          Total pieces <strong>{numPieces}</strong>
+          {t("account_total_pieces")} <strong>{numPieces}</strong>
         </Typography>
       )}
       {largeUploads.length > 0 && (
         <>
           <Typography variant="body1">
-            Num. of large uploads <strong>{largeUploads.length}</strong>
+            {t("account_num_of_large_uploads")}{" "}
+            <strong>{largeUploads.length}</strong>
             <Tooltip tooltip={LARGE_UPLOAD_TOOLTIP} />
           </Typography>
           <Typography variant="body1">
-            Total Pieces in large uploads{" "}
+            {t("account_total_pieces_large_uploads")}{" "}
             <strong>{_.sumBy(largeUploads, (f) => f.properties.pieces)}</strong>
           </Typography>
         </>
@@ -167,16 +170,23 @@ export default function AccountPage({
       {myLastPhotos.length > 0 && (
         <>
           <Typography variant="h6">
-            Last {myLastPhotos.length} approved
+            <Trans i18nKey="account_last_approved">
+              Last {{ lastPhotosLength: myLastPhotos.length }} approved
+            </Trans>
           </Typography>
 
           {_.map(myLastPhotos, (photo) => (
             <Typography variant="body1" key={photo.properties.id}>
               {photo.properties.pieces && (
                 <span>
-                  <strong>{photo.properties.pieces}</strong> pieces{" "}
+                  <Trans
+                    i18nKey="account_approved_piece_count"
+                    count={photo.properties.pieces}
+                  >
+                    <strong>{{ count: photo.properties.pieces }}</strong> piece
+                  </Trans>
                 </span>
-              )}
+              )}{` `}
               <Link to={calcUrl(photo)} onClick={() => handlePhotoClick(photo)}>
                 {photo.properties.moderated &&
                 photo.properties.moderated.toDateString
@@ -191,18 +201,20 @@ export default function AccountPage({
       {isMissionEnabled() && (
         <div className={classes.missionsWrapper}>
           <Typography variant="h6" className={classes.missionsTitle}>
-            My missions
+            {t("account_my_missions")}
           </Typography>
 
           {missions === undefined || missions?.length === 0 ? (
             <Typography className={classes.missionJoinPrompt}>
-              You haven't joined any missions yet!
-              <br />
-              Tap{" "}
-              <Link to={linkToMissionsPage()} className={classes.link}>
-                here
-              </Link>{" "}
-              to find a mission to join.
+              <Trans i18nKey="account_mission_placeholder">
+                You haven't joined any missions yet!
+                <br />
+                Tap{" "}
+                <Link to={linkToMissionsPage()} className={classes.link}>
+                  here
+                </Link>{" "}
+                to find a mission to join.
+              </Trans>
             </Typography>
           ) : (
             missions?.map((mission) => (

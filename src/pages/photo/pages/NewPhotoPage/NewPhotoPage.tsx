@@ -7,6 +7,7 @@ import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
 import styles from "standard.module.scss";
 import { usePhotoPageDispatch, resetState } from "pages/photo/state";
 import useEffectOnMount from "hooks/useEffectOnMount";
+import { Trans } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -54,16 +55,17 @@ export default function NewPhotoPage({
           <AddAPhotoIcon className={styles.icon} />
         </Button>
         <div className={styles.text}>
-          <p>Tap on the button above to add a photo of litter.</p>
-
-          <p>Make sure all litter is clearly visible.</p>
-          <p>
-            If you would like to see an example, please check out the{" "}
-            <Link to={linkToTutorialPage()} className={styles.link}>
-              tutorial
-            </Link>
-            .
-          </p>
+          <Trans i18nKey="record_litter_description">
+            <p>Tap on the button above to add a photo of litter.</p>
+            <p>Make sure all litter is clearly visible.</p>
+            <p>
+              If you would like to see an example, please check out the{" "}
+              <Link to={linkToTutorialPage()} className={styles.link}>
+                tutorial
+              </Link>
+              .
+            </p>
+          </Trans>
         </div>
       </div>
     </>

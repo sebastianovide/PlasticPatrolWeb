@@ -1,5 +1,6 @@
 import { ImageMetaData } from "../pages/photo/state/types";
 import User from "./User";
+import i18n from "../custom/i18n";
 
 export const PRIVATE_MISSION_ID_SEARCH_LENGTH = 6;
 
@@ -181,19 +182,19 @@ export const getTextDurationBetweenTimes = (
   let duration;
   if (daysRemaining >= 31) {
     const months = Math.floor(daysRemaining / 31);
-    duration = `${Math.abs(months)} ${months > 1 ? `months` : `month`}`;
+    duration = i18n.t("month_with_count", { count: Math.abs(months) });
   } else if (daysRemaining >= 7) {
     const weeks = Math.floor(daysRemaining / 7);
     const days = daysRemaining % 7;
-    duration = `${Math.abs(weeks)} ${weeks > 1 ? `weeks` : `week`}${days > 0 ? ` and ${days} ${days > 1 ? `days` : `day`}` : ``}`;
+    duration = `${i18n.t("week_with_count", { count: Math.abs(weeks) })}${days > 0 ? ` ${i18n.t("and_conjunction")} ${i18n.t("day_with_count", { count: Math.abs(days) })}` : ``}`;
+
   } else {
-    duration = `${Math.abs(daysRemaining)} ${Math.abs(daysRemaining) > 1 ? `days` : `day`
-      }`;
+    duration = i18n.t("day_with_count", { count: Math.abs(daysRemaining) });
   }
 
   if (daysRemaining < 0) {
-    return `Finished ${duration} ago`;
+    return i18n.t("missions_finished_text", { duration });
   }
 
-  return `${duration} remaining`;
+  return i18n.t("missions_remaining_count_text", { duration });
 };

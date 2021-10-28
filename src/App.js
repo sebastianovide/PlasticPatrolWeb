@@ -3,6 +3,7 @@ import { withRouter } from "react-router-dom";
 
 import Snackbar from "@material-ui/core/Snackbar";
 import { withStyles } from "@material-ui/core/styles";
+import { withTranslation } from "react-i18next";
 
 import { Routes } from "routes/Routes";
 
@@ -197,7 +198,10 @@ class App extends Component {
           />
         </main>
 
-        <Snackbar open={!geojson} message="Loading photos..." />
+        <Snackbar
+          open={!geojson}
+          message={this.props.t("app_loading_photos_message")}
+        />
 
         <DrawerContainer
           user={user}
@@ -212,4 +216,6 @@ class App extends Component {
   }
 }
 
-export default withRouter(withStyles(styles, { withTheme: true })(App));
+export default withRouter(
+  withStyles(styles, { withTheme: true })(withTranslation()(App))
+);

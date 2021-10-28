@@ -1,4 +1,4 @@
-import React, { createRef, useState } from "react";
+import React, { createRef } from "react";
 import { Route, useHistory } from "react-router-dom";
 
 import { linkToTutorialPage } from "routes/tutorial/links";

@@ -1,6 +1,6 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-
+import { useTranslation } from "react-i18next";
 import PageWrapper from "components/PageWrapper";
 import "react-circular-progressbar/dist/styles.css";
 import { useHistory } from "react-router";
@@ -13,10 +13,7 @@ import {
   isDuplicatingExistingMissionName
 } from "../../../types/Missions";
 
-import {
-  linkToCreateMission,
-  linkToMissionsPage
-} from "../../../routes/missions/links";
+import { linkToCreateMission } from "../../../routes/missions/links";
 import { useUser } from "../../../providers/UserProvider";
 import { createMission } from "../../../features/firebase/missions";
 import { useMissions } from "../../../providers/MissionsProvider";
@@ -57,7 +54,7 @@ type Props = {};
 
 export default function CreateMission({}: Props) {
   const styles = useStyles();
-
+  const { t } = useTranslation();
   const history = useHistory();
   const user = useUser();
 
@@ -77,11 +74,11 @@ export default function CreateMission({}: Props) {
   if (user === undefined) {
     return (
       <PageWrapper
-        label={"Create a mission"}
+        label={t("missions_create_button_text")}
         navigationHandler={handleBack}
         className={styles.wrapper}
       >
-        You need to be logged in to create a mission!
+        {t("missions_login_warning")}
         <Button
           color="default"
           variant="contained"
@@ -92,7 +89,7 @@ export default function CreateMission({}: Props) {
             )
           }
         >
-          Login
+          {t("login_button_text")}
         </Button>
       </PageWrapper>
     );
@@ -114,7 +111,7 @@ export default function CreateMission({}: Props) {
 
   return (
     <PageWrapper
-      label={"Create a mission"}
+      label={t("missions_create_label")}
       navigationHandler={handleBack}
       className={styles.wrapper}
     >
@@ -133,12 +130,12 @@ export default function CreateMission({}: Props) {
           variant="contained"
           disabled={!missionReady || creatingMission}
         >
-          Create mission
+          {t("missions_create_button_text")}
         </Button>
       </div>
       {duplicatingExistingMissionName && (
         <div className={styles.formErrorWarning}>
-          Cannot have the same name as an existing mission
+          {t("missions_duplicate_name_warning")}
         </div>
       )}
     </PageWrapper>

@@ -1,6 +1,6 @@
 // let the user write a feedback.
 
-import React from "react";
+import React, { useState } from "react";
 import firebase from "firebase/app";
 
 import Button from "@material-ui/core/Button";
@@ -11,6 +11,7 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import TextField from "@material-ui/core/TextField";
 import { withStyles } from "@material-ui/core/styles";
+import { useTranslation } from "react-i18next";
 
 import { dbFirebase } from "features/firebase";
 
@@ -37,69 +38,57 @@ const styles = (theme) => ({
   }
 });
 
-class WriteFeedbackPage extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      email: props.user ? props.user.email : "",
-      emailHelperText: "",
-      feedback: "",
-      open: false,
-      sending: false
-    };
-  }
+const WriteFeedbackPage = (props) => {
+  const { classes, handleClose, label, location, online, user } = props;
+  const { t } = useTranslation();
+  const [email, setEmail] = useState(user ? user.email : "");
+  const [emailHelperText, setEmailHelperText] = useState("");
+  const [feedback, setFeedback] = useState("");
+  const [open, setOpen] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [message, setMessage] = useState("");
+  const [isError, setIsError] = useState();
 
-  handleEmailChange = (event) => {
+  const handleEmailChange = (event) => {
     const email = event.target.value;
     const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(.\w{2,3})+$/;
 
     if (email && !email.match(emailRegex)) {
-      this.setState({
-        email,
-        emailHelperText: "Invalid email format!"
-      });
+      setEmail(email);
+      setEmailHelperText(t("feedback_email_helper_text"));
     } else {
-      this.setState({
-        email,
-        emailHelperText: ""
-      });
+      setEmail(email);
+      setEmailHelperText("");
     }
   };
 
-  handleFeedbackChange = (event) => {
-    this.setState({
-      feedback: event.target.value
-    });
+  const handleFeedbackChange = (event) => {
+    setFeedback(event.target.value);
   };
 
-  openDialog = (message, isError) => {
-    this.setState({
-      sending: false,
-      open: true,
-      message,
-      isError
-    });
+  const openDialog = (message, isError) => {
+    setSending(false);
+    setOpen(true);
+    setMessage(message);
+    setIsError(isError);
   };
 
-  closeDialog = () => {
-    this.setState({ open: false });
-
-    // if it is NOT error...
-    if (!this.state.isError) {
-      this.props.handleClose();
+  const closeDialog = () => {
+    setOpen(false);
+    if (!isError) {
+      handleClose();
     }
   };
 
-  sendFeedback = () => {
-    this.setState({ sending: true });
-    const { location } = this.props;
+  const sendFeedback = () => {
+    setSending(true);
 
     let data = {};
-    data.feedback = this.state.feedback;
+    data.feedback = feedback;
     data.resolved = false;
     data.appVersion = process.env.REACT_APP_VERSION;
     data.buildNumber = process.env.REACT_APP_BUILD_NUMBER;
-    data.email = this.state.email ? this.state.email : "anonymous";
+    data.email = email ? email : "anonymous";
     data.device = device();
     data.userAgent = navigator.userAgent;
     data.created = firebase.default.firestore.FieldValue.serverTimestamp();
@@ -112,123 +101,110 @@ class WriteFeedbackPage extends React.Component {
     dbFirebase
       .writeFeedback(data)
       .then((res) => {
-        this.setState({ sending: false });
-        this.openDialog(
-          "Feedback sent, our team will reply as soon as possible!"
-        );
+        setSending(false);
+        openDialog(t("feedback_dialog_sent_text"));
       })
       .catch((err) => {
         console.log(err.toString());
-        this.openDialog(
-          `Something went wrong. Try again later or please email us to ${feedbackEmail}`,
-          true
-        );
+        openDialog(t("feedback_dialog_error_text", { feedbackEmail }), true);
       });
   };
 
-  render() {
-    const { classes, label, handleClose } = this.props;
-
-    return (
-      <PageWrapper label={label} navigationHandler={{ handleClose }}>
-        <div className={classes.content}>
-          <TextField
-            fullWidth
-            id="filled-email-input"
-            label="Email"
-            placeholder="aa@bb.com"
-            error={!!this.state.emailHelperText}
-            helperText={this.state.emailHelperText}
-            type="email"
-            name="email"
-            autoComplete="email"
-            margin="normal"
-            variant="filled"
-            onChange={this.handleEmailChange}
-            value={this.state.email}
-          />
-          <TextField
-            fullWidth
-            id="feedback-textfield"
-            placeholder="Type your feedback here"
-            onChange={this.handleFeedbackChange}
-            value={this.state.feedback}
-            autoFocus
-            variant="filled"
-            type="string"
-            required
-            margin="dense"
-            rows={
-              window.innerHeight > 667
-                ? 23
-                : window.innerHeight > 640
-                ? 19
-                : window.innerHeight > 480
-                ? 11
-                : 9
-            }
-            rowsMax={
-              window.innerHeight > 667
-                ? 24
-                : window.innerHeight > 640
-                ? 20
-                : window.innerHeight > 480
-                ? 12
-                : 10
-            }
-            multiline
-          />
-        </div>
-        <div className={classes.button}>
-          <Button
-            color="primary"
-            fullWidth
-            disabled={
-              !!this.state.emailHelperText ||
-              !this.state.feedback ||
-              !this.props.online
-            }
-            variant="contained"
-            onClick={this.sendFeedback}
-          >
-            Send
-          </Button>
-        </div>
-
-        <Dialog
-          open={this.state.open}
-          onClose={this.closeDialog}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
+  return (
+    <PageWrapper label={t(label)} navigationHandler={{ handleClose }}>
+      <div className={classes.content}>
+        <TextField
+          fullWidth
+          id="filled-email-input"
+          label={t("feedback_email_label")}
+          placeholder="aa@bb.com"
+          error={!!emailHelperText}
+          helperText={emailHelperText}
+          type="email"
+          name="email"
+          autoComplete="email"
+          margin="normal"
+          variant="filled"
+          onChange={handleEmailChange}
+          value={email}
+        />
+        <TextField
+          fullWidth
+          id="feedback-textfield"
+          placeholder={t("feedback_placeholder")}
+          onChange={handleFeedbackChange}
+          value={feedback}
+          autoFocus
+          variant="filled"
+          type="string"
+          required
+          margin="dense"
+          rows={
+            window.innerHeight > 667
+              ? 23
+              : window.innerHeight > 640
+              ? 19
+              : window.innerHeight > 480
+              ? 11
+              : 9
+          }
+          rowsMax={
+            window.innerHeight > 667
+              ? 24
+              : window.innerHeight > 640
+              ? 20
+              : window.innerHeight > 480
+              ? 12
+              : 10
+          }
+          multiline
+        />
+      </div>
+      <div className={classes.button}>
+        <Button
+          color="primary"
+          fullWidth
+          disabled={!!emailHelperText || !feedback || !online}
+          variant="contained"
+          onClick={sendFeedback}
         >
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              {this.state.message}
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={this.closeDialog} color="primary">
-              Ok
-            </Button>
-          </DialogActions>
-        </Dialog>
+          {t("feedback_send_button_text")}
+        </Button>
+      </div>
 
-        <Dialog open={this.state.sending}>
-          <DialogContent>
-            <DialogContentText id="loading-dialog-text">
-              Sending ;)
-            </DialogContentText>
-            <CircularProgress
-              className={classes.progress}
-              color="primary"
-              size={50}
-              thickness={6}
-            />
-          </DialogContent>
-        </Dialog>
-      </PageWrapper>
-    );
-  }
-}
+      <Dialog
+        open={open}
+        onClose={closeDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            {message}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeDialog} color="primary">
+            {t("ok_button_text")}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog open={sending}>
+        <DialogContent>
+          <DialogContentText id="loading-dialog-text">
+            {t("feedback_sending_text")}
+          </DialogContentText>
+          <CircularProgress
+            className={classes.progress}
+            color="primary"
+            size={50}
+            thickness={6}
+          />
+        </DialogContent>
+      </Dialog>
+    </PageWrapper>
+  );
+};
 
 export default withStyles(styles)(WriteFeedbackPage);

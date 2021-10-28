@@ -8,6 +8,7 @@ import SuggestionBasedInput from "../SuggestionBasedInput";
 import styles from "standard.module.scss";
 import { useCategoriesJson } from "features/firebase/categories/CategoriesProvider";
 import { useBrands } from "features/firebase/brands/BrandsProvider";
+import { useTranslation } from "react-i18next";
 
 type Props = {
   onCancelClick: () => void;
@@ -93,6 +94,7 @@ export default function AddNewItem({
   );
 
   const styles = useStyles();
+  const { t } = useTranslation();
 
   const itemButtonIsDisabled = !(quantity && category && category.label);
 
@@ -104,18 +106,14 @@ export default function AddNewItem({
       <div>
         <SuggestionBasedInput
           sourceData={categories}
-          inputPrompt={
-            'Search for the litter type e.g. "plastic bottle" or "crisp packet"'
-          }
+          inputPrompt={t("record_litter_type_placeholder")}
           callback={setCategory}
           initialLabel={initialItem?.category?.label || ""}
           className={styles.category}
         />
         <SuggestionBasedInput
           sourceData={brands}
-          inputPrompt={
-            'Search for the litter brand e.g. "Coca Cola" or "Cadbury"'
-          }
+          inputPrompt={t("record_litter_brand_placeholder")}
           callback={setBrand}
           initialLabel={initialItem?.brand?.label || ""}
           className={styles.brand}
@@ -133,7 +131,7 @@ export default function AddNewItem({
         color="primary"
         className={styles.cancel}
       >
-        Cancel
+        {t("cancel_button_text")}
       </Button>
       <Button
         disabled={itemButtonIsDisabled}
@@ -148,7 +146,9 @@ export default function AddNewItem({
         color="primary"
         className={styles.add}
       >
-        {initialItem ? "Edit" : "Add"} item(s)
+        {initialItem
+          ? t("record_litter_edit_item_button_text")
+          : t("record_litter_add_item_button_text")}
       </Button>
     </div>
   );

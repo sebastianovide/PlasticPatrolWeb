@@ -66,5 +66,17 @@
   "2003": { "label": "Face mask" },
   "2004": { "label": "Battery" },
   "2005": { "label": "Disposable gloves" },
-  "2006": { "label": "Lollypop" }
+  "2006": { "label": "Lollypop" },
+  "GXscooK2PUGj3YsmNsAz": { "label": "Nos canister", "synonyms": ["nos"] },
+  "NqgF6O6MBxOJlIbkLqIN": { "label": "Compostable cup" },
+  "0kDic8cmdRcdFGBQ0ihE": { "label": "Plastic sachet", "synonyms": ["sachet"] },
+  "5lMV1pEROlOyEXlPGItv": { "label": "Drinks pouch" },
+  "8BQxkJqGNPE92IbEXJyU": {
+    "label": "Aluminium foil",
+    "synonyms": ["foil", "silver foil"]
+  },
+  "aJm0G9r1KSSDnJW9x1Yj": {
+    "label": "Tetrapak",
+    "synonyms": ["Juice carton", "carton", "drinks carton"]
+  }
 }

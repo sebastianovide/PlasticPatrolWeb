@@ -11,7 +11,7 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import { makeStyles } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
-
+import { useTranslation, Trans } from "react-i18next";
 import { Feedback } from "types/Feedback";
 
 import { isIphoneWithNotchAndCordova, isIphoneAndCordova } from "../../utils";
@@ -80,6 +80,7 @@ export default function FeedbackDetailsPage({
   }, [feedbacksL, feedback, feedbackId, fetchFeedbackById]);
 
   const styles = useStyles();
+  const { t } = useTranslation();
 
   return (
     <Dialog open aria-labelledby="responsive-dialog-title">
@@ -87,7 +88,7 @@ export default function FeedbackDetailsPage({
         <Toolbar>
           <BackIcon className={styles.iconButton} onClick={handleClose} />
           <Typography variant="h6" color="inherit">
-            Feedback details
+            {t("feedback_reports_details")}
           </Typography>
         </Toolbar>
       </AppBar>
@@ -114,15 +115,16 @@ export default function FeedbackDetailsPage({
             );
           })
         ) : fetchedAll.current && fetchedSingle.current && !feedback ? (
-          <>
-            Sorry we can't find that feedback any more <br />
+          <Trans i18nKey="feedback_reports_details_error">
+            Sorry we can't find that feedback any more
+            <br />
             <br />
             If you think it should still exist please get in touch so that a
             developer can take a look into it
             <br />
             <br />
-            Feedback ID: {feedbackId}
-          </>
+            Feedback ID: {{ feedbackId }}
+          </Trans>
         ) : (
           <Dialog
             open
@@ -147,7 +149,9 @@ export default function FeedbackDetailsPage({
             handleClose();
           }}
         >
-          {feedback && feedback.resolved ? "Unsolved" : "Resolved"}
+          {feedback && feedback.resolved
+            ? t("feedback_reports_details_unsolved_button_text")
+            : t("feedback_reports_details_resolved_button_text")}
         </Button>
       </DialogActions>
       <div className={styles.notchBottom} />

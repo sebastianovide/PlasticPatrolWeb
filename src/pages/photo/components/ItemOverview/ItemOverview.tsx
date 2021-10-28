@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import CloseIcon from "@material-ui/icons/Close";
 import { makeStyles } from "@material-ui/core/styles";
-
+import { useTranslation } from "react-i18next";
 import { Item } from "../../types";
 import {
   Dialog,
@@ -40,6 +40,7 @@ export default function ItemOverview({
   handleClick
 }: Props) {
   const styles = useStyles();
+  const { t } = useTranslation();
   const [confirmRemove, setConfirmRemove] = useState(false);
 
   return (
@@ -60,7 +61,7 @@ export default function ItemOverview({
       >
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Are you sure you want to remove this label?
+            {t("record_litter_remove_details_prompt_text")}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -71,7 +72,7 @@ export default function ItemOverview({
             }}
             color="primary"
           >
-            Cancel
+            {t("cancel_button_text")}
           </Button>
           <Button
             onClick={(e) => {
@@ -80,7 +81,7 @@ export default function ItemOverview({
             }}
             color="primary"
           >
-            Remove
+            {t("remove_button_text")}
           </Button>
         </DialogActions>
       </Dialog>

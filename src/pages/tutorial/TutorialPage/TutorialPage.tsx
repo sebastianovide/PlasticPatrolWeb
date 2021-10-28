@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import ReactSwipe from "react-swipe";
 
 import { makeStyles } from "@material-ui/core";
+import { useTranslation } from "react-i18next";
 
 import PageWrapper from "components/PageWrapper";
 import NavDots from "components/common/NavDots";
@@ -37,6 +38,7 @@ export default function TutorialPage({ handleClose }: Props) {
   const reactSwipeEl = useRef();
   const [navDotActiveIndex, setNavDotActiveIndex] = useState(0);
   const styles = useStyles();
+  const { t } = useTranslation();
 
   const handleNavdotClick = (index: number) => {
     setNavDotActiveIndex(index);
@@ -50,7 +52,7 @@ export default function TutorialPage({ handleClose }: Props) {
 
   return (
     <PageWrapper
-      label={"Tutorial"}
+      label={t("tutorial")}
       navigationHandler={{ handleClose }}
       className={styles.wrapper}
     >

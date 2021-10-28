@@ -18,6 +18,7 @@ import Page from "types/Page";
 import config from "custom/config";
 import { isMissionEnabled } from "custom/featuresFlags";
 import { useStats } from "providers/StatsProvider";
+import { useTranslation } from "react-i18next";
 
 const drawerWidth = "80%";
 const drawerMaxWidth = 360;
@@ -78,6 +79,8 @@ export default function DrawerContainer({
   const theme = useTheme();
   const classes = useStyles();
   const stats = useStats();
+  const { t } = useTranslation();
+
   // these list items are only rendered when there is a user
   const listItemsTop: Page[] = [PAGES.account, PAGES.moderator];
   const listItemsTopUnderBreak: Page[] = [
@@ -155,13 +158,19 @@ export default function DrawerContainer({
                 <ListItemIcon>
                   <ExitToAppIcon />
                 </ListItemIcon>
-                <ListItemText primary={user ? "Logout" : "Login"} />
+                <ListItemText
+                  primary={
+                    user
+                      ? t("logout_button_text")
+                      : t("login_button_text")
+                  }
+                />
               </ListItem>
             )}
           </List>
           <div className={classes.info}>
             <Typography className={classes.stats} color={"primary"}>
-              {`${stats.pieces} pieces found so far!`}
+              {stats.pieces} {t("drawer_container_stats_pieces")}
             </Typography>
             {sponsorImage && (
               <span
@@ -172,9 +181,11 @@ export default function DrawerContainer({
             )}
 
             <Typography className={classes.links}>
-              <a href={tAndCLink}>Terms and Conditions</a>
+              <a href={tAndCLink}>{t("drawer_container_ts_and_cs")}</a>
               {" / "}
-              <a href={privatePolicyLink}>Privacy Policy</a>
+              <a href={privatePolicyLink}>
+                {t("drawer_container_privacy_policy")}
+              </a>
             </Typography>
           </div>
         </div>

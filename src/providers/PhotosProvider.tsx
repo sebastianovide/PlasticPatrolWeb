@@ -10,7 +10,7 @@ import Photo, { PhotosContainer } from "types/Photo";
 import Feature from "types/Feature";
 import MapLocation from "types/MapLocation";
 import config from "custom/config";
-import { Location, History } from "history";
+import { Location } from "history";
 import { RealtimeUpdate } from "features/firebase/dbFirebase";
 import _ from "lodash";
 import useAsyncEffect from "hooks/useAsyncEffect";

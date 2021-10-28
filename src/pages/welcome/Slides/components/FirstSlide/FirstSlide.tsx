@@ -1,5 +1,5 @@
 import React from "react";
-
+import { useTranslation } from "react-i18next";
 import seeIt from "assets/images/intro/seeIt.png";
 import snapIt from "assets/images/intro/snapIt.png";
 import mapIt from "assets/images/intro/mapIt.png";
@@ -14,17 +14,18 @@ const useStyles = makeStyles(() => ({
 
 export default function FirstSlide() {
   const styles = useStyles();
+  const { t } = useTranslation();
   return (
-    <SlideLayout title="Welcome to the global movement to clean up the planet">
+    <SlideLayout title={t("welcome_first_slide_title")}>
       <>
-        <img src={seeIt} alt="See it" className={styles.image} />
-        <p className={styles.text}>Pick up a piece of litter</p>
+        <img src={seeIt} alt={t("welcome_first_slide_see_it_img_alt")} className={styles.image} />
+        <p className={styles.text}>{t("welcome_first_slide_see_it_content")}</p>
 
-        <img src={snapIt} alt="Snap it" className={styles.image} />
-        <p className={styles.text}>Take a photo and record the brand name</p>
+        <img src={snapIt} alt={t("welcome_first_slide_snap_it_img_alt")} className={styles.image} />
+        <p className={styles.text}>{t("welcome_first_slide_snap_it_content")}</p>
 
-        <img src={mapIt} alt="Map it" className={styles.image} />
-        <p className={styles.text}>Upload your findings to our global map</p>
+        <img src={mapIt} alt={t("welcome_first_slide_map_it_img_alt")} className={styles.image} />
+        <p className={styles.text}>{t("welcome_first_slide_map_it_content")}</p>
       </>
     </SlideLayout>
   );

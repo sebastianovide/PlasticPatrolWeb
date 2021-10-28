@@ -15,7 +15,7 @@ import {
   TableCellRenderer,
   TableHeaderProps
 } from "react-virtualized";
-
+import { useTranslation } from "react-i18next";
 import { sortArrayByObjectKey } from "utils";
 
 declare module "@material-ui/core/styles/withStyles" {
@@ -245,6 +245,7 @@ export default function UserPieceRankTable({
     ...value
   }));
   const width = window.innerWidth;
+  const { t } = useTranslation();
 
   return (
     <VirtualizedTable
@@ -254,18 +255,18 @@ export default function UserPieceRankTable({
       columns={[
         {
           width: width * 0.15,
-          label: "Rank",
+          label: t("leaderboard_rank"),
           dataKey: "rank"
         },
         {
           width: width * 0.55,
-          label: "User",
+          label: t("leaderboard_user"),
           dataKey: "displayName",
           numeric: false
         },
         {
           width: width * 0.3,
-          label: "Pieces",
+          label: t("leaderboard_pieces"),
           dataKey: "pieces",
           numeric: true
         }

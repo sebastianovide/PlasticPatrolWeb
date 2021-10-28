@@ -2,12 +2,12 @@
 
 _NOTE_ I highly recommend running "echo REACT_APP_USE_PROD_DATA=false >> .env" before running the app.
 
-To start the webapp, just `npm start`
+To start the webapp, just `yarn start`
 
 # Testing
 
-To test, run `npm test`. This covers both the main app and our Firebase cloud functions.
-To start up Jest in watch mode, run `npm run app:test:watch` and it will monitor your files
+To test, run `yarn test`. This covers both the main app and our Firebase cloud functions.
+To start up Jest in watch mode, run `yarn run app:test:watch` and it will monitor your files
 for changes and report if any tests break as a result.
 
 # Functions
@@ -20,7 +20,7 @@ the firebase emulator. You will need to set up credentials and `export GOOGLE_AP
 
 _NOTE_ These should be **dev** credentials!!
 
-When you make changes to the typescript, you will need to manually `npm run build` in the functions/
+When you make changes to the typescript, you will need to manually `yarn build` in the functions/
 directory to have those changes picked up by the emulator. Once that is up, you should be able to:
 
 ```
@@ -31,7 +31,7 @@ And see the result.
 
 ## Unit Tests
 
-To unit test functions in isolation, run `npm run functions:test`
+To unit test functions in isolation, run `yarn functions:test`
 
 # Scripts
 
@@ -68,3 +68,11 @@ Exact details on version bumping can be found [here](https://github.com/phips28/
 If you want to bump a major vesion include "major" or "BREAKING CHANGE" in a commit message
 Minor version include the string "feat" or "minor"
 Anything else will be a patch version
+
+# Translation
+
+Translation is based on i18next. The setting file is at src/custom/i18n.tsx.
+
+Each language has its JSON file under src/locales directory. Please follow the format in en.json to create new language JSON file. If the language JSON file does not exist yet, the fallback language is English.
+
+To check if the translation works, please change the preferred language order in browser or mobile phone.

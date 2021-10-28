@@ -9,3 +9,5 @@ export type Item = {
   brand: SuggestionBasedText;
   barcode?: number;
 };
+
+export type CategoryJson = { [key: string]: { label: string; synonyms?: string[] | undefined } };

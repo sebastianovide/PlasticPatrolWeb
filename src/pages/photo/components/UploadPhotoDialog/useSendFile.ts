@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
-
+import { useTranslation } from "react-i18next";
 import firebase from "firebase/app";
 
 import { dbFirebase } from "features/firebase";
 import { gtagEvent } from "gtag.js";
-import { Item } from "pages/photo/types";
+import { Item, CategoryJson } from "pages/photo/types";
 
 import { linkToUploadSuccess } from "routes/upload-success/links";
 import useEffectOnMount from "hooks/useEffectOnMount";
@@ -13,6 +13,7 @@ import useEffectOnMount from "hooks/useEffectOnMount";
 import { useUser } from "../../../../providers/UserProvider";
 import { updateMissionOnPhotoUploaded } from "../../../../features/firebase/missions";
 import { useMissions } from "../../../../providers/MissionsProvider";
+import { useCategoriesJson } from "features/firebase/categories/CategoriesProvider";
 
 type HookArgs = {
   imgSrc: string;
@@ -28,6 +29,7 @@ type Args = {
   setUploadTask: (task: any) => void;
   history: any;
   missionIds: string[];
+  categories: CategoryJson;
 } & HookArgs;
 
 export default function useSendFile(args: HookArgs) {
@@ -38,6 +40,8 @@ export default function useSendFile(args: HookArgs) {
   const history = useHistory();
   const missionData = useMissions();
   const user = useUser();
+  const categories = useCategoriesJson();
+  const { t } = useTranslation();
 
   const missionIds = user?.missions || [];
   const uploaderId = user?.id || "";
@@ -50,11 +54,12 @@ export default function useSendFile(args: HookArgs) {
         setUploadTask,
         setSendingProgress,
         history,
-        missionIds
+        missionIds,
+        categories
       });
       await missionData?.refresh();
     } catch (err) {
-      setErrorMessage(err.message);
+      setErrorMessage(t(err.message));
     }
   };
   const cancelUpload = () => {
@@ -85,16 +90,14 @@ async function sendFile({
   history,
   setSendingProgress,
   setUploadTask,
-  missionIds
+  missionIds,
+  categories
 }: Args) {
   if (!online) {
-    throw new Error(
-      "It appears you're offline, please turn on your data or wifi to upload this photo"
-    );
+    throw new Error("record_litter_offline_text");
   }
 
   gtagEvent("Upload", "Photo");
-
   let totalCount: number = 0;
   const transformedItems = items.map(
     ({ quantity, category, brand, barcode }) => {
@@ -104,7 +107,7 @@ async function sendFile({
         brandId: brand.id,
         barcode: barcode || null,
         number: quantity,
-        label: category.label,
+        label: categories[category.id!].label,
         categoryId: category.id,
         // legacy
         leafkey: category.id

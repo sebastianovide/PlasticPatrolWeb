@@ -1,19 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import ReactDOM from "react-dom";
 import { HashRouter as Router } from "react-router-dom";
-import * as firebaseui from "firebaseui";
-import firebase from "firebase/app";
-
-// import { defineCustomElements } from '@ionic/pwa-elements/loader';
-
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 
 import "./index.scss";
 import App from "./App";
 
 import { firebaseApp } from "features/firebase/firebaseInit";
-
-import LoginFirebase from "./components/LoginFirebase";
 import * as serviceWorker from "./serviceWorker";
 import config from "./custom/config";
 import { isIphoneAndCordova } from "./utils";
@@ -28,7 +21,12 @@ import { useOnline } from "./providers/OnlineProvider";
 import UserProvider, { useUser } from "./providers/UserProvider";
 import StatsProvider from "./providers/StatsProvider";
 import { dbFirebase } from "features/firebase";
-import { MissionsProvider, useChallenges } from "./providers/MissionsProvider";
+import { MissionsProvider } from "./providers/MissionsProvider";
+import { I18nextProvider } from "react-i18next";
+import i18n from "./custom/i18n";
+import { Plugins } from "@capacitor/core";
+
+const { Device } = Plugins;
 
 serviceWorker.register();
 
@@ -69,6 +67,10 @@ const Wrapper = () => {
   const user = useUser();
 
   useEffect(() => {
+    Device.getLanguageCode().then((langCode) =>
+      i18n.changeLanguage(langCode.value)
+    );
+
     return () => dbFirebase.disconnect();
   }, []);
 
@@ -97,7 +99,9 @@ const startApp = () => {
             <StatsProvider>
               <MissionsProvider>
                 <UserProvider>
-                  <Wrapper />
+                  <I18nextProvider i18n={i18n}>
+                    <Wrapper />
+                  </I18nextProvider>
                 </UserProvider>
               </MissionsProvider>
             </StatsProvider>

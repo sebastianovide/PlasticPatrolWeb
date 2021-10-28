@@ -43,6 +43,8 @@ import MissionsRoute from "./missions/Route";
 import linkToAdminPages from "./admin/links";
 import AdminRouter from "./admin/Router";
 
+import { useTranslation } from "react-i18next";
+
 type Props = {
   user: User;
   reloadPhotos: () => void;
@@ -65,30 +67,28 @@ export function Routes({
   sponsorImage
 }: Props) {
   const history = useHistory();
-
   const stats = useStats();
+  const { t } = useTranslation();
+
   return (
     <Switch>
       <Route path={linkToUploadSuccess()}>
         <UploadPhotoRoute sponsorImage={sponsorImage} />
       </Route>
-
       <Route path={linkToLogin()}>
         <LoginRoute />
       </Route>
-
       <Route path={linkToAboutPage()}>
         <AboutPageRoute
+          label={config.PAGES.about.label}
           handleClose={history.goBack}
           reloadPhotos={reloadPhotos}
           sponsorImage={sponsorImage}
         />
       </Route>
-
       <Route path={linkToTutorialPage()}>
         <TutorialPageRoute handleClose={history.goBack} />
       </Route>
-
       <Route path={config.PAGES.leaderboard.path}>
         <Leaderboard
           label={config.PAGES.leaderboard.label}
@@ -97,7 +97,6 @@ export function Routes({
           user={user}
         />
       </Route>
-
       <Route
         path={config.PAGES.groups.path}
         render={(props) => (
@@ -109,7 +108,6 @@ export function Routes({
           />
         )}
       />
-
       <Route
         path={config.PAGES.grouplist.path}
         render={(props) => (
@@ -122,7 +120,6 @@ export function Routes({
           />
         )}
       />
-
       <Route
         path={config.PAGES.groupadd.path}
         render={(props) => (
@@ -134,11 +131,9 @@ export function Routes({
           />
         )}
       />
-
       <Route path={linkToMissionsPage()}>
-        <MissionsRoute />
+        <MissionsRoute label={config.PAGES.missions.label} />
       </Route>
-
       <ModeratorRoute path={config.PAGES.moderator.path} user={user}>
         <ModeratorPage
           user={user as User}
@@ -146,19 +141,15 @@ export function Routes({
           handleClose={history.goBack}
         />
       </ModeratorRoute>
-
       <ModeratorRoute path={linkToFeedbackReports()} user={user}>
         <FeedbackRoute user={user} />
       </ModeratorRoute>
-
       <Route path={linkToAdminPages()}>
         <AdminRouter />
       </Route>
-
       <Route path={linkToPhotoPage()}>
         <PhotoRoute />
       </Route>
-
       <SignedInRoute path={linkToAccountPage()} user={user}>
         <AccountPageRoute
           config={config}
@@ -171,14 +162,13 @@ export function Routes({
 
       <Route path={config.PAGES.writeFeedback.path}>
         <WriteFeedbackPage
-          label={config.PAGES.writeFeedback.label}
+          label={t(config.PAGES.writeFeedback.label)}
           user={user}
           location={gpsLocation}
           online={online}
           handleClose={history.goBack}
         />
       </Route>
-
       <Route
         path={[
           `${config.PAGES.displayPhoto.path}/:id`,

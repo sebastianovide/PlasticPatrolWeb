@@ -19,7 +19,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
-
+import { useTranslation } from "react-i18next";
 import { isIphoneWithNotchAndCordova, isIphoneAndCordova } from "utils";
 import { tweetMessage } from "static/info";
 
@@ -85,6 +85,7 @@ export default function DisplayPhoto({
   const classes = useStyles();
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  const { t } = useTranslation();
 
   const [confirmation, setConfirmation] = useState<Confirmation | undefined>();
   const photoID = _.get(feature, "properties.id", "");
@@ -115,7 +116,7 @@ export default function DisplayPhoto({
             <Toolbar>
               <BackIcon className={classes.iconButton} onClick={handleClose} />
               <Typography variant="h6" color="inherit">
-                {config.PAGES.displayPhoto.label}
+                {t(config.PAGES.displayPhoto.label)}
               </Typography>
             </Toolbar>
           </AppBar>
@@ -133,7 +134,7 @@ export default function DisplayPhoto({
               />
             </div>
             {feature === null ? (
-              <h3>Error!!! No item found at the given url</h3>
+              <h3>{t("display_photo_error_text")}</h3>
             ) : (
               <Card>
                 <div style={{ display: "flex" }}>
@@ -167,14 +168,18 @@ export default function DisplayPhoto({
                     <div>
                       <ExpansionPanel>
                         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                          <Typography>Moderator Details</Typography>
+                          <Typography>
+                            {t("display_photo_moderator_details")}
+                          </Typography>
                         </ExpansionPanelSummary>
                         <ExpansionPanelDetails>
                           <CardComponent
                             photoSelected={feature.properties}
                             handleReject={() => {
                               setConfirmation({
-                                message: `Are you sure you want to unpublish the photo ?`,
+                                message: t(
+                                  "photo_approval_unpublish_photo_message"
+                                ),
                                 onConfirmation: () =>
                                   dbFirebase.writeModeration(
                                     feature.properties.id,
@@ -185,7 +190,9 @@ export default function DisplayPhoto({
                             }}
                             handleApprove={() => {
                               setConfirmation({
-                                message: `Are you sure you want to publish the photo ?`,
+                                message: t(
+                                  "photo_approval_publish_photo_message"
+                                ),
                                 onConfirmation: () =>
                                   dbFirebase.writeModeration(
                                     feature.properties.id,

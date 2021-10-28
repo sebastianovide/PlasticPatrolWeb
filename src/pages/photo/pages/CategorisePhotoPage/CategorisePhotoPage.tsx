@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Route, useHistory } from "react-router";
-
+import { useTranslation } from "react-i18next";
 import { makeStyles } from "@material-ui/core/styles";
 import { Button } from "@material-ui/core";
 
@@ -116,6 +116,7 @@ export default function CategoriseLitterPage() {
 export function CategoriseLitterPageWithFileInfo() {
   const history = useHistory();
   const state = usePhotoPageState();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (
@@ -160,7 +161,7 @@ export function CategoriseLitterPageWithFileInfo() {
       setItems(newItems);
       setEditingItem(null);
     } else {
-      throw new Error("no item to edit");
+      console.error("No item to edit...");
     }
   };
 
@@ -188,9 +189,7 @@ export function CategoriseLitterPageWithFileInfo() {
           />
         ) : (
           <>
-            <p className={styles.prompt}>
-              Tap on a piece of litter in your photo and add details
-            </p>
+            <p className={styles.prompt}>{t("record_litter_add_details")}</p>
             {isCordova && (
               <>
                 <p className={styles.or}>or</p>
@@ -229,7 +228,7 @@ export function CategoriseLitterPageWithFileInfo() {
             className={styles.button}
             onClick={() => history.push(linkToUploadPhotoDialog())}
           >
-            Submit Collection
+            {t("record_litter_submit_button_text")}
           </Button>
         )}
       </div>

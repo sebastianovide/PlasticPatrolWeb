@@ -27,6 +27,8 @@ const secondaryContrastText = styles.primaryContrastText;
 
 export const linkToMap = () => "/";
 
+// NOTE: the `label` is the text of drawer item, and also the title of the app bar.
+// Need to match the translations key in locales json so it is correctly displayed.
 const PAGES: { [pageName: string]: Page } = {
   map: {
     path: linkToMap(),
@@ -36,58 +38,50 @@ const PAGES: { [pageName: string]: Page } = {
     path: "/embeddable",
     label: "Map"
   },
-  photos: {
+  photo: {
     path: "/photo",
-    label: "Photo"
+    label: "photo"
   },
   moderator: {
     path: "/moderator",
-    label: "Photo Approval",
+    label: "photo_approval",
     icon: <CheckCircleIcon />,
     visible: (user: User | undefined, online: boolean) =>
       !!(user && user.isModerator)
   },
   account: {
     path: "/account",
-    label: "Account",
+    label: "account",
     icon: <AccountCircleIcon />,
     visible: (user: User | undefined, online: boolean) => !!user
   },
   about: {
     path: linkToAboutPage(),
-    label: "About",
+    label: "about",
     visible: (user: User | undefined, online: boolean) => true,
     icon: <HelpIcon />
   },
   tutorial: {
     path: linkToTutorialPage(),
-    label: "Tutorial",
+    label: "tutorial",
     visible: (user: User | undefined, online: boolean) => true,
     icon: <SchoolIcon />
   },
   writeFeedback: {
     path: "/write-feedback",
-    label: "Feedback",
+    label: "feedback",
     visible: (user: User | undefined, online: boolean) => true,
     icon: <FeedbackIcon />
   },
-  events: {
-    path: "/events",
-    label: "Clean-ups"
-  },
-  partners: {
-    path: "/partners",
-    label: "Partners"
-  },
   leaderboard: {
     path: "/leaderboard",
-    label: "Leaderboard",
+    label: "leaderboard",
     visible: (user: User | undefined, online: boolean) => true,
     icon: <DashboardIcon />
   },
   feedbackReports: {
     path: linkToFeedbackReports(),
-    label: "Feedback Reports",
+    label: "feedback_reports",
     icon: <LibraryBooksIcon />,
     visible: (user: User | undefined, online: boolean) =>
       !!(user && user.isModerator)
@@ -100,7 +94,7 @@ const PAGES: { [pageName: string]: Page } = {
     path: "https://planetpatrol.co/clean-ups/",
     visible: (user: User | undefined, online: boolean) => true,
     icon: <EventIcon />,
-    label: "Clean-ups"
+    label: "clean_ups"
   },
   groups: {
     path: "/groups",
@@ -120,7 +114,7 @@ const PAGES: { [pageName: string]: Page } = {
   },
   missions: {
     path: "/missions",
-    label: "Missions",
+    label: "missions",
     visible: (user, online) => true,
     icon: (
       <img

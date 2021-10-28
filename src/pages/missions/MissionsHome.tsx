@@ -5,6 +5,7 @@ import PageWrapper from "components/PageWrapper";
 import React, { useMemo, useState } from "react";
 import "react-circular-progressbar/dist/styles.css";
 import { useHistory } from "react-router";
+import { useTranslation } from "react-i18next";
 import styles from "standard.module.scss";
 
 import { linkToMap } from "../../custom/config";
@@ -60,7 +61,9 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-type Props = {};
+type Props = {
+  label: string;
+};
 
 function getFilteredMissions(
   searchString: string,
@@ -106,7 +109,7 @@ function getFilteredMissions(
   );
 }
 
-export default function MissionsHome({}: Props) {
+export default function MissionsHome({ label }: Props) {
   const history = useHistory();
   const handleClose = () => history.push(linkToMap());
 
@@ -114,6 +117,7 @@ export default function MissionsHome({}: Props) {
   const user = useUser();
 
   const classes = useStyles();
+  const { t } = useTranslation();
   const [searchString, setSearchString] = useState("");
   const filteredMissionList = useMemo(
     () => getFilteredMissions(searchString, missionData?.missions || [], user),
@@ -122,7 +126,7 @@ export default function MissionsHome({}: Props) {
 
   return (
     <PageWrapper
-      label={"Missions"}
+      label={t(label)}
       navigationHandler={{ handleClose: handleClose }}
       className={classes.wrapper}
       addAction={
@@ -134,7 +138,7 @@ export default function MissionsHome({}: Props) {
       <div className={classes.searchWrapper}>
         <Search style={{ color: styles.darkgrey }} />
         <input
-          placeholder={"Search"}
+          placeholder={t("missions_search_placeholder")}
           className={classes.searchInput}
           value={searchString}
           onChange={(e) => setSearchString(e.target.value)}
@@ -149,9 +153,9 @@ export default function MissionsHome({}: Props) {
 
       <div className={classes.missionList}>
         {missionData?.missions === undefined ? (
-          <div>Loading...</div>
+          <div>{t("missions_loading")}</div>
         ) : filteredMissionList.length === 0 ? (
-          <div>Missions coming soon</div>
+          <div>{t("missions_coming_soon")}</div>
         ) : (
           filteredMissionList.map((mission: MissionFirestoreData) => (
             <MissionThumbnail key={mission.id} mission={mission} />

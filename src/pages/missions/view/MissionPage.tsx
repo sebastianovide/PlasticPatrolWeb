@@ -5,8 +5,8 @@ import styles from "standard.module.scss";
 import PageWrapper from "components/PageWrapper";
 import "react-circular-progressbar/dist/styles.css";
 import { useHistory, useParams } from "react-router-dom";
-
 import { Capacitor } from "@capacitor/core";
+import { useTranslation, Trans } from "react-i18next";
 import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Snackbar from "@material-ui/core/Snackbar";
@@ -157,6 +157,7 @@ export default function MissionPage() {
   const classes = useStyles();
   const themes = useTheme();
   const user = useUser();
+  const { t } = useTranslation();
 
   const history = useHistory();
   const handleBack = () => history.push(linkToMissionsPage());
@@ -183,7 +184,7 @@ export default function MissionPage() {
   }
 
   if (mission === undefined) {
-    return <div>Could not find mission</div>;
+    return <div>{t("missions_not_found")}</div>;
   }
 
   const missionProgress = (mission.totalPieces / mission.targetPieces) * 100;
@@ -221,15 +222,19 @@ export default function MissionPage() {
 
   const pieceTotal = `${mission.totalPieces}/${mission.targetPieces}`;
 
-  let progressText = `${pieceTotal} pieces of litter collected so far!`;
+  let progressText = t("missions_progress_text", { pieceTotal });
 
   if (missionIsCompleted(mission)) {
-    progressText = `Awesome!\nThis mission has ${mission.totalPieces} total pieces (original goal was ${mission.targetPieces}).`;
+    progressText = t("missions_completed_text", {
+      totalPieces: mission.totalPieces,
+      targetPieces: mission.targetPieces
+    });
+
     if (!missionEnded) {
-      progressText += `\n\nAdditional pieces can still be added until the mission duration has ended.`;
+      progressText += t("missions_not_ended_text");
     }
   } else if (missionEnded) {
-    progressText = `This mission has finished!\n${pieceTotal} pieces of litter were collected!`;
+    progressText = t("missions_ended_text", { pieceTotal });
   }
 
   return (
@@ -239,7 +244,11 @@ export default function MissionPage() {
       className={classes.wrapper}
     >
       <div className={classes.pictureWrapper}>
-        <img src={imgSrc} alt={"Mission cover"} className={classes.picture} />
+        <img
+          src={imgSrc}
+          alt={t("missions_cover_alternate_text")}
+          className={classes.picture}
+        />
       </div>
       <div className={classes.progressWrapper}>
         <div
@@ -270,7 +279,7 @@ export default function MissionPage() {
         <div className={classes.buttonsWrapper}>
           {!userLoggedIn && !missionEnded && (
             <div className={classes.notLoggedInMessage}>
-              Before you can join a mission, you need to login or register.
+              {t("missions_join_login_hint")}
               <Button
                 color="default"
                 variant="contained"
@@ -281,7 +290,7 @@ export default function MissionPage() {
                   )
                 }
               >
-                Login
+                {t("login_button_text")}
               </Button>
             </div>
           )}
@@ -290,8 +299,7 @@ export default function MissionPage() {
             !missionEnded &&
             (userIsPendingMember ? (
               <div className={classes.pendingRequestLabel}>
-                Your request to join this mission needs to be approved by a
-                moderator or mission owner.
+                {t("missions_join_is_pending")}
               </div>
             ) : (
               <div className={classes.missionButton}>
@@ -306,8 +314,8 @@ export default function MissionPage() {
                   variant="contained"
                 >
                   {userOnMissionLeaderboard(mission, userId)
-                    ? `REJOIN MISSION`
-                    : `JOIN MISSION`}
+                    ? t("missions_rejoin_button_text")
+                    : t("missions_join_button_text")}
                 </Button>
               </div>
             ))}
@@ -319,7 +327,7 @@ export default function MissionPage() {
                 size="small"
                 variant="contained"
               >
-                Upload pieces
+                {t("missions_upload_pieces_button_text")}
               </Button>
             </div>
           )}
@@ -332,7 +340,7 @@ export default function MissionPage() {
                 size="small"
                 variant="contained"
               >
-                Share link
+                {t("missions_share_link_button_text")}
               </Button>
             </div>
           )}
@@ -345,7 +353,7 @@ export default function MissionPage() {
                 size="small"
                 variant="outlined"
               >
-                Leave mission
+                {t("missions_leave_mission_button_text")}
               </Button>
             </div>
           )}
@@ -364,7 +372,7 @@ export default function MissionPage() {
                   size="small"
                   variant="contained"
                 >
-                  Manage members
+                  {t("missions_manage_members")}
                 </Button>
               </div>
             )}
@@ -378,7 +386,7 @@ export default function MissionPage() {
                 size="small"
                 variant="contained"
               >
-                Edit details
+                {t("missions_edit_details_button_text")}
               </Button>
             </div>
           )}
@@ -390,7 +398,7 @@ export default function MissionPage() {
                 size="small"
                 variant="outlined"
               >
-                Delete mission
+                {t("missions_delete_mission_button_text")}
               </Button>
             </div>
           )}
@@ -407,7 +415,7 @@ export default function MissionPage() {
           />
         ) : (
           <div className={classes.hiddenTableLabel}>
-            Join this Mission to view the leaderboard.
+            {t("missions_view_private_leaderboard")}
           </div>
         )}
       </div>
@@ -436,41 +444,36 @@ export default function MissionPage() {
         aria-describedby="alert-dialog-description"
       >
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            {`You have successfully joined this mission!`}
-          </DialogContentText>
-          <DialogContentText>
-            {`Now, when a photo you upload is approved, the pieces of litter will be added to the mission total (and other missions you are part of).`}
-          </DialogContentText>
-          <DialogContentText>
-            {`This will continue until either the mission finishes, or you leave the mission.`}
-          </DialogContentText>
+          <Trans i18nKey="missions_post_join_mission_dialog_text">
+            <DialogContentText id="alert-dialog-description">
+              {`You have successfully joined this mission!`}
+            </DialogContentText>
+            <DialogContentText>
+              {`Now, when a photo you upload is approved, the pieces of litter will be added to the mission total (and other missions you are part of).`}
+            </DialogContentText>
+            <DialogContentText>
+              {`This will continue until either the mission finishes, or you leave the mission.`}
+            </DialogContentText>
+          </Trans>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setShowPostJoinModal(false)} color="default">
-            Ok
+            {t("ok_button_text")}
           </Button>
         </DialogActions>
       </Dialog>
 
       <ConfirmationModal
         isOpen={showLeaveModal}
-        text={
-          "Are you sure you want to leave this mission? " +
-          "You're pieces collected will remain in the leaderboard, but none of your new uploads will contribute to this mission. " +
-          "If it's a public mission, you can rejoin at any time. " +
-          "If it's a private mission, you'll need to request to rejoin."
-        }
-        confirmText={"Leave Mission"}
+        text={t("missions_leave_mission_dialog_text")}
+        confirmText={t("missions_leave_mission_button_text")}
         handleConfirm={leaveMissionSubmit}
         handleCancel={() => setShowLeaveModal(false)}
       />
       <ConfirmationModal
         isOpen={showDeleteModal}
-        text={
-          "Are you sure you want to delete this mission? You'll need to ask Planet Patrol staff to retrieve it."
-        }
-        confirmText={"Delete Mission"}
+        text={t("missions_delete_mission_dialog_text")}
+        confirmText={t("missions_delete_mission_button_text")}
         handleConfirm={deleteMissionSubmit}
         handleCancel={() => setShowDeleteModal(false)}
       />
@@ -493,6 +496,7 @@ const ConfirmationModal = ({
   handleConfirm,
   handleCancel
 }: ConfirmationModalProps) => {
+  const { t } = useTranslation();
   return (
     <Dialog
       open={isOpen}
@@ -512,7 +516,7 @@ const ConfirmationModal = ({
           }}
           color="default"
         >
-          Cancel
+          {t("cancel_button_text")}
         </Button>
         <Button
           onClick={(e) => {

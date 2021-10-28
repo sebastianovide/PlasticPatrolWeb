@@ -371,11 +371,11 @@ const wrap = (f) => {
 };
 
 module.exports = {
-  api: functions.runWith({ memory: "1GB" }).https.onRequest(app),
+  api: functions.runWith({ memory: "2GB", timeoutSeconds: 300 }).https.onRequest(app),
   hostMetadata: functions.https.onRequest(hostMetadata),
   generateThumbnail,
-  updateStats: functions.pubsub.topic(STATS_TOPIC).onPublish(updateStats),
-  computeStats: functions.https.onRequest(wrap(computeStatsAdHoc)),
+  updateStats: functions.runWith({ memory: "1GB" }).pubsub.topic(STATS_TOPIC).onPublish(updateStats),
+  computeStats: functions.runWith({ memory: "1GB" }).https.onRequest(wrap(computeStatsAdHoc)),
   barcodeLookup: functions.https.onCall(barcodeLookup),
   createMission: missions.create,
   joinMission: missions.join,

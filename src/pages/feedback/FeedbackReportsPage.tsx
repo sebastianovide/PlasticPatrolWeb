@@ -14,7 +14,7 @@ import Checkbox from "@material-ui/core/Checkbox";
 import { makeStyles } from "@material-ui/core/styles";
 
 import PageWrapper from "components/PageWrapper";
-
+import { useTranslation } from "react-i18next";
 import { Feedback } from "types/Feedback";
 
 const useStyles = makeStyles((theme) => ({
@@ -44,16 +44,20 @@ export default function FeedbackReportsPage({
   handleToggleResolvedClick
 }: Props) {
   const styles = useStyles();
+  const { t } = useTranslation();
   const [showAll, setShowAll] = useState(false);
 
   return (
-    <PageWrapper label={"Feedback"} navigationHandler={{ handleClose }}>
+    <PageWrapper
+      label={t("feedback_reports")}
+      navigationHandler={{ handleClose }}
+    >
       <div>
         <FormControlLabel
           className={styles.checkbox}
           checked={showAll}
           control={<Checkbox onChange={() => setShowAll(!showAll)} />}
-          label="Show All"
+          label={t("feedback_reports_checkbox_text")}
         />
 
         <List dense={false}>

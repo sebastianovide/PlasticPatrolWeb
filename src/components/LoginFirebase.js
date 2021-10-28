@@ -21,21 +21,22 @@ import {
   SignInWithAppleOptions
 } from "@capacitor-community/apple-sign-in";
 import { Plugins } from "@capacitor/core";
+import i18n from "../custom/i18n";
 
 const FacebookLoginButton = createButton({
-  text: "Sign in with Facebook",
+  text: i18n.t("sign_in_with_facebook"),
   icon: () => <img src={facebookIcon} alt="email" />,
   style: { background: "#3b5998", marginBottom: "15px" }
 });
 
 const EmailLoginButton = createButton({
-  text: "Sign in with email",
+  text: i18n.t("sign_in_with_email"),
   icon: () => <img src={emailIcon} alt="email" />,
   style: { background: "#db4437", marginBottom: "15px" }
 });
 
 const AppleLoginButton = createButton({
-  text: "Sign in with Apple",
+  text: i18n.t("sign_in_with_apple"),
   icon: () => <img src={appleIcon} alt="apple" />,
   style: { background: "#000000", marginBottom: "15px" }
 });

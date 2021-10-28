@@ -1,7 +1,7 @@
 import React from "react";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core";
-
+import { useTranslation } from "react-i18next";
 import handPrint from "assets/images/intro/handPrint.png";
 
 import styles from "standard.module.scss";
@@ -26,12 +26,13 @@ const useStyles = makeStyles(() => ({
 
 export default function FinalSlide({ onButtonClick }: any) {
   const styles = useStyles();
+  const { t } = useTranslation();
   return (
-    <SlideLayout title="Ready to make your mark?">
+    <SlideLayout title={t("welcome_final_slide_title")}>
       <>
         <img src={handPrint} className={styles.image} alt="" />
         <Button className={styles.button} onClick={onButtonClick}>
-          Get started
+          {t("get_started_button_text")}
         </Button>
       </>
     </SlideLayout>

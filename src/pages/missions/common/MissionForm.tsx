@@ -2,11 +2,11 @@ import Button from "@material-ui/core/Button";
 import { DesktopPhotoFallback } from "../../../components/common/DesktopPhotoFallback";
 import AddPhotoDialog from "../../photo/components/AddPhotoDialog/AddPhotoDialog";
 import React, { ChangeEvent, createRef, useEffect, useState } from "react";
+import { useTranslation, Trans } from "react-i18next";
 import { makeStyles } from "@material-ui/core/styles";
 import styles from "../../../standard.module.scss";
 import {
   Mission,
-  MissionFirestoreData,
   ConfigurableMissionData,
   coverPhotoIsMetaData,
   isSameDay,
@@ -192,6 +192,7 @@ export default function MissionForm({
 }: Props) {
   const classes = useStyles();
   const gpsLocation = useGPSLocation();
+  const { t } = useTranslation();
 
   // Magic for handling photo uploads.
   const desktopPhotoRef = createRef<HTMLInputElement>();
@@ -300,7 +301,7 @@ export default function MissionForm({
   return (
     <div>
       <input
-        placeholder={"Enter a mission name"}
+        placeholder={t("missions_name_placeholder")}
         className={classes.name}
         value={name}
         onChange={(e) =>
@@ -311,7 +312,7 @@ export default function MissionForm({
         {name.length}/{MISSION_NAME_LIMIT}
       </div>
       <textarea
-        placeholder={"Enter a short description"}
+        placeholder={t("missions_description_placeholder")}
         className={classes.description}
         value={description}
         rows={3}
@@ -328,7 +329,7 @@ export default function MissionForm({
       </div>
 
       <div className={classes.pieceTargetWrapper}>
-        <div className={classes.fieldLabel}>Target pieces to collect</div>
+        <div className={classes.fieldLabel}>{t("missions_target_pieces")}</div>
         <input
           className={classes.pieceTarget}
           type="number"
@@ -369,7 +370,7 @@ export default function MissionForm({
         color="default"
         variant="contained"
       >
-        {coverPhoto !== undefined ? "Change cover photo" : "Add cover photo"}
+        {coverPhoto !== undefined ? t("missions_change_cover_photo") : t("missions_add_cover_photo")}
       </Button>
       <DesktopPhotoFallback
         ref={desktopPhotoRef}
@@ -383,7 +384,7 @@ export default function MissionForm({
       )}
 
       <div className={classes.date}>
-        <div className={classes.fieldLabel}>Start date</div>
+        <div className={classes.fieldLabel}>{t("missions_start_date")}</div>
         <input
           className={classes.dateInput}
           type="date"
@@ -393,7 +394,7 @@ export default function MissionForm({
       </div>
 
       <div className={classes.date}>
-        <div className={classes.fieldLabel}>End date</div>
+        <div className={classes.fieldLabel}>{t("missions_end_date")}</div>
         <input
           className={classes.dateInput}
           type="date"
@@ -404,15 +405,18 @@ export default function MissionForm({
 
       {!isSameDay(startDate, today) && endDate < startDate && (
         <div className={classes.inputWarning}>
-          End date cannot be before start date
+          {t("missions_end_date_warning")}
         </div>
       )}
 
       {missionDurationDays > 0 && (
         <div className={classes.dateSummary}>
-          {`Mission will run for ${missionDurationDays} ${
-            missionDurationDays === 1 ? `day` : `days`
-          }`}
+          <Trans
+            i18nKey="missions_duration_day"
+            count={missionDurationDays}
+          >
+            Mission will run for {{ count: missionDurationDays }} day
+          </Trans>
         </div>
       )}
 
@@ -425,12 +429,12 @@ export default function MissionForm({
             onChange={() => {}}
             onClick={() => setIsPrivate(!isPrivate)}
           />
-          Private mission{"   "}
+          {t("missions_private_radio_label")}{" "}
           <span
             className={classes.privateToggleInfo}
             onClick={() => setShowPrivateMissionInfo(true)}
           >
-            What is this?
+            {t("missions_private_link")}
           </span>
         </div>
       )}
@@ -438,10 +442,7 @@ export default function MissionForm({
       <Dialog open={showPrivateMissionInfo}>
         <DialogContent className={"dialogs__contentProgress"}>
           <DialogContentText id="loading-dialog-text">
-            You may want to make a mission private. This means that it cannot be
-            found in the list of missions, or searched. Only people with a
-            direct link to your mission - which you can share - will be able to
-            view it.
+            {t("missions_private_description")}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -449,7 +450,7 @@ export default function MissionForm({
             onClick={() => setShowPrivateMissionInfo(false)}
             color="primary"
           >
-            Ok
+            {t("ok_button_text")}
           </Button>
         </DialogActions>
       </Dialog>

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Dialog,
   DialogContent,
@@ -42,10 +43,10 @@ export default function MissionShareModal({
   isPrivate: boolean;
 }) {
   const styles = useStyles();
+  const { t } = useTranslation();
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
-  const shareMessage =
-    "Join me in a litter picking Mission. Download the free Planet Patrol app and log any litter you see. See it 👀 Snap it 📸 Map it 🗺️";
+  const shareMessage = t("mission_share_dialog_content_2");
   const url =
     process.env.NODE_ENV !== "development"
       ? `${config.metadata.serverUrl}/#/missions/${missionId}?utm_source=app_share`
@@ -67,12 +68,12 @@ export default function MissionShareModal({
       </IconButton>
       <DialogContent>
         <DialogTitle id="alert-dialog-description">
-          Share this Mission
+          {t("mission_share_dialog_title")}
         </DialogTitle>
         <DialogContentText>
           {!isPrivate
-            ? "DM friends to join the mission!"
-            : "This Mission is private, by sharing it other users will be able to discover it."}
+            ? t("mission_share_dialog_content_1")
+            : t("This Mission is private, by sharing it other users will be able to discover it.")}
         </DialogContentText>
         <DialogContentText>
           <Grid spacing={2} container justify="center">
@@ -106,7 +107,7 @@ export default function MissionShareModal({
         }}
         open={openSnackbar}
         autoHideDuration={3000}
-        message="Link copied to clipboard"
+        message={t("mission_share_dialog_snackbar_message")}
         onClose={() => setOpenSnackbar(false)}
       />
     </Dialog>

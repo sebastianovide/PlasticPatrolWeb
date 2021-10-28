@@ -1,5 +1,6 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core";
+import { useTranslation } from "react-i18next";
 
 import { TutorialStep } from "../static";
 
@@ -33,13 +34,14 @@ export default function TutorialItem({
   Button
 }: Props) {
   const styles = useStyles();
+  const { t } = useTranslation();
 
   return (
     <div className={styles.wrapper}>
       {Icon && <Icon className={styles.icon} />}
       {title && (
         <h3>
-          Step {stepNumber}: {title}
+          {t("tutorial_item_step_placeholder")} {stepNumber}: {title}
         </h3>
       )}
       <p>{text}</p>

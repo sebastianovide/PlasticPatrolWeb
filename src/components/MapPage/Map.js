@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import _ from "lodash";
-import mapboxgl from 'mapbox-gl/dist/mapbox-gl';
+import mapboxgl from "mapbox-gl/dist/mapbox-gl";
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import "mapbox-gl/dist/mapbox-gl.css";
 
@@ -11,6 +11,7 @@ import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
 import Dehaze from "@material-ui/icons/Dehaze";
 
 import { withStyles } from "@material-ui/core/styles";
+import { withTranslation } from "react-i18next";
 
 import { gtagEvent } from "../../gtag.js";
 import { isIphoneWithNotchAndCordova } from "../../utils";
@@ -78,7 +79,7 @@ class Map extends Component {
 
     this.map = new mapboxgl.Map({
       container: "map", // container id
-      style:  this.props.config.MAP_SOURCE,
+      style: this.props.config.MAP_SOURCE,
       center: center, // starting position [lng, lat]
       zoom: zoom, // starting zoom
       attributionControl: false
@@ -358,7 +359,9 @@ class Map extends Component {
               color="primary"
               onClick={this.props.handleCameraClick}
             >
-              <span style={{ marginRight: "3px" }}>Record Your Litter</span>
+              <span style={{ marginRight: "3px" }}>
+                {this.props.t("record_litter_button_text")}
+              </span>
               <AddAPhotoIcon />
             </Fab>
             <Dehaze
@@ -373,4 +376,4 @@ class Map extends Component {
   }
 }
 
-export default withStyles(styles)(Map);
+export default withStyles(styles)(withTranslation()(Map));

@@ -6,6 +6,7 @@ import {
   DialogContentText,
   makeStyles
 } from "@material-ui/core";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -22,6 +23,7 @@ export default function WebAppMissionDialog({
   onClose: () => void;
 }) {
   const classes = useStyles();
+  const { t } = useTranslation();
 
   return (
     <Dialog
@@ -32,8 +34,7 @@ export default function WebAppMissionDialog({
     >
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-          Download the free Planet Patrol app from the App or Google Play Store,
-          then follow the link to join the Mission
+          {t("web_app_mission_dialog_content")}
         </DialogContentText>
         <Button
           color="primary"
@@ -42,7 +43,7 @@ export default function WebAppMissionDialog({
           className={classes.button}
           href="https://apps.apple.com/gb/app/plastic-patrol/id1235072883"
         >
-          Download on the App Store
+          {t("web_app_mission_dialog_app_store_button_text")}
         </Button>
         <Button
           color="primary"
@@ -51,7 +52,7 @@ export default function WebAppMissionDialog({
           className={classes.button}
           href="https://play.google.com/store/apps/details?id=uk.co.plasticpatrol"
         >
-          Download from the Play Store
+          {t("web_app_mission_dialog_play_store_button_text")}
         </Button>
         <Button
           onClick={onClose}
@@ -60,7 +61,7 @@ export default function WebAppMissionDialog({
           variant="outlined"
           className={classes.button}
         >
-          Ok
+          {t("ok_button_text")}
         </Button>
       </DialogContent>
     </Dialog>

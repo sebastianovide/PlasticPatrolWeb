@@ -1,28 +1,20 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-
+import { useTranslation } from "react-i18next";
 import PageWrapper from "components/PageWrapper";
 import "react-circular-progressbar/dist/styles.css";
 import { useHistory } from "react-router";
 import Button from "@material-ui/core/Button";
-import { Route, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import MissionForm from "../common/MissionForm";
 import {
-  MissionFirestoreData,
   ConfigurableMissionData,
   equal,
   isMissionDataValid,
   isDuplicatingExistingMissionName
 } from "../../../types/Missions";
 import { editMission } from "../../../features/firebase/missions";
-import {
-  MissionsProviderData,
-  useMissions
-} from "../../../providers/MissionsProvider";
-import {
-  linkToMission,
-  linkToMissionsPage
-} from "../../../routes/missions/links";
+import { useMissions } from "../../../providers/MissionsProvider";
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -56,6 +48,7 @@ type Props = {};
 
 export default function EditMission({}: Props) {
   const styles = useStyles();
+  const { t } = useTranslation();
   const history = useHistory();
   const handleBack = { handleBack: () => history.goBack(), confirm: true };
 
@@ -103,7 +96,7 @@ export default function EditMission({}: Props) {
 
   return (
     <PageWrapper
-      label={"Edit mission"}
+      label={t("missions_edit_label")}
       navigationHandler={handleBack}
       className={styles.wrapper}
     >
@@ -122,7 +115,7 @@ export default function EditMission({}: Props) {
           variant="contained"
           disabled={!missionReady || !missionChanged}
         >
-          Apply changes
+          {t("missions_edit_mission_apply_button_text")}
         </Button>
         <Button
           className={styles.button}
@@ -131,12 +124,12 @@ export default function EditMission({}: Props) {
           variant="contained"
           disabled={!missionChanged}
         >
-          Discard changes
+          {t("missions_edit_mission_discard_button_text")}
         </Button>
       </div>
       {duplicatingExistingMissionName && (
         <div className={styles.formErrorWarning}>
-          Cannot have the same name as an existing mission
+          {t("missions_duplicate_name_warning")}
         </div>
       )}
     </PageWrapper>

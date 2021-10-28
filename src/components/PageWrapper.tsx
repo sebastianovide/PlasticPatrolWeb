@@ -9,6 +9,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import AddIcon from "@material-ui/icons/Add";
 import BackIcon from "@material-ui/icons/ArrowBack";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { useTranslation } from "react-i18next";
 
 import standardStyles from "standard.module.scss";
 
@@ -198,6 +199,7 @@ const ConfirmBack = ({
   handleConfirm,
   handleCancel
 }: ConfirmBackProps) => {
+  const { t } = useTranslation();
   return (
     <Dialog
       open={open}
@@ -207,7 +209,7 @@ const ConfirmBack = ({
     >
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-          Are you sure you want to go back? Your progress might be lost
+          {t("go_back_warning_text")}
         </DialogContentText>
       </DialogContent>
       <DialogActions>
@@ -217,7 +219,7 @@ const ConfirmBack = ({
           }}
           color="primary"
         >
-          Cancel
+          {t("cancel_button_text")}
         </Button>
         <Button
           onClick={(e) => {
@@ -225,7 +227,7 @@ const ConfirmBack = ({
           }}
           color="primary"
         >
-          Go back
+          {t("go_back_button_text")}
         </Button>
       </DialogActions>
     </Dialog>

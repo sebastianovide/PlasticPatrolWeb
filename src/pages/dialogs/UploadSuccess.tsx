@@ -1,6 +1,7 @@
 import Dialog from "@material-ui/core/Dialog";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core";
+import { useTranslation, Trans } from "react-i18next";
 
 type Props = {
   isInMission: boolean;
@@ -44,31 +45,35 @@ export default function UploadSuccessDialog({
   sponsorImage
 }: Props) {
   const styles = useStyles();
+  const { t } = useTranslation();
+
   return (
     <Dialog open PaperProps={{ className: styles.dialog }}>
-      <p>
-        <span className={styles.bold}>Thank you.</span>
-        <br />
-        <br />
-        Your photo is now being moderated and will appear on the global map
-        within 48 hours 🙌
-        {isInMission && (
-          <>
-            <br />
-            <br />
-            The pieces you've uploaded have been added to the Mission(s) you are
-            part of 🚀
-          </>
-        )}
-      </p>
+      <Trans i18nKey="record_litter_upload_success_text">
+        <p>
+          <span className={styles.bold}>Thank you.</span>
+          <br />
+          <br />
+          Your photo is now being moderated and will appear on the global map
+          within 48 hours 🙌
+          {isInMission && (
+            <>
+              <br />
+              <br />
+              The pieces you've uploaded have been added to the Mission(s) you
+              are part of 🚀
+            </>
+          )}
+        </p>
+      </Trans>
 
       {sponsorImage && (
         <>
-          <p className={styles.sponsoredBy}>Sponsored by</p>
+          <p className={styles.sponsoredBy}>{t("sponsored_by_text")}</p>
           <img
             className={styles.sponsorImage}
             src={sponsorImage}
-            alt="sponsor logo"
+            alt={t("sponsor_logo_alt")}
           />
         </>
       )}
@@ -79,7 +84,7 @@ export default function UploadSuccessDialog({
         variant="contained"
         className={styles.button}
       >
-        Upload another photo
+        {t("record_litter_upload_another_photo_button_text")}
       </Button>
 
       <br />
@@ -90,7 +95,7 @@ export default function UploadSuccessDialog({
         variant="outlined"
         className={styles.button}
       >
-        Back to the map
+        {t("back_to_the_map_button_text")}
       </Button>
     </Dialog>
   );

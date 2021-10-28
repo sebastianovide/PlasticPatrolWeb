@@ -9,6 +9,8 @@ import Button from "@material-ui/core/Button";
 
 import useSendFile from "./useSendFile";
 
+import { useTranslation } from "react-i18next";
+
 interface Props {
   imgLocation: any;
   imgSrc: any;
@@ -34,6 +36,8 @@ export default function UploadPhotoDialog({
     items
   });
 
+  const { t } = useTranslation();
+
   return (
     <>
       <Dialog
@@ -49,7 +53,7 @@ export default function UploadPhotoDialog({
         </DialogContent>
         <DialogActions>
           <Button onClick={closeErrorDialog} color="primary">
-            Ok
+            {t("ok_button_text")}
           </Button>
         </DialogActions>
       </Dialog>
@@ -57,7 +61,7 @@ export default function UploadPhotoDialog({
       <Dialog open={!errorMessage}>
         <DialogContent className={"dialogs__contentProgress"}>
           <DialogContentText id="loading-dialog-text">
-            {sendingProgress} % done. Be patient ;)
+            {sendingProgress} {t("record_litter_sending_progress_text")}
           </DialogContentText>
           <div className={"dialogs__linearProgress"}>
             <br />
@@ -70,7 +74,7 @@ export default function UploadPhotoDialog({
         </DialogContent>
         <DialogActions>
           <Button onClick={cancelUpload} color="primary">
-            Cancel
+            {t("cancel_button_text")}
           </Button>
         </DialogActions>
       </Dialog>
