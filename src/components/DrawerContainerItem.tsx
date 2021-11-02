@@ -20,7 +20,7 @@ const DrawerContainerItem = (props: Props): JSX.Element => {
   const { t } = useTranslation();
 
   if (item.visible && !item.visible(user, online)) {
-    return <Fragment>[]</Fragment>;
+    return <Fragment></Fragment>;
   }
 
   if (item.path.startsWith("http")) {
