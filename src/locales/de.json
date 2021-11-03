@@ -163,7 +163,7 @@
     "welcome_final_slide_title": "Bereit deine Spur zu hinterlassen?",
     "categories": {
       "4 / 6 pack rings": { "label": "Sechserträger" },
-      "Aluminium foil": { "label": "Aluminiumfolie" },
+      "Aluminium foil": { "label": "Alufolie" },
       "Balloon": { "label": "Balloon" },
       "Battery": {
         "label": "Batterie",
@@ -198,7 +198,7 @@
         "label": "Einmalhandschuhe",
         "synonyms": ["Wegwerfhandschuhe"]
       },
-      "Drinks pouch": { "label": "Getränkebeutel" },
+      "Drinks pouch": { "label": "Trinkbeutel" },
       "Electrical": {
         "label": "Elektronik",
         "synonyms": ["Elektronikmüll", "Elektrik"]
@@ -242,7 +242,7 @@
       "Plastic cup lid": { "label": "Plastiktassendeckel" },
       "Plastic fragment": { "label": "Plastiksplitter" },
       "Plastic packaging": { "label": "Plastikverpackung" },
-      "Plastic sachet": { "label": "Plastikbeutel" },
+      "Plastic sachet": { "label": "Plastikpäckchen" },
       "Plastic straw": { "label": "Plastikstrohhalm" },
       "Plastic utensil / cutlery": { "label": "Plastikbesteck" },
       "Rope": { "label": "Seil" },
@@ -253,10 +253,7 @@
       "Sweet wrapper": { "label": "Süßigkeitenverpackung" },
       "Tampon": { "label": "Tampon", "synonyms": ["OB"] },
       "Tampon applicator": { "label": "Tamponapplikator" },
-      "Tetrapak": {
-        "label": "Tetrapak",
-        "synonyms": ["Saftkarton", "Getränkekarton"]
-      },
+      "Tetrapak": { "label": "Tetrapak" },
       "Toy": { "label": "Spielzeug" },
       "Tyre": {
         "label": "Reifen",
