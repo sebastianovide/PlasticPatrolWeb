@@ -192,7 +192,7 @@ export function CategoriseLitterPageWithFileInfo() {
             <p className={styles.prompt}>{t("record_litter_add_details")}</p>
             {isCordova && (
               <>
-                <p className={styles.or}>or</p>
+                <p className={styles.or}>{t("or_text")}</p>
                 <BarcodeScanner
                   className={styles.scanButton}
                   onResult={(result) => {

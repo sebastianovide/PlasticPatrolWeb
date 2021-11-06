@@ -5,6 +5,7 @@ import dbFirebase, {
   ProductInfo
 } from "../../../../features/firebase/dbFirebase";
 import { makeStyles } from "@material-ui/core";
+import { useTranslation } from "react-i18next";
 
 declare global {
   interface Window {
@@ -68,9 +69,10 @@ function scan(): Promise<number> {
 
 const BarcodeScanner = ({ onResult, className }: Props) => {
   const classes = useStyles();
+  const { t } = useTranslation();
   return (
     <div className={classes.barcodeIcon}>
-      <p>Scan a barcode</p>
+      <p>{t("record_litter_barcodescan_hint")}</p>
       <IconButton
         disableRipple
         className={className}
@@ -79,15 +81,15 @@ const BarcodeScanner = ({ onResult, className }: Props) => {
           try {
             id = await scan();
           } catch {
-            onResult("scan error");
+            onResult(t("record_litter_barcodescan_scan_error"));
             return;
           }
 
           try {
             const result = await getBarcodeInfo(id);
-            onResult(result || "not found");
+            onResult(result || t("record_litter_barcodescan_not_found"));
           } catch {
-            onResult("lookup error");
+            onResult(t("record_litter_barcodescan_lookup_error"));
           }
         }}
       >
