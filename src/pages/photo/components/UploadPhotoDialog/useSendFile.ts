@@ -107,7 +107,7 @@ async function sendFile({
         brandId: brand.id,
         barcode: barcode || null,
         number: quantity,
-        label: categories[category.id!].label,
+        label: barcode ? category.label : categories[category.id!].label,
         categoryId: category.id,
         // legacy
         leafkey: category.id
