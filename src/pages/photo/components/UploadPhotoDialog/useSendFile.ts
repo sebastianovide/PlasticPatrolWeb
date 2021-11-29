@@ -13,7 +13,8 @@ import useEffectOnMount from "hooks/useEffectOnMount";
 import { useUser } from "../../../../providers/UserProvider";
 import { updateMissionOnPhotoUploaded } from "../../../../features/firebase/missions";
 import { useMissions } from "../../../../providers/MissionsProvider";
-import { useCategoriesJson } from "features/firebase/categories/CategoriesProvider";
+
+import categories from "custom/categories.json";
 
 type HookArgs = {
   imgSrc: string;
@@ -29,7 +30,6 @@ type Args = {
   setUploadTask: (task: any) => void;
   history: any;
   missionIds: string[];
-  categories: CategoryJson;
 } & HookArgs;
 
 export default function useSendFile(args: HookArgs) {
@@ -40,7 +40,6 @@ export default function useSendFile(args: HookArgs) {
   const history = useHistory();
   const missionData = useMissions();
   const user = useUser();
-  const categories = useCategoriesJson();
   const { t } = useTranslation();
 
   const missionIds = user?.missions || [];
@@ -54,8 +53,7 @@ export default function useSendFile(args: HookArgs) {
         setUploadTask,
         setSendingProgress,
         history,
-        missionIds,
-        categories
+        missionIds
       });
       await missionData?.refresh();
     } catch (err) {
@@ -90,14 +88,15 @@ async function sendFile({
   history,
   setSendingProgress,
   setUploadTask,
-  missionIds,
-  categories
+  missionIds
 }: Args) {
   if (!online) {
     throw new Error("record_litter_offline_text");
   }
 
   gtagEvent("Upload", "Photo");
+
+  const categoryJson = categories as CategoryJson;
   let totalCount: number = 0;
   const transformedItems = items.map(
     ({ quantity, category, brand, barcode }) => {
@@ -107,7 +106,7 @@ async function sendFile({
         brandId: brand.id,
         barcode: barcode || null,
         number: quantity,
-        label: barcode ? category.label : categories[category.id!].label,
+        label: barcode || !category.id ? category.label : categoryJson[category.id!].label,
         categoryId: category.id,
         // legacy
         leafkey: category.id
