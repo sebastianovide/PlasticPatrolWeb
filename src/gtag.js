@@ -3,7 +3,6 @@
 import firebase from "firebase/app";
 import { Plugins } from "@capacitor/core";
 
-
 // https://github.com/capacitor-community/firebase-crashlytics
 const { FirebaseCrashlytics } = Plugins;
 let analytics;
